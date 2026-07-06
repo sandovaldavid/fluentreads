@@ -12,90 +12,84 @@ import type { Product } from '../types/product';
  * @returns Filtered array of products
  */
 export function filterProducts(
-	products: Product[],
-	resourceType: string = 'any',
-	level: string = 'all',
-	format: string = 'all',
-	searchTerm: string = '',
-	editorialMap: Map<string, string> = new Map()
+  products: Product[],
+  resourceType: string = 'any',
+  level: string = 'all',
+  format: string = 'all',
+  searchTerm: string = '',
+  editorialMap: Map<string, string> = new Map()
 ): Product[] {
-	// Early return if no products
-	if (!products || !products.length) return [];
+  // Early return if no products
+  if (!products || !products.length) return [];
 
-	// Log for debugging
-	console.log(`Filtering ${products.length} products`);
-	console.log(
-		`Type filter: ${resourceType}, Level: ${level}, Format: ${format}`
-	);
+  // Log for debugging
+  console.log(`Filtering ${products.length} products`);
+  console.log(`Type filter: ${resourceType}, Level: ${level}, Format: ${format}`);
 
-	// Count products by type before filtering
-	const typeCounts = products.reduce((acc, product) => {
-		acc[product.productType] = (acc[product.productType] || 0) + 1;
-		return acc;
-	}, {} as Record<string, number>);
-	console.log('Products by type before filtering:', typeCounts);
+  // Count products by type before filtering
+  const typeCounts = products.reduce(
+    (acc, product) => {
+      acc[product.productType] = (acc[product.productType] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
+  console.log('Products by type before filtering:', typeCounts);
 
-	// Use Array.filter with combined conditions for better performance
-	const filtered = products.filter((product) => {
-		// Type filter
-		if (resourceType !== 'any' && product.productType !== resourceType) {
-			return false;
-		}
+  // Use Array.filter with combined conditions for better performance
+  const filtered = products.filter((product) => {
+    // Type filter
+    if (resourceType !== 'any' && product.productType !== resourceType) {
+      return false;
+    }
 
-		// Level filter
-		if (level !== 'all' && product.level !== level) {
-			return false;
-		}
+    // Level filter
+    if (level !== 'all' && product.level !== level) {
+      return false;
+    }
 
-		// Format filter
-		if (
-			format !== 'all' &&
-			(!product.formatTags || !product.formatTags.includes(format as any))
-		) {
-			return false;
-		}
+    // Format filter
+    if (format !== 'all' && (!product.formatTags || !product.formatTags.includes(format as any))) {
+      return false;
+    }
 
-		// Search term filter
-		if (searchTerm) {
-			const normalizedSearchTerm = searchTerm.toLowerCase();
-			const titleMatch = product.title
-				.toLowerCase()
-				.includes(normalizedSearchTerm);
+    // Search term filter
+    if (searchTerm) {
+      const normalizedSearchTerm = searchTerm.toLowerCase();
+      const titleMatch = product.title.toLowerCase().includes(normalizedSearchTerm);
 
-			// Fixed: Properly check for description property
-			const descriptionMatch =
-				typeof product.description === 'string' &&
-				product.description
-					.toLowerCase()
-					.includes(normalizedSearchTerm);
+      // Fixed: Properly check for description property
+      const descriptionMatch =
+        typeof product.description === 'string' &&
+        product.description.toLowerCase().includes(normalizedSearchTerm);
 
-			// Check editorial match for books - use proper type guard
-			const editorialMatch =
-				product.productType === 'book' &&
-				'editorialId' in product &&
-				product.editorialId &&
-				editorialMap.has(product.editorialId) &&
-				editorialMap
-					.get(product.editorialId)
-					?.toLowerCase()
-					.includes(normalizedSearchTerm);
+      // Check editorial match for books - use proper type guard
+      const editorialMatch =
+        product.productType === 'book' &&
+        'editorialId' in product &&
+        product.editorialId &&
+        editorialMap.has(product.editorialId) &&
+        editorialMap.get(product.editorialId)?.toLowerCase().includes(normalizedSearchTerm);
 
-			if (!titleMatch && !descriptionMatch && !editorialMatch) {
-				return false;
-			}
-		}
+      if (!titleMatch && !descriptionMatch && !editorialMatch) {
+        return false;
+      }
+    }
 
-		return true;
-	});
+    return true;
+  });
 
-	// Log filtered results for debugging
-	const filteredTypeCounts = filtered.reduce((acc, product) => {
-		acc[product.productType] = (acc[product.productType] || 0) + 1;
-		return acc;
-	}, {} as Record<string, number>);
-	console.log('Products by type after filtering:', filteredTypeCounts);
+  // Log filtered results for debugging
+  const filteredTypeCounts = filtered.reduce(
+    (acc, product) => {
+      acc[product.productType] = (acc[product.productType] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
+  console.log('Products by type after filtering:', filteredTypeCounts);
 
-	return filtered;
+  return filtered;
 }
 
 /**
@@ -104,75 +98,64 @@ export function filterProducts(
  * @param sortOption Sort option ('price-low', 'price-high', 'bestseller', 'featured', etc.)
  * @returns Sorted array of products
  */
-export function sortProducts(
-	products: Product[],
-	sortOption: string = 'featured'
-): Product[] {
-	if (!products || !products.length) return [];
+export function sortProducts(products: Product[], sortOption: string = 'featured'): Product[] {
+  if (!products || !products.length) return [];
 
-	const sortedProducts = [...products];
+  const sortedProducts = [...products];
 
-	// Handle all sorting options in a switch case for better maintainability
-	switch (sortOption) {
-		case 'price-low':
-			return sortedProducts.sort((a, b) => a.price - b.price);
+  // Handle all sorting options in a switch case for better maintainability
+  switch (sortOption) {
+    case 'price-low':
+      return sortedProducts.sort((a, b) => a.price - b.price);
 
-		case 'price-high':
-			return sortedProducts.sort((a, b) => b.price - a.price);
+    case 'price-high':
+      return sortedProducts.sort((a, b) => b.price - a.price);
 
-		case 'bestseller':
-			return sortedProducts.sort((a, b) => {
-				const aIsBestseller = a.popularityTags?.includes('bestSeller')
-					? 1
-					: 0;
-				const bIsBestseller = b.popularityTags?.includes('bestSeller')
-					? 1
-					: 0;
+    case 'bestseller':
+      return sortedProducts.sort((a, b) => {
+        const aIsBestseller = a.popularityTags?.includes('bestSeller') ? 1 : 0;
+        const bIsBestseller = b.popularityTags?.includes('bestSeller') ? 1 : 0;
 
-				// If bestseller status is the same, sort by rating as a tiebreaker
-				if (aIsBestseller === bIsBestseller) {
-					return (b.rating?.score || 0) - (a.rating?.score || 0);
-				}
+        // If bestseller status is the same, sort by rating as a tiebreaker
+        if (aIsBestseller === bIsBestseller) {
+          return (b.rating?.score || 0) - (a.rating?.score || 0);
+        }
 
-				return bIsBestseller - aIsBestseller;
-			});
+        return bIsBestseller - aIsBestseller;
+      });
 
-		case 'newest':
-			// If there was a date field, we would sort by that here
-			// In future, add date-based sorting
-			return sortedProducts;
+    case 'newest':
+      // If there was a date field, we would sort by that here
+      // In future, add date-based sorting
+      return sortedProducts;
 
-		case 'name-asc':
-			return sortedProducts.sort((a, b) =>
-				a.title.localeCompare(b.title, undefined, {
-					sensitivity: 'base',
-				})
-			);
+    case 'name-asc':
+      return sortedProducts.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, {
+          sensitivity: 'base',
+        })
+      );
 
-		case 'name-desc':
-			return sortedProducts.sort((a, b) =>
-				b.title.localeCompare(a.title, undefined, {
-					sensitivity: 'base',
-				})
-			);
+    case 'name-desc':
+      return sortedProducts.sort((a, b) =>
+        b.title.localeCompare(a.title, undefined, {
+          sensitivity: 'base',
+        })
+      );
 
-		case 'featured':
-		default:
-			// Sort by featured status, then by bestseller status as secondary criteria
-			return sortedProducts.sort((a, b) => {
-				if (a.featured !== b.featured) {
-					return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-				}
-				// If featured status is the same, check bestseller status
-				const aIsBestseller = a.popularityTags?.includes('bestSeller')
-					? 1
-					: 0;
-				const bIsBestseller = b.popularityTags?.includes('bestSeller')
-					? 1
-					: 0;
-				return bIsBestseller - aIsBestseller;
-			});
-	}
+    case 'featured':
+    default:
+      // Sort by featured status, then by bestseller status as secondary criteria
+      return sortedProducts.sort((a, b) => {
+        if (a.featured !== b.featured) {
+          return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+        }
+        // If featured status is the same, check bestseller status
+        const aIsBestseller = a.popularityTags?.includes('bestSeller') ? 1 : 0;
+        const bIsBestseller = b.popularityTags?.includes('bestSeller') ? 1 : 0;
+        return bIsBestseller - aIsBestseller;
+      });
+  }
 }
 
 /**
@@ -187,25 +170,25 @@ export function sortProducts(
  * @returns Filtered and sorted products
  */
 export function processProducts(
-	products: Product[],
-	resourceType: string = 'any',
-	level: string = 'all',
-	format: string = 'all',
-	sortOption: string = 'featured',
-	searchTerm: string = '',
-	editorialMap: Map<string, string> = new Map()
+  products: Product[],
+  resourceType: string = 'any',
+  level: string = 'all',
+  format: string = 'all',
+  sortOption: string = 'featured',
+  searchTerm: string = '',
+  editorialMap: Map<string, string> = new Map()
 ): Product[] {
-	// First filter, then sort
-	const filteredProducts = filterProducts(
-		products,
-		resourceType,
-		level,
-		format,
-		searchTerm,
-		editorialMap
-	);
+  // First filter, then sort
+  const filteredProducts = filterProducts(
+    products,
+    resourceType,
+    level,
+    format,
+    searchTerm,
+    editorialMap
+  );
 
-	return sortProducts(filteredProducts, sortOption);
+  return sortProducts(filteredProducts, sortOption);
 }
 
 /**
@@ -214,32 +197,32 @@ export function processProducts(
  * @returns Object with counts for each product type
  */
 export function getProductCounts(products: Product[]) {
-	if (!products || !products.length)
-		return {
-			totalCount: 0,
-			bookCount: 0,
-			packCount: 0,
-			examCount: 0,
-		};
+  if (!products || !products.length)
+    return {
+      totalCount: 0,
+      bookCount: 0,
+      packCount: 0,
+      examCount: 0,
+    };
 
-	// Use reduce for a single-pass count of all types
-	return products.reduce(
-		(counts, product) => {
-			counts.totalCount++;
+  // Use reduce for a single-pass count of all types
+  return products.reduce(
+    (counts, product) => {
+      counts.totalCount++;
 
-			if (product.productType === 'book') counts.bookCount++;
-			else if (product.productType === 'pack') counts.packCount++;
-			else if (product.productType === 'exam') counts.examCount++;
+      if (product.productType === 'book') counts.bookCount++;
+      else if (product.productType === 'pack') counts.packCount++;
+      else if (product.productType === 'exam') counts.examCount++;
 
-			return counts;
-		},
-		{
-			totalCount: 0,
-			bookCount: 0,
-			packCount: 0,
-			examCount: 0,
-		}
-	);
+      return counts;
+    },
+    {
+      totalCount: 0,
+      bookCount: 0,
+      packCount: 0,
+      examCount: 0,
+    }
+  );
 }
 
 /**
@@ -248,17 +231,14 @@ export function getProductCounts(products: Product[]) {
  * @returns Tailwind CSS grid class
  */
 export function getGridClassFromColumns(cols: number): string {
-	const gridClasses: Record<number, string> = {
-		1: 'grid-cols-1',
-		2: 'grid-cols-1 sm:grid-cols-2',
-		3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-		4: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
-		5: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
-		6: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
-	};
+  const gridClasses: Record<number, string> = {
+    1: 'grid-cols-1',
+    2: 'grid-cols-1 sm:grid-cols-2',
+    3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+    4: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+    5: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+    6: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
+  };
 
-	return (
-		gridClasses[cols] ||
-		'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-	);
+  return gridClasses[cols] || 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
 }

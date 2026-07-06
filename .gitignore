@@ -1,8 +1,8 @@
 # build output
 dist/
 
-# generated types
-.astro/
+# generated types (keep types.d.ts for CI, ignore cache)
+.astro/cache/
 
 # dependencies
 node_modules/
@@ -12,13 +12,28 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+*.log
 
 # environment variables
 .env
 .env.production
+.env.local
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# husky internals
+.husky/_
+
+# eslint cache
+.eslintcache
+
+# test coverage
+coverage/
+
+# personal AI/MCP configs (do not commit)
+.mcp.json
+.claude/

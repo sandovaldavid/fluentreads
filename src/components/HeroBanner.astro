@@ -112,20 +112,20 @@ import CarruselButtons from './CarruselButtons.astro';
 import Button from './Button.astro';
 ---
 
-<section class="hero-banner bg-primary-dark text-white py-6 md:py-18 lg:py-10 overflow-hidden relative lg:px-8">
+<section className="hero-banner bg-primary-dark text-white py-6 md:py-18 lg:py-10 overflow-hidden relative lg:px-8">
     <!-- Animated particles background effect -->
-    <div class="particles-background absolute inset-0 opacity-20"></div>
+    <div className="particles-background absolute inset-0 opacity-20" />
     
-    <div class="container mx-auto px-4 mt-6 relative z-10">
-        <div class="max-w-5xl mx-auto text-center mb-12">
+    <div className="container mx-auto px-4 mt-6 relative z-10">
+        <div className="max-w-5xl mx-auto text-center mb-12">
             <h1 
-                class="text-4xl md:text-6xl font-bold mb-6 animate-title"
+                className="text-4xl md:text-6xl font-bold mb-6 animate-title"
                 transition:animate={fade({ duration: '0.8s' })}
             >
                 {title}
             </h1>
             <p 
-                class="text-xl md:text-2xl mb-10 text-secondary-light animate-subtitle"
+                className="text-xl md:text-2xl mb-10 text-secondary-light animate-subtitle"
                 transition:animate={fade({ duration: '0.8s' })}
             >
                 {subtitle}
@@ -142,32 +142,32 @@ import Button from './Button.astro';
         </div>
 
         {showCarousel && offers.length > 0 && (
-            <div class="offers-carousel mt-12 relative" data-offers-count={offers.length}>
-                <div class="carousel-container overflow-hidden rounded-xl shadow-2xl">
-                    <div class="carousel-track flex transition-transform duration-500">
+            <div className="offers-carousel mt-12 relative" data-offers-count={offers.length}>
+                <div className="carousel-container overflow-hidden rounded-xl shadow-2xl">
+                    <div className="carousel-track flex transition-transform duration-500">
                         {offers.map((offer, index) => (
-                            <div class="carousel-slide w-full flex-shrink-0 p-6 md:p-8 bg-gradient-to-r from-primary to-primary-light rounded-xl overflow-hidden relative" data-offer-id={offer.id} data-offer-type={offer.type}>
-                                <div class="flex flex-col md:flex-row items-center gap-8">
-                                    <div class="md:w-2/5 relative">
+                            <div className="carousel-slide w-full flex-shrink-0 p-6 md:p-8 bg-gradient-to-r from-primary to-primary-light rounded-xl overflow-hidden relative" data-offer-id={offer.id} data-offer-type={offer.type}>
+                                <div className="flex flex-col md:flex-row items-center gap-8">
+                                    <div className="md:w-2/5 relative">
                                         {offer.discount && (
-                                            <div class="absolute -top-2 -left-2 bg-accent text-white px-4 py-1 rounded-lg font-bold z-20 animate-pulse">
+                                            <div className="absolute -top-2 -left-2 bg-accent text-white px-4 py-1 rounded-lg font-bold z-20 animate-pulse">
                                                 {offer.discount}
                                             </div>
                                         )}
-                                        <div class="absolute -top-2 -right-2 bg-primary-light text-white px-3 py-1 rounded-lg font-bold z-20">
+                                        <div className="absolute -top-2 -right-2 bg-primary-light text-white px-3 py-1 rounded-lg font-bold z-20">
                                             {offer.type === "book" ? "Libro" : offer.type === "pack" ? "Pack" : "Examen"}
                                         </div>
                                         <img 
                                             src={offer.image} 
                                             alt={offer.title} 
-                                            class="rounded-lg shadow-lg object-cover w-full h-60 md:h-80 transform transition-transform hover:scale-105"
+                                            className="rounded-lg shadow-lg object-cover w-full h-60 md:h-80 transform transition-transform hover:scale-105"
                                             loading={index === 0 ? "eager" : "lazy"}
                                         />
                                     </div>
-                                    <div class="md:w-3/5 text-left">
-                                        <h3 class="text-2xl md:text-3xl font-bold mb-4 text-secondary">{offer.title}</h3>
-                                        <p class="text-lg md:text-xl mb-6">{offer.description}</p>
-                                        <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                                    <div className="md:w-3/5 text-left">
+                                        <h3 className="text-2xl md:text-3xl font-bold mb-4 text-secondary">{offer.title}</h3>
+                                        <p className="text-lg md:text-xl mb-6">{offer.description}</p>
+                                        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
                                             <Button 
                                                 variant="accent"
                                                 size="medium"
@@ -177,7 +177,7 @@ import Button from './Button.astro';
                                                 <ArrowRightIcon class='h-5 w-5 ml-2 animate-arrow'/>
                                             </Button>
                                             {offer.expiration && (
-                                                <p class="text-sm opacity-80">Expira: {offer.expiration}</p>
+                                                <p className="text-sm opacity-80">Expira: {offer.expiration}</p>
                                             )}
                                         </div>
                                     </div>
@@ -195,13 +195,13 @@ import Button from './Button.astro';
                 />
 
                 <!-- Carousel indicators -->
-                <div class="carousel-indicators flex justify-center gap-2 mt-6">
+                <div className="carousel-indicators flex justify-center gap-2 mt-6">
                     {offers.map((_, index) => (
                         <button 
-                            class={`indicator-dot h-3 w-3 rounded-full ${index === 0 ? 'bg-secondary' : 'bg-gray-400'} hover:bg-secondary transition-colors duration-300 cursor-pointer`} 
+                            className={`indicator-dot h-3 w-3 rounded-full ${index === 0 ? 'bg-secondary' : 'bg-gray-400'} hover:bg-secondary transition-colors duration-300 cursor-pointer`} 
                             data-index={index}
                             aria-label={`Ver oferta ${index + 1}`}
-                        ></button>
+                         />
                     ))}
                 </div>
             </div>
@@ -209,4 +209,4 @@ import Button from './Button.astro';
     </div>
 </section>
 
-<script src="../scripts/HeroBanner.ts"></script>
+<script src="../scripts/HeroBanner.ts" />

@@ -2,19 +2,19 @@
 import TagIcon from './icons/Offer.astro';
 
 interface Props {
-	discount: string;
-	size?: 'small' | 'medium' | 'large';
-	className?: string;
-	position?: string;
-	animate?: boolean;
+  discount: string;
+  size?: 'small' | 'medium' | 'large';
+  className?: string;
+  position?: string;
+  animate?: boolean;
 }
 
 const {
-	discount,
-	size = 'medium',
-	className = '',
-	position = 'absolute top-2 right-2',
-	animate = true,
+  discount,
+  size = 'medium',
+  className = '',
+  position = 'absolute top-2 right-2',
+  animate = true,
 } = Astro.props;
 
 // Determine sizing based on the size prop
@@ -24,74 +24,66 @@ const isLarge = size === 'large';
 
 // Badge sizing classes
 const badgeSize = isSmall
-	? 'text-3xs px-1 py-0.5 rounded-md'
-	: isMedium
-		? 'text-2xs px-1.5 py-0.5 rounded-full'
-		: 'text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full';
+  ? 'text-3xs px-1 py-0.5 rounded-md'
+  : isMedium
+    ? 'text-2xs px-1.5 py-0.5 rounded-full'
+    : 'text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full';
 
 // Icon sizing classes
-const iconSize = isSmall
-	? 'h-2 w-2.5'
-	: isMedium
-		? 'h-2.5 w-3'
-		: 'h-3 w-4 sm:h-4 sm:w-5';
+const iconSize = isSmall ? 'h-2 w-2.5' : isMedium ? 'h-2.5 w-3' : 'h-3 w-4 sm:h-4 sm:w-5';
 
 // Position adjustments based on size
 const positionClass = isSmall
-	? 'top-1 right-1'
-	: isMedium
-		? 'top-2 right-2'
-		: 'top-2 sm:top-4 right-2 sm:right-4';
+  ? 'top-1 right-1'
+  : isMedium
+    ? 'top-2 right-2'
+    : 'top-2 sm:top-4 right-2 sm:right-4';
 
 // Only apply default position if position is not explicitly provided
 const positionToUse =
-	position === 'absolute top-2 right-2'
-		? `absolute ${positionClass}`
-		: position;
+  position === 'absolute top-2 right-2' ? `absolute ${positionClass}` : position;
 
 // Animation class
 const animationClass = animate ? 'discount-badge-animate' : '';
 ---
 
-<div
-	class={`${positionToUse} z-10 discount-badge ${className} ${animationClass}`}>
-	<div
-		class={`bg-accent text-white font-bold shadow-md flex items-center gap-1 ${badgeSize}`}>
-		<TagIcon class={iconSize} />
-		<span>{discount}</span>
-	</div>
+<div className={`${positionToUse} z-10 discount-badge ${className} ${animationClass}`}>
+  <div className={`bg-accent text-white font-bold shadow-md flex items-center gap-1 ${badgeSize}`}>
+    <TagIcon class={iconSize} />
+    <span>{discount}</span>
+  </div>
 </div>
 
 <style>
-	/* Badge animation and hover effects */
-	.discount-badge {
-		transition: transform 0.3s ease;
-		box-shadow: none;
-	}
+  /* Badge animation and hover effects */
+  .discount-badge {
+    transition: transform 0.3s ease;
+    box-shadow: none;
+  }
 
-	.discount-badge-animate:hover {
-		transform: scale(1.05);
-	}
+  .discount-badge-animate:hover {
+    transform: scale(1.05);
+  }
 
-	/* Pulse animation for special emphasis */
-	@keyframes gentle-pulse {
-		0%,
-		100% {
-			transform: scale(1);
-		}
-		50% {
-			transform: scale(1.05);
-		}
-	}
+  /* Pulse animation for special emphasis */
+  @keyframes gentle-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
 
-	/* Custom text sizes */
-	:global(.text-3xs) {
-		font-size: 0.6rem;
-		line-height: 0.9rem;
-	}
+  /* Custom text sizes */
+  :global(.text-3xs) {
+    font-size: 0.6rem;
+    line-height: 0.9rem;
+  }
 
-	:global(.text-2xs) {
-		font-size: 0.65rem;
-		line-height: 1rem;
-	}
+  :global(.text-2xs) {
+    font-size: 0.65rem;
+    line-height: 1rem;
+  }
 </style>

@@ -1,81 +1,75 @@
 ---
 export interface Props {
-	variant?:
-		| 'primary'
-		| 'secondary'
-		| 'accent'
-		| 'outline'
-		| 'ghost'
-		| 'custom';
-	size?: 'xsmall' | 'small' | 'medium' | 'large';
-	href?: string;
-	fullWidth?: boolean;
-	disabled?: boolean;
-	type?: 'button' | 'submit' | 'reset';
-	class?: string;
-	newTab?: boolean;
-	customClasses?: string;
-	[key: string]: any;
+  variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost' | 'custom';
+  size?: 'xsmall' | 'small' | 'medium' | 'large';
+  href?: string;
+  fullWidth?: boolean;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  newTab?: boolean;
+  customClasses?: string;
+  [key: string]: any;
 }
 
 const {
-	variant = 'primary',
-	size = 'medium',
-	href,
-	fullWidth = false,
-	disabled = false,
-	type = 'button',
-	class: className = '',
-	newTab = true,
-	className: customClasses = '',
-	...rest
+  variant = 'primary',
+  size = 'medium',
+  href,
+  fullWidth = false,
+  disabled = false,
+  type = 'button',
+  class: className = '',
+  newTab = true,
+  className: customClasses = '',
+  ...rest
 } = Astro.props;
 
 // Base classes that apply to all buttons
 const baseClasses =
-	'font-[Poppins] rounded-full transition-all duration-300 ease-out inline-flex items-center justify-center focus:outline-none focus:ring-2';
+  'font-[Poppins] rounded-full transition-all duration-300 ease-out inline-flex items-center justify-center focus:outline-none focus:ring-2';
 
 // Size-specific classes with improved responsive sizing
 const sizeClasses = {
-	xsmall: 'px-1.5 py-0.5 text-2xs sm:text-xs',
-	small: 'px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm',
-	medium: 'px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base',
-	large: 'px-4 py-2 text-base sm:px-6 sm:py-3 sm:text-lg',
+  xsmall: 'px-1.5 py-0.5 text-2xs sm:text-xs',
+  small: 'px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm',
+  medium: 'px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base',
+  large: 'px-4 py-2 text-base sm:px-6 sm:py-3 sm:text-lg',
 }[size];
 
 // Variant-specific classes
 const variantClasses = {
-	primary:
-		'bg-primary text-white hover:bg-primary-dark focus:ring-primary-light focus:ring-opacity-50 hover:shadow-md',
-	secondary:
-		'bg-secondary text-black hover:bg-secondary-dark focus:ring-secondary-light focus:ring-opacity-50 transition-all duration-300 ease-out hover:shadow-md',
-	accent: 'bg-accent text-white hover:bg-accent-dark focus:ring-accent-light focus:ring-opacity-50 transition-all duration-300 ease-out hover:shadow-md',
-	outline:
-		'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary-light focus:ring-opacity-50 hover:shadow-md',
-	ghost: 'bg-transparent text-primary hover:bg-neutral hover:text-primary-dark focus:ring-neutral focus:ring-opacity-50',
-	custom: customClasses,
+  primary:
+    'bg-primary text-white hover:bg-primary-dark focus:ring-primary-light focus:ring-opacity-50 hover:shadow-md',
+  secondary:
+    'bg-secondary text-black hover:bg-secondary-dark focus:ring-secondary-light focus:ring-opacity-50 transition-all duration-300 ease-out hover:shadow-md',
+  accent:
+    'bg-accent text-white hover:bg-accent-dark focus:ring-accent-light focus:ring-opacity-50 transition-all duration-300 ease-out hover:shadow-md',
+  outline:
+    'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary-light focus:ring-opacity-50 hover:shadow-md',
+  ghost:
+    'bg-transparent text-primary hover:bg-neutral hover:text-primary-dark focus:ring-neutral focus:ring-opacity-50',
+  custom: customClasses,
 }[variant];
 
 // Width classes with improved responsive behavior
 const widthClasses = fullWidth ? 'w-full' : 'w-auto';
 
 // Disabled classes
-const disabledClasses = disabled
-	? 'opacity-50 cursor-not-allowed pointer-events-none'
-	: '';
+const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '';
 
 // Touch device optimization
 const touchClasses = 'touch-manipulation';
 
 // Combine all the classes
 const combinedClasses = [
-	baseClasses,
-	sizeClasses,
-	variantClasses,
-	widthClasses,
-	disabledClasses,
-	touchClasses,
-	className,
+  baseClasses,
+  sizeClasses,
+  variantClasses,
+  widthClasses,
+  disabledClasses,
+  touchClasses,
+  className,
 ].join(' ');
 
 const isLink = typeof href !== 'undefined';
@@ -83,44 +77,45 @@ const Element = isLink ? 'a' : 'button';
 
 // Handle link props including new tab functionality
 const linkProps = isLink
-	? {
-			href,
-			target: newTab ? '_blank' : undefined,
-			rel: newTab ? 'noopener noreferrer' : undefined,
-			'aria-label': newTab
-				? `${rest['aria-label'] || ''} (opens in new tab)`.trim()
-				: rest['aria-label'],
-		}
-	: { type };
+  ? {
+      href,
+      target: newTab ? '_blank' : undefined,
+      rel: newTab ? 'noopener noreferrer' : undefined,
+      'aria-label': newTab
+        ? `${rest['aria-label'] || ''} (opens in new tab)`.trim()
+        : rest['aria-label'],
+    }
+  : { type };
 ---
 
 <Element
-	class={combinedClasses}
-	disabled={!isLink && disabled}
-	aria-disabled={disabled}
-	{...linkProps}
-	{...rest}>
-	<slot />
-	{newTab && isLink && <span class='sr-only'>(opens in new tab)</span>}
+  class={combinedClasses}
+  disabled={!isLink && disabled}
+  aria-disabled={disabled}
+  {...linkProps}
+  {...rest}
+>
+  <slot />
+  {newTab && isLink && <span className="sr-only">(opens in new tab)</span>}
 </Element>
 
 <style>
-	/* Improve touch target size on mobile */
-	@media (max-width: 640px) {
-		a:not(.size-xsmall),
-		button:not(.size-xsmall) {
-			min-height: 25px;
-		}
+  /* Improve touch target size on mobile */
+  @media (max-width: 640px) {
+    a:not(.size-xsmall),
+    button:not(.size-xsmall) {
+      min-height: 25px;
+    }
 
-		a.size-xsmall,
-		button.size-xsmall {
-			min-height: 30px;
-		}
-	}
+    a.size-xsmall,
+    button.size-xsmall {
+      min-height: 30px;
+    }
+  }
 
-	/* Add text-2xs custom size */
-	.text-2xs {
-		font-size: 0.65rem;
-		line-height: 1rem;
-	}
+  /* Add text-2xs custom size */
+  .text-2xs {
+    font-size: 0.65rem;
+    line-height: 1rem;
+  }
 </style>

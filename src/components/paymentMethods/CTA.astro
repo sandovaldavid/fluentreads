@@ -11,218 +11,200 @@ import TrustIndicator from '../TrustIndicator.astro';
 import TestimoniesCard from '../TestimoniesCard.astro';
 ---
 
-<section
-	class='py-16 bg-primary text-white relative overflow-hidden cta-payment-container'>
-	<!-- Animated background elements -->
-	<div class='cta-animated-bg'></div>
+<section className="bg-primary cta-payment-container relative overflow-hidden py-16 text-white">
+  <!-- Animated background elements -->
+  <div className="cta-animated-bg" />
 
-	<!-- Decorative circles -->
-	<div class='cta-circle cta-circle-1'></div>
-	<div class='cta-circle cta-circle-2'></div>
-	<div class='cta-circle cta-circle-3'></div>
+  <!-- Decorative circles -->
+  <div className="cta-circle cta-circle-1" />
+  <div className="cta-circle cta-circle-2" />
+  <div className="cta-circle cta-circle-3" />
 
-	<div class='container mx-auto px-4 md:px-8 text-center relative z-10'>
-		<div class='max-w-5xl mx-auto'>
-			<div class='cta-payment-icon'>
-				<span class='cta-icon-pulse'>
-					<DollarIcon class='w-10 h-10' />
-				</span>
-			</div>
+  <div className="relative z-10 container mx-auto px-4 text-center md:px-8">
+    <div className="mx-auto max-w-5xl">
+      <div className="cta-payment-icon">
+        <span className="cta-icon-pulse">
+          <DollarIcon class="h-10 w-10" />
+        </span>
+      </div>
 
-			<h2 class='text-3xl md:text-4xl font-bold mb-6 cta-title'>
-				¿Listo para mejorar tu inglés?
-			</h2>
+      <h2 className="cta-title mb-6 text-3xl font-bold md:text-4xl">¿Listo para mejorar tu inglés?</h2>
 
-			<!-- Fixed horizontal stars -->
-			<div class='flex justify-center items-center gap-1 mb-6'>
-				<div class='stars-container'>
-					<span class='star'>★</span>
-					<span class='star'>★</span>
-					<span class='star'>★</span>
-					<span class='star'>★</span>
-					<span class='star'>★</span>
-				</div>
-				<span class='rating-count'>(+2,500 clientes satisfechos)</span>
-			</div>
+      <!-- Fixed horizontal stars -->
+      <div className="mb-6 flex items-center justify-center gap-1">
+        <div className="stars-container">
+          <span className="star">★</span>
+          <span className="star">★</span>
+          <span className="star">★</span>
+          <span className="star">★</span>
+          <span className="star">★</span>
+        </div>
+        <span className="rating-count">(+2,500 clientes satisfechos)</span>
+      </div>
 
-			<p
-				class='text-lg md:text-xl opacity-90 mb-8 max-w-3xl mx-auto leading-relaxed'>
-				Elige el material que necesitas, realiza el pago y comienza a
-				aprender hoy mismo. <span class='highlight pulse-text'
-					>¡Tu futuro profesional te espera!</span
-				>
-			</p>
+      <p className="mx-auto mb-8 max-w-3xl text-lg leading-relaxed opacity-90 md:text-xl">
+        Elige el material que necesitas, realiza el pago y comienza a aprender hoy mismo. <span
+          className="highlight pulse-text">¡Tu futuro profesional te espera!</span
+        >
+      </p>
 
-			<!-- Trust badges with improved layout -->
-			<div class='trust-badges-container'>
-				<div class='trust-badge'>
-					<div class='badge-icon'>
-						<SecurityIcon class='h-7 w-7' />
-					</div>
-					<span>Pago 100% Seguro</span>
-				</div>
-				<div class='trust-badge'>
-					<div class='badge-icon'>
-						<ClockIcon class='h-7 w-7' />
-					</div>
-					<span>Entrega Inmediata</span>
-				</div>
-				<div class='trust-badge'>
-					<div class='badge-icon'>
-						<CardIcon class='h-7 w-7' />
-					</div>
-					<span>Múltiples Métodos de Pago</span>
-				</div>
-			</div>
+      <!-- Trust badges with improved layout -->
+      <div className="trust-badges-container">
+        <div className="trust-badge">
+          <div className="badge-icon">
+            <SecurityIcon class="h-7 w-7" />
+          </div>
+          <span>Pago 100% Seguro</span>
+        </div>
+        <div className="trust-badge">
+          <div className="badge-icon">
+            <ClockIcon class="h-7 w-7" />
+          </div>
+          <span>Entrega Inmediata</span>
+        </div>
+        <div className="trust-badge">
+          <div className="badge-icon">
+            <CardIcon class="h-7 w-7" />
+          </div>
+          <span>Múltiples Métodos de Pago</span>
+        </div>
+      </div>
 
-			<!-- Enhanced countdown timer -->
-			<div class='countdown-container'>
-				<div class='countdown-header'>
-					<span class='flash-icon'>⚡</span> Oferta especial termina en:
-				</div>
-				<div class='countdown-display'>
-					<div class='countdown-unit'>
-						<div class='countdown-value' id='hours'>24</div>
-						<div class='countdown-label'>Horas</div>
-					</div>
-					<div class='countdown-separator'>:</div>
-					<div class='countdown-unit'>
-						<div class='countdown-value' id='minutes'>00</div>
-						<div class='countdown-label'>Minutos</div>
-					</div>
-					<div class='countdown-separator'>:</div>
-					<div class='countdown-unit'>
-						<div class='countdown-value' id='seconds'>00</div>
-						<div class='countdown-label'>Segundos</div>
-					</div>
-				</div>
-			</div>
+      <!-- Enhanced countdown timer -->
+      <div className="countdown-container">
+        <div className="countdown-header">
+          <span className="flash-icon">⚡</span> Oferta especial termina en:
+        </div>
+        <div className="countdown-display">
+          <div className="countdown-unit">
+            <div className="countdown-value" id="hours">24</div>
+            <div className="countdown-label">Horas</div>
+          </div>
+          <div className="countdown-separator">:</div>
+          <div className="countdown-unit">
+            <div className="countdown-value" id="minutes">00</div>
+            <div className="countdown-label">Minutos</div>
+          </div>
+          <div className="countdown-separator">:</div>
+          <div className="countdown-unit">
+            <div className="countdown-value" id="seconds">00</div>
+            <div className="countdown-label">Segundos</div>
+          </div>
+        </div>
+      </div>
 
-			<!-- Action buttons with better spacing and emphasis -->
-			<div class='cta-action-buttons'>
-				<Button
-					variant='secondary'
-					size='large'
-					href='/catalogo'
-					class='primary-cta-button'>
-					<span class='flex items-center'>
-						Ver Catálogo
-						<ArrowRightIcon class='ml-2 h-5 w-5 bounce-right' />
-					</span>
-				</Button>
-				<Button
-					variant='accent'
-					size='large'
-					href='https://wa.me/1234567890'
-					class='secondary-cta-button'>
-					<WhatsAppIcon class='h-5 w-5 mr-2' />
-					Contactar por WhatsApp
-				</Button>
-			</div>
+      <!-- Action buttons with better spacing and emphasis -->
+      <div className="cta-action-buttons">
+        <Button variant="secondary" size="large" href="/catalogo" class="primary-cta-button">
+          <span className="flex items-center">
+            Ver Catálogo
+            <ArrowRightIcon class="bounce-right ml-2 h-5 w-5" />
+          </span>
+        </Button>
+        <Button
+          variant="accent"
+          size="large"
+          href="https://wa.me/1234567890"
+          class="secondary-cta-button"
+        >
+          <WhatsAppIcon class="mr-2 h-5 w-5" />
+          Contactar por WhatsApp
+        </Button>
+      </div>
 
-			<!-- Enhanced testimonial -->
-			<div class='animate-on-scroll lg:max-w-xl lg:mx-auto'>
-				<TestimoniesCard
-					quote='FluentReads me ayudó a mejorar mi inglés de forma rápida y sencilla. ¡Lo recomiendo!'
-					author='María Fernández'
-					position='Estudiante de Medicina'
-					avatarUrl='https://i.pravatar.cc/100?img=40'
-					rating={4.5}
-					compact
-				/>
-			</div>
+      <!-- Enhanced testimonial -->
+      <div className="animate-on-scroll lg:mx-auto lg:max-w-xl">
+        <TestimoniesCard
+          quote="FluentReads me ayudó a mejorar mi inglés de forma rápida y sencilla. ¡Lo recomiendo!"
+          author="María Fernández"
+          position="Estudiante de Medicina"
+          avatarUrl="https://i.pravatar.cc/100?img=40"
+          rating={4.5}
+          compact
+        />
+      </div>
 
-			<!-- Added satisfaction guarantee -->
-			<div class='satisfaction-guarantee'>
-				<TrustIndicator />
-				<p>100% Garantía de satisfacción o te devolvemos tu dinero</p>
-			</div>
-		</div>
-	</div>
+      <!-- Added satisfaction guarantee -->
+      <div className="satisfaction-guarantee">
+        <TrustIndicator />
+        <p>100% Garantía de satisfacción o te devolvemos tu dinero</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
-	// Countdown timer functionality
-	document.addEventListener('DOMContentLoaded', () => {
-		function updateCountdown() {
-			// Set a 24-hour countdown from when the user first visits
-			const countdownEnd = localStorage.getItem('countdownEnd');
+  // Countdown timer functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    function updateCountdown() {
+      // Set a 24-hour countdown from when the user first visits
+      const countdownEnd = localStorage.getItem('countdownEnd');
 
-			if (!countdownEnd) {
-				// Set end time to 24 hours from now
-				const end = new Date();
-				end.setHours(end.getHours() + 24);
-				localStorage.setItem('countdownEnd', end.getTime().toString());
-			}
+      if (!countdownEnd) {
+        // Set end time to 24 hours from now
+        const end = new Date();
+        end.setHours(end.getHours() + 24);
+        localStorage.setItem('countdownEnd', end.getTime().toString());
+      }
 
-			const endTime = parseInt(
-				localStorage.getItem('countdownEnd') || '0'
-			);
-			const now = new Date().getTime();
-			const timeLeft = endTime - now;
+      const endTime = parseInt(localStorage.getItem('countdownEnd') || '0');
+      const now = new Date().getTime();
+      const timeLeft = endTime - now;
 
-			if (timeLeft <= 0) {
-				// Reset the timer when it reaches zero
-				localStorage.removeItem('countdownEnd');
-				updateCountdown();
-				return;
-			}
+      if (timeLeft <= 0) {
+        // Reset the timer when it reaches zero
+        localStorage.removeItem('countdownEnd');
+        updateCountdown();
+        return;
+      }
 
-			// Calculate time units
-			const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-			const minutes = Math.floor(
-				(timeLeft % (1000 * 60 * 60)) / (1000 * 60)
-			);
-			const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      // Calculate time units
+      const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-			// Update the HTML
-			document.getElementById('hours')!.textContent = hours
-				.toString()
-				.padStart(2, '0');
-			document.getElementById('minutes')!.textContent = minutes
-				.toString()
-				.padStart(2, '0');
-			document.getElementById('seconds')!.textContent = seconds
-				.toString()
-				.padStart(2, '0');
-		}
+      // Update the HTML
+      document.getElementById('hours')!.textContent = hours.toString().padStart(2, '0');
+      document.getElementById('minutes')!.textContent = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds')!.textContent = seconds.toString().padStart(2, '0');
+    }
 
-		// Update the countdown immediately and then every second
-		updateCountdown();
-		setInterval(updateCountdown, 1000);
+    // Update the countdown immediately and then every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
-		// Add entrance animations
-		const animateElements = document.querySelectorAll('.animate-on-scroll');
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('animated');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{
-				threshold: 0.2,
-			}
-		);
+    // Add entrance animations
+    const animateElements = document.querySelectorAll('.animate-on-scroll');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+      }
+    );
 
-		animateElements.forEach((el) => {
-			observer.observe(el);
-		});
+    animateElements.forEach((el) => {
+      observer.observe(el);
+    });
 
-		// Add pulse effect to CTA buttons
-		const ctaButtons = document.querySelectorAll('.primary-cta-button');
-		ctaButtons.forEach((button) => {
-			button.classList.add('pulse-animation');
-		});
+    // Add pulse effect to CTA buttons
+    const ctaButtons = document.querySelectorAll('.primary-cta-button');
+    ctaButtons.forEach((button) => {
+      button.classList.add('pulse-animation');
+    });
 
-		// Add stars animation
-		const stars = document.querySelectorAll('.star');
-		stars.forEach((star, index) => {
-			setTimeout(() => {
-				star.classList.add('star-animated');
-			}, index * 150);
-		});
-	});
+    // Add stars animation
+    const stars = document.querySelectorAll('.star');
+    stars.forEach((star, index) => {
+      setTimeout(() => {
+        star.classList.add('star-animated');
+      }, index * 150);
+    });
+  });
 </script>

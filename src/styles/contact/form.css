@@ -7,7 +7,8 @@
 }
 
 /* Input focus styles */
-.form-input:focus, .form-textarea:focus {
+.form-input:focus,
+.form-textarea:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
 }
@@ -134,7 +135,7 @@
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  .form-group .form-input, 
+  .form-group .form-input,
   .form-group .form-textarea {
     font-size: 16px; /* Prevent zoom on iOS devices */
   }
@@ -201,13 +202,21 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 /* Remove the default Pageclip loading spinner since we're using our own */

@@ -4,132 +4,120 @@ import ArrowDown from '../icons/ArrowBottom.astro';
 ---
 
 <section
-	class='catalog-hero bg-gradient-to-r from-primary to-primary-dark text-white py-16 md:py-24 relative overflow-hidden'>
-	<!-- Animated background elements -->
-	<div class='absolute top-0 left-0 w-full h-full overflow-hidden'>
-		<div class='book-particles'></div>
-	</div>
+  className="catalog-hero from-primary to-primary-dark relative overflow-hidden bg-gradient-to-r py-16 text-white md:py-24"
+>
+  <!-- Animated background elements -->
+  <div className="absolute top-0 left-0 h-full w-full overflow-hidden">
+    <div className="book-particles" />
+  </div>
 
-	<div class='container mx-auto px-4 relative z-10'>
-		<div class='max-w-4xl mx-auto text-center'>
-			<span
-				class='inline-block bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-4 py-1 rounded-full mb-6 animate-pulse-subtle'>
-				Materiales educativos de alta calidad
-			</span>
+  <div className="relative z-10 container mx-auto px-4">
+    <div className="mx-auto max-w-4xl text-center">
+      <span
+        className="animate-pulse-subtle mb-6 inline-block rounded-full bg-white/20 px-4 py-1 text-sm font-medium text-white backdrop-blur-sm"
+      >
+        Materiales educativos de alta calidad
+      </span>
 
-			<h1
-				class='text-4xl md:text-5xl lg:text-6xl font-bold mb-6 hero-title'>
-				Encuentra el material perfecto para dominar el inglés
-			</h1>
+      <h1 className="hero-title mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">
+        Encuentra el material perfecto para dominar el inglés
+      </h1>
 
-			<p
-				class='text-lg md:text-xl text-white/80 mb-8 md:mb-10 max-w-3xl mx-auto hero-subtitle'>
-				Libros digitales, workbooks, audios y recursos especializados
-				para cada profesión y nivel de aprendizaje.
-			</p>
+      <p className="hero-subtitle mx-auto mb-8 max-w-3xl text-lg text-white/80 md:mb-10 md:text-xl">
+        Libros digitales, workbooks, audios y recursos especializados para cada profesión y nivel de
+        aprendizaje.
+      </p>
 
-			<div
-				class='flex flex-col sm:flex-row justify-center gap-4 hero-buttons'>
-				<Button
-					variant='secondary'
-					size='large'
-					href='#catalog-categories'
-					newTab={false}
-					class='group shadow-lg hover:shadow-xl transition-all duration-300'>
-					<span>Ver por categorías</span>
-				</Button>
+      <div className="hero-buttons flex flex-col justify-center gap-4 sm:flex-row">
+        <Button
+          variant="secondary"
+          size="large"
+          href="#catalog-categories"
+          newTab={false}
+          class="group shadow-lg transition-all duration-300 hover:shadow-xl"
+        >
+          <span>Ver por categorías</span>
+        </Button>
 
-				<Button
-					variant='outline'
-					size='large'
-					href='#full-catalog'
-					newTab={false}
-					class='text-white border-white hover:bg-white/10 transition-all duration-300'>
-					<span>Explorar todo</span>
-					<ArrowDown
-						class='h-5 w-5 ml-2 group-hover:translate-y-1 transition-transform'
-					/>
-				</Button>
-			</div>
+        <Button
+          variant="outline"
+          size="large"
+          href="#full-catalog"
+          newTab={false}
+          class="border-white text-white transition-all duration-300 hover:bg-white/10"
+        >
+          <span>Explorar todo</span>
+          <ArrowDown class="ml-2 h-5 w-5 transition-transform group-hover:translate-y-1" />
+        </Button>
+      </div>
 
-			<!-- Stats bar -->
-			<div
-				class='mt-12 md:mt-16 bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 flex flex-wrap justify-center gap-8 md:gap-16 hero-stats'>
-				<div class='text-center'>
-					<div
-						class='text-3xl font-bold text-secondary counter-animation'>
-						12+
-					</div>
-					<div class='text-sm text-white/80'>Categorías</div>
-				</div>
-				<div class='text-center'>
-					<div
-						class='text-3xl font-bold text-secondary counter-animation'>
-						50+
-					</div>
-					<div class='text-sm text-white/80'>Recursos</div>
-				</div>
-				<div class='text-center'>
-					<div
-						class='text-3xl font-bold text-secondary counter-animation'>
-						24h
-					</div>
-					<div class='text-sm text-white/80'>Entrega</div>
-				</div>
-				<div class='text-center'>
-					<div
-						class='text-3xl font-bold text-secondary counter-animation'>
-						100%
-					</div>
-					<div class='text-sm text-white/80'>Digital</div>
-				</div>
-			</div>
-		</div>
-	</div>
+      <!-- Stats bar -->
+      <div
+        className="hero-stats mt-12 flex flex-wrap justify-center gap-8 rounded-xl bg-white/10 p-4 backdrop-blur-md md:mt-16 md:gap-16 md:p-6"
+      >
+        <div className="text-center">
+          <div className="text-secondary counter-animation text-3xl font-bold">12+</div>
+          <div className="text-sm text-white/80">Categorías</div>
+        </div>
+        <div className="text-center">
+          <div className="text-secondary counter-animation text-3xl font-bold">50+</div>
+          <div className="text-sm text-white/80">Recursos</div>
+        </div>
+        <div className="text-center">
+          <div className="text-secondary counter-animation text-3xl font-bold">24h</div>
+          <div className="text-sm text-white/80">Entrega</div>
+        </div>
+        <div className="text-center">
+          <div className="text-secondary counter-animation text-3xl font-bold">100%</div>
+          <div className="text-sm text-white/80">Digital</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-	<!-- Bottom wave pattern -->
-	<div class='absolute bottom-0 left-0 w-full overflow-hidden leading-0'>
-		<svg
-			xmlns='http://www.w3.org/2000/svg'
-			viewBox='0 0 1200 120'
-			preserveAspectRatio='none'
-			class='relative block w-full h-[60px]'>
-			<path
-				d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.11,140.83,94.17,208.35,82.73,260.55,74.64,280.77,60.19,321.39,56.44Z'
-				class='fill-white'></path>
-		</svg>
-	</div>
+  <!-- Bottom wave pattern -->
+  <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1200 120"
+      preserveAspectRatio="none"
+      className="relative block h-[60px] w-full"
+    >
+      <path
+        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.11,140.83,94.17,208.35,82.73,260.55,74.64,280.77,60.19,321.39,56.44Z"
+        className="fill-white" />
+    </svg>
+  </div>
 </section>
 
 <script>
-	// Counter animation for stats
-	document.addEventListener('DOMContentLoaded', () => {
-		const counterElements = document.querySelectorAll('.counter-animation');
+  // Counter animation for stats
+  document.addEventListener('DOMContentLoaded', () => {
+    const counterElements = document.querySelectorAll('.counter-animation');
 
-		counterElements.forEach((element) => {
-			const target = element.textContent ?? '';
-			const targetValue = parseInt(target);
+    counterElements.forEach((element) => {
+      const target = element.textContent ?? '';
+      const targetValue = parseInt(target);
 
-			if (!isNaN(targetValue)) {
-				// Start from zero and animate to target
-				let counter = 0;
-				const increment = Math.ceil(targetValue / 40);
-				const duration = 1500;
-				const interval = duration / (targetValue / increment);
+      if (!isNaN(targetValue)) {
+        // Start from zero and animate to target
+        let counter = 0;
+        const increment = Math.ceil(targetValue / 40);
+        const duration = 1500;
+        const interval = duration / (targetValue / increment);
 
-				element.textContent = '0';
+        element.textContent = '0';
 
-				const timer = setInterval(() => {
-					counter += increment;
-					if (counter >= targetValue) {
-						element.textContent = target;
-						clearInterval(timer);
-					} else {
-						element.textContent =
-							counter + (target.includes('+') ? '+' : '');
-					}
-				}, interval);
-			}
-		});
-	});
+        const timer = setInterval(() => {
+          counter += increment;
+          if (counter >= targetValue) {
+            element.textContent = target;
+            clearInterval(timer);
+          } else {
+            element.textContent = counter + (target.includes('+') ? '+' : '');
+          }
+        }, interval);
+      }
+    });
+  });
 </script>

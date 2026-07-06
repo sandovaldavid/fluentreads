@@ -1,219 +1,219 @@
 /* Main carousel container */
 .media-carousel {
-	position: relative;
-	overflow: hidden;
-	background-color: rgba(0, 0, 0, 0.02);
-	display: flex;
-	flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Carousel track and slides */
 .carousel-track {
-	display: flex;
-	position: relative;
-	width: 100%;
-	flex-grow: 1;
+  display: flex;
+  position: relative;
+  width: 100%;
+  flex-grow: 1;
 }
 
 .carousel-slide {
-	flex: 0 0 100%;
-	position: relative;
-	transition: opacity 0.4s ease;
+  flex: 0 0 100%;
+  position: relative;
+  transition: opacity 0.4s ease;
 }
 
 /* Active and inactive slide states */
 .carousel-slide.active {
-	visibility: visible !important;
-	opacity: 1 !important;
-	position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
 }
 
 .carousel-slide:not(.active) {
-	position: absolute !important;
-	top: 0;
-	left: 0;
-	opacity: 0 !important;
-	visibility: hidden !important;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 /* Image container styling */
 .media-image-container {
-	position: relative;
-	overflow: hidden;
-	width: 100%;
-	height: 100%;
-	background-color: #f9f9f9;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: zoom-in;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-in;
 }
 
 .media-image-container img {
-	display: block;
-	max-width: 100%;
-	max-height: 100%;
-	width: auto;
-	height: auto;
-	object-fit: contain;
-	transition: transform 0.6s ease;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.6s ease;
 }
 
 .media-image-container:hover img {
-	transform: scale(1.03);
+  transform: scale(1.03);
 }
 
 /* Video container styling */
 .media-video-container {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #000;
-	overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  overflow: hidden;
 }
 
 .media-video-container lite-youtube {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* Thumbnails styling */
 .thumbnails-container {
-	scrollbar-width: thin;
-	scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
-	margin-top: 10px;
-	flex-shrink: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+  margin-top: 10px;
+  flex-shrink: 0;
 }
 
 .thumbnails-container::-webkit-scrollbar {
-	height: 6px;
+  height: 6px;
 }
 
 .thumbnails-container::-webkit-scrollbar-track {
-	background: rgba(0, 0, 0, 0.05);
-	border-radius: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
 }
 
 .thumbnails-container::-webkit-scrollbar-thumb {
-	background: rgba(0, 0, 0, 0.2);
-	border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
 .thumbnail-item {
-	opacity: 0.7;
-	transition: all 0.3s ease;
+  opacity: 0.7;
+  transition: all 0.3s ease;
 }
 
 .thumbnail-item:hover {
-	opacity: 1;
-	transform: translateY(-2px);
+  opacity: 1;
+  transform: translateY(-2px);
 }
 
 .thumbnail-item.border-primary,
 .thumbnail-item.active-thumbnail {
-	opacity: 1;
-	border-color: var(--color-primary);
+  opacity: 1;
+  border-color: var(--color-primary);
 }
 
 .thumbnail-item.initial-active {
-	opacity: 1;
+  opacity: 1;
 }
 
 /* Zoom icon styling */
 .zoom-icon {
-	transform: scale(0.8);
-	transition: transform 0.3s ease;
-	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: 50%;
-	padding: 10px;
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 10px;
 }
 
 .media-image-container:hover .zoom-icon {
-	transform: scale(1);
+  transform: scale(1);
 }
 
 /* Loading state */
 .media-carousel::before {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 40px;
-	height: 40px;
-	border: 4px solid rgba(0, 0, 0, 0.1);
-	border-left-color: var(--color-primary);
-	border-radius: 50%;
-	animation: spin 1s linear infinite;
-	z-index: 0;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 0;
 }
 
 @keyframes spin {
-	0% {
-		transform: translate(-50%, -50%) rotate(0deg);
-	}
-	100% {
-		transform: translate(-50%, -50%) rotate(360deg);
-	}
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 /* Hide loading indicator when images are loaded */
 .media-carousel.loaded::before {
-	display: none;
+  display: none;
 }
 
 /* Carousel controls */
 .carousel-control {
-	background-color: rgba(255, 255, 255, 0.8);
-	border-radius: 50%;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-	width: 40px;
-	height: 40px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: all 0.3s ease;
-	opacity: 0.7;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
 }
 
 .carousel-control:hover {
-	background-color: white;
-	opacity: 1;
-	transform: scale(1.1);
+  background-color: white;
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 /* Image animations */
 @keyframes zoomIn {
-	from {
-		transform: scale(0.9);
-		opacity: 0;
-	}
-	to {
-		transform: scale(1);
-		opacity: 1;
-	}
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .zoom-in-animation {
-	animation: zoomIn 0.4s ease forwards;
+  animation: zoomIn 0.4s ease forwards;
 }
 
 /* Responsive styling */
 @media (min-width: 768px) {
-	.thumbnails-track {
-		justify-content: center;
-	}
+  .thumbnails-track {
+    justify-content: center;
+  }
 }
 
 @media (min-width: 1024px) {
-	.thumbnail-item {
-		width: 24px;
-		height: 24px;
-	}
+  .thumbnail-item {
+    width: 24px;
+    height: 24px;
+  }
 }

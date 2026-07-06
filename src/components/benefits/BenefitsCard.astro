@@ -9,128 +9,119 @@ import CheckIcon from '../icons/Check.astro';
 
 // Define benefits data
 const benefits = [
-	{
-		icon: AccessIcon,
-		title: 'Acceso inmediato',
-		description: 'Recibe los libros al instante después del pago.',
-		class: 'bg-secondary text-primary p-2 rounded-full',
-	},
-	{
-		icon: MaterialIcon,
-		title: 'Material completo',
-		description:
-			'Libros + Workbook + Audios + Videos + Software + Exámenes.',
-		class: 'bg-secondary text-black p-2 rounded-full',
-	},
-	{
-		icon: SubscriptionIcon,
-		title: 'Sin suscripción',
-		description: 'Compra única, sin pagos recurrentes.',
-		class: 'bg-secondary text-red-900 p-2 rounded-full',
-	},
-	{
-		icon: PriceIcon,
-		title: 'Precios accesibles',
-		description: 'Packs completos por solo S/10.00.',
-		class: 'bg-secondary text-accent p-2 rounded-full',
-	},
-	{
-		icon: SupportIcon,
-		title: 'Atención personalizada',
-		description: 'Resolvemos dudas en WhatsApp y Telegram.',
-		class: 'bg-secondary text-black p-2 rounded-full',
-	},
-	{
-		icon: SecurityIcon,
-		title: 'Seguridad',
-		description:
-			'Pagos 100% seguros con Yape, Plin, Transferencias y PayPal.',
-		class: 'bg-secondary text-black p-2 rounded-full',
-	},
+  {
+    icon: AccessIcon,
+    title: 'Acceso inmediato',
+    description: 'Recibe los libros al instante después del pago.',
+    class: 'bg-secondary text-primary p-2 rounded-full',
+  },
+  {
+    icon: MaterialIcon,
+    title: 'Material completo',
+    description: 'Libros + Workbook + Audios + Videos + Software + Exámenes.',
+    class: 'bg-secondary text-black p-2 rounded-full',
+  },
+  {
+    icon: SubscriptionIcon,
+    title: 'Sin suscripción',
+    description: 'Compra única, sin pagos recurrentes.',
+    class: 'bg-secondary text-red-900 p-2 rounded-full',
+  },
+  {
+    icon: PriceIcon,
+    title: 'Precios accesibles',
+    description: 'Packs completos por solo S/10.00.',
+    class: 'bg-secondary text-accent p-2 rounded-full',
+  },
+  {
+    icon: SupportIcon,
+    title: 'Atención personalizada',
+    description: 'Resolvemos dudas en WhatsApp y Telegram.',
+    class: 'bg-secondary text-black p-2 rounded-full',
+  },
+  {
+    icon: SecurityIcon,
+    title: 'Seguridad',
+    description: 'Pagos 100% seguros con Yape, Plin, Transferencias y PayPal.',
+    class: 'bg-secondary text-black p-2 rounded-full',
+  },
 ];
 
 const { className = '' } = Astro.props;
 ---
 
 <div class=`${className}`>
-	<!-- Background gradient effect -->
-	<div
-		class='absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-50'>
-	</div>
+  <!-- Background gradient effect -->
+  <div className="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-50" />
 
-	<div
-		class='bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 lg:transform lg:transition-all lg:duration-500 lg:hover:shadow-xl relative overflow-hidden h-full'>
-		<!-- Content wrapper -->
-		<div class='z-10 relative'>
-			<h3
-				class='text-xl md:text-2xl font-bold text-primary-dark mb-5 md:mb-7 flex items-center'>
-				<span
-					class='bg-primary text-white p-2 rounded-full mr-3 shadow-md transform transition-all duration-300 hover:scale-110'>
-					<CheckIcon class='w-5 h-5 sm:w-6 sm:h-6' />
-				</span>
-				Beneficios de comprar aquí
-			</h3>
+  <div
+    className="relative h-full overflow-hidden rounded-xl bg-white p-4 shadow-lg sm:p-6 md:p-8 lg:transform lg:transition-all lg:duration-500 lg:hover:shadow-xl"
+  >
+    <!-- Content wrapper -->
+    <div className="relative z-10">
+      <h3 className="text-primary-dark mb-5 flex items-center text-xl font-bold md:mb-7 md:text-2xl">
+        <span
+          className="bg-primary mr-3 transform rounded-full p-2 text-white shadow-md transition-all duration-300 hover:scale-110"
+        >
+          <CheckIcon class="h-5 w-5 sm:h-6 sm:w-6" />
+        </span>
+        Beneficios de comprar aquí
+      </h3>
 
-			<!-- Benefits cards with improved grid -->
-			<div
-				class='grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-10 h-full benefits-grid'>
-				{
-					benefits.map((benefit, index) => (
-						<div
-							class={`benefit-item benefit-item-${index + 1} p-3 sm:p-4 md:p-5 rounded-lg border border-neutral bg-white/80 lg:hover:border-primary-light lg:hover:bg-white group lg:transition-all lg:duration-300 cursor-default`}>
-							<div class='flex items-start'>
-								<div
-									class={`${benefit.class} h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center shadow-sm mr-3 sm:mr-4 shrink-0`}>
-									<benefit.icon class='w-6 h-6' />
-								</div>
-								<div>
-									<h4 class='font-bold text-primary-dark text-base sm:text-lg mb-1 sm:mb-2 leading-tight'>
-										{benefit.title}
-									</h4>
-									<p class='text-gray-600 text-sm sm:text-base'>
-										{benefit.description}
-									</p>
-								</div>
-							</div>
-						</div>
-					))
-				}
-			</div>
-		</div>
-	</div>
+      <!-- Benefits cards with improved grid -->
+      <div className="benefits-grid grid h-full grid-cols-1 gap-3 sm:gap-4 md:gap-10 lg:grid-cols-2">
+        {
+          benefits.map((benefit, index) => (
+            <div
+              className={`benefit-item benefit-item-${index + 1} border-neutral lg:hover:border-primary-light group cursor-default rounded-lg border bg-white/80 p-3 sm:p-4 md:p-5 lg:transition-all lg:duration-300 lg:hover:bg-white`}
+            >
+              <div className="flex items-start">
+                <div
+                  className={`${benefit.class} mr-3 flex h-10 w-10 shrink-0 items-center justify-center shadow-sm sm:mr-4 sm:h-11 sm:w-11`}
+                >
+                  <benefit.icon class="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="text-primary-dark mb-1 text-base leading-tight font-bold sm:mb-2 sm:text-lg">
+                    {benefit.title}
+                  </h4>
+                  <p className="text-sm text-gray-600 sm:text-base">{benefit.description}</p>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
-	.benefit-item-container {
-		position: relative;
-		transition: all 0.3s ease;
-	}
+  .benefit-item-container {
+    position: relative;
+    transition: all 0.3s ease;
+  }
 
-	/* Improved mobile experience */
-	@media (max-width: 640px) {
-		.benefit-item-container {
-			position: relative;
-			padding-bottom: 1.5rem;
-		}
+  /* Improved mobile experience */
+  @media (max-width: 640px) {
+    .benefit-item-container {
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
 
-		.benefit-item-container::after {
-			content: '';
-			position: absolute;
-			bottom: 0;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 30%;
-			height: 1px;
-			background: linear-gradient(
-				90deg,
-				transparent,
-				var(--color-primary-light),
-				transparent
-			);
-		}
+    .benefit-item-container::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-primary-light), transparent);
+    }
 
-		.benefit-item-container:last-child::after {
-			display: none;
-		}
-	}
+    .benefit-item-container:last-child::after {
+      display: none;
+    }
+  }
 </style>

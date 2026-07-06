@@ -1,0 +1,9 @@
+dist/
+.astro/
+node_modules/
+bun.lock
+public/assets/
+public/images/
+public/icons/
+*.min.js
+*.min.css

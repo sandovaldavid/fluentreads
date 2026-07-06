@@ -9,32 +9,32 @@ import type { FormatTag, PopularityTag } from '../types/book';
 import '../styles/Card.css';
 
 interface Props {
-	product: Product;
-	size?: 'small' | 'medium' | 'large';
-	className?: string;
-	editorial?: string; // Optional editorial name (not ID)
+  product: Product;
+  size?: 'small' | 'medium' | 'large';
+  className?: string;
+  editorial?: string; // Optional editorial name (not ID)
 }
 
 const {
-	product,
-	size = 'medium',
-	className = '',
-	editorial, // Optional override for editorial name
+  product,
+  size = 'medium',
+  className = '',
+  editorial, // Optional override for editorial name
 } = Astro.props;
 
 // Extract values from the product object
 const {
-	id,
-	title,
-	price,
-	discount = 0,
-	coverImage,
-	rating,
-	level,
-	formatTags = [],
-	popularityTags = [],
-	productType = 'book',
-	detailsLink,
+  id,
+  title,
+  price,
+  discount = 0,
+  coverImage,
+  rating,
+  level,
+  formatTags = [],
+  popularityTags = [],
+  productType = 'book',
+  detailsLink,
 } = product;
 
 // Calculate discount if provided
@@ -50,39 +50,39 @@ const formattedFinalPrice = `S/${finalPrice.toFixed(2)}`;
 const tagConfig = productType === 'exam' ? difficultyConfig : levelConfig;
 const levelOrDifficulty = level;
 const levelDisplay = levelOrDifficulty
-	? tagConfig[levelOrDifficulty as keyof typeof tagConfig]
-	: null;
+  ? tagConfig[levelOrDifficulty as keyof typeof tagConfig]
+  : null;
 
 // Replace fixed height configurations with responsive approach
 const cardClasses = {
-	small: 'product-card-small',
-	medium: 'product-card-medium',
-	large: 'product-card-large',
+  small: 'product-card-small',
+  medium: 'product-card-medium',
+  large: 'product-card-large',
 };
 
 const imgHeights = {
-	small: 'h-[100px] sm:h-[120px]',
-	medium: 'h-[120px] sm:h-[160px]',
-	large: 'h-[140px] sm:h-[180px]',
+  small: 'h-[100px] sm:h-[120px]',
+  medium: 'h-[120px] sm:h-[160px]',
+  large: 'h-[140px] sm:h-[180px]',
 };
 
 // Better font sizing for responsive display
 const fontSizes = {
-	small: 'text-xs sm:text-sm',
-	medium: 'text-sm sm:text-base',
-	large: 'text-base sm:text-lg',
+  small: 'text-xs sm:text-sm',
+  medium: 'text-sm sm:text-base',
+  large: 'text-base sm:text-lg',
 };
 
 const formatTagsLimit = {
-	small: { xs: 1, sm: 1 },
-	medium: { xs: 1, sm: 2 },
-	large: { xs: 2, sm: 3 },
+  small: { xs: 1, sm: 1 },
+  medium: { xs: 1, sm: 2 },
+  large: { xs: 2, sm: 3 },
 };
 
 const popularityTagsLimit = {
-	small: { xs: 0, sm: 1 },
-	medium: { xs: 1, sm: 1 },
-	large: { xs: 1, sm: 2 },
+  small: { xs: 0, sm: 1 },
+  medium: { xs: 1, sm: 1 },
+  large: { xs: 1, sm: 2 },
 };
 
 // Properly type and filter the tags
@@ -91,254 +91,229 @@ const typedPopularityTags = popularityTags as PopularityTag[];
 
 // Get high priority tags first (PDF is usually most important for books)
 const prioritizedFormatTags = [...typedFormatTags].sort((a, b) => {
-	// Prioritize PDF, then AUDIO, then other formats
-	if (a === 'pdf') return -1;
-	if (b === 'pdf') return 1;
-	if (a === 'audio') return -1;
-	if (b === 'audio') return 1;
-	return 0;
+  // Prioritize PDF, then AUDIO, then other formats
+  if (a === 'pdf') return -1;
+  if (b === 'pdf') return 1;
+  if (a === 'audio') return -1;
+  if (b === 'audio') return 1;
+  return 0;
 });
 
 // Prepare tags to display based on screen size and card size
-const visibleFormatTags = prioritizedFormatTags.slice(
-	0,
-	formatTagsLimit[size].sm
-);
-const visiblePopularityTags = typedPopularityTags.slice(
-	0,
-	popularityTagsLimit[size].sm
-);
+const visibleFormatTags = prioritizedFormatTags.slice(0, formatTagsLimit[size].sm);
+const visiblePopularityTags = typedPopularityTags.slice(0, popularityTagsLimit[size].sm);
 
-const isBestseller = typedPopularityTags.includes(
-	'bestSeller' as PopularityTag
-);
+const isBestseller = typedPopularityTags.includes('bestSeller' as PopularityTag);
 const showBestsellerTag =
-	isBestseller &&
-	!visiblePopularityTags.includes('bestSeller' as PopularityTag);
+  isBestseller && !visiblePopularityTags.includes('bestSeller' as PopularityTag);
 
 // Determine if we should show editorial based on size
 const showEditorial = size !== 'small' && editorial;
 ---
 
 <div
-	class={`product-card relative flex flex-col overflow-hidden rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 ${cardClasses[size]} ${className}`}>
-	<!-- Product Image Container -->
-	<a
-		href={detailsLink}
-		class='block relative overflow-hidden book-cover-container'>
-		<img
-			src={coverImage}
-			alt={`Portada de ${title}`}
-			class={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgHeights[size]}`}
-			loading='lazy'
-		/>
+  className={`product-card relative flex flex-col overflow-hidden rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 ${cardClasses[size]} ${className}`}
+>
+  <!-- Product Image Container -->
+  <a href={detailsLink} className="book-cover-container relative block overflow-hidden">
+    <img
+      src={coverImage}
+      alt={`Portada de ${title}`}
+      className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgHeights[size]}`}
+      loading="lazy"
+    />
 
-		{/* Discount Badge - Optimized for mobile */}
-		{
-			hasDiscount && (
-				<div class='absolute top-1 right-1 sm:top-2 sm:right-2 bg-accent text-white font-bold text-[10px] sm:text-xs py-0.5 px-1.5 sm:py-1 sm:px-3 rounded-full shadow-md'>
-					{discount}% OFF
-				</div>
-			)
-		}
+    {/* Discount Badge - Optimized for mobile */}
+    {
+      hasDiscount && (
+        <div className="bg-accent absolute top-1 right-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white shadow-md sm:top-2 sm:right-2 sm:px-3 sm:py-1 sm:text-xs">
+          {discount}% OFF
+        </div>
+      )
+    }
 
-		{/* Bestseller Badge - Optimized for mobile */}
-		{
-			isBestseller && (
-				<div class='absolute top-1 left-1 sm:top-2 sm:left-2 bg-amber-400 text-primary-dark font-bold text-[10px] sm:text-xs py-0.5 px-1.5 sm:py-1 sm:px-3 rounded-full shadow-md bestseller-badge'>
-					<span class='flex items-center'>🔥</span>
-				</div>
-			)
-		}
+    {/* Bestseller Badge - Optimized for mobile */}
+    {
+      isBestseller && (
+        <div className="text-primary-dark bestseller-badge absolute top-1 left-1 rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold shadow-md sm:top-2 sm:left-2 sm:px-3 sm:py-1 sm:text-xs">
+          <span className="flex items-center">🔥</span>
+        </div>
+      )
+    }
 
-		{/* Product Type Badge - Optimized for mobile */}
-		<div
-			class='absolute bottom-1 left-1 sm:bottom-2 sm:left-2 bg-primary bg-opacity-80 text-white text-[10px] sm:text-xs py-0.5 px-1.5 sm:py-1 sm:px-2 rounded'>
-			{
-				productType === 'book'
-					? 'Libro'
-					: productType === 'exam'
-						? 'Examen'
-						: 'Pack'
-			}
-		</div>
-	</a>
+    {/* Product Type Badge - Optimized for mobile */}
+    <div
+      className="bg-primary bg-opacity-80 absolute bottom-1 left-1 rounded px-1.5 py-0.5 text-[10px] text-white sm:bottom-2 sm:left-2 sm:px-2 sm:py-1 sm:text-xs"
+    >
+      {productType === 'book' ? 'Libro' : productType === 'exam' ? 'Examen' : 'Pack'}
+    </div>
+  </a>
 
-	<!-- Product Details -->
-	<div class='flex flex-col flex-grow p-2 sm:p-4'>
-		{/* Editorial - Only on larger screens */}
-		{
-			showEditorial && (
-				<div class='hidden sm:block text-xs text-gray-500 mb-1'>
-					{editorial}
-				</div>
-			)
-		}
+  <!-- Product Details -->
+  <div className="flex flex-grow flex-col p-2 sm:p-4">
+    {/* Editorial - Only on larger screens */}
+    {showEditorial && <div className="mb-1 hidden text-xs text-gray-500 sm:block">{editorial}</div>}
 
-		{/* Title - Improved font scaling */}
-		<h3
-			class={`font-bold text-gray-800 mb-1 line-clamp-2 ${fontSizes[size]}`}>
-			<a href={detailsLink} class='hover:text-primary transition-colors'>
-				{title}
-			</a>
-		</h3>
+    {/* Title - Improved font scaling */}
+    <h3 className={`font-bold text-gray-800 mb-1 line-clamp-2 ${fontSizes[size]}`}>
+      <a href={detailsLink} className="hover:text-primary transition-colors">
+        {title}
+      </a>
+    </h3>
 
-		{/* Level/Difficulty Tag */}
-		{
-			levelDisplay && (
-				<div class='mb-1 sm:mb-2'>
-					<span
-						class={`inline-block text-[10px] sm:text-xs px-1 sm:px-2 py-0.5 rounded-full ${levelDisplay.color}`}>
-						{levelDisplay.label}
-					</span>
-				</div>
-			)
-		}
+    {/* Level/Difficulty Tag */}
+    {
+      levelDisplay && (
+        <div className="mb-1 sm:mb-2">
+          <span
+            className={`inline-block rounded-full px-1 py-0.5 text-[10px] sm:px-2 sm:text-xs ${levelDisplay.color}`}
+          >
+            {levelDisplay.label}
+          </span>
+        </div>
+      )
+    }
 
-		{/* Tags */}
-		<div class={`tags-container ${size !== 'small' ? 'flex-grow' : ''}`}>
-			<BookTags
-				formatTags={visibleFormatTags}
-				popularityTags={visiblePopularityTags}
-				formatConfig={formatConfig}
-				popularityConfig={popularityConfig}
-			/>
-		</div>
+    {/* Tags */}
+    <div className={`tags-container ${size !== 'small' ? 'flex-grow' : ''}`}>
+      <BookTags
+        formatTags={visibleFormatTags}
+        popularityTags={visiblePopularityTags}
+        formatConfig={formatConfig}
+        popularityConfig={popularityConfig}
+      />
+    </div>
 
-		{/* Rating Stars */}
-		{
-			rating &&
-				rating.score > 0 &&
-				(size !== 'small' ||
-					(size === 'small' && className.includes('sm:'))) && (
-					<div class='flex items-center mb-1 sm:mb-2'>
-						<ReviewStars
-							score={rating.score}
-							size='small'
-							showScore={false}
-							className='text-yellow-400'
-						/>
-					</div>
-				)
-		}
+    {/* Rating Stars */}
+    {
+      rating &&
+        rating.score > 0 &&
+        (size !== 'small' || (size === 'small' && className.includes('sm:'))) && (
+          <div className="mb-1 flex items-center sm:mb-2">
+            <ReviewStars
+              score={rating.score}
+              size="small"
+              showScore={false}
+              className="text-yellow-400"
+            />
+          </div>
+        )
+    }
 
-		{/* Price Display */}
-		<div class='flex items-center justify-between mt-auto pt-2'>
-			<div class='price-display'>
-				{
-					hasDiscount ? (
-						<div class='flex flex-col'>
-							<span class='font-bold text-primary text-sm sm:text-base'>
-								{formattedFinalPrice}
-							</span>
-							<span class='text-gray-500 line-through text-[10px] sm:text-xs'>
-								{formattedPrice}
-							</span>
-						</div>
-					) : (
-						<span class='font-bold text-primary text-sm sm:text-base'>
-							{formattedPrice}
-						</span>
-					)
-				}
-			</div>
-			<Button
-				href={detailsLink}
-				variant='primary'
-				size={size === 'small' ? 'xsmall' : 'small'}
-				newTab={false}>
-				{size === 'small' ? 'Ver' : 'Ver detalles'}
-			</Button>
-		</div>
-	</div>
+    {/* Price Display */}
+    <div className="mt-auto flex items-center justify-between pt-2">
+      <div className="price-display">
+        {
+          hasDiscount ? (
+            <div className="flex flex-col">
+              <span className="text-primary text-sm font-bold sm:text-base">{formattedFinalPrice}</span>
+              <span className="text-[10px] text-gray-500 line-through sm:text-xs">
+                {formattedPrice}
+              </span>
+            </div>
+          ) : (
+            <span className="text-primary text-sm font-bold sm:text-base">{formattedPrice}</span>
+          )
+        }
+      </div>
+      <Button
+        href={detailsLink}
+        variant="primary"
+        size={size === 'small' ? 'xsmall' : 'small'}
+        newTab={false}
+      >
+        {size === 'small' ? 'Ver' : 'Ver detalles'}
+      </Button>
+    </div>
+  </div>
 </div>
 
 <style>
-	.product-card {
-		border: 1px solid rgba(0, 0, 0, 0.05);
-		transition: all 0.3s ease;
-	}
+  .product-card {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
 
-	/* Responsive height for different card sizes */
-	.product-card-small {
-		min-height: 220px;
-	}
+  /* Responsive height for different card sizes */
+  .product-card-small {
+    min-height: 220px;
+  }
 
-	.product-card-medium {
-		min-height: 260px;
-	}
+  .product-card-medium {
+    min-height: 260px;
+  }
 
-	.product-card-large {
-		min-height: 300px;
-	}
+  .product-card-large {
+    min-height: 300px;
+  }
 
-	/* Adjust heights for larger screens */
-	@media (min-width: 640px) {
-		.product-card-small {
-			min-height: 320px;
-		}
+  /* Adjust heights for larger screens */
+  @media (min-width: 640px) {
+    .product-card-small {
+      min-height: 320px;
+    }
 
-		.product-card-medium {
-			min-height: 360px;
-		}
+    .product-card-medium {
+      min-height: 360px;
+    }
 
-		.product-card-large {
-			min-height: 420px;
-		}
-	}
+    .product-card-large {
+      min-height: 420px;
+    }
+  }
 
-	/* More space-efficient tag display on mobile */
-	.tags-container {
-		margin-bottom: 0.5rem;
-	}
+  /* More space-efficient tag display on mobile */
+  .tags-container {
+    margin-bottom: 0.5rem;
+  }
 
-	@media (min-width: 640px) {
-		.tags-container {
-			margin-bottom: 0.75rem;
-		}
-	}
+  @media (min-width: 640px) {
+    .tags-container {
+      margin-bottom: 0.75rem;
+    }
+  }
 
-	.product-card:hover {
-		transform: translateY(-5px);
-	}
+  .product-card:hover {
+    transform: translateY(-5px);
+  }
 
-	/* Bestseller badge animation */
-	.bestseller-badge {
-		animation: pulse 2s infinite;
-	}
+  /* Bestseller badge animation */
+  .bestseller-badge {
+    animation: pulse 2s infinite;
+  }
 
-	@keyframes pulse {
-		0% {
-			transform: scale(1);
-		}
-		50% {
-			transform: scale(1.05);
-		}
-		100% {
-			transform: scale(1);
-		}
-	}
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 
-	/* Better touch target sizes on small screens */
-	@media (max-width: 480px) {
-		.product-card a.bg-primary {
-			padding: 0.25rem 0.5rem;
-			min-width: 32px;
-			text-align: center;
-		}
-	}
+  /* Better touch target sizes on small screens */
+  @media (max-width: 480px) {
+    .product-card a.bg-primary {
+      padding: 0.25rem 0.5rem;
+      min-width: 32px;
+      text-align: center;
+    }
+  }
 
-	/* Fix line height on small screens */
-	@media (max-width: 640px) {
-		.product-card h3 {
-			line-height: 1.3;
-		}
-	}
+  /* Fix line height on small screens */
+  @media (max-width: 640px) {
+    .product-card h3 {
+      line-height: 1.3;
+    }
+  }
 
-	/* In mobile 2-column grid layout, add spacing between cards */
-	@media (max-width: 640px) {
-		.product-card {
-			margin-bottom: 0.5rem;
-		}
-	}
+  /* In mobile 2-column grid layout, add spacing between cards */
+  @media (max-width: 640px) {
+    .product-card {
+      margin-bottom: 0.5rem;
+    }
+  }
 </style>

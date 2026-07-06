@@ -87,14 +87,14 @@ const contactForm = {
 
 <section
 	id='contact-form'
-	class='form-section bg-white p-6 md:p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 my-4 md:my-8 lg:mx-6'>
-	<div class='flex flex-col md:flex-row items-center gap-4'>
-		<div class='flex-1 flex flex-col space-y-3'>
-			<div class='flex items-center mb-4'>
-				<span class='bg-primary text-white p-2 rounded-full mr-3'>
+	className='form-section bg-white p-6 md:p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 my-4 md:my-8 lg:mx-6'>
+	<div className='flex flex-col md:flex-row items-center gap-4'>
+		<div className='flex-1 flex flex-col space-y-3'>
+			<div className='flex items-center mb-4'>
+				<span className='bg-primary text-white p-2 rounded-full mr-3'>
 					<EmailIcon class='w-5 h-5' />
 				</span>
-				<h3 class='font-bold text-lg md:text-xl lg:text-2xl text-primary-dark'>
+				<h3 className='font-bold text-lg md:text-xl lg:text-2xl text-primary-dark'>
 					Envíanos un mensaje
 				</h3>
 			</div>
@@ -102,7 +102,7 @@ const contactForm = {
 	</div>
 
 	<!-- Success message container, initially hidden -->
-	<div id='form-response-container' class='transition-all duration-500'>
+	<div id='form-response-container' className='transition-all duration-500'>
 		<SuccessMessage id='success-message' class='hidden' />
 	</div>
 
@@ -110,16 +110,16 @@ const contactForm = {
 	<div id='form-container'>
 		{
 			contactForm.recaptcha.isDevelopment && (
-				<div class='bg-blue-50 border-l-4 border-blue-400 p-4 mb-6'>
-					<div class='flex'>
-						<div class='flex-shrink-0'>
+				<div className='bg-blue-50 border-l-4 border-blue-400 p-4 mb-6'>
+					<div className='flex'>
+						<div className='flex-shrink-0'>
 							<WarningIcon class='h-5 w-5 text-blue-500' />
 						</div>
-						<div class='ml-3'>
-							<p class='text-sm text-blue-700 font-medium'>
+						<div className='ml-3'>
+							<p className='text-sm text-blue-700 font-medium'>
 								Modo Desarrollo Local
 							</p>
-							<p class='text-sm text-blue-700'>
+							<p className='text-sm text-blue-700'>
 								reCAPTCHA desactivado para evitar errores COEP en localhost
 							</p>
 						</div>
@@ -130,13 +130,13 @@ const contactForm = {
 
 		{
 			!contactForm.recaptcha.isDevelopment && contactForm.recaptcha.enabled === false && (
-				<div class='bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6'>
-					<div class='flex'>
-						<div class='flex-shrink-0'>
+				<div className='bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6'>
+					<div className='flex'>
+						<div className='flex-shrink-0'>
 							<WarningIcon class='h-5 w-5 text-yellow-400' />
 						</div>
-						<div class='ml-3'>
-							<p class='text-sm text-yellow-700'>
+						<div className='ml-3'>
+							<p className='text-sm text-yellow-700'>
 								Modo desarrollo: reCAPTCHA desactivado
 							</p>
 						</div>
@@ -149,117 +149,117 @@ const contactForm = {
 			id='contactForm'
 			action={contactForm.action}
 			method='post'
-			class='pageclip-form space-y-6'>
+			className='pageclip-form space-y-6'>
 			<!-- Form grid layout -->
-			<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+			<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 				<!-- Name Field -->
-				<div class='form-group'>
+				<div className='form-group'>
 					<label
-						for='name'
-						class='block text-sm font-medium text-gray-700 mb-1'
+						htmlFor='name'
+						className='block text-sm font-medium text-gray-700 mb-1'
 						>{contactForm.fields[0].label}
-						<span class='text-accent'>*</span></label
+						<span className='text-accent'>*</span></label
 					>
-					<div class='relative'>
+					<div className='relative'>
 						<input
 							type='text'
 							id='name'
 							name='name'
 							required
-							class='form-input w-full py-2 px-4 border border-neutral rounded-lg focus:ring-2 focus:ring-primary-light focus:border-primary transition duration-200 placeholder-gray-400'
+							className='form-input w-full py-2 px-4 border border-neutral rounded-lg focus:ring-2 focus:ring-primary-light focus:border-primary transition duration-200 placeholder-gray-400'
 							placeholder={contactForm.fields[0].placeholder}
 						/>
-						<span class='form-validation-icon'></span>
+						<span className='form-validation-icon' />
 					</div>
-					<span class='error-message text-sm text-red-500 hidden'>
+					<span className='error-message text-sm text-red-500 hidden'>
 						{contactForm.fields[0].errorMessage}
 					</span>
 				</div>
 
 				<!-- Email Field -->
-				<div class='form-group'>
+				<div className='form-group'>
 					<label
-						for='email'
-						class='block text-sm font-medium text-gray-700 mb-1'
+						htmlFor='email'
+						className='block text-sm font-medium text-gray-700 mb-1'
 						>{contactForm.fields[1].label}
-						<span class='text-accent'>*</span></label
+						<span className='text-accent'>*</span></label
 					>
-					<div class='relative'>
+					<div className='relative'>
 						<input
 							type='email'
 							id='email'
 							name='email'
 							required
-							class='form-input w-full py-2 px-4 border border-neutral rounded-lg focus:ring-2 focus:ring-primary-light focus:border-primary transition duration-200 placeholder-gray-400'
+							className='form-input w-full py-2 px-4 border border-neutral rounded-lg focus:ring-2 focus:ring-primary-light focus:border-primary transition duration-200 placeholder-gray-400'
 							placeholder={contactForm.fields[1].placeholder}
 						/>
-						<span class='form-validation-icon'></span>
+						<span className='form-validation-icon' />
 					</div>
-					<span class='error-message text-sm text-red-500 hidden'>
+					<span className='error-message text-sm text-red-500 hidden'>
 						{contactForm.fields[1].errorMessage}
 					</span>
 				</div>
 			</div>
 
 			<!-- Subject Field -->
-			<div class='form-group'>
+			<div className='form-group'>
 				<label
-					for='subject'
-					class='block text-sm font-medium text-gray-700 mb-1'
+					htmlFor='subject'
+					className='block text-sm font-medium text-gray-700 mb-1'
 					>{contactForm.fields[2].label}
-					<span class='text-accent'>*</span></label
+					<span className='text-accent'>*</span></label
 				>
-				<div class='relative'>
+				<div className='relative'>
 					<input
 						type='text'
 						id='subject'
 						name='subject'
 						required
-						class='form-input w-full py-2 px-4 border border-neutral rounded-lg focus:ring-2 focus:ring-primary-light focus:border-primary transition duration-200 placeholder-gray-400'
+						className='form-input w-full py-2 px-4 border border-neutral rounded-lg focus:ring-2 focus:ring-primary-light focus:border-primary transition duration-200 placeholder-gray-400'
 						placeholder={contactForm.fields[2].placeholder}
 					/>
-					<span class='form-validation-icon'></span>
+					<span className='form-validation-icon' />
 				</div>
-				<span class='error-message text-sm text-red-500 hidden'>
+				<span className='error-message text-sm text-red-500 hidden'>
 					{contactForm.fields[2].errorMessage}
 				</span>
 			</div>
 
 			<!-- Message Field -->
-			<div class='form-group'>
+			<div className='form-group'>
 				<label
-					for='body'
-					class='block text-sm font-medium text-gray-700 mb-1'
+					htmlFor='body'
+					className='block text-sm font-medium text-gray-700 mb-1'
 					>{contactForm.fields[3].label}
-					<span class='text-accent'>*</span></label
+					<span className='text-accent'>*</span></label
 				>
-				<div class='relative'>
+				<div className='relative'>
 					<textarea
 						id='body'
 						name='body'
 						rows='6'
 						required
-						class='form-textarea w-full py-2 px-4 border border-neutral rounded-lg focus:ring-2 focus:ring-primary-light focus:border-primary transition duration-200 placeholder-gray-400'
+						className='form-textarea w-full py-2 px-4 border border-neutral rounded-lg focus:ring-2 focus:ring-primary-light focus:border-primary transition duration-200 placeholder-gray-400'
 						placeholder={contactForm.fields[3].placeholder}
-					></textarea>
-					<span class='form-validation-icon'></span>
+					 />
+					<span className='form-validation-icon' />
 				</div>
-				<span class='error-message text-sm text-red-500 hidden'>
+				<span className='error-message text-sm text-red-500 hidden'>
 					{contactForm.fields[3].errorMessage}
 				</span>
 			</div>
 
 			<!-- Development Mode Anti-Spam Fallback -->
 			{contactForm.recaptcha.isDevelopment && (
-				<div class="dev-spam-check p-3 border border-gray-300 rounded-lg bg-gray-50">
-					<label for="dev-human-check" class="flex items-center cursor-pointer">
+				<div className="dev-spam-check p-3 border border-gray-300 rounded-lg bg-gray-50">
+					<label htmlFor="dev-human-check" className="flex items-center cursor-pointer">
 						<input 
 							type="checkbox" 
 							id="dev-human-check" 
-							class="mr-2 h-5 w-5 text-primary focus:ring-primary border-gray-300 rounded"
+							className="mr-2 h-5 w-5 text-primary focus:ring-primary border-gray-300 rounded"
 							required
 						/>
-						<span class="text-gray-700">Confirmo que no soy un robot (verificación solo en desarrollo)</span>
+						<span className="text-gray-700">Confirmo que no soy un robot (verificación solo en desarrollo)</span>
 					</label>
 				</div>
 			)}
@@ -267,14 +267,14 @@ const contactForm = {
 			<!-- Only load reCAPTCHA if not in development mode -->
 			{
 				!contactForm.recaptcha.isDevelopment && contactForm.recaptcha.enabled && (
-					<div class="recaptcha-container my-4 p-3 border border-gray-300 rounded-lg bg-gray-50">
-						<p class="mb-2 text-sm text-gray-600">Por favor completa el captcha:</p>
+					<div className="recaptcha-container my-4 p-3 border border-gray-300 rounded-lg bg-gray-50">
+						<p className="mb-2 text-sm text-gray-600">Por favor completa el captcha:</p>
 						<div
 							id="recaptcha-widget"
-							class="g-recaptcha"
+							className="g-recaptcha"
 							data-sitekey={contactForm.recaptcha.siteKey}
-						></div>
-						<div id="recaptcha-error" class="text-red-500 text-sm mt-2 hidden">
+						 />
+						<div id="recaptcha-error" className="text-red-500 text-sm mt-2 hidden">
 							Error al cargar reCAPTCHA. Por favor recarga la página.
 						</div>
 					</div>
@@ -282,7 +282,7 @@ const contactForm = {
 			}
 
 			<!-- Submit Button with loading state -->
-			<div class='flex justify-end'>
+			<div className='flex justify-end'>
 				<!-- Corregido: Estructura del botón para mostrar correctamente el texto -->
 				<Button
 					type='submit'
@@ -290,13 +290,13 @@ const contactForm = {
 					size='large'
 					id='submit-button'
 					class='group relative pageclip-form__submit shadow-md hover:shadow-lg transform transition-all duration-300 active:scale-95'>
-					<span class='submit-button-content flex items-center'>
-						<span class='mr-2'>Enviar mensaje</span>
+					<span className='submit-button-content flex items-center'>
+						<span className='mr-2'>Enviar mensaje</span>
 						<ArrowRightIcon
 							class='size-5 transition-transform duration-300 group-hover:translate-x-1'
 						/>
 					</span>
-					<span class='submit-button-loading hidden items-center'>
+					<span className='submit-button-loading hidden items-center'>
 						<LoadingIcon class='animate-spin mr-2 h-5 w-5' />
 						<span>Enviando...</span>
 					</span>
@@ -304,9 +304,9 @@ const contactForm = {
 			</div>
 		</form>
 
-		<div class='mt-6 text-center text-sm text-gray-500'>
+		<div className='mt-6 text-center text-sm text-gray-500'>
 			<p>
-				Todos los campos marcados con <span class='text-accent'>*</span>
+				Todos los campos marcados con <span className='text-accent'>*</span>
 				son obligatorios
 			</p>
 		</div>

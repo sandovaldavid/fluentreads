@@ -9,329 +9,296 @@ import '../../styles/paymentMethods/DeliveryTime.css';
 ---
 
 <section
-	class='py-12 md:py-16 lg:px-8 bg-neutral-light relative overflow-hidden delivery-time-section'>
-	<!-- Background decorative elements -->
-	<div class='delivery-dots-pattern absolute inset-0 opacity-10'></div>
-	<div class='delivery-shape-1'></div>
-	<div class='delivery-shape-2'></div>
+  className="bg-neutral-light delivery-time-section relative overflow-hidden py-12 md:py-16 lg:px-8"
+>
+  <!-- Background decorative elements -->
+  <div className="delivery-dots-pattern absolute inset-0 opacity-10" />
+  <div className="delivery-shape-1" />
+  <div className="delivery-shape-2" />
 
-	<div class='container mx-auto px-4 relative z-10'>
-		<div
-			class='max-w-4xl mx-auto text-center mb-8 md:mb-12 animate-on-scroll fade-up'>
-			<SectionTitle>Entrega inmediata, sin esperas</SectionTitle>
-			<p class='text-gray-600 mt-4 max-w-2xl mx-auto'>
-				Recibe tus libros digitales al instante después de confirmar tu
-				pago. No pierdas tiempo valioso en tu aprendizaje.
-			</p>
-		</div>
+  <div className="relative z-10 container mx-auto px-4">
+    <div className="animate-on-scroll fade-up mx-auto mb-8 max-w-4xl text-center md:mb-12">
+      <SectionTitle>Entrega inmediata, sin esperas</SectionTitle>
+      <p className="mx-auto mt-4 max-w-2xl text-gray-600">
+        Recibe tus libros digitales al instante después de confirmar tu pago. No pierdas tiempo
+        valioso en tu aprendizaje.
+      </p>
+    </div>
 
-		<!-- Main content with delivery timeline -->
-		<div class='grid md:grid-cols-2 gap-8 md:gap-12 items-center'>
-			<!-- Left Column: Delivery Info -->
-			<div
-				class='bg-white rounded-xl p-6 md:p-8 shadow-lg animate-on-scroll fade-right'>
-				<div class='flex items-center mb-6'>
-					<div class='p-3 bg-primary/10 rounded-full mr-4'>
-						<TimerIcon class='w-8 h-8 text-primary' />
-					</div>
-					<h3 class='text-2xl font-bold text-primary-dark'>
-						Proceso de entrega
-					</h3>
-				</div>
+    <!-- Main content with delivery timeline -->
+    <div className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
+      <!-- Left Column: Delivery Info -->
+      <div className="animate-on-scroll fade-right rounded-xl bg-white p-6 shadow-lg md:p-8">
+        <div className="mb-6 flex items-center">
+          <div className="bg-primary/10 mr-4 rounded-full p-3">
+            <TimerIcon class="text-primary h-8 w-8" />
+          </div>
+          <h3 className="text-primary-dark text-2xl font-bold">Proceso de entrega</h3>
+        </div>
 
-				<div
-					class='delivery-timeline relative pl-8 border-l-2 border-primary/30'>
-					<!-- Timeline steps -->
-					<div class='timeline-item pb-8'>
-						<div class='timeline-marker'></div>
-						<h4 class='font-bold text-lg mb-2'>
-							Confirmación del pago
-						</h4>
-						<p class='text-gray-600'>
-							Una vez recibido y confirmado tu pago, comienza el
-							proceso de entrega inmediata.
-						</p>
-					</div>
+        <div className="delivery-timeline border-primary/30 relative border-l-2 pl-8">
+          <!-- Timeline steps -->
+          <div className="timeline-item pb-8">
+            <div className="timeline-marker" />
+            <h4 className="mb-2 text-lg font-bold">Confirmación del pago</h4>
+            <p className="text-gray-600">
+              Una vez recibido y confirmado tu pago, comienza el proceso de entrega inmediata.
+            </p>
+          </div>
 
-					<div class='timeline-item pb-8'>
-						<div class='timeline-marker'></div>
-						<h4 class='font-bold text-lg mb-2'>
-							Preparación del material
-						</h4>
-						<p class='text-gray-600'>
-							Preparamos tu acceso personalizado a todo el
-							material seleccionado.
-						</p>
-					</div>
+          <div className="timeline-item pb-8">
+            <div className="timeline-marker" />
+            <h4 className="mb-2 text-lg font-bold">Preparación del material</h4>
+            <p className="text-gray-600">
+              Preparamos tu acceso personalizado a todo el material seleccionado.
+            </p>
+          </div>
 
-					<div class='timeline-item'>
-						<div class='timeline-marker'></div>
-						<h4 class='font-bold text-lg mb-2'>Entrega digital</h4>
-						<p class='text-gray-600'>
-							Recibes enlaces de acceso a Google Drive/OneDrive
-							con todos tus libros y materiales.
-						</p>
-					</div>
-				</div>
+          <div className="timeline-item">
+            <div className="timeline-marker" />
+            <h4 className="mb-2 text-lg font-bold">Entrega digital</h4>
+            <p className="text-gray-600">
+              Recibes enlaces de acceso a Google Drive/OneDrive con todos tus libros y materiales.
+            </p>
+          </div>
+        </div>
 
-				<!-- Trust indicator -->
-				<div
-					class='mt-8 flex justify-center md:justify-start items-center space-x-2 text-xs text-gray-500'>
-					<TrustIndicator />
-					Datos protegidos y entrega garantizada
-				</div>
-			</div>
+        <!-- Trust indicator -->
+        <div
+          className="mt-8 flex items-center justify-center space-x-2 text-xs text-gray-500 md:justify-start"
+        >
+          <TrustIndicator />
+          Datos protegidos y entrega garantizada
+        </div>
+      </div>
 
-			<!-- Right Column: Stats and Visuals -->
-			<div class='animate-on-scroll fade-left'>
-				<!-- Delivery stats cards -->
-				<div class='grid grid-cols-2 gap-4 mb-6'>
-					<div
-						class='bg-white rounded-lg p-5 shadow-md text-center delivery-stat-card'>
-						<div class='text-4xl font-bold text-primary mb-2'>
-							15<span class='text-lg'>min</span>
-						</div>
-						<p class='text-sm text-gray-600'>
-							Tiempo máximo de espera
-						</p>
-					</div>
-					<div
-						class='bg-white rounded-lg p-5 shadow-md text-center delivery-stat-card'>
-						<div class='text-4xl font-bold text-primary mb-2'>
-							24<span class='text-lg'>h</span>
-						</div>
-						<p class='text-sm text-gray-600'>Soporte disponible</p>
-					</div>
-					<div
-						class='bg-white rounded-lg p-5 shadow-md text-center delivery-stat-card'>
-						<div class='text-4xl font-bold text-primary mb-2'>
-							100<span class='text-lg'>%</span>
-						</div>
-						<p class='text-sm text-gray-600'>Entrega garantizada</p>
-					</div>
-					<div
-						class='bg-white rounded-lg p-5 shadow-md text-center delivery-stat-card'>
-						<div class='text-4xl font-bold text-primary mb-2'>
-							0<span class='text-lg'>S/.</span>
-						</div>
-						<p class='text-sm text-gray-600'>Costo de envío</p>
-					</div>
-				</div>
+      <!-- Right Column: Stats and Visuals -->
+      <div className="animate-on-scroll fade-left">
+        <!-- Delivery stats cards -->
+        <div className="mb-6 grid grid-cols-2 gap-4">
+          <div className="delivery-stat-card rounded-lg bg-white p-5 text-center shadow-md">
+            <div className="text-primary mb-2 text-4xl font-bold">
+              15<span className="text-lg">min</span>
+            </div>
+            <p className="text-sm text-gray-600">Tiempo máximo de espera</p>
+          </div>
+          <div className="delivery-stat-card rounded-lg bg-white p-5 text-center shadow-md">
+            <div className="text-primary mb-2 text-4xl font-bold">
+              24<span className="text-lg">h</span>
+            </div>
+            <p className="text-sm text-gray-600">Soporte disponible</p>
+          </div>
+          <div className="delivery-stat-card rounded-lg bg-white p-5 text-center shadow-md">
+            <div className="text-primary mb-2 text-4xl font-bold">
+              100<span className="text-lg">%</span>
+            </div>
+            <p className="text-sm text-gray-600">Entrega garantizada</p>
+          </div>
+          <div className="delivery-stat-card rounded-lg bg-white p-5 text-center shadow-md">
+            <div className="text-primary mb-2 text-4xl font-bold">
+              0<span className="text-lg">S/.</span>
+            </div>
+            <p className="text-sm text-gray-600">Costo de envío</p>
+          </div>
+        </div>
 
-				<!-- Delivery status animation -->
-				<div class='bg-white rounded-lg p-6 shadow-md'>
-					<div class='flex items-center justify-between mb-4'>
-						<h4 class='font-bold text-primary-dark'>
-							Estado actual del servicio
-						</h4>
-						<span
-							class='px-3 py-1 bg-accent/20 text-accent rounded-full text-sm font-medium'
-							>Activo</span
-						>
-					</div>
-					<div class='flex items-center space-x-3 mb-4'>
-						<div class='delivery-pulse'></div>
-						<div class='text-sm'>
-							Entregas procesándose en tiempo real
-						</div>
-					</div>
-					<div class='delivery-progress-container'>
-						<div class='delivery-progress-bar'></div>
-					</div>
-					<div class='mt-4 text-sm text-center text-gray-500'>
-						Tiempo promedio de entrega actual: <strong
-							class='text-primary'>~5 minutos</strong
-						>
-					</div>
-				</div>
-			</div>
-		</div>
+        <!-- Delivery status animation -->
+        <div className="rounded-lg bg-white p-6 shadow-md">
+          <div className="mb-4 flex items-center justify-between">
+            <h4 className="text-primary-dark font-bold">Estado actual del servicio</h4>
+            <span className="bg-accent/20 text-accent rounded-full px-3 py-1 text-sm font-medium"
+              >Activo</span
+            >
+          </div>
+          <div className="mb-4 flex items-center space-x-3">
+            <div className="delivery-pulse" />
+            <div className="text-sm">Entregas procesándose en tiempo real</div>
+          </div>
+          <div className="delivery-progress-container">
+            <div className="delivery-progress-bar" />
+          </div>
+          <div className="mt-4 text-center text-sm text-gray-500">
+            Tiempo promedio de entrega actual: <strong className="text-primary">~5 minutos</strong>
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<!-- Testimonials about delivery speed -->
-		<div class='mt-12 md:mt-16 max-w-3xl mx-auto animate-on-scroll fade-up'>
-			<div
-				class='bg-white rounded-xl p-6 md:p-8 shadow-md relative overflow-hidden'>
-				<div
-					class='quote-marks opacity-10 absolute top-2 left-4 text-6xl text-primary'>
-					"
-				</div>
-				<div class='relative z-10'>
-					<h3 class='text-xl font-bold text-center mb-6'>
-						Lo que dicen nuestros clientes
-					</h3>
+    <!-- Testimonials about delivery speed -->
+    <div className="animate-on-scroll fade-up mx-auto mt-12 max-w-3xl md:mt-16">
+      <div className="relative overflow-hidden rounded-xl bg-white p-6 shadow-md md:p-8">
+        <div className="quote-marks text-primary absolute top-2 left-4 text-6xl opacity-10">"</div>
+        <div className="relative z-10">
+          <h3 className="mb-6 text-center text-xl font-bold">Lo que dicen nuestros clientes</h3>
 
-					<div class='delivery-testimonial-slider'>
-						<div class='delivery-testimonial active'>
-							<TestimoniesCard
-								quote='¡Impresionante! Pagué y en menos de 5 minutos ya estaba descargando todos mis libros. Proceso súper eficiente.'
-								author='Carlos M.'
-								position='Lima, Perú'
-								avatarUrl='https://i.pravatar.cc/150?img=68'
-								rating={5}
-								compact={true}
-							/>
-						</div>
-						<div class='delivery-testimonial'>
-							<TestimoniesCard
-								quote='La entrega inmediata fue clave para mí. Necesitaba los materiales para una reunión al día siguiente y todo llegó en minutos.'
-								author='Laura T.'
-								position='Bogotá, Colombia'
-								avatarUrl='https://i.pravatar.cc/150?img=48'
-								rating={5}
-								compact={true}
-							/>
-						</div>
-						<div class='delivery-testimonial'>
-							<TestimoniesCard
-								quote='El acceso instantáneo es realmente instantáneo. Envié mi comprobante por WhatsApp y en menos de 10 minutos ya tenía todo listo.'
-								author='Juan D.'
-								position='Madrid, España'
-								avatarUrl='https://i.pravatar.cc/150?img=33'
-								rating={4.5}
-								compact={true}
-							/>
-						</div>
-					</div>
+          <div className="delivery-testimonial-slider">
+            <div className="delivery-testimonial active">
+              <TestimoniesCard
+                quote="¡Impresionante! Pagué y en menos de 5 minutos ya estaba descargando todos mis libros. Proceso súper eficiente."
+                author="Carlos M."
+                position="Lima, Perú"
+                avatarUrl="https://i.pravatar.cc/150?img=68"
+                rating={5}
+                compact={true}
+              />
+            </div>
+            <div className="delivery-testimonial">
+              <TestimoniesCard
+                quote="La entrega inmediata fue clave para mí. Necesitaba los materiales para una reunión al día siguiente y todo llegó en minutos."
+                author="Laura T."
+                position="Bogotá, Colombia"
+                avatarUrl="https://i.pravatar.cc/150?img=48"
+                rating={5}
+                compact={true}
+              />
+            </div>
+            <div className="delivery-testimonial">
+              <TestimoniesCard
+                quote="El acceso instantáneo es realmente instantáneo. Envié mi comprobante por WhatsApp y en menos de 10 minutos ya tenía todo listo."
+                author="Juan D."
+                position="Madrid, España"
+                avatarUrl="https://i.pravatar.cc/150?img=33"
+                rating={4.5}
+                compact={true}
+              />
+            </div>
+          </div>
 
-					<!-- Testimonial navigation dots -->
-					<div class='flex justify-center space-x-2 mt-6'>
-						<button
-							class='w-3 h-3 rounded-full bg-primary opacity-100 testimonial-dot active'
-							aria-label='Testimonial 1'></button>
-						<button
-							class='w-3 h-3 rounded-full bg-primary opacity-40 testimonial-dot'
-							aria-label='Testimonial 2'></button>
-						<button
-							class='w-3 h-3 rounded-full bg-primary opacity-40 testimonial-dot'
-							aria-label='Testimonial 3'></button>
-					</div>
-				</div>
-			</div>
-		</div>
+          <!-- Testimonial navigation dots -->
+          <div className="mt-6 flex justify-center space-x-2">
+            <button
+              className="bg-primary testimonial-dot active h-3 w-3 rounded-full opacity-100"
+              aria-label="Testimonial 1" />
+            <button
+              className="bg-primary testimonial-dot h-3 w-3 rounded-full opacity-40"
+              aria-label="Testimonial 2" />
+            <button
+              className="bg-primary testimonial-dot h-3 w-3 rounded-full opacity-40"
+              aria-label="Testimonial 3" />
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<!-- Delivery Benefits -->
-		<DeliveryBenefits />
-	</div>
+    <!-- Delivery Benefits -->
+    <DeliveryBenefits />
+  </div>
 </section>
 
 <script>
-	// Animation on scroll
-	document.addEventListener('DOMContentLoaded', () => {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('animated');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{
-				threshold: 0.1,
-				rootMargin: '0px 0px -50px 0px',
-			}
-		);
+  // Animation on scroll
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
 
-		document.querySelectorAll('.animate-on-scroll').forEach((el) => {
-			observer.observe(el);
-		});
+    document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+      observer.observe(el);
+    });
 
-		// Testimonial slider functionality
-		const testimonials = document.querySelectorAll('.delivery-testimonial');
-		const dots = document.querySelectorAll('.testimonial-dot');
+    // Testimonial slider functionality
+    const testimonials = document.querySelectorAll('.delivery-testimonial');
+    const dots = document.querySelectorAll('.testimonial-dot');
 
-		dots.forEach((dot, index) => {
-			dot.addEventListener('click', () => {
-				// Remove active class from all testimonials and dots
-				testimonials.forEach((t) => t.classList.remove('active'));
-				dots.forEach((d) =>
-					d.classList.remove('active', 'opacity-100')
-				);
-				dots.forEach((d) => d.classList.add('opacity-40'));
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        // Remove active class from all testimonials and dots
+        testimonials.forEach((t) => t.classList.remove('active'));
+        dots.forEach((d) => d.classList.remove('active', 'opacity-100'));
+        dots.forEach((d) => d.classList.add('opacity-40'));
 
-				// Add active class to current testimonial and dot
-				testimonials[index].classList.add('active');
-				dot.classList.add('active', 'opacity-100');
-				dot.classList.remove('opacity-40');
-			});
-		});
+        // Add active class to current testimonial and dot
+        testimonials[index].classList.add('active');
+        dot.classList.add('active', 'opacity-100');
+        dot.classList.remove('opacity-40');
+      });
+    });
 
-		// Auto-rotate testimonials every 5 seconds
-		let currentIndex = 0;
-		const autoRotate = setInterval(() => {
-			currentIndex = (currentIndex + 1) % testimonials.length;
+    // Auto-rotate testimonials every 5 seconds
+    let currentIndex = 0;
+    const autoRotate = setInterval(() => {
+      currentIndex = (currentIndex + 1) % testimonials.length;
 
-			// Remove active class from all testimonials and dots
-			testimonials.forEach((t) => t.classList.remove('active'));
-			dots.forEach((d) => d.classList.remove('active', 'opacity-100'));
-			dots.forEach((d) => d.classList.add('opacity-40'));
+      // Remove active class from all testimonials and dots
+      testimonials.forEach((t) => t.classList.remove('active'));
+      dots.forEach((d) => d.classList.remove('active', 'opacity-100'));
+      dots.forEach((d) => d.classList.add('opacity-40'));
 
-			// Add active class to current testimonial and dot
-			testimonials[currentIndex].classList.add('active');
-			dots[currentIndex].classList.add('active', 'opacity-100');
-			dots[currentIndex].classList.remove('opacity-40');
-		}, 5000);
+      // Add active class to current testimonial and dot
+      testimonials[currentIndex].classList.add('active');
+      dots[currentIndex].classList.add('active', 'opacity-100');
+      dots[currentIndex].classList.remove('opacity-40');
+    }, 5000);
 
-		// Clear interval on mouse interaction
-		document
-			.querySelector('.delivery-testimonial-slider')
-			?.addEventListener('mouseenter', () => {
-				clearInterval(autoRotate);
-			});
-	});
+    // Clear interval on mouse interaction
+    document.querySelector('.delivery-testimonial-slider')?.addEventListener('mouseenter', () => {
+      clearInterval(autoRotate);
+    });
+  });
 
-	// Improved testimonial slider functionality
-	document.addEventListener('DOMContentLoaded', () => {
-		const testimonials = document.querySelectorAll('.delivery-testimonial');
-		const dots = document.querySelectorAll('.testimonial-dot');
+  // Improved testimonial slider functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const testimonials = document.querySelectorAll('.delivery-testimonial');
+    const dots = document.querySelectorAll('.testimonial-dot');
 
-		if (!testimonials.length || !dots.length) return;
+    if (!testimonials.length || !dots.length) return;
 
-		// Initialize - make sure the first one is visible
-		testimonials[0].classList.add('active');
-		dots[0].classList.add('active', 'opacity-100');
-		dots[0].classList.remove('opacity-40');
+    // Initialize - make sure the first one is visible
+    testimonials[0].classList.add('active');
+    dots[0].classList.add('active', 'opacity-100');
+    dots[0].classList.remove('opacity-40');
 
-		dots.forEach((dot, index) => {
-			dot.addEventListener('click', () => {
-				// Remove active class from all testimonials and dots
-				testimonials.forEach((t) => t.classList.remove('active'));
-				dots.forEach((d) => {
-					d.classList.remove('active', 'opacity-100');
-					d.classList.add('opacity-40');
-				});
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        // Remove active class from all testimonials and dots
+        testimonials.forEach((t) => t.classList.remove('active'));
+        dots.forEach((d) => {
+          d.classList.remove('active', 'opacity-100');
+          d.classList.add('opacity-40');
+        });
 
-				// Add active class to current testimonial and dot
-				testimonials[index].classList.add('active');
-				dot.classList.add('active', 'opacity-100');
-				dot.classList.remove('opacity-40');
-			});
-		});
+        // Add active class to current testimonial and dot
+        testimonials[index].classList.add('active');
+        dot.classList.add('active', 'opacity-100');
+        dot.classList.remove('opacity-40');
+      });
+    });
 
-		// Auto-rotate testimonials every 5 seconds
-		let currentIndex = 0;
-		const autoRotate = setInterval(() => {
-			currentIndex = (currentIndex + 1) % testimonials.length;
+    // Auto-rotate testimonials every 5 seconds
+    let currentIndex = 0;
+    const autoRotate = setInterval(() => {
+      currentIndex = (currentIndex + 1) % testimonials.length;
 
-			// Remove active class from all testimonials and dots
-			testimonials.forEach((t) => t.classList.remove('active'));
-			dots.forEach((d) => {
-				d.classList.remove('active', 'opacity-100');
-				d.classList.add('opacity-40');
-			});
+      // Remove active class from all testimonials and dots
+      testimonials.forEach((t) => t.classList.remove('active'));
+      dots.forEach((d) => {
+        d.classList.remove('active', 'opacity-100');
+        d.classList.add('opacity-40');
+      });
 
-			// Add active class to current testimonial and dot
-			testimonials[currentIndex].classList.add('active');
-			dots[currentIndex].classList.add('active', 'opacity-100');
-			dots[currentIndex].classList.remove('opacity-40');
-		}, 5000);
+      // Add active class to current testimonial and dot
+      testimonials[currentIndex].classList.add('active');
+      dots[currentIndex].classList.add('active', 'opacity-100');
+      dots[currentIndex].classList.remove('opacity-40');
+    }, 5000);
 
-		// Pause auto-rotation on mouse interaction
-		const slider = document.querySelector('.delivery-testimonial-slider');
-		if (slider) {
-			slider.addEventListener('mouseenter', () => {
-				clearInterval(autoRotate);
-			});
-		}
-	});
+    // Pause auto-rotation on mouse interaction
+    const slider = document.querySelector('.delivery-testimonial-slider');
+    if (slider) {
+      slider.addEventListener('mouseenter', () => {
+        clearInterval(autoRotate);
+      });
+    }
+  });
 </script>

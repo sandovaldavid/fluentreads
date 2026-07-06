@@ -5,13 +5,13 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [react()],
-	site: 'https://fluentreads.devsolution.software',
-	vite: {
-		plugins: [tailwindcss()],
-		ssr: {
-			// Add external packages that should be skipped during SSR
-			noExternal: ['@justinribeiro/lite-youtube'],
-		},
-	},
+  integrations: [react()],
+  site: 'https://fluentreads.devsolution.software',
+  vite: {
+    plugins: [tailwindcss()],
+    ssr: {
+      // Add external packages that should be skipped during SSR
+      noExternal: ['@justinribeiro/lite-youtube'],
+    },
+  },
 });

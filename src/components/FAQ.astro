@@ -10,130 +10,120 @@ import paymentFaqs from '../database/payment-faqs.json';
 import catalogFaqs from '../database/catalog-faqs.json';
 
 interface FAQItem {
-	question: string;
-	answer: string;
+  question: string;
+  answer: string;
 }
 
 interface Props {
-	jsonPath?: string; // Keep for backward compatibility but not used anymore
-	dataset?: 'general' | 'payment' | 'catalog' | 'custom';
-	customFAQs?: FAQItem[];
-	title: string;
-	description?: string;
-	contactLink?: string;
-	contactText?: string;
-	className?: string;
-	expanded?: number;
+  jsonPath?: string; // Keep for backward compatibility but not used anymore
+  dataset?: 'general' | 'payment' | 'catalog' | 'custom';
+  customFAQs?: FAQItem[];
+  title: string;
+  description?: string;
+  contactLink?: string;
+  contactText?: string;
+  className?: string;
+  expanded?: number;
 }
 
 const {
-	dataset = 'general',
-	customFAQs = [],
-	title,
-	description = '',
-	contactLink = '/contacto',
-	contactText = 'Contáctanos directamente',
-	className = '',
-	expanded = -1,
+  dataset = 'general',
+  customFAQs = [],
+  title,
+  description = '',
+  contactLink = '/contacto',
+  contactText = 'Contáctanos directamente',
+  className = '',
+  expanded = -1,
 } = Astro.props;
 
 // Determine which FAQ dataset to use
 let faqItems: FAQItem[] = [];
 if (dataset === 'general') {
-	faqItems = generalFaqs;
+  faqItems = generalFaqs;
 } else if (dataset === 'payment') {
-	faqItems = paymentFaqs;
+  faqItems = paymentFaqs;
 } else if (dataset === 'catalog') {
-	faqItems = catalogFaqs;
+  faqItems = catalogFaqs;
 } else if (dataset === 'custom' && customFAQs.length > 0) {
-	faqItems = customFAQs;
+  faqItems = customFAQs;
 }
 ---
 
-<section
-	class={`bg-neutral-light relative overflow-hidden faq-section ${className}`}>
-	<!-- Decorative elements -->
-	<div
-		class='absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl'>
-	</div>
-	<div
-		class='absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full -ml-32 -mb-32 blur-3xl'>
-	</div>
+<section className={`bg-neutral-light relative overflow-hidden faq-section ${className}`}>
+  <!-- Decorative elements -->
+  <div className="bg-primary/5 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl" />
+  <div
+    className="bg-secondary/5 absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full blur-3xl"
+   />
 
-	<div class='container mx-auto px-4'>
-		<div class='max-w-4xl mx-auto'>
-			<div class='text-center mb-8 md:mb-12'>
-				<SectionTitle>{title}</SectionTitle>
-				{
-					description && (
-						<p class='text-gray-600 mt-4 max-w-2xl mx-auto'>
-							{description}
-						</p>
-					)
-				}
-			</div>
+  <div className="container mx-auto px-4">
+    <div className="mx-auto max-w-4xl">
+      <div className="mb-8 text-center md:mb-12">
+        <SectionTitle>{title}</SectionTitle>
+        {description && <p className="mx-auto mt-4 max-w-2xl text-gray-600">{description}</p>}
+      </div>
 
-			<div class='space-y-4 md:space-y-6 faq-container'>
-				{
-					faqItems.length > 0 ? (
-						faqItems.map((item, index) => (
-							<QuestionCard
-								question={item.question}
-								answer={item.answer}
-								expanded={index === expanded}
-								id={`faq-${title.replace(/\s+/g, '-').toLowerCase()}-${index}`}
-							/>
-						))
-					) : (
-						<p class='text-center p-8 bg-white rounded-lg border border-neutral'>
-							No se encontraron preguntas frecuentes para mostrar.
-						</p>
-					)
-				}
-			</div>
+      <div className="faq-container space-y-4 md:space-y-6">
+        {
+          faqItems.length > 0 ? (
+            faqItems.map((item, index) => (
+              <QuestionCard
+                question={item.question}
+                answer={item.answer}
+                expanded={index === expanded}
+                id={`faq-${title.replace(/\s+/g, '-').toLowerCase()}-${index}`}
+              />
+            ))
+          ) : (
+            <p className="border-neutral rounded-lg border bg-white p-8 text-center">
+              No se encontraron preguntas frecuentes para mostrar.
+            </p>
+          )
+        }
+      </div>
 
-			<!-- Additional support info -->
-			<div
-				class='mt-10 bg-white p-5 rounded-xl border border-neutral shadow-sm text-center'>
-				<p class='text-gray-700'>
-					¿No encuentras respuesta a tu pregunta?
-					<a
-						href={contactLink}
-						class='text-primary font-medium hover:text-primary-dark underline decoration-2 underline-offset-2'>
-						{contactText}
-					</a> y te responderemos a la brevedad.
-				</p>
-			</div>
-		</div>
-	</div>
+      <!-- Additional support info -->
+      <div className="border-neutral mt-10 rounded-xl border bg-white p-5 text-center shadow-sm">
+        <p className="text-gray-700">
+          ¿No encuentras respuesta a tu pregunta?
+          <a
+            href={contactLink}
+            className="text-primary hover:text-primary-dark font-medium underline decoration-2 underline-offset-2"
+          >
+            {contactText}
+          </a> y te responderemos a la brevedad.
+        </p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
-	// Add entrance animations
-	document.addEventListener('DOMContentLoaded', () => {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						// Add staggered animation to cards
-						const cards =
-							entry.target.querySelectorAll('.question-card');
-						cards.forEach((card, index) => {
-							setTimeout(() => {
-								card.classList.add('fade-in-visible');
-							}, index * 100);
-						});
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{ threshold: 0.1 }
-		);
+  // Add entrance animations
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Add staggered animation to cards
+            const cards = entry.target.querySelectorAll('.question-card');
+            cards.forEach((card, index) => {
+              setTimeout(() => {
+                card.classList.add('fade-in-visible');
+              }, index * 100);
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-		// Observe the FAQ container
-		const faqContainer = document.querySelector('.faq-container');
-		if (faqContainer) {
-			observer.observe(faqContainer);
-		}
-	});
+    // Observe the FAQ container
+    const faqContainer = document.querySelector('.faq-container');
+    if (faqContainer) {
+      observer.observe(faqContainer);
+    }
+  });
 </script>

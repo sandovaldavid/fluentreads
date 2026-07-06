@@ -6,72 +6,72 @@ import WhatsAppIcon from './icons/WhatsApp.astro';
 import SocialMediaButton from './SocialMediaButton.astro';
 
 interface Props {
-	showFacebook?: boolean;
-	showInstagram?: boolean;
-	showTwitter?: boolean;
-	showWhatsApp?: boolean;
-	facebookUrl?: string;
-	instagramUrl?: string;
-	twitterUrl?: string;
-	whatsAppUrl?: string;
-	whatsAppNumber?: string;
-	iconSize?: string;
-	class?: string;
-	direction?: 'horizontal' | 'vertical';
+  showFacebook?: boolean;
+  showInstagram?: boolean;
+  showTwitter?: boolean;
+  showWhatsApp?: boolean;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  twitterUrl?: string;
+  whatsAppUrl?: string;
+  whatsAppNumber?: string;
+  iconSize?: string;
+  class?: string;
+  direction?: 'horizontal' | 'vertical';
 }
 
 const {
-	showFacebook = true,
-	showInstagram = true,
-	showTwitter = true,
-	showWhatsApp = false,
-	facebookUrl = '#',
-	instagramUrl = '#',
-	twitterUrl = '#',
-	whatsAppUrl = '',
-	whatsAppNumber = '1234567890',
-	iconSize = 'w-6 h-6',
-	class: className = '',
-	direction = 'horizontal',
+  showFacebook = true,
+  showInstagram = true,
+  showTwitter = true,
+  showWhatsApp = false,
+  facebookUrl = '#',
+  instagramUrl = '#',
+  twitterUrl = '#',
+  whatsAppUrl = '',
+  whatsAppNumber = '1234567890',
+  iconSize = 'w-6 h-6',
+  class: className = '',
+  direction = 'horizontal',
 } = Astro.props;
 
 const finalWhatsAppUrl = whatsAppUrl || `https://wa.me/${whatsAppNumber}`;
 const containerClass =
-	direction === 'horizontal'
-		? `flex space-x-3 items-center ${className}`
-		: `flex flex-col space-y-3 items-center ${className}`;
+  direction === 'horizontal'
+    ? `flex space-x-3 items-center ${className}`
+    : `flex flex-col space-y-3 items-center ${className}`;
 ---
 
-<div class={containerClass}>
-	{
-		showFacebook && (
-			<SocialMediaButton network='Facebook' href={facebookUrl}>
-				<FacebookIcon class={iconSize} />
-			</SocialMediaButton>
-		)
-	}
+<div className={containerClass}>
+  {
+    showFacebook && (
+      <SocialMediaButton network="Facebook" href={facebookUrl}>
+        <FacebookIcon class={iconSize} />
+      </SocialMediaButton>
+    )
+  }
 
-	{
-		showInstagram && (
-			<SocialMediaButton network='Instagram' href={instagramUrl}>
-				<InstagramIcon class={iconSize} />
-			</SocialMediaButton>
-		)
-	}
+  {
+    showInstagram && (
+      <SocialMediaButton network="Instagram" href={instagramUrl}>
+        <InstagramIcon class={iconSize} />
+      </SocialMediaButton>
+    )
+  }
 
-	{
-		showTwitter && (
-			<SocialMediaButton network='X' href={twitterUrl}>
-				<TwitterIcon class={iconSize} />
-			</SocialMediaButton>
-		)
-	}
+  {
+    showTwitter && (
+      <SocialMediaButton network="X" href={twitterUrl}>
+        <TwitterIcon class={iconSize} />
+      </SocialMediaButton>
+    )
+  }
 
-	{
-		showWhatsApp && (
-			<SocialMediaButton network='WhatsApp' href={finalWhatsAppUrl}>
-				<WhatsAppIcon class={iconSize} />
-			</SocialMediaButton>
-		)
-	}
+  {
+    showWhatsApp && (
+      <SocialMediaButton network="WhatsApp" href={finalWhatsAppUrl}>
+        <WhatsAppIcon class={iconSize} />
+      </SocialMediaButton>
+    )
+  }
 </div>

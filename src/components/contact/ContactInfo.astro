@@ -8,121 +8,120 @@ import '../../styles/contact/contactInfo.css';
 
 // Contact data
 const contactData = {
-	email: 'support@fluentreads.com',
-	whatsapp: '1234567890',
-	telegram: 'FluentReads',
-	supportHours:
-		'Lunes a Viernes: 9:00 AM - 6:00 PM | Sábados: 9:00 AM - 1:00 PM',
+  email: 'support@fluentreads.com',
+  whatsapp: '1234567890',
+  telegram: 'FluentReads',
+  supportHours: 'Lunes a Viernes: 9:00 AM - 6:00 PM | Sábados: 9:00 AM - 1:00 PM',
 };
 ---
 
 <section
-	class='contact-info-section bg-white p-6 md:p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 my-4 md:my-8 lg:mx-10'>
-	<!-- Contact Methods Grid -->
-	<div class='grid md:grid-cols-2 gap-6'>
-		<!-- Email Contact -->
-		<div
-			class='contact-method-card bg-white rounded-lg p-5 border border-neutral hover:border-primary-light transition-all duration-300 hover:shadow-md group'>
-			<div class='flex flex-col md:flex-row items-center gap-4'>
-				<div class='flex-1 flex flex-col space-y-3'>
-					<div class='flex items-center mb-4'>
-						<span
-							class='bg-primary text-white p-2 rounded-full mr-3'>
-							<EmailIcon class='w-5 h-5' />
-						</span>
-						<h3
-							class='font-bold text-lg md:text-xl lg:text-2xl text-primary-dark'>
-							Correo Electrónico
-						</h3>
-					</div>
-				</div>
-			</div>
+  className="contact-info-section my-4 rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg md:my-8 md:p-8 lg:mx-10"
+>
+  <!-- Contact Methods Grid -->
+  <div className="grid gap-6 md:grid-cols-2">
+    <!-- Email Contact -->
+    <div
+      className="contact-method-card border-neutral hover:border-primary-light group rounded-lg border bg-white p-5 transition-all duration-300 hover:shadow-md"
+    >
+      <div className="flex flex-col items-center gap-4 md:flex-row">
+        <div className="flex flex-1 flex-col space-y-3">
+          <div className="mb-4 flex items-center">
+            <span className="bg-primary mr-3 rounded-full p-2 text-white">
+              <EmailIcon class="h-5 w-5" />
+            </span>
+            <h3 className="text-primary-dark text-lg font-bold md:text-xl lg:text-2xl">
+              Correo Electrónico
+            </h3>
+          </div>
+        </div>
+      </div>
 
-			<p class='text-gray-600 mb-4'>
-				Para consultas, soporte o cualquier información adicional,
-				escríbenos a:
-			</p>
+      <p className="mb-4 text-gray-600">
+        Para consultas, soporte o cualquier información adicional, escríbenos a:
+      </p>
 
-			<a
-				href={`mailto:${contactData.email}`}
-				class='inline-flex items-center text-primary hover:text-primary-dark font-medium transition-colors duration-200 underline decoration-2 underline-offset-4'>
-				{contactData.email}
-			</a>
-		</div>
+      <a
+        href={`mailto:${contactData.email}`}
+        className="text-primary hover:text-primary-dark inline-flex items-center font-medium underline decoration-2 underline-offset-4 transition-colors duration-200"
+      >
+        {contactData.email}
+      </a>
+    </div>
 
-		<!-- Direct Messaging -->
-		<div
-			class='contact-method-card bg-white rounded-lg p-5 border border-neutral hover:border-primary-light transition-all duration-300 hover:shadow-md'>
-			<div class='flex flex-col md:flex-row items-center gap-4'>
-				<div class='flex-1 flex flex-col space-y-3'>
-					<div class='flex items-center mb-4'>
-						<span
-							class='bg-primary text-white p-2 rounded-full mr-3'>
-							<SmartPhoneIcon class='w-5 h-5' />
-						</span>
-						<h3
-							class='font-bold text-lg md:text-xl lg:text-2xl text-primary-dark'>
-							Mensajería Directa
-						</h3>
-					</div>
-				</div>
-			</div>
-			<p class='text-gray-600 mb-5'>
-				Contacta con nuestro equipo de soporte instantáneo a través de:
-			</p>
+    <!-- Direct Messaging -->
+    <div
+      className="contact-method-card border-neutral hover:border-primary-light rounded-lg border bg-white p-5 transition-all duration-300 hover:shadow-md"
+    >
+      <div className="flex flex-col items-center gap-4 md:flex-row">
+        <div className="flex flex-1 flex-col space-y-3">
+          <div className="mb-4 flex items-center">
+            <span className="bg-primary mr-3 rounded-full p-2 text-white">
+              <SmartPhoneIcon class="h-5 w-5" />
+            </span>
+            <h3 className="text-primary-dark text-lg font-bold md:text-xl lg:text-2xl">
+              Mensajería Directa
+            </h3>
+          </div>
+        </div>
+      </div>
+      <p className="mb-5 text-gray-600">
+        Contacta con nuestro equipo de soporte instantáneo a través de:
+      </p>
 
-			<div class='flex flex-col sm:flex-row gap-4'>
-				<Button
-					variant='accent'
-					href={`https://wa.me/${contactData.whatsapp}`}
-					class='flex-1 flex items-center justify-center shadow-md hover:shadow-lg'>
-					<WhatsAppIcon class='w-5 h-5 mr-2' />
-					WhatsApp
-				</Button>
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <Button
+          variant="accent"
+          href={`https://wa.me/${contactData.whatsapp}`}
+          class="flex flex-1 items-center justify-center shadow-md hover:shadow-lg"
+        >
+          <WhatsAppIcon class="mr-2 h-5 w-5" />
+          WhatsApp
+        </Button>
 
-				<Button
-					variant='primary'
-					href={`https://t.me/${contactData.telegram}`}
-					class='flex-1 flex items-center justify-center shadow-md hover:shadow-lg'>
-					<TelegramIcon class='w-5 h-5 mr-2' />
-					Telegram
-				</Button>
-			</div>
-		</div>
-	</div>
+        <Button
+          variant="primary"
+          href={`https://t.me/${contactData.telegram}`}
+          class="flex flex-1 items-center justify-center shadow-md hover:shadow-lg"
+        >
+          <TelegramIcon class="mr-2 h-5 w-5" />
+          Telegram
+        </Button>
+      </div>
+    </div>
+  </div>
 
-	<!-- Trust Message -->
-	<div
-		class='mt-8 text-center bg-primary/5 rounded-lg p-4 border border-primary/10'>
-		<p class='text-gray-600'>
-			Nos esforzamos por responder a todas las consultas lo más rápido
-			posible, generalmente en menos de 24 horas durante días laborables.
-		</p>
-	</div>
+  <!-- Trust Message -->
+  <div className="bg-primary/5 border-primary/10 mt-8 rounded-lg border p-4 text-center">
+    <p className="text-gray-600">
+      Nos esforzamos por responder a todas las consultas lo más rápido posible, generalmente en
+      menos de 24 horas durante días laborables.
+    </p>
+  </div>
 </section>
 
 <script>
-	// Add entrance animations
-	document.addEventListener('DOMContentLoaded', () => {
-		const cards = document.querySelectorAll('.contact-method-card');
+  // Add entrance animations
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.contact-method-card');
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('animated');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{ threshold: 0.1 }
-		);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-		cards.forEach((card, index) => {
-			// Add a small delay between each card animation
-			setTimeout(() => {
-				observer.observe(card);
-			}, index * 150);
-		});
-	});
+    cards.forEach((card, index) => {
+      // Add a small delay between each card animation
+      setTimeout(() => {
+        observer.observe(card);
+      }, index * 150);
+    });
+  });
 </script>

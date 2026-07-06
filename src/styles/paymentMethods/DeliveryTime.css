@@ -2,297 +2,284 @@
 
 /* Background patterns and decorative elements */
 .delivery-dots-pattern {
-	background-image: radial-gradient(
-		var(--color-primary) 1px,
-		transparent 1px
-	);
-	background-size: 20px 20px;
+  background-image: radial-gradient(var(--color-primary) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 .delivery-shape-1,
 .delivery-shape-2 {
-	position: absolute;
-	border-radius: 50%;
-	opacity: 0.1;
-	z-index: 0;
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  z-index: 0;
 }
 
 .delivery-shape-1 {
-	top: -5%;
-	right: 80%;
-	width: 400px;
-	height: 400px;
-	background: linear-gradient(
-		135deg,
-		var(--color-primary),
-		var(--color-accent)
-	);
+  top: -5%;
+  right: 80%;
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
 }
 
 .delivery-shape-2 {
-	bottom: -10%;
-	left: -5%;
-	width: 300px;
-	height: 300px;
-	background: linear-gradient(
-		45deg,
-		var(--color-secondary),
-		var(--color-primary-light)
-	);
+  bottom: -10%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(45deg, var(--color-secondary), var(--color-primary-light));
 }
 
 /* Timeline styling */
 .timeline-item {
-	position: relative;
+  position: relative;
 }
 
 .timeline-marker {
-	position: absolute;
-	left: -43px;
-	top: 2px;
-	width: 20px;
-	height: 20px;
-	background-color: var(--color-primary);
-	border: 4px solid white;
-	border-radius: 50%;
-	box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.3);
+  position: absolute;
+  left: -43px;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-primary);
+  border: 4px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.3);
 }
 
 /* Delivery stat cards with hover effects */
 .delivery-stat-card {
-	transition: all 0.3s ease;
-	cursor: default;
+  transition: all 0.3s ease;
+  cursor: default;
 }
 
 .delivery-stat-card:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 /* Delivery pulse animation */
 .delivery-pulse {
-	width: 12px;
-	height: 12px;
-	background-color: var(--color-accent);
-	border-radius: 50%;
-	position: relative;
+  width: 12px;
+  height: 12px;
+  background-color: var(--color-accent);
+  border-radius: 50%;
+  position: relative;
 }
 
 .delivery-pulse:before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	background-color: var(--color-accent);
-	animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
 
 @keyframes pulse-ring {
-	0% {
-		transform: scale(0.5);
-		opacity: 0.5;
-	}
-	80%,
-	100% {
-		transform: scale(2);
-		opacity: 0;
-	}
+  0% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  80%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }
 
 /* Progress bar animation */
 .delivery-progress-container {
-	height: 8px;
-	background-color: var(--color-neutral);
-	border-radius: 4px;
-	overflow: hidden;
+  height: 8px;
+  background-color: var(--color-neutral);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .delivery-progress-bar {
-	height: 100%;
-	width: 75%;
-	background: linear-gradient(
-		90deg,
-		var(--color-primary-light),
-		var(--color-accent)
-	);
-	border-radius: 4px;
-	animation: progress-animation 2s ease-in-out infinite alternate;
+  height: 100%;
+  width: 75%;
+  background: linear-gradient(90deg, var(--color-primary-light), var(--color-accent));
+  border-radius: 4px;
+  animation: progress-animation 2s ease-in-out infinite alternate;
 }
 
 @keyframes progress-animation {
-	0% {
-		width: 65%;
-	}
-	100% {
-		width: 85%;
-	}
+  0% {
+    width: 65%;
+  }
+  100% {
+    width: 85%;
+  }
 }
 
 /* Testimonial slider styles */
 .delivery-testimonial-slider {
-	position: relative;
-	overflow: hidden;
-	min-height: 150px;
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
 }
 
 .delivery-testimonial {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	opacity: 0;
-	transform: translateX(20px);
-	transition: all 0.5s ease;
-	visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.5s ease;
+  visibility: hidden;
 }
 
 .delivery-testimonial.active {
-	opacity: 1;
-	transform: translateX(0);
-	position: relative;
-	visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+  position: relative;
+  visibility: visible;
 }
 
 /* Benefit cards with hover effects */
 .delivery-benefit-card {
-	transition: all 0.3s ease;
-	border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
 }
 
 .delivery-benefit-card:hover {
-	transform: translateY(-5px);
-	border-bottom: 3px solid var(--color-primary);
+  transform: translateY(-5px);
+  border-bottom: 3px solid var(--color-primary);
 }
 
 /* Entrance animations */
 .animate-on-scroll {
-	opacity: 0;
-	transition: all 0.8s ease;
+  opacity: 0;
+  transition: all 0.8s ease;
 }
 
 .fade-up {
-	transform: translateY(30px);
+  transform: translateY(30px);
 }
 
 .fade-right {
-	transform: translateX(-30px);
+  transform: translateX(-30px);
 }
 
 .fade-left {
-	transform: translateX(30px);
+  transform: translateX(30px);
 }
 
 .animated {
-	opacity: 1;
-	transform: translate(0, 0);
+  opacity: 1;
+  transform: translate(0, 0);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-	.delivery-shape-1,
-	.delivery-shape-2 {
-		width: 200px;
-		height: 200px;
-	}
+  .delivery-shape-1,
+  .delivery-shape-2 {
+    width: 200px;
+    height: 200px;
+  }
 
-	.timeline-marker {
-		width: 16px;
-		height: 16px;
-		left: -41px;
-	}
+  .timeline-marker {
+    width: 16px;
+    height: 16px;
+    left: -41px;
+  }
 
-	.delivery-benefit-card:hover {
-		transform: none;
-	}
+  .delivery-benefit-card:hover {
+    transform: none;
+  }
 }
 
 @media (max-width: 480px) {
-	.delivery-stat-card {
-		padding: 0.75rem;
-	}
+  .delivery-stat-card {
+    padding: 0.75rem;
+  }
 
-	.delivery-stat-card .text-4xl {
-		font-size: 1.5rem;
-	}
+  .delivery-stat-card .text-4xl {
+    font-size: 1.5rem;
+  }
 
-	.delivery-stat-card .text-lg {
-		font-size: 0.875rem;
-	}
+  .delivery-stat-card .text-lg {
+    font-size: 0.875rem;
+  }
 }
 
 /* Add these styles at the end of the file */
 
 /* Testimonial slider styles - FIXED VERSION */
 .delivery-testimonial-slider {
-	position: relative;
-	overflow: hidden;
-	min-height: 220px; /* Ensure enough space for the testimonial */
+  position: relative;
+  overflow: hidden;
+  min-height: 220px; /* Ensure enough space for the testimonial */
 }
 
 .delivery-testimonial {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity 0.5s ease, transform 0.5s ease;
-	transform: translateX(20px);
-	z-index: 1;
-	pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  transform: translateX(20px);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .delivery-testimonial.active {
-	position: relative;
-	opacity: 1;
-	visibility: visible;
-	transform: translateX(0);
-	z-index: 2;
-	pointer-events: auto;
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  z-index: 2;
+  pointer-events: auto;
 }
 
 /* Customize testimonial cards in delivery section */
 .delivery-testimonial .testimonial-snippet {
-	margin-bottom: 0;
-	box-shadow: none;
-	border: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 0;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* Adjust spacing for compact mode */
 .delivery-testimonial .compact-testimonial {
-	padding: 1rem !important;
+  padding: 1rem !important;
 }
 
 /* Fix for testimonial navigation dots */
 .testimonial-dot {
-	cursor: pointer;
-	transition: all 0.3s ease;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .testimonial-dot.active {
-	transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 @keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateX(20px);
-	}
-	to {
-		opacity: 1;
-		transform: translateX(0);
-	}
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.delivery-testimonial {
-		transition: none;
-	}
+  .delivery-testimonial {
+    transition: none;
+  }
 
-	.delivery-testimonial.active {
-		animation: none;
-	}
+  .delivery-testimonial.active {
+    animation: none;
+  }
 }

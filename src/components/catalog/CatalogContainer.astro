@@ -6,27 +6,27 @@ import type { Product } from '../../types/product';
 import { PopularityTag } from '../../types/book';
 
 interface Props {
-	products: Product[];
-	initialLevel?: string;
-	initialFormat?: string;
-	initialSort?: string;
-	initialResourceType?: string;
-	editorialMap?: Map<string, string>;
-	gridCols?: number;
-	productSize?: 'small' | 'medium' | 'large';
-	enableResourceTypeFilter?: boolean;
+  products: Product[];
+  initialLevel?: string;
+  initialFormat?: string;
+  initialSort?: string;
+  initialResourceType?: string;
+  editorialMap?: Map<string, string>;
+  gridCols?: number;
+  productSize?: 'small' | 'medium' | 'large';
+  enableResourceTypeFilter?: boolean;
 }
 
 const {
-	products = [],
-	initialLevel = 'all',
-	initialFormat = 'all',
-	initialSort = 'featured',
-	initialResourceType = 'any',
-	editorialMap = new Map(),
-	gridCols = 4,
-	productSize = 'medium',
-	enableResourceTypeFilter = false,
+  products = [],
+  initialLevel = 'all',
+  initialFormat = 'all',
+  initialSort = 'featured',
+  initialResourceType = 'any',
+  editorialMap = new Map(),
+  gridCols = 4,
+  productSize = 'medium',
+  enableResourceTypeFilter = false,
 } = Astro.props;
 
 // Apply initial filters on the server
@@ -34,55 +34,41 @@ let filteredProducts = [...products];
 
 // Filter by resource type if specified
 if (initialResourceType !== 'any') {
-	filteredProducts = filteredProducts.filter(
-		(product) => product.productType === initialResourceType
-	);
+  filteredProducts = filteredProducts.filter(
+    (product) => product.productType === initialResourceType
+  );
 }
 
 // Filter by format if specified
 if (initialFormat !== 'all') {
-	filteredProducts = filteredProducts.filter(
-		(product) =>
-			product.formatTags &&
-			product.formatTags.includes(initialFormat as any)
-	);
+  filteredProducts = filteredProducts.filter(
+    (product) => product.formatTags && product.formatTags.includes(initialFormat as any)
+  );
 }
 
 // Filter by level if specified
 if (initialLevel !== 'all') {
-	filteredProducts = filteredProducts.filter(
-		(product) => product.level === initialLevel
-	);
+  filteredProducts = filteredProducts.filter((product) => product.level === initialLevel);
 }
 
 // Apply initial sorting
 if (initialSort === 'price-low') {
-	filteredProducts.sort((a, b) => a.price - b.price);
+  filteredProducts.sort((a, b) => a.price - b.price);
 } else if (initialSort === 'price-high') {
-	filteredProducts.sort((a, b) => b.price - a.price);
+  filteredProducts.sort((a, b) => b.price - a.price);
 } else if (initialSort === 'newest') {
-	// Assuming we don't have a date field, we'll leave this as is
-	// In a real app, you'd sort by date: filteredProducts.sort((a, b) => new Date(b.publishedDate) - new Date(a.publishedDate));
+  // Assuming we don't have a date field, we'll leave this as is
+  // In a real app, you'd sort by date: filteredProducts.sort((a, b) => new Date(b.publishedDate) - new Date(a.publishedDate));
 } else if (initialSort === 'bestseller') {
-	filteredProducts = filteredProducts.sort((a, b) => {
-		// Fixed type error by converting boolean to number
-		const aIsBestseller = a.popularityTags?.includes(
-			PopularityTag.BESTSELLER
-		)
-			? 1
-			: 0;
-		const bIsBestseller = b.popularityTags?.includes(
-			PopularityTag.BESTSELLER
-		)
-			? 1
-			: 0;
-		return bIsBestseller - aIsBestseller;
-	});
+  filteredProducts = filteredProducts.sort((a, b) => {
+    // Fixed type error by converting boolean to number
+    const aIsBestseller = a.popularityTags?.includes(PopularityTag.BESTSELLER) ? 1 : 0;
+    const bIsBestseller = b.popularityTags?.includes(PopularityTag.BESTSELLER) ? 1 : 0;
+    return bIsBestseller - aIsBestseller;
+  });
 } else {
-	// Default 'featured' sort
-	filteredProducts = filteredProducts.sort(
-		(a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
-	);
+  // Default 'featured' sort
+  filteredProducts = filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 }
 
 // Pass all products as a JSON string to make them available for client-side filtering
@@ -90,464 +76,423 @@ const allProductsJSON = JSON.stringify(products);
 
 // Maps a grid column count to responsive Tailwind classes
 const getGridClassFromColumns = (cols: number): string => {
-	const gridClasses = {
-		2: 'grid-cols-2',
-		3: 'grid-cols-2 md:grid-cols-3',
-		4: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
-		5: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
-	};
+  const gridClasses = {
+    2: 'grid-cols-2',
+    3: 'grid-cols-2 md:grid-cols-3',
+    4: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+    5: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+  };
 
-	return (
-		gridClasses[cols as keyof typeof gridClasses] ||
-		'grid-cols-2 grid-cols-3 lg:grid-cols-4'
-	);
+  return gridClasses[cols as keyof typeof gridClasses] || 'grid-cols-2 grid-cols-3 lg:grid-cols-4';
 };
 
 const gridClass = getGridClassFromColumns(gridCols);
 ---
 
-<div class='flex flex-col items-center catalog-container'>
-	<!-- Filtro en React (Isla) con parámetros iniciales -->
-	<Filter
-		client:load
-		initialLevel={initialLevel}
-		initialFormat={initialFormat}
-		initialSort={initialSort}
-		initialResourceType={initialResourceType}
-		enableResourceTypeFilter={enableResourceTypeFilter}
-		productType={initialResourceType !== 'any'
-			? initialResourceType
-			: undefined}
-		productCount={filteredProducts.length}
-	/>
+<div className="catalog-container flex flex-col items-center">
+  <!-- Filtro en React (Isla) con parámetros iniciales -->
+  <Filter
+    client:load
+    initialLevel={initialLevel}
+    initialFormat={initialFormat}
+    initialSort={initialSort}
+    initialResourceType={initialResourceType}
+    enableResourceTypeFilter={enableResourceTypeFilter}
+    productType={initialResourceType !== 'any' ? initialResourceType : undefined}
+    productCount={filteredProducts.length}
+  />
 
-	<!-- Hidden input to store all products data for client-side manipulation -->
-	<input type='hidden' id='all-products-data' value={allProductsJSON} />
+  <!-- Hidden input to store all products data for client-side manipulation -->
+  <input type="hidden" id="all-products-data" value={allProductsJSON} />
 
-	<!-- Contenedor del grid con posición relativa para el loading indicator -->
-	<div class='relative w-full'>
-		<!-- Loading indicator dentro del contenedor del grid -->
-		<div
-			id='loading-indicator'
-			class='hidden absolute inset-0 bg-white/80 rounded-lg z-10 loading-container'>
-			<!-- Skeleton loader que se muestra durante la carga -->
-			<SkeletonCatalog count={gridCols * 2} />
-		</div>
+  <!-- Contenedor del grid con posición relativa para el loading indicator -->
+  <div className="relative w-full">
+    <!-- Loading indicator dentro del contenedor del grid -->
+    <div
+      id="loading-indicator"
+      className="loading-container absolute inset-0 z-10 hidden rounded-lg bg-white/80"
+    >
+      <!-- Skeleton loader que se muestra durante la carga -->
+      <SkeletonCatalog count={gridCols * 2} />
+    </div>
 
-		<!-- Grid de productos -->
-		<div
-			id='products-grid'
-			class={`grid ${gridClass} md:gap-6 mt-8 min-h-[300px] px-1 sm:px-4 md:px-8`}>
-			{
-				filteredProducts.map((product) => {
-					// Safely extract editorial information for book products
-					let editorialName = '';
-					if (
-						product.productType === 'book' &&
-						'editorialId' in product
-					) {
-						const editorialId = product.editorialId;
-						if (editorialId && editorialMap.has(editorialId)) {
-							editorialName = editorialMap.get(editorialId) || '';
-						}
-					}
+    <!-- Grid de productos -->
+    <div
+      id="products-grid"
+      className={`grid ${gridClass} md:gap-6 mt-8 min-h-[300px] px-1 sm:px-4 md:px-8`}
+    >
+      {
+        filteredProducts.map((product) => {
+          // Safely extract editorial information for book products
+          let editorialName = '';
+          if (product.productType === 'book' && 'editorialId' in product) {
+            const editorialId = product.editorialId;
+            if (editorialId && editorialMap.has(editorialId)) {
+              editorialName = editorialMap.get(editorialId) || '';
+            }
+          }
 
-					return (
-						<div
-							class='product-grid-item'
-							data-product-id={product.id}
-							data-type={product.productType}
-							data-level={product.level}
-							data-format={product.formatTags?.join(',')}
-							data-featured={product.featured}
-							data-price={product.price}
-							data-title={product.title}
-							data-bestseller={product.popularityTags?.includes(
-								PopularityTag.BESTSELLER
-							)}
-							data-editorial={editorialName}>
-							<ProductCard product={product} size={productSize} />
-						</div>
-					);
-				})
-			}
-		</div>
-	</div>
+          return (
+            <div
+              className="product-grid-item"
+              data-product-id={product.id}
+              data-type={product.productType}
+              data-level={product.level}
+              data-format={product.formatTags?.join(',')}
+              data-featured={product.featured}
+              data-price={product.price}
+              data-title={product.title}
+              data-bestseller={product.popularityTags?.includes(PopularityTag.BESTSELLER)}
+              data-editorial={editorialName}
+            >
+              <ProductCard product={product} size={productSize} />
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
 
-	<!-- Empty state message that will be shown when no products match filters -->
-	<div id='empty-state' class='text-center py-16 px-4 hidden'>
-		<div class='text-6xl mb-4'>📚</div>
-		<h3 class='text-2xl font-bold text-gray-700 mb-2'>
-			No hay resultados que coincidan con tus filtros
-		</h3>
-		<p class='text-gray-500 mb-6'>
-			Intenta con otros filtros o revisa todas nuestras opciones
-			disponibles
-		</p>
-		<button
-			id='reset-filters'
-			class='bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary-dark transition-colors'>
-			Limpiar filtros
-		</button>
-	</div>
+  <!-- Empty state message that will be shown when no products match filters -->
+  <div id="empty-state" className="hidden px-4 py-16 text-center">
+    <div className="mb-4 text-6xl">📚</div>
+    <h3 className="mb-2 text-2xl font-bold text-gray-700">
+      No hay resultados que coincidan con tus filtros
+    </h3>
+    <p className="mb-6 text-gray-500">
+      Intenta con otros filtros o revisa todas nuestras opciones disponibles
+    </p>
+    <button
+      id="reset-filters"
+      className="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 text-white transition-colors"
+    >
+      Limpiar filtros
+    </button>
+  </div>
 </div>
 
 <script>
-	// Client-side filtering without page reload
-	document.addEventListener('DOMContentLoaded', () => {
-		// Get all products from the hidden input
-		const allProductsDataElement =
-			document.getElementById('all-products-data');
-		if (!allProductsDataElement) {
-			console.error('All products data element not found');
-			return;
-		}
-		// Cast to HTMLInputElement to access the value property
-		const allProducts = JSON.parse(
-			(allProductsDataElement as HTMLInputElement).value
-		);
+  // Client-side filtering without page reload
+  document.addEventListener('DOMContentLoaded', () => {
+    // Get all products from the hidden input
+    const allProductsDataElement = document.getElementById('all-products-data');
+    if (!allProductsDataElement) {
+      console.error('All products data element not found');
+      return;
+    }
+    // Cast to HTMLInputElement to access the value property
+    const allProducts = JSON.parse((allProductsDataElement as HTMLInputElement).value);
 
-		// Get DOM elements
-		const productsGrid = document.getElementById('products-grid');
-		const emptyState = document.getElementById('empty-state');
-		const loadingIndicator = document.getElementById('loading-indicator');
-		const resetButton = document.getElementById('reset-filters');
+    // Get DOM elements
+    const productsGrid = document.getElementById('products-grid');
+    const emptyState = document.getElementById('empty-state');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const resetButton = document.getElementById('reset-filters');
 
-		// Function to show/hide loading indicator
-		const showLoading = (show: boolean): void => {
-			if (!loadingIndicator || !productsGrid) return;
+    // Function to show/hide loading indicator
+    const showLoading = (show: boolean): void => {
+      if (!loadingIndicator || !productsGrid) return;
 
-			if (show) {
-				loadingIndicator.classList.remove('hidden');
-				productsGrid.classList.add('filtering');
-				productsGrid.style.opacity = '0'; // Ocultar el grid original cuando se muestra el skeleton
-			} else {
-				loadingIndicator.classList.add('hidden');
-				productsGrid.classList.remove('filtering');
-				productsGrid.style.opacity = '1'; // Mostrar el grid cuando se quita el skeleton
-			}
-		};
+      if (show) {
+        loadingIndicator.classList.remove('hidden');
+        productsGrid.classList.add('filtering');
+        productsGrid.style.opacity = '0'; // Ocultar el grid original cuando se muestra el skeleton
+      } else {
+        loadingIndicator.classList.add('hidden');
+        productsGrid.classList.remove('filtering');
+        productsGrid.style.opacity = '1'; // Mostrar el grid cuando se quita el skeleton
+      }
+    };
 
-		// Function to update URL without reloading
-		const updateURL = (
-			resourceType: string,
-			level: string,
-			format: string,
-			sort: string,
-			search: string = ''
-		): void => {
-			// Create URL object based on current URL
-			const url = new URL(window.location.href);
+    // Function to update URL without reloading
+    const updateURL = (
+      resourceType: string,
+      level: string,
+      format: string,
+      sort: string,
+      search: string = ''
+    ): void => {
+      // Create URL object based on current URL
+      const url = new URL(window.location.href);
 
-			// Update query parameters
-			if (resourceType && resourceType !== 'any') {
-				url.searchParams.set('type', resourceType);
-			} else {
-				url.searchParams.delete('type');
-			}
+      // Update query parameters
+      if (resourceType && resourceType !== 'any') {
+        url.searchParams.set('type', resourceType);
+      } else {
+        url.searchParams.delete('type');
+      }
 
-			if (level && level !== 'all') {
-				url.searchParams.set('level', level);
-			} else {
-				url.searchParams.delete('level');
-			}
+      if (level && level !== 'all') {
+        url.searchParams.set('level', level);
+      } else {
+        url.searchParams.delete('level');
+      }
 
-			if (format && format !== 'all') {
-				url.searchParams.set('format', format);
-			} else {
-				url.searchParams.delete('format');
-			}
+      if (format && format !== 'all') {
+        url.searchParams.set('format', format);
+      } else {
+        url.searchParams.delete('format');
+      }
 
-			if (sort && sort !== 'featured') {
-				url.searchParams.set('sort', sort);
-			} else {
-				url.searchParams.delete('sort');
-			}
+      if (sort && sort !== 'featured') {
+        url.searchParams.set('sort', sort);
+      } else {
+        url.searchParams.delete('sort');
+      }
 
-			if (search) {
-				url.searchParams.set('q', search);
-			} else {
-				url.searchParams.delete('q');
-			}
+      if (search) {
+        url.searchParams.set('q', search);
+      } else {
+        url.searchParams.delete('q');
+      }
 
-			// Add hash to keep user at catalog section
-			url.hash = 'catalog';
+      // Add hash to keep user at catalog section
+      url.hash = 'catalog';
 
-			// Update the URL without reloading the page
-			window.history.pushState({}, '', url.toString());
-		};
+      // Update the URL without reloading the page
+      window.history.pushState({}, '', url.toString());
+    };
 
-		// Function to filter products and update the display
-		const filterProducts = (
-			resourceType: string,
-			level: string,
-			format: string,
-			sort: string,
-			search: string = ''
-		): void => {
-			showLoading(true);
+    // Function to filter products and update the display
+    const filterProducts = (
+      resourceType: string,
+      level: string,
+      format: string,
+      sort: string,
+      search: string = ''
+    ): void => {
+      showLoading(true);
 
-			// Incrementa el retraso para dar tiempo a ver el skeleton
-			setTimeout(() => {
-				// Apply filters
-				let filtered = [...allProducts];
+      // Incrementa el retraso para dar tiempo a ver el skeleton
+      setTimeout(() => {
+        // Apply filters
+        let filtered = [...allProducts];
 
-				// Filter by resource type if specified
-				if (resourceType !== 'any') {
-					filtered = filtered.filter(
-						(product) => product.productType === resourceType
-					);
-				}
+        // Filter by resource type if specified
+        if (resourceType !== 'any') {
+          filtered = filtered.filter((product) => product.productType === resourceType);
+        }
 
-				// Filter by level if specified (handle difficulty mapping for exams)
-				if (level && level !== 'all') {
-					filtered = filtered.filter(
-						(product) => {
-							// Handle both direct level match and mapped difficulty to level
-							return product.level === level;
-						}
-					);
-				}
+        // Filter by level if specified (handle difficulty mapping for exams)
+        if (level && level !== 'all') {
+          filtered = filtered.filter((product) => {
+            // Handle both direct level match and mapped difficulty to level
+            return product.level === level;
+          });
+        }
 
-				// Filter by format if specified
-				if (format && format !== 'all') {
-					filtered = filtered.filter(
-						(product) =>
-							product.formatTags &&
-							product.formatTags.includes(format)
-					);
-				}
+        // Filter by format if specified
+        if (format && format !== 'all') {
+          filtered = filtered.filter(
+            (product) => product.formatTags && product.formatTags.includes(format)
+          );
+        }
 
-				// Filter by search term if provided
-				if (search) {
-					const normalizedSearchTerm = search.toLowerCase();
-					filtered = filtered.filter((product) =>
-						product.title
-							.toLowerCase()
-							.includes(normalizedSearchTerm)
-					);
-				}
+        // Filter by search term if provided
+        if (search) {
+          const normalizedSearchTerm = search.toLowerCase();
+          filtered = filtered.filter((product) =>
+            product.title.toLowerCase().includes(normalizedSearchTerm)
+          );
+        }
 
-				 // Debug logs
-				console.log(`Filtered to ${filtered.length} products`);
-				console.log(`Resource type filter: ${resourceType}`);
-				if (resourceType !== 'any') {
-					const typeCounts = filtered.reduce((acc, product) => {
-						acc[product.productType] = (acc[product.productType] || 0) + 1;
-						return acc;
-					}, {} as Record<string, number>);
-					
-					console.log('Products by type:', typeCounts);
-				}
+        // Debug logs
+        console.log(`Filtered to ${filtered.length} products`);
+        console.log(`Resource type filter: ${resourceType}`);
+        if (resourceType !== 'any') {
+          const typeCounts = filtered.reduce(
+            (acc, product) => {
+              acc[product.productType] = (acc[product.productType] || 0) + 1;
+              return acc;
+            },
+            {} as Record<string, number>
+          );
 
-				// Apply sorting
-				if (sort === 'price-low') {
-					filtered.sort((a, b) => a.price - b.price);
-				} else if (sort === 'price-high') {
-					filtered.sort((a, b) => b.price - a.price);
-				} else if (sort === 'bestseller') {
-					filtered = filtered.sort((a, b) => {
-						// Use numerical values to avoid type errors
-						const aIsBestseller = a.popularityTags?.includes(
-							'bestSeller'
-						)
-							? 1
-							: 0;
-						const bIsBestseller = b.popularityTags?.includes(
-							'bestSeller'
-						)
-							? 1
-							: 0;
-						return bIsBestseller - aIsBestseller;
-					});
-				} else {
-					// Default 'featured' sort
-					filtered = filtered.sort(
-						(a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
-					);
-				}
+          console.log('Products by type:', typeCounts);
+        }
 
-				// Update URL to reflect filters without page reload
-				updateURL(resourceType, level, format, sort, search);
+        // Apply sorting
+        if (sort === 'price-low') {
+          filtered.sort((a, b) => a.price - b.price);
+        } else if (sort === 'price-high') {
+          filtered.sort((a, b) => b.price - a.price);
+        } else if (sort === 'bestseller') {
+          filtered = filtered.sort((a, b) => {
+            // Use numerical values to avoid type errors
+            const aIsBestseller = a.popularityTags?.includes('bestSeller') ? 1 : 0;
+            const bIsBestseller = b.popularityTags?.includes('bestSeller') ? 1 : 0;
+            return bIsBestseller - aIsBestseller;
+          });
+        } else {
+          // Default 'featured' sort
+          filtered = filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+        }
 
-				// Get all product items in the grid
-				const productItems =
-					document.querySelectorAll('.product-grid-item');
+        // Update URL to reflect filters without page reload
+        updateURL(resourceType, level, format, sort, search);
 
-				// Create a map of product IDs for quick lookup
-				const filteredIds = new Set(
-					filtered.map((product) => product.id)
-				);
+        // Get all product items in the grid
+        const productItems = document.querySelectorAll('.product-grid-item');
 
-				// Show/hide products based on filter results
-				let visibleCount = 0;
-				productItems.forEach((item) => {
-					const productId = item.getAttribute('data-product-id');
-					if (filteredIds.has(productId)) {
-						item.classList.remove('hidden');
-						visibleCount++;
+        // Create a map of product IDs for quick lookup
+        const filteredIds = new Set(filtered.map((product) => product.id));
 
-						// Determine the animation delay for staggered effect
-						const index = Array.from(productItems).indexOf(item);
-						const delayClass = `appear-${(index % 4) + 1}`;
+        // Show/hide products based on filter results
+        let visibleCount = 0;
+        productItems.forEach((item) => {
+          const productId = item.getAttribute('data-product-id');
+          if (filteredIds.has(productId)) {
+            item.classList.remove('hidden');
+            visibleCount++;
 
-						// Reset animation classes
-						item.classList.remove(
-							'in-view',
-							'appear-1',
-							'appear-2',
-							'appear-3',
-							'appear-4'
-						);
+            // Determine the animation delay for staggered effect
+            const index = Array.from(productItems).indexOf(item);
+            const delayClass = `appear-${(index % 4) + 1}`;
 
-						// Force reflow to restart animation
-						// Use proper DOM property check
-						(item as HTMLElement).style.display = 'none';
-						void (item as HTMLElement).offsetWidth;
-						(item as HTMLElement).style.display = '';
+            // Reset animation classes
+            item.classList.remove('in-view', 'appear-1', 'appear-2', 'appear-3', 'appear-4');
 
-						// Apply animation classes
-						setTimeout(() => {
-							item.classList.add('in-view', delayClass);
-						}, 50);
-					} else {
-						item.classList.add('hidden');
-					}
-				});
+            // Force reflow to restart animation
+            // Use proper DOM property check
+            (item as HTMLElement).style.display = 'none';
+            void (item as HTMLElement).offsetWidth;
+            (item as HTMLElement).style.display = '';
 
-				// Show empty state if no products match filters
-				if (emptyState) {
-					if (visibleCount === 0) {
-						emptyState.classList.remove('hidden');
-					} else {
-						emptyState.classList.add('hidden');
-					}
-				}
+            // Apply animation classes
+            setTimeout(() => {
+              item.classList.add('in-view', delayClass);
+            }, 50);
+          } else {
+            item.classList.add('hidden');
+          }
+        });
 
-				showLoading(false);
+        // Show empty state if no products match filters
+        if (emptyState) {
+          if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+          } else {
+            emptyState.classList.add('hidden');
+          }
+        }
 
-				// Dispatch event to inform other components about the filter results count
-				window.dispatchEvent(
-					new CustomEvent('updateFilterCount', {
-						detail: { count: visibleCount },
-					})
-				);
-			}, 600); // Aumentamos el retraso para apreciar mejor el skeleton
-		};
+        showLoading(false);
 
-		// Filter change event handler - THIS IS THE KEY PART
-		const handleFilterChange = (event: CustomEvent): void => {
-			// Get the filter data from the event detail
-			const { level, format, sort, resourceType, search } =
-				event.detail as {
-					level: string;
-					format: string;
-					sort: string;
-					resourceType: string;
-					search: string;
-				};
+        // Dispatch event to inform other components about the filter results count
+        window.dispatchEvent(
+          new CustomEvent('updateFilterCount', {
+            detail: { count: visibleCount },
+          })
+        );
+      }, 600); // Aumentamos el retraso para apreciar mejor el skeleton
+    };
 
-			// Apply client-side filtering without page reload
-			filterProducts(resourceType, level, format, sort, search);
-		};
+    // Filter change event handler - THIS IS THE KEY PART
+    const handleFilterChange = (event: CustomEvent): void => {
+      // Get the filter data from the event detail
+      const { level, format, sort, resourceType, search } = event.detail as {
+        level: string;
+        format: string;
+        sort: string;
+        resourceType: string;
+        search: string;
+      };
 
-		// Reset filters button
-		if (resetButton) {
-			resetButton.addEventListener('click', () => {
-				// Create and dispatch a reset event
-				const resetEvent = new CustomEvent('resetFilters');
-				document.dispatchEvent(resetEvent);
+      // Apply client-side filtering without page reload
+      filterProducts(resourceType, level, format, sort, search);
+    };
 
-				// Apply the default filters
-				filterProducts('any', 'all', 'all', 'featured', '');
-			});
-		}
+    // Reset filters button
+    if (resetButton) {
+      resetButton.addEventListener('click', () => {
+        // Create and dispatch a reset event
+        const resetEvent = new CustomEvent('resetFilters');
+        document.dispatchEvent(resetEvent);
 
-		// Listen for filter changes from the Filter component
-		window.addEventListener(
-			'filterChange',
-			handleFilterChange as EventListener
-		);
+        // Apply the default filters
+        filterProducts('any', 'all', 'all', 'featured', '');
+      });
+    }
 
-		// Animation for product grid items
-		const observeElements = () => {
-			const observer = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry, index) => {
-						if (entry.isIntersecting) {
-							// Add class for animation and staggered timing
-							setTimeout(
-								() => {
-									entry.target.classList.add(
-										'in-view',
-										`appear-${(index % 4) + 1}`
-									);
-								},
-								100 * (index % 4)
-							);
-							observer.unobserve(entry.target);
-						}
-					});
-				},
-				{ threshold: 0.1 }
-			);
+    // Listen for filter changes from the Filter component
+    window.addEventListener('filterChange', handleFilterChange as EventListener);
 
-			// Observe all product grid items
-			document.querySelectorAll('.product-grid-item').forEach((item) => {
-				if (!item.classList.contains('hidden')) {
-					observer.observe(item);
-				}
-			});
-		};
+    // Animation for product grid items
+    const observeElements = () => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+              // Add class for animation and staggered timing
+              setTimeout(
+                () => {
+                  entry.target.classList.add('in-view', `appear-${(index % 4) + 1}`);
+                },
+                100 * (index % 4)
+              );
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
 
-		// Initialize animations
-		observeElements();
-	});
+      // Observe all product grid items
+      document.querySelectorAll('.product-grid-item').forEach((item) => {
+        if (!item.classList.contains('hidden')) {
+          observer.observe(item);
+        }
+      });
+    };
+
+    // Initialize animations
+    observeElements();
+  });
 </script>
 
 <style>
-	/* Animation styles for product grid items */
-	.product-grid-item {
-		opacity: 0;
-		transform: translateY(20px);
-		transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
-	}
+  /* Animation styles for product grid items */
+  .product-grid-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
 
-	.product-grid-item.in-view {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  .product-grid-item.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-	.appear-1 {
-		transition-delay: 0.05s;
-	}
+  .appear-1 {
+    transition-delay: 0.05s;
+  }
 
-	.appear-2 {
-		transition-delay: 0.1s;
-	}
+  .appear-2 {
+    transition-delay: 0.1s;
+  }
 
-	.appear-3 {
-		transition-delay: 0.15s;
-	}
+  .appear-3 {
+    transition-delay: 0.15s;
+  }
 
-	.appear-4 {
-		transition-delay: 0.2s;
-	}
+  .appear-4 {
+    transition-delay: 0.2s;
+  }
 
-	.loading-container {
-		animation: fadeIn 0.3s ease-in forwards;
-	}
+  .loading-container {
+    animation: fadeIn 0.3s ease-in forwards;
+  }
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
-	.catalog-container {
-		width: 100%;
-	}
+  .catalog-container {
+    width: 100%;
+  }
 </style>

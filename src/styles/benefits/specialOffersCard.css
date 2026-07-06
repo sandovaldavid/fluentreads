@@ -1,40 +1,40 @@
 .animate-bounce-once {
-	animation: bounce 0.7s ease-in-out;
+  animation: bounce 0.7s ease-in-out;
 }
 
 @keyframes bounce {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-	50% {
-		transform: translateY(-10px);
-	}
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Enhance accent border with gradient */
 .special-offer-banner {
-	position: relative;
+  position: relative;
 }
 
 .special-offer-banner::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 100%;
-	width: 4px;
-	background: linear-gradient(
-		to bottom,
-		var(--color-accent-light),
-		var(--color-accent),
-		var(--color-accent-dark)
-	);
-	border-radius: 2px 0 0 2px;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(
+    to bottom,
+    var(--color-accent-light),
+    var(--color-accent),
+    var(--color-accent-dark)
+  );
+  border-radius: 2px 0 0 2px;
 }
 
 @media (min-width: 640px) {
-	.special-offer-banner::before {
-		width: 6px;
-	}
+  .special-offer-banner::before {
+    width: 6px;
+  }
 }

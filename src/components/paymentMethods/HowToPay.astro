@@ -14,217 +14,205 @@ import '../../styles/paymentMethods/HowToPay.css';
 
 // Define payment methods for visual display
 const paymentMethods = [
-	{ icon: BcpIcon, name: 'BCP', color: 'bg-blue-50' },
-	{ icon: BbvaIcon, name: 'BBVA', color: 'bg-cyan-50' },
-	{ icon: ScotiabankIcon, name: 'Scotiabank', color: 'bg-red-50' },
-	{ icon: PayPalIcon, name: 'PayPal', color: 'bg-blue-100' },
+  { icon: BcpIcon, name: 'BCP', color: 'bg-blue-50' },
+  { icon: BbvaIcon, name: 'BBVA', color: 'bg-cyan-50' },
+  { icon: ScotiabankIcon, name: 'Scotiabank', color: 'bg-red-50' },
+  { icon: PayPalIcon, name: 'PayPal', color: 'bg-blue-100' },
 ];
 ---
 
-<section class='py-16 bg-neutral-light relative overflow-hidden'>
-	<!-- Floating decoration elements -->
-	<div
-		class='floating-element absolute w-60 h-60 rounded-full bg-primary opacity-10 -top-20 -left-20'>
-	</div>
-	<div
-		class='floating-element absolute w-48 h-48 rounded-full bg-secondary opacity-10 -bottom-20 -right-20'
-		style='animation-delay: 2s;'>
-	</div>
-	<div
-		class='floating-element absolute w-36 h-36 rounded-full bg-accent opacity-10 top-1/3 -right-10'
-		style='animation-delay: 4s;'>
-	</div>
+<section className="bg-neutral-light relative overflow-hidden py-16">
+  <!-- Floating decoration elements -->
+  <div
+    className="floating-element bg-primary absolute -top-20 -left-20 h-60 w-60 rounded-full opacity-10"
+   />
+  <div
+    className="floating-element bg-secondary absolute -right-20 -bottom-20 h-48 w-48 rounded-full opacity-10"
+    style="animation-delay: 2s;"
+   />
+  <div
+    className="floating-element bg-accent absolute top-1/3 -right-10 h-36 w-36 rounded-full opacity-10"
+    style="animation-delay: 4s;"
+   />
 
-	<div class='container mx-auto px-4'>
-		<div class='max-w-5xl mx-auto'>
-			<div class='text-center mb-12 fade-in-element'>
-				<SectionTitle class='mb-4'>¿Cómo realizar el pago?</SectionTitle
-				>
-				<p class='mt-4 text-gray-600 max-w-2xl mx-auto text-lg'>
-					Sigue estos <span class='text-accent font-semibold'
-						>sencillos pasos</span
-					>
-					para completar tu compra y recibir tu material <span
-						class='text-primary font-semibold'>inmediatamente</span
-					>.
-				</p>
-			</div>
+  <div className="container mx-auto px-4">
+    <div className="mx-auto max-w-5xl">
+      <div className="fade-in-element mb-12 text-center">
+        <SectionTitle class="mb-4">¿Cómo realizar el pago?</SectionTitle>
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
+          Sigue estos <span className="text-accent font-semibold">sencillos pasos</span>
+          para completar tu compra y recibir tu material <span className="text-primary font-semibold"
+            >inmediatamente</span
+          >.
+        </p>
+      </div>
 
-			<!-- Payment methods visualization -->
-			<div class='mb-14'>
-				<div class='text-center mb-6'>
-					<h3 class='text-xl font-semibold text-primary-dark'>
-						Métodos de Pago Aceptados
-					</h3>
-				</div>
+      <!-- Payment methods visualization -->
+      <div className="mb-14">
+        <div className="mb-6 text-center">
+          <h3 className="text-primary-dark text-xl font-semibold">Métodos de Pago Aceptados</h3>
+        </div>
 
-				<div
-					class='flex flex-wrap justify-center gap-4 max-w-3xl mx-auto'>
-					{
-						paymentMethods.map((method, index) => (
-							<div
-								class={`payment-method-card flex flex-col items-center p-5 rounded-xl shadow-md transition-all duration-300 ${method.color} border-2 border-transparent hover:border-secondary hover:-translate-y-1 hover:shadow-lg`}
-								style={`animation-delay: ${index * 150}ms`}>
-								<method.icon class='w-14 h-14 mb-3 transition-transform duration-300 payment-icon' />
-								<span class='font-semibold text-sm text-primary-dark'>
-									{method.name}
-								</span>
-							</div>
-						))
-					}
-				</div>
-			</div>
+        <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-4">
+          {
+            paymentMethods.map((method, index) => (
+              <div
+                className={`payment-method-card flex flex-col items-center rounded-xl p-5 shadow-md transition-all duration-300 ${method.color} hover:border-secondary border-2 border-transparent hover:-translate-y-1 hover:shadow-lg`}
+                style={`animation-delay: ${index * 150}ms`}
+              >
+                <method.icon class="payment-icon mb-3 h-14 w-14 transition-transform duration-300" />
+                <span className="text-primary-dark text-sm font-semibold">{method.name}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
 
-			<!-- Steps flow -->
-			<div
-				class='flex flex-col md:flex-row gap-6 md:gap-4 max-w-4xl mx-auto mb-8'>
-				<!-- Step 1 -->
-				<div
-					class='payment-step bg-white rounded-2xl p-8 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-lg flex-1 text-center flex flex-col items-center'>
-					<div class='relative mb-6'>
-						<div
-							class='flex items-center justify-center w-20 h-20 text-3xl font-bold text-white bg-primary rounded-full shadow-md z-10'>
-							1
-						</div>
-						<div
-							class='hidden md:block absolute top-1/2 right-[-3.5rem] w-12 h-1 bg-gradient-to-r from-primary to-secondary transform -translate-y-1/2'>
-						</div>
-					</div>
-					<div class='flex flex-col flex-1'>
-						<h3
-							class='text-xl font-bold text-primary-dark mb-4 step-title'>
-							Elige y realiza el pago
-						</h3>
-						<p class='text-black text-opacity-80 text-lg'>
-							Selecciona el método que prefieras y realiza la
-							transferencia del importe a cualquiera de nuestras
-							cuentas.
-						</p>
-					</div>
-				</div>
+      <!-- Steps flow -->
+      <div className="mx-auto mb-8 flex max-w-4xl flex-col gap-6 md:flex-row md:gap-4">
+        <!-- Step 1 -->
+        <div
+          className="payment-step flex flex-1 flex-col items-center rounded-2xl bg-white p-8 text-center shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+        >
+          <div className="relative mb-6">
+            <div
+              className="bg-primary z-10 flex h-20 w-20 items-center justify-center rounded-full text-3xl font-bold text-white shadow-md"
+            >
+              1
+            </div>
+            <div
+              className="from-primary to-secondary absolute top-1/2 right-[-3.5rem] hidden h-1 w-12 -translate-y-1/2 transform bg-gradient-to-r md:block"
+             />
+          </div>
+          <div className="flex flex-1 flex-col">
+            <h3 className="text-primary-dark step-title mb-4 text-xl font-bold">
+              Elige y realiza el pago
+            </h3>
+            <p className="text-opacity-80 text-lg text-black">
+              Selecciona el método que prefieras y realiza la transferencia del importe a cualquiera
+              de nuestras cuentas.
+            </p>
+          </div>
+        </div>
 
-				<!-- Step 2 -->
-				<div
-					class='payment-step bg-white rounded-2xl p-8 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-lg flex-1 text-center flex flex-col items-center'>
-					<div class='relative mb-6'>
-						<div
-							class='flex items-center justify-center w-20 h-20 text-3xl font-bold text-white bg-primary rounded-full shadow-md z-10'>
-							2
-						</div>
-						<div
-							class='hidden md:block absolute top-1/2 right-[-3.5rem] w-12 h-1 bg-gradient-to-r from-primary to-secondary transform -translate-y-1/2'>
-						</div>
-					</div>
-					<div class='flex flex-col flex-1'>
-						<h3
-							class='text-xl font-bold text-primary-dark mb-4 step-title'>
-							Guarda el comprobante
-						</h3>
-						<p class='text-black text-opacity-80 text-lg'>
-							Toma una captura de pantalla o guarda el comprobante
-							de tu pago para verificación.
-						</p>
-					</div>
-				</div>
+        <!-- Step 2 -->
+        <div
+          className="payment-step flex flex-1 flex-col items-center rounded-2xl bg-white p-8 text-center shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+        >
+          <div className="relative mb-6">
+            <div
+              className="bg-primary z-10 flex h-20 w-20 items-center justify-center rounded-full text-3xl font-bold text-white shadow-md"
+            >
+              2
+            </div>
+            <div
+              className="from-primary to-secondary absolute top-1/2 right-[-3.5rem] hidden h-1 w-12 -translate-y-1/2 transform bg-gradient-to-r md:block"
+             />
+          </div>
+          <div className="flex flex-1 flex-col">
+            <h3 className="text-primary-dark step-title mb-4 text-xl font-bold">
+              Guarda el comprobante
+            </h3>
+            <p className="text-opacity-80 text-lg text-black">
+              Toma una captura de pantalla o guarda el comprobante de tu pago para verificación.
+            </p>
+          </div>
+        </div>
 
-				<!-- Step 3 -->
-				<div
-					class='payment-step bg-white rounded-2xl p-8 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-lg flex-1 text-center flex flex-col items-center'>
-					<div class='relative mb-6'>
-						<div
-							class='flex items-center justify-center w-20 h-20 text-3xl font-bold text-white bg-primary rounded-full shadow-md z-10'>
-							3
-						</div>
-					</div>
-					<div class='flex flex-col flex-1'>
-						<h3
-							class='text-xl font-bold text-primary-dark mb-4 step-title'>
-							Envíanos el comprobante
-						</h3>
-						<p class='text-black text-opacity-80 text-lg'>
-							Comparte el comprobante vía WhatsApp o Telegram para
-							recibir tu material inmediatamente.
-						</p>
-					</div>
-				</div>
-			</div>
+        <!-- Step 3 -->
+        <div
+          className="payment-step flex flex-1 flex-col items-center rounded-2xl bg-white p-8 text-center shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+        >
+          <div className="relative mb-6">
+            <div
+              className="bg-primary z-10 flex h-20 w-20 items-center justify-center rounded-full text-3xl font-bold text-white shadow-md"
+            >
+              3
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col">
+            <h3 className="text-primary-dark step-title mb-4 text-xl font-bold">
+              Envíanos el comprobante
+            </h3>
+            <p className="text-opacity-80 text-lg text-black">
+              Comparte el comprobante vía WhatsApp o Telegram para recibir tu material
+              inmediatamente.
+            </p>
+          </div>
+        </div>
+      </div>
 
-			<!-- Social sharing options with enhanced visual appeal -->
-			<SocialSharing />
+      <!-- Social sharing options with enhanced visual appeal -->
+      <SocialSharing />
 
-			<!-- Trust indicators and guarantees -->
-			<div class='flex flex-col md:flex-row gap-4 max-w-4xl mx-auto'>
-				<div
-					class='flex items-center p-4 bg-white rounded-lg shadow-sm border-l-4 border-accent flex-1 transition-all duration-300 hover:-translate-y-1 hover:shadow-md'>
-					<TrustIndicator />
-					<p class='ml-2 text-sm'>
-						Respuesta en menos de <span
-							class='text-accent font-semibold'>15 minutos</span
-						> en horario de atención
-					</p>
-				</div>
+      <!-- Trust indicators and guarantees -->
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 md:flex-row">
+        <div
+          className="border-accent flex flex-1 items-center rounded-lg border-l-4 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+        >
+          <TrustIndicator />
+          <p className="ml-2 text-sm">
+            Respuesta en menos de <span className="text-accent font-semibold">15 minutos</span> en horario
+            de atención
+          </p>
+        </div>
 
-				<div
-					class='flex items-center p-4 bg-white rounded-lg shadow-sm border-l-4 border-accent flex-1 transition-all duration-300 hover:-translate-y-1 hover:shadow-md'>
-					<TrustIndicator />
-					<p class='ml-2 text-sm'>
-						Material <span class='text-accent font-semibold'
-							>completo y actualizado</span
-						> garantizado
-					</p>
-				</div>
+        <div
+          className="border-accent flex flex-1 items-center rounded-lg border-l-4 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+        >
+          <TrustIndicator />
+          <p className="ml-2 text-sm">
+            Material <span className="text-accent font-semibold">completo y actualizado</span> garantizado
+          </p>
+        </div>
 
-				<div
-					class='flex items-center p-4 bg-white rounded-lg shadow-sm border-l-4 border-accent flex-1 transition-all duration-300 hover:-translate-y-1 hover:shadow-md'>
-					<TrustIndicator />
-					<p class='ml-2 text-sm'>
-						Soporte <span class='text-accent font-semibold'
-							>post-venta</span
-						> incluido
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div
+          className="border-accent flex flex-1 items-center rounded-lg border-l-4 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+        >
+          <TrustIndicator />
+          <p className="ml-2 text-sm">
+            Soporte <span className="text-accent font-semibold">post-venta</span> incluido
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
-	// Add intersection observer to create scroll animations
-	document.addEventListener('DOMContentLoaded', function () {
-		const fadeElements = document.querySelectorAll('.fade-in-element');
-		const paymentSteps = document.querySelectorAll('.payment-step');
+  // Add intersection observer to create scroll animations
+  document.addEventListener('DOMContentLoaded', function () {
+    const fadeElements = document.querySelectorAll('.fade-in-element');
+    const paymentSteps = document.querySelectorAll('.payment-step');
 
-		const appearOptions = {
-			threshold: 0.25,
-			rootMargin: '0px 0px -100px 0px',
-		};
+    const appearOptions = {
+      threshold: 0.25,
+      rootMargin: '0px 0px -100px 0px',
+    };
 
-		const appearOnScroll = new IntersectionObserver(function (
-			entries,
-			appearOnScroll
-		) {
-			entries.forEach((entry) => {
-				if (!entry.isIntersecting) return;
-				entry.target.classList.add('appear');
-				appearOnScroll.unobserve(entry.target);
-			});
-		}, appearOptions);
+    const appearOnScroll = new IntersectionObserver(function (entries, appearOnScroll) {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('appear');
+        appearOnScroll.unobserve(entry.target);
+      });
+    }, appearOptions);
 
-		fadeElements.forEach((element) => {
-			appearOnScroll.observe(element);
-		});
+    fadeElements.forEach((element) => {
+      appearOnScroll.observe(element);
+    });
 
-		paymentSteps.forEach((step) => {
-			appearOnScroll.observe(step);
-		});
+    paymentSteps.forEach((step) => {
+      appearOnScroll.observe(step);
+    });
 
-		// Add hover effect to payment method cards
-		const paymentCards = document.querySelectorAll('.payment-method-card');
-		paymentCards.forEach((card) => {
-			card.addEventListener('mouseenter', function (this: HTMLElement) {
-				paymentCards.forEach((c) => c.classList.remove('active'));
-				this.classList.add('active');
-			});
-		});
-	});
+    // Add hover effect to payment method cards
+    const paymentCards = document.querySelectorAll('.payment-method-card');
+    paymentCards.forEach((card) => {
+      card.addEventListener('mouseenter', function (this: HTMLElement) {
+        paymentCards.forEach((c) => c.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  });
 </script>

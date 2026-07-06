@@ -2,10 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "./node_modules/.bin/astro dev",
-      "name": "Development server",
+      "command": "bun run dev",
+      "name": "Astro dev server",
       "request": "launch",
-      "type": "node-terminal"
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Astro preview (production build)",
+      "request": "launch",
+      "type": "node-terminal",
+      "command": "bun run preview",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "build:force"
     }
   ]
 }

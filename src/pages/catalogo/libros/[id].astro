@@ -9,48 +9,42 @@ import { levelConfig } from '../../../utils/bookTags';
 import { bookToProduct } from '../../../utils/RelatedProducts';
 
 export async function getStaticPaths() {
-	return booksData.map((book) => ({
-		params: { id: book.id },
-		props: { book },
-	}));
+  return booksData.map((book) => ({
+    params: { id: book.id },
+    props: { book },
+  }));
 }
 
 interface Props {
-	book: Book;
+  book: Book;
 }
 
 const { book } = Astro.props;
 
 // Get related books (same level or format)
 const relatedBooks = booksData
-	.filter(
-		(item) =>
-			item.id !== book.id &&
-			(item.level === book.level ||
-				(item.formatTags &&
-					book.formatTags &&
-					item.formatTags.some((tag) =>
-						book.formatTags?.includes(tag)
-					)))
-	)
-	.slice(0, 4);
+  .filter(
+    (item) =>
+      item.id !== book.id &&
+      (item.level === book.level ||
+        (item.formatTags &&
+          book.formatTags &&
+          item.formatTags.some((tag) => book.formatTags?.includes(tag))))
+  )
+  .slice(0, 4);
 
 // Get related books and convert them to Product type for consistency
-const relatedProducts: Product[] = relatedBooks.map((book) =>
-	bookToProduct(book)
-);
+const relatedProducts: Product[] = relatedBooks.map((book) => bookToProduct(book));
 
 // Calculate discounted price if there's a discount
 const hasDiscount = book.discount !== undefined && book.discount > 0;
 const originalPrice = book.price;
-const discountedPrice = hasDiscount
-	? book.price * (1 - (book.discount || 0) / 100)
-	: book.price;
+const discountedPrice = hasDiscount ? book.price * (1 - (book.discount || 0) / 100) : book.price;
 
 // SEO metadata
 const bookLevel = book.level
-	? levelConfig[book.level as keyof typeof levelConfig]?.label || book.level
-	: '';
+  ? levelConfig[book.level as keyof typeof levelConfig]?.label || book.level
+  : '';
 const formatTags = book.formatTags?.join(', ') || '';
 
 // Improved title with keywords
@@ -58,10 +52,10 @@ const title = `${book.title} | Libro en inglés ${bookLevel ? `- ${bookLevel}` :
 
 // Enhanced description
 const description =
-	book.description?.length > 160
-		? `${book.description.substring(0, 157)}...`
-		: book.description ||
-			`Libro de inglés: ${book.title}. Material educativo ideal para aprender inglés.`;
+  book.description?.length > 160
+    ? `${book.description.substring(0, 157)}...`
+    : book.description ||
+      `Libro de inglés: ${book.title}. Material educativo ideal para aprender inglés.`;
 
 // Canonical URL
 const siteUrl = new URL(siteInfo.siteURL);
@@ -69,106 +63,105 @@ const canonicalURL = new URL(`/catalogo/libros/${book.id}`, siteUrl);
 
 // Structured data for rich snippets
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@type': 'Book',
-	name: book.title,
-	description: book.description,
-	image: book.coverImage,
-	isbn: book.id, // Using ID as ISBN for example
-	offers: {
-		'@type': 'Offer',
-		price: discountedPrice,
-		priceCurrency: 'PEN',
-		availability: 'https://schema.org/InStock',
-		url: canonicalURL.toString(),
-		priceValidUntil: new Date(
-			new Date().setFullYear(new Date().getFullYear() + 1)
-		)
-			.toISOString()
-			.split('T')[0],
-	},
-	publisher: {
-		'@type': 'Organization',
-		name: book.editorialId || siteInfo.siteName,
-	},
-	inLanguage: 'en',
-	aggregateRating: book.rating
-		? {
-				'@type': 'AggregateRating',
-				ratingValue: book.rating.score,
-				reviewCount: book.rating.reviewCount,
-				bestRating: '5',
-				worstRating: '1',
-			}
-		: undefined,
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  name: book.title,
+  description: book.description,
+  image: book.coverImage,
+  isbn: book.id, // Using ID as ISBN for example
+  offers: {
+    '@type': 'Offer',
+    price: discountedPrice,
+    priceCurrency: 'PEN',
+    availability: 'https://schema.org/InStock',
+    url: canonicalURL.toString(),
+    priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+      .toISOString()
+      .split('T')[0],
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: book.editorialId || siteInfo.siteName,
+  },
+  inLanguage: 'en',
+  aggregateRating: book.rating
+    ? {
+        '@type': 'AggregateRating',
+        ratingValue: book.rating.score,
+        reviewCount: book.rating.reviewCount,
+        bestRating: '5',
+        worstRating: '1',
+      }
+    : undefined,
 };
 
 // Breadcrumb structured data
 const breadcrumbJsonLd = {
-	'@context': 'https://schema.org',
-	'@type': 'BreadcrumbList',
-	itemListElement: [
-		{
-			'@type': 'ListItem',
-			position: 1,
-			name: 'Inicio',
-			item: new URL('/', siteUrl).toString(),
-		},
-		{
-			'@type': 'ListItem',
-			position: 2,
-			name: 'Catálogo',
-			item: new URL('/catalogo', siteUrl).toString(),
-		},
-		{
-			'@type': 'ListItem',
-			position: 3,
-			name: 'Libros',
-			item: new URL('/catalogo/libros', siteUrl).toString(),
-		},
-		{
-			'@type': 'ListItem',
-			position: 4,
-			name: book.title,
-			item: canonicalURL.toString(),
-		},
-	],
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Inicio',
+      item: new URL('/', siteUrl).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Catálogo',
+      item: new URL('/catalogo', siteUrl).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Libros',
+      item: new URL('/catalogo/libros', siteUrl).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      name: book.title,
+      item: canonicalURL.toString(),
+    },
+  ],
 };
 ---
 
 <Layout
-	title={title}
-	description={description}
-	productType='book'
-	price={discountedPrice}
-	currency='PEN'
-	image={book.coverImage}
-	canonicalURL={canonicalURL}
-	ogTitle={title}
-	ogDescription={description}
-	ogImage={book.coverImage}
-	twitterTitle={title}
-	twitterDescription={description}
-	twitterImage={book.coverImage}
-	structuredData={structuredData}
-	breadcrumbData={breadcrumbJsonLd}>
-	<BookDetails book={book} relatedProducts={relatedProducts} />
+  title={title}
+  description={description}
+  productType="book"
+  price={discountedPrice}
+  currency="PEN"
+  image={book.coverImage}
+  canonicalURL={canonicalURL}
+  ogTitle={title}
+  ogDescription={description}
+  ogImage={book.coverImage}
+  twitterTitle={title}
+  twitterDescription={description}
+  twitterImage={book.coverImage}
+  structuredData={structuredData}
+  breadcrumbData={breadcrumbJsonLd}
+>
+  <BookDetails book={book} relatedProducts={relatedProducts} />
 
-	<!-- Add event listener for cart operations -->
-	<script>
-		import { CartManager } from '../../../utils/cartManager';
+  <!-- Add event listener for cart operations -->
+  <script>
+    import { CartManager } from '../../../utils/cartManager';
 
-		// Initialize cart functionality
-		document.addEventListener('DOMContentLoaded', () => {
-			// Make sure cart is initialized
-			if (typeof window !== 'undefined') {
-				CartManager.initializeCart();
-			}
+    // Initialize cart functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      // Make sure cart is initialized
+      if (typeof window !== 'undefined') {
+        CartManager.initializeCart();
+      }
 
-			// Listen for cart updates to refresh indicators
-			window.addEventListener('cartUpdated', () => {
-				console.log('Cart updated');
-			});
-		});
-	</script>
+      // Listen for cart updates to refresh indicators
+      window.addEventListener('cartUpdated', () => {
+        console.log('Cart updated');
+      });
+    });
+  </script>
 </Layout>
