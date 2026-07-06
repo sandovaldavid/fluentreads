@@ -4,61 +4,61 @@ import LocationIcon from '../icons/Location.astro';
 const { class: className = '' } = Astro.props;
 ---
 
-<div class={`schedule-banner ${className}`}>
-	<div
-		class='bg-gradient-to-r from-primary/10 to-primary-light/5 border border-primary-light/20 rounded-xl lg:shadow-md lg:hover:shadow-lg lg:transition-all lg:duration-300 p-5'>
-		<div class='flex flex-col md:flex-row items-center gap-4'>
-			<div class='flex-1 flex flex-col space-y-3'>
-				<div class='flex items-center mb-4'>
-					<span class='bg-primary text-white p-2 rounded-full mr-3'>
-						<LocationIcon class='w-5 h-5' />
-					</span>
-					<h3
-						class='font-bold text-lg md:text-xl lg:text-2xl text-primary-dark'>
-						Ubicación virtual
-					</h3>
-				</div>
-			</div>
-		</div>
-		<p class='text-gray-600 mb-4'>
-			FluentReads es una tienda completamente digital. Ofrecemos todos
-			nuestros materiales en formato electrónico con entrega inmediata.
-		</p>
-	</div>
+<div className={`schedule-banner ${className}`}>
+  <div
+    className="from-primary/10 to-primary-light/5 border-primary-light/20 rounded-xl border bg-gradient-to-r p-5 lg:shadow-md lg:transition-all lg:duration-300 lg:hover:shadow-lg"
+  >
+    <div className="flex flex-col items-center gap-4 md:flex-row">
+      <div className="flex flex-1 flex-col space-y-3">
+        <div className="mb-4 flex items-center">
+          <span className="bg-primary mr-3 rounded-full p-2 text-white">
+            <LocationIcon class="h-5 w-5" />
+          </span>
+          <h3 className="text-primary-dark text-lg font-bold md:text-xl lg:text-2xl">
+            Ubicación virtual
+          </h3>
+        </div>
+      </div>
+    </div>
+    <p className="mb-4 text-gray-600">
+      FluentReads es una tienda completamente digital. Ofrecemos todos nuestros materiales en
+      formato electrónico con entrega inmediata.
+    </p>
+  </div>
 </div>
 
 <style>
-	.schedule-banner {
-		animation: fadeIn 0.6s ease-in-out;
-	}
+  .schedule-banner {
+    animation: fadeIn 0.6s ease-in-out;
+  }
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-	/* Pulse animation for the clock icon */
-	@media (min-width: 768px) {
-		.schedule-banner:hover :global(svg) {
-			animation: pulse 1.5s infinite;
-		}
-	}
+  /* Pulse animation for the clock icon */
+  @media (min-width: 768px) {
+    .schedule-banner:hover :global(svg) {
+      animation: pulse 1.5s infinite;
+    }
+  }
 
-	@keyframes pulse {
-		0% {
-			transform: scale(1);
-		}
-		50% {
-			transform: scale(1.05);
-		}
-		100% {
-			transform: scale(1);
-		}
-	}
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 </style>

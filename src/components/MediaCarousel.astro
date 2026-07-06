@@ -7,134 +7,131 @@ import { extractYoutubeId } from '../utils/videoEmbeds';
 import '../styles/MediaCarousel.css';
 
 interface MediaItem {
-	type: 'image' | 'video';
-	url: string;
-	thumbnail?: string;
-	title?: string;
+  type: 'image' | 'video';
+  url: string;
+  thumbnail?: string;
+  title?: string;
 }
 
 interface Props {
-	mediaItems: MediaItem[];
-	title: string;
-	height?: string;
+  mediaItems: MediaItem[];
+  title: string;
+  height?: string;
 }
 
 const { mediaItems, title, height = '500px' } = Astro.props;
 
 // Create thumbnails array with proper types
 const thumbnails = mediaItems.map((item, index) => {
-	if (item.type === 'video') {
-		const videoId = extractYoutubeId(item.url);
-		return {
-			type: 'video',
-			thumb:
-				item.thumbnail ||
-				`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
-			url: item.url,
-			index,
-		};
-	} else {
-		return {
-			type: 'image',
-			thumb: item.thumbnail || item.url,
-			url: item.url,
-			index,
-		};
-	}
+  if (item.type === 'video') {
+    const videoId = extractYoutubeId(item.url);
+    return {
+      type: 'video',
+      thumb: item.thumbnail || `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+      url: item.url,
+      index,
+    };
+  } else {
+    return {
+      type: 'image',
+      thumb: item.thumbnail || item.url,
+      url: item.url,
+      index,
+    };
+  }
 });
 ---
 
 <div
-	class='media-carousel relative rounded-xl overflow-hidden shadow-xl mb-6 group'
-	id='media-carousel'
-	style={`height: ${height};`}>
-	<!-- Main display area for current media -->
-	<div class='carousel-track w-full h-full transition-transform duration-500'>
-		{
-			mediaItems.map((item, index) => (
-				<div
-					class={`carousel-slide aspect-video absolute inset-0 ${index === 0 ? 'active' : ''}`}
-					data-index={index}
-					id={`slide-${index}`}>
-					{item.type === 'image' ? (
-						<div class='media-image-container cursor-zoom-in h-full'>
-							<img
-								src={item.url}
-								alt={
-									item.title ||
-									`${title} - Imagen ${index + 1}`
-								}
-								class='media-image'
-								loading={index === 0 ? 'eager' : 'lazy'}
-								data-full-img={item.url}
-							/>
-							<div class='absolute inset-0 flex items-center justify-center bg-opacity-0 hover:bg-opacity-20 transition-opacity'>
-								<div class='zoom-icon opacity-0 group-hover:opacity-100 transition-opacity'>
-									<ZoomInIcon class='h-10 w-10 text-white' />
-								</div>
-							</div>
-						</div>
-					) : (
-						<div class='media-video-container h-full'>
-							<lite-youtube
-								videoId={extractYoutubeId(item.url)}
-								title={item.title || `${title} - Video`}
-								playlabel={`Play: ${item.title || `${title} - Video`}`}
-								style="background-image: url('https://img.youtube.com/vi/${extractYoutubeId(item.url)}/maxresdefault.jpg');"
-								params='autoplay=1&rel=0'
-							/>
-						</div>
-					)}
-				</div>
-			))
-		}
-	</div>
+  className="media-carousel group relative mb-6 overflow-hidden rounded-xl shadow-xl"
+  id="media-carousel"
+  style={`height: ${height};`}
+>
+  <!-- Main display area for current media -->
+  <div className="carousel-track h-full w-full transition-transform duration-500">
+    {
+      mediaItems.map((item, index) => (
+        <div
+          className={`carousel-slide absolute inset-0 aspect-video ${index === 0 ? 'active' : ''}`}
+          data-index={index}
+          id={`slide-${index}`}
+        >
+          {item.type === 'image' ? (
+            <div className="media-image-container h-full cursor-zoom-in">
+              <img
+                src={item.url}
+                alt={item.title || `${title} - Imagen ${index + 1}`}
+                className="media-image"
+                loading={index === 0 ? 'eager' : 'lazy'}
+                data-full-img={item.url}
+              />
+              <div className="bg-opacity-0 hover:bg-opacity-20 absolute inset-0 flex items-center justify-center transition-opacity">
+                <div className="zoom-icon opacity-0 transition-opacity group-hover:opacity-100">
+                  <ZoomInIcon class="h-10 w-10 text-white" />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="media-video-container h-full">
+              <lite-youtube
+                videoId={extractYoutubeId(item.url)}
+                title={item.title || `${title} - Video`}
+                playlabel={`Play: ${item.title || `${title} - Video`}`}
+                style="background-image: url('https://img.youtube.com/vi/${extractYoutubeId(item.url)}/maxresdefault.jpg');"
+                params="autoplay=1&rel=0"
+              />
+            </div>
+          )}
+        </div>
+      ))
+    }
+  </div>
 
-	<!-- Carousel controls -->
-	<CarruselButtons
-		ariaLabelPrev={`Imagen anterior de ${title}`}
-		ariaLabelNext={`Siguiente imagen de ${title}`}
-	/>
+  <!-- Carousel controls -->
+  <CarruselButtons
+    ariaLabelPrev={`Imagen anterior de ${title}`}
+    ariaLabelNext={`Siguiente imagen de ${title}`}
+  />
 
-	<!-- Thumbnails navigation -->
-	<div
-		class='thumbnails-container overflow-x-auto py-4 px-2 mt-4 bg-gray-100 rounded-lg'>
-		<div class='thumbnails-track flex gap-2'>
-			{
-				thumbnails.map((thumb, index) => (
-					<div
-						class={`thumbnail-item flex-shrink-0 overflow-hidden rounded border-2 transition-all duration-300 cursor-pointer ${index === 0 ? 'initial-active' : 'border-transparent'}`}
-						data-index={index}>
-						<div class='w-16 h-16 sm:w-20 sm:h-20 relative'>
-							<img
-								src={thumb.thumb}
-								alt={`Miniatura ${index + 1}`}
-								class='w-full h-full object-cover'
-							/>
-							{thumb.type === 'video' && (
-								<div class='absolute inset-0 flex items-center justify-center bg-black bg-opacity-30'>
-									<PlayIcon class='h-8 w-8 text-white' />
-								</div>
-							)}
-						</div>
-					</div>
-				))
-			}
-		</div>
-	</div>
+  <!-- Thumbnails navigation -->
+  <div className="thumbnails-container mt-4 overflow-x-auto rounded-lg bg-gray-100 px-2 py-4">
+    <div className="thumbnails-track flex gap-2">
+      {
+        thumbnails.map((thumb, index) => (
+          <div
+            className={`thumbnail-item flex-shrink-0 cursor-pointer overflow-hidden rounded border-2 transition-all duration-300 ${index === 0 ? 'initial-active' : 'border-transparent'}`}
+            data-index={index}
+          >
+            <div className="relative h-16 w-16 sm:h-20 sm:w-20">
+              <img
+                src={thumb.thumb}
+                alt={`Miniatura ${index + 1}`}
+                className="h-full w-full object-cover"
+              />
+              {thumb.type === 'video' && (
+                <div className="bg-opacity-30 absolute inset-0 flex items-center justify-center bg-black">
+                  <PlayIcon class="h-8 w-8 text-white" />
+                </div>
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
 
-	<!-- Image modal for zoomed view -->
-	<ImageModal id='image-modal' />
+  <!-- Image modal for zoomed view -->
+  <ImageModal id="image-modal" />
 </div>
 
 <script>
-	import '@justinribeiro/lite-youtube';
-	import { MediaCarouselManager } from '../scripts/mediaCarousel';
+  import '@justinribeiro/lite-youtube';
+  import { MediaCarouselManager } from '../scripts/mediaCarousel';
 
-	document.addEventListener('DOMContentLoaded', () => {
-		setTimeout(() => {
-			const carousel = new MediaCarouselManager();
-			carousel.init();
-		}, 100);
-	});
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      const carousel = new MediaCarouselManager();
+      carousel.init();
+    }, 100);
+  });
 </script>

@@ -1,23 +1,23 @@
 [
-	{
-		"name": "Libros",
-		"description": "Libros de lectura para todos los niveles",
-		"icon": "📖",
-		"image": "/images/libros-template.jpg",
-		"link": "/catalogo/libros"
-	},
-	{
-		"name": "Packs de Libros",
-		"description": "Paquetes de libros para todos los niveles",
-		"icon": "📚",
-		"image": "/images/libros-template.jpg",
-		"link": "/catalogo/packs"
-	},
-	{
-		"name": "Examenes Internacionales",
-		"description": "Preparación para exámenes internacionales",
-		"icon": "📗",
-		"image": "/images/libros-template.jpg",
-		"link": "/catalogo/examenes-internacionales"
-	}
+  {
+    "name": "Libros",
+    "description": "Libros de lectura para todos los niveles",
+    "icon": "📖",
+    "image": "/images/libros-template.jpg",
+    "link": "/catalogo/libros"
+  },
+  {
+    "name": "Packs de Libros",
+    "description": "Paquetes de libros para todos los niveles",
+    "icon": "📚",
+    "image": "/images/libros-template.jpg",
+    "link": "/catalogo/packs"
+  },
+  {
+    "name": "Examenes Internacionales",
+    "description": "Preparación para exámenes internacionales",
+    "icon": "📗",
+    "image": "/images/libros-template.jpg",
+    "link": "/catalogo/examenes-internacionales"
+  }
 ]

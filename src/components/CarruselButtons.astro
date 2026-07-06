@@ -1,51 +1,44 @@
 ---
 interface Props {
-	ariaLabelPrev: string;
-	ariaLabelNext: string;
-	className?: string;
+  ariaLabelPrev: string;
+  ariaLabelNext: string;
+  className?: string;
 }
 
-const {
-	ariaLabelPrev = 'Anterior',
-	ariaLabelNext = 'Siguiente',
-	className = '',
-} = Astro.props;
+const { ariaLabelPrev = 'Anterior', ariaLabelNext = 'Siguiente', className = '' } = Astro.props;
 ---
 
-<div class={`carousel-controls ${className}`}>
-	<button
-		type='button'
-		class='carousel-control prev absolute left-4 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer'
-		aria-label={ariaLabelPrev}>
-		<svg
-			xmlns='http://www.w3.org/2000/svg'
-			class='h-6 w-6 text-primary'
-			fill='none'
-			viewBox='0 0 24 24'
-			stroke='currentColor'>
-			<path
-				stroke-linecap='round'
-				stroke-linejoin='round'
-				stroke-width='2'
-				d='M15 19l-7-7 7-7'></path>
-		</svg>
-	</button>
+<div className={`carousel-controls ${className}`}>
+  <button
+    type="button"
+    className="carousel-control prev absolute top-1/2 left-4 z-10 -translate-y-1/2 transform cursor-pointer"
+    aria-label={ariaLabelPrev}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="text-primary h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"
+       />
+    </svg>
+  </button>
 
-	<button
-		type='button'
-		class='carousel-control next absolute right-4 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer'
-		aria-label={ariaLabelNext}>
-		<svg
-			xmlns='http://www.w3.org/2000/svg'
-			class='h-6 w-6 text-primary'
-			fill='none'
-			viewBox='0 0 24 24'
-			stroke='currentColor'>
-			<path
-				stroke-linecap='round'
-				stroke-linejoin='round'
-				stroke-width='2'
-				d='M9 5l7 7-7 7'></path>
-		</svg>
-	</button>
+  <button
+    type="button"
+    className="carousel-control next absolute top-1/2 right-4 z-10 -translate-y-1/2 transform cursor-pointer"
+    aria-label={ariaLabelNext}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="text-primary h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
 </div>

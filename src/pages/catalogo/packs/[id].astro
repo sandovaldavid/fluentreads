@@ -9,14 +9,14 @@ import type { Product } from '../../../types/product';
 import { levelConfig } from '../../../utils/bookTags';
 
 export async function getStaticPaths() {
-	return packsData.map((pack) => ({
-		params: { id: pack.id },
-		props: { pack },
-	}));
+  return packsData.map((pack) => ({
+    params: { id: pack.id },
+    props: { pack },
+  }));
 }
 
 interface Props {
-	pack: Pack;
+  pack: Pack;
 }
 
 const { pack } = Astro.props;
@@ -24,35 +24,31 @@ const { pack } = Astro.props;
 // Find related packs if any (based on formatTags or level)
 const packsArray = Array.isArray(packsData) ? packsData : [packsData];
 const relatedPacks = packsArray
-	.filter(
-		(item) =>
-			item.id !== pack.id &&
-			(item.level === pack.level ||
-				(item.formatTags &&
-					pack.formatTags &&
-					item.formatTags.some((tag) =>
-						pack.formatTags?.includes(tag)
-					)))
-	)
-	.slice(0, 4)
-	// Transform pack objects to include required Product interface properties
-	.map((relatedPack) => ({
-		...relatedPack,
-		productType: 'pack' as const, // Add the productType property
-		detailsLink: `/catalogo/packs/${relatedPack.id}`,
-	})) as Product[]; // Cast as Product[] to ensure TypeScript recognizes the transformation
+  .filter(
+    (item) =>
+      item.id !== pack.id &&
+      (item.level === pack.level ||
+        (item.formatTags &&
+          pack.formatTags &&
+          item.formatTags.some((tag) => pack.formatTags?.includes(tag))))
+  )
+  .slice(0, 4)
+  // Transform pack objects to include required Product interface properties
+  .map((relatedPack) => ({
+    ...relatedPack,
+    productType: 'pack' as const, // Add the productType property
+    detailsLink: `/catalogo/packs/${relatedPack.id}`,
+  })) as Product[]; // Cast as Product[] to ensure TypeScript recognizes the transformation
 
 // Calculate discounted price if there's a discount
 const hasDiscount = pack.discount !== undefined && pack.discount > 0;
 const originalPrice = pack.price;
-const discountedPrice = hasDiscount
-	? pack.price * (1 - (pack.discount || 0) / 100)
-	: pack.price;
+const discountedPrice = hasDiscount ? pack.price * (1 - (pack.discount || 0) / 100) : pack.price;
 
 // SEO metadata
 const packLevel = pack.level
-	? levelConfig[pack.level as keyof typeof levelConfig]?.label || pack.level
-	: '';
+  ? levelConfig[pack.level as keyof typeof levelConfig]?.label || pack.level
+  : '';
 const formatTags = pack.formatTags?.join(', ') || '';
 
 // Improved title with keywords
@@ -60,10 +56,10 @@ const title = `${pack.title} | Pack de libros en inglés ${packLevel ? `- ${pack
 
 // Enhanced description
 const description =
-	pack.description?.length > 160
-		? `${pack.description.substring(0, 157)}...`
-		: pack.description ||
-			`Pack de libros de inglés: ${pack.title}. Material educativo ideal para aprender inglés.`;
+  pack.description?.length > 160
+    ? `${pack.description.substring(0, 157)}...`
+    : pack.description ||
+      `Pack de libros de inglés: ${pack.title}. Material educativo ideal para aprender inglés.`;
 
 // Canonical URL
 const siteUrl = new URL(siteInfo.siteURL);
@@ -71,113 +67,112 @@ const canonicalURL = new URL(`/catalogo/packs/${pack.id}`, siteUrl);
 
 // Structured data for rich snippets
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@type': 'Product',
-	name: pack.title,
-	description: pack.description,
-	image: pack.coverImage,
-	sku: pack.id,
-	offers: {
-		'@type': 'Offer',
-		price: discountedPrice,
-		priceCurrency: 'PEN',
-		availability: 'https://schema.org/InStock',
-		url: canonicalURL.toString(),
-		priceValidUntil: new Date(
-			new Date().setFullYear(new Date().getFullYear() + 1)
-		)
-			.toISOString()
-			.split('T')[0],
-	},
-	brand: {
-		'@type': 'Brand',
-		name: siteInfo.siteName,
-	},
-	aggregateRating: pack.rating
-		? {
-				'@type': 'AggregateRating',
-				ratingValue: pack.rating.score,
-				reviewCount: pack.rating.reviewCount,
-				bestRating: '5',
-				worstRating: '1',
-			}
-		: undefined,
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: pack.title,
+  description: pack.description,
+  image: pack.coverImage,
+  sku: pack.id,
+  offers: {
+    '@type': 'Offer',
+    price: discountedPrice,
+    priceCurrency: 'PEN',
+    availability: 'https://schema.org/InStock',
+    url: canonicalURL.toString(),
+    priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+      .toISOString()
+      .split('T')[0],
+  },
+  brand: {
+    '@type': 'Brand',
+    name: siteInfo.siteName,
+  },
+  aggregateRating: pack.rating
+    ? {
+        '@type': 'AggregateRating',
+        ratingValue: pack.rating.score,
+        reviewCount: pack.rating.reviewCount,
+        bestRating: '5',
+        worstRating: '1',
+      }
+    : undefined,
 };
 
 // Breadcrumb structured data
 const breadcrumbJsonLd = {
-	'@context': 'https://schema.org',
-	'@type': 'BreadcrumbList',
-	itemListElement: [
-		{
-			'@type': 'ListItem',
-			position: 1,
-			name: 'Inicio',
-			item: new URL('/', siteUrl).toString(),
-		},
-		{
-			'@type': 'ListItem',
-			position: 2,
-			name: 'Catálogo',
-			item: new URL('/catalogo', siteUrl).toString(),
-		},
-		{
-			'@type': 'ListItem',
-			position: 3,
-			name: 'Packs',
-			item: new URL('/catalogo/packs', siteUrl).toString(),
-		},
-		{
-			'@type': 'ListItem',
-			position: 4,
-			name: pack.title,
-			item: canonicalURL.toString(),
-		},
-	],
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Inicio',
+      item: new URL('/', siteUrl).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Catálogo',
+      item: new URL('/catalogo', siteUrl).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Packs',
+      item: new URL('/catalogo/packs', siteUrl).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      name: pack.title,
+      item: canonicalURL.toString(),
+    },
+  ],
 };
 
 // Breadcrumb navigation items
 const breadcrumbItems = [
-	{ label: 'Inicio', url: '/' },
-	{ label: 'Catálogo', url: '/catalogo' },
-	{ label: 'Packs', url: '/catalogo/packs' },
-	{ label: pack.title, url: `/catalogo/packs/${pack.id}`, active: true },
+  { label: 'Inicio', url: '/' },
+  { label: 'Catálogo', url: '/catalogo' },
+  { label: 'Packs', url: '/catalogo/packs' },
+  { label: pack.title, url: `/catalogo/packs/${pack.id}`, active: true },
 ];
 ---
 
 <Layout
-	title={title}
-	description={description}
-	productType='pack'
-	price={discountedPrice}
-	currency='PEN'
-	image={pack.coverImage}
-	canonicalURL={canonicalURL}
-	ogTitle={title}
-	ogDescription={description}
-	ogImage={pack.coverImage}
-	twitterTitle={title}
-	twitterDescription={description}
-	twitterImage={pack.coverImage}
-	structuredData={structuredData}
-	breadcrumbData={breadcrumbJsonLd}>
-	<!-- Pack details section -->
-	<PackDetails pack={pack} relatedProducts={relatedPacks} />
+  title={title}
+  description={description}
+  productType="pack"
+  price={discountedPrice}
+  currency="PEN"
+  image={pack.coverImage}
+  canonicalURL={canonicalURL}
+  ogTitle={title}
+  ogDescription={description}
+  ogImage={pack.coverImage}
+  twitterTitle={title}
+  twitterDescription={description}
+  twitterImage={pack.coverImage}
+  structuredData={structuredData}
+  breadcrumbData={breadcrumbJsonLd}
+>
+  <!-- Pack details section -->
+  <PackDetails pack={pack} relatedProducts={relatedPacks} />
 
-	<script>
-		import { CartManager } from '../../../utils/cartManager';
+  <script>
+    import { CartManager } from '../../../utils/cartManager';
 
-		// Initialize cart functionality
-		document.addEventListener('DOMContentLoaded', () => {
-			// Make sure cart is initialized
-			if (typeof window !== 'undefined') {
-				CartManager.initializeCart();
-			}
+    // Initialize cart functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      // Make sure cart is initialized
+      if (typeof window !== 'undefined') {
+        CartManager.initializeCart();
+      }
 
-			// Listen for cart updates to refresh indicators
-			window.addEventListener('cartUpdated', () => {
-				console.log('Cart updated');
-			});
-		});
-	</script>
+      // Listen for cart updates to refresh indicators
+      window.addEventListener('cartUpdated', () => {
+        console.log('Cart updated');
+      });
+    });
+  </script>
 </Layout>

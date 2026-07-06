@@ -1,36 +1,36 @@
 /* Start with max-height: 0 for closed state */
 .question-card.expanded .answer-panel {
-	max-height: 500px; /* Large enough for most answers */
+  max-height: 500px; /* Large enough for most answers */
 }
 
 .question-card.expanded .question-icon {
-	background-color: var(--color-primary);
+  background-color: var(--color-primary);
 }
 
 .question-card.expanded .question-icon svg {
-	color: white;
-	transform: rotate(180deg);
+  color: white;
+  transform: rotate(180deg);
 }
 
 /* Focus styles for accessibility */
 .question-card:focus-within {
-	box-shadow: 0 0 0 2px var(--color-primary-light);
+  box-shadow: 0 0 0 2px var(--color-primary-light);
 }
 
 /* Improve mobile experience */
 @media (hover: hover) {
-	.question-card:hover {
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-		transform: translateY(-2px);
-	}
+  .question-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+  }
 }
 
 /* Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
-	.answer-panel,
-	.question-card,
-	.question-icon,
-	svg {
-		transition: none !important;
-	}
+  .answer-panel,
+  .question-card,
+  .question-icon,
+  svg {
+    transition: none !important;
+  }
 }

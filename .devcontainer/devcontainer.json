@@ -1,0 +1,70 @@
+{
+  "name": "FluentReads DevContainer",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "image": "ghcr.io/sandovaldavid/fluentreads-devcontainer:latest",
+  "cacheFrom": ["ghcr.io/sandovaldavid/fluentreads-devcontainer:cache"],
+  "forwardPorts": [4321],
+  "portsAttributes": {
+    "4321": {
+      "label": "Astro dev server",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/postCreate.sh",
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "usernamehw.errorlens",
+        "eamodio.gitlens",
+        "csstools.postcss",
+        "github.vscode-github-actions",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-devcontainers"
+      ],
+      "settings": {
+        "files.associations": {
+          "*.astro": "astro"
+        },
+        "emmet.includeLanguages": {
+          "astro": "html"
+        },
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "eslint.useFlatConfig": true,
+        "eslint.validate": [
+          "astro",
+          "typescript",
+          "typescriptreact",
+          "javascript",
+          "javascriptreact"
+        ],
+        "tailwindCSS.includeFiles": ["**/*.astro", "**/*.tsx", "**/*.jsx", "**/*.css"],
+        "tailwindCSS.experimental.classRegex": ["class:list={([^}]*)}", "class=(?:\"([^\"]*)\")"],
+        "typescript.tsdk": "node_modules/typescript/lib",
+        "typescript.enablePromptUseWorkspaceTsdk": true,
+        "files.exclude": {
+          "**/.astro/cache": true,
+          "**/dist": true
+        },
+        "search.exclude": {
+          "**/bun.lock": true,
+          "**/.astro": true,
+          "**/dist": true
+        },
+        "git.branchProtection": ["main", "develop"],
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}

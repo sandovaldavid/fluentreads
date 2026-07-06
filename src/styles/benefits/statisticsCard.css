@@ -1,78 +1,73 @@
 /* Animation for rating stars */
 .shine-effect {
-	position: relative;
-	display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .shine-effect:nth-child(1) {
-	animation: shine 2s ease-in-out 0.2s infinite;
+  animation: shine 2s ease-in-out 0.2s infinite;
 }
 .shine-effect:nth-child(2) {
-	animation: shine 2s ease-in-out 0.4s infinite;
+  animation: shine 2s ease-in-out 0.4s infinite;
 }
 .shine-effect:nth-child(3) {
-	animation: shine 2s ease-in-out 0.6s infinite;
+  animation: shine 2s ease-in-out 0.6s infinite;
 }
 .shine-effect:nth-child(4) {
-	animation: shine 2s ease-in-out 0.8s infinite;
+  animation: shine 2s ease-in-out 0.8s infinite;
 }
 .shine-effect:nth-child(5) {
-	animation: shine 2s ease-in-out 1s infinite;
+  animation: shine 2s ease-in-out 1s infinite;
 }
 
 @keyframes shine {
-	0%,
-	100% {
-		transform: scale(1);
-		opacity: 0.9;
-	}
-	50% {
-		transform: scale(1.1);
-		opacity: 1;
-	}
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 }
 
 /* Counter animation for numbers */
 .counter-animation {
-	position: relative;
-	overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
 
 .counter-animation::after {
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background: linear-gradient(
-		90deg,
-		transparent,
-		var(--color-secondary),
-		transparent
-	);
-	animation: slide 3s ease-in-out infinite;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-secondary), transparent);
+  animation: slide 3s ease-in-out infinite;
 }
 
 @keyframes slide {
-	0% {
-		transform: translateX(-100%);
-	}
-	100% {
-		transform: translateX(100%);
-	}
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-	.stat-item {
-		margin-bottom: 0.5rem;
-	}
+  .stat-item {
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* Fix for xs screens to ensure proper column layout */
 @media (min-width: 480px) and (max-width: 639px) {
-	.xs\:grid-cols-3 {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
+  .xs\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }

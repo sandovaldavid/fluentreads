@@ -22,49 +22,43 @@ const sort = searchParams.get('sort') || 'featured';
 
 // Define type-safe mapping objects
 const levelNames: Record<string, string> = {
-	[BookLevel.BASIC]: 'Nivel Básico',
-	[BookLevel.INTERMEDIATE]: 'Nivel Intermedio',
-	[BookLevel.ADVANCED]: 'Nivel Avanzado',
-	[BookLevel.PROFESSIONAL]: 'Nivel Profesional',
-	[BookLevel.ALL_LEVELS]: 'Multi-nivel',
+  [BookLevel.BASIC]: 'Nivel Básico',
+  [BookLevel.INTERMEDIATE]: 'Nivel Intermedio',
+  [BookLevel.ADVANCED]: 'Nivel Avanzado',
+  [BookLevel.PROFESSIONAL]: 'Nivel Profesional',
+  [BookLevel.ALL_LEVELS]: 'Multi-nivel',
 };
 
 const formatNames: Record<string, string> = {
-	[FormatTag.PDF]: 'PDF',
-	[FormatTag.WORKBOOK]: 'Workbooks',
-	[FormatTag.AUDIO]: 'Material con Audio',
-	[FormatTag.VIDEO]: 'Material con Video',
-	[FormatTag.SOFTWARE]: 'Software',
-	[FormatTag.EXAMS]: 'Exámenes de Práctica',
+  [FormatTag.PDF]: 'PDF',
+  [FormatTag.WORKBOOK]: 'Workbooks',
+  [FormatTag.AUDIO]: 'Material con Audio',
+  [FormatTag.VIDEO]: 'Material con Video',
+  [FormatTag.SOFTWARE]: 'Software',
+  [FormatTag.EXAMS]: 'Exámenes de Práctica',
 };
 
 // Determine page title and description based on filters
 let pageTitle = 'Packs de Libros en Inglés';
 let pageDescription =
-	'Explora nuestros packs de libros en inglés con materiales complementarios. Ahorra con nuestros paquetes especiales diseñados para maximizar tu aprendizaje.';
+  'Explora nuestros packs de libros en inglés con materiales complementarios. Ahorra con nuestros paquetes especiales diseñados para maximizar tu aprendizaje.';
 let canonicalUrl = new URL('/catalogo/packs', Astro.site).toString();
 let categoryHeroImage = '/images/book-sample/pack-hero.jpg';
 
 // If level filter is applied, customize title
 if (level !== 'all') {
-	const levelName = levelNames[level] || level;
-	pageTitle = `Packs de Inglés - ${levelName}`;
-	pageDescription = `Conjuntos de materiales educativos en inglés para ${levelName}. Encuentra packs completos para tu nivel de aprendizaje.`;
-	canonicalUrl = new URL(
-		`/catalogo/packs?level=${level}`,
-		Astro.site
-	).toString();
+  const levelName = levelNames[level] || level;
+  pageTitle = `Packs de Inglés - ${levelName}`;
+  pageDescription = `Conjuntos de materiales educativos en inglés para ${levelName}. Encuentra packs completos para tu nivel de aprendizaje.`;
+  canonicalUrl = new URL(`/catalogo/packs?level=${level}`, Astro.site).toString();
 }
 
 // If format filter is applied, customize further
 if (format !== 'all') {
-	const formatName = formatNames[format] || format;
-	pageTitle = `${formatName} - ${pageTitle}`;
-	pageDescription = `${formatName} ${pageDescription}`;
-	canonicalUrl = new URL(
-		`/catalogo/packs?format=${format}`,
-		Astro.site
-	).toString();
+  const formatName = formatNames[format] || format;
+  pageTitle = `${formatName} - ${pageTitle}`;
+  pageDescription = `${formatName} ${pageDescription}`;
+  canonicalUrl = new URL(`/catalogo/packs?format=${format}`, Astro.site).toString();
 }
 
 // Get packs data using the utility function
@@ -72,58 +66,54 @@ const allPacks = getProductsByType('pack');
 
 // Convert to Pack[] type and ensure all required fields exist
 const safePacks: Pack[] = allPacks.map((pack) => ({
-	id: pack.id,
-	title: pack.title,
-	description: pack.description || '',
-	price: pack.price,
-	coverImage: pack.coverImage,
-	altText: pack.altText || `${pack.title} Pack cover`,
-	includedItems:
-		'includedItems' in pack ? (pack.includedItems as string[]) : [],
-	booksIds: 'booksIds' in pack ? (pack.booksIds as string[]) : [],
-	rating: pack.rating || { score: 0, reviewCount: 0 },
-	buyLink:
-		'buyLink' in pack ? (pack.buyLink as string) : `/checkout/${pack.id}`,
-	detailsLink: pack.detailsLink || `/catalogo/packs/${pack.id}`,
-	discount: pack.discount || 0,
-	level: (pack.level as BookLevel) || BookLevel.INTERMEDIATE,
-	featured: pack.featured || false,
-	formatTags: pack.formatTags || [],
-	popularityTags: pack.popularityTags || [],
-	images: 'images' in pack ? (pack.images as string[]) : [],
-	video: 'video' in pack ? (pack.video as string) : '',
-	stock: 'stock' in pack ? (pack.stock as number) : 10,
+  id: pack.id,
+  title: pack.title,
+  description: pack.description || '',
+  price: pack.price,
+  coverImage: pack.coverImage,
+  altText: pack.altText || `${pack.title} Pack cover`,
+  includedItems: 'includedItems' in pack ? (pack.includedItems as string[]) : [],
+  booksIds: 'booksIds' in pack ? (pack.booksIds as string[]) : [],
+  rating: pack.rating || { score: 0, reviewCount: 0 },
+  buyLink: 'buyLink' in pack ? (pack.buyLink as string) : `/checkout/${pack.id}`,
+  detailsLink: pack.detailsLink || `/catalogo/packs/${pack.id}`,
+  discount: pack.discount || 0,
+  level: (pack.level as BookLevel) || BookLevel.INTERMEDIATE,
+  featured: pack.featured || false,
+  formatTags: pack.formatTags || [],
+  popularityTags: pack.popularityTags || [],
+  images: 'images' in pack ? (pack.images as string[]) : [],
+  video: 'video' in pack ? (pack.video as string) : '',
+  stock: 'stock' in pack ? (pack.stock as number) : 10,
 }));
 
 // Define breadcrumb items
 const breadcrumbItems = [
-	{ label: 'Inicio', url: '/' },
-	{ label: 'Catálogo', url: '/catalogo' },
-	{ label: 'Packs', url: '/catalogo/packs', active: true },
+  { label: 'Inicio', url: '/' },
+  { label: 'Catálogo', url: '/catalogo' },
+  { label: 'Packs', url: '/catalogo/packs', active: true },
 ];
 
 // Structured data for SEO
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@type': 'CollectionPage',
-	name: pageTitle,
-	description: pageDescription,
-	url: canonicalUrl,
-	hasPart: safePacks.map((pack) => ({
-		'@type': 'Product',
-		name: pack.title,
-		description: pack.description,
-		url: new URL(`/catalogo/packs/${pack.id}`, Astro.site).toString(),
-		image: pack.coverImage,
-		offers: {
-			'@type': 'Offer',
-			price: pack.discount
-				? pack.price * (1 - pack.discount / 100)
-				: pack.price,
-			priceCurrency: 'PEN',
-			availability: 'https://schema.org/InStock',
-		},
-	})),
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  hasPart: safePacks.map((pack) => ({
+    '@type': 'Product',
+    name: pack.title,
+    description: pack.description,
+    url: new URL(`/catalogo/packs/${pack.id}`, Astro.site).toString(),
+    image: pack.coverImage,
+    offers: {
+      '@type': 'Offer',
+      price: pack.discount ? pack.price * (1 - pack.discount / 100) : pack.price,
+      priceCurrency: 'PEN',
+      availability: 'https://schema.org/InStock',
+    },
+  })),
 };
 
 // Log pack count for debugging
@@ -131,212 +121,208 @@ console.log(`Loaded ${safePacks.length} packs for display`);
 ---
 
 <Layout
-	title={`${pageTitle} | FluentReads`}
-	description={pageDescription}
-	canonicalURL={canonicalUrl}
-	structuredData={structuredData}>
-	<!-- Hero Banner -->
-	<section
-		class='catalog-hero py-12 bg-primary bg-cover bg-center text-white relative overflow-hidden'
-		style={`background-image: linear-gradient(to bottom, rgba(30, 58, 138, 0.8), rgba(30, 58, 138, 0.5)), url(${categoryHeroImage});`}>
-		<div
-			class='absolute inset-0 bg-gradient-to-r from-primary-dark/80 to-primary/40'>
-		</div>
-		<div class='container mx-auto px-8 relative z-10'>
-			<div class='grid grid-cols-1 md:grid-cols-3 gap-8 h-full'>
-				<!-- Text content -->
-				<div class='md:col-span-2 text-center md:text-left'>
-					<!-- Breadcrumbs -->
-					<Breadcrumb
-						items={breadcrumbItems}
-						class='mb-6 text-white/90'
-					/>
-					<div>
-						<div
-							class='inline-block mb-4 text-4xl p-4 bg-white/10 backdrop-blur-sm rounded-lg shadow-lg fade-in'>
-							📚
-						</div>
-						<h1
-							class='text-3xl md:text-4xl lg:text-5xl font-bold mb-4 slide-in-left'>
-							Packs de Libros en Inglés
-						</h1>
-						<p
-							class='text-lg md:text-xl text-white/90 max-w-2xl mb-6 slide-in-left delay-100'>
-							Ahorra con nuestros paquetes especiales que incluyen
-							libros, materiales digitales y recursos adicionales
-							diseñados para maximizar tu aprendizaje del inglés.
-						</p>
-						<div
-							class='flex flex-wrap justify-center md:justify-start gap-4 slide-in-left delay-200'>
-							<a
-								href='#catalog-section'
-								class='bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl'>
-								Ver Packs
-							</a>
-							<a
-								href='#contact-form'
-								class='bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300'>
-								Consultar Disponibilidad
-							</a>
-						</div>
-					</div>
-				</div>
+  title={`${pageTitle} | FluentReads`}
+  description={pageDescription}
+  canonicalURL={canonicalUrl}
+  structuredData={structuredData}
+>
+  <!-- Hero Banner -->
+  <section
+    className="catalog-hero bg-primary relative overflow-hidden bg-cover bg-center py-12 text-white"
+    style={`background-image: linear-gradient(to bottom, rgba(30, 58, 138, 0.8), rgba(30, 58, 138, 0.5)), url(${categoryHeroImage});`}
+  >
+    <div className="from-primary-dark/80 to-primary/40 absolute inset-0 bg-gradient-to-r" />
+    <div className="relative z-10 container mx-auto px-8">
+      <div className="grid h-full grid-cols-1 gap-8 md:grid-cols-3">
+        <!-- Text content -->
+        <div className="text-center md:col-span-2 md:text-left">
+          <!-- Breadcrumbs -->
+          <Breadcrumb items={breadcrumbItems} class="mb-6 text-white/90" />
+          <div>
+            <div
+              className="fade-in mb-4 inline-block rounded-lg bg-white/10 p-4 text-4xl shadow-lg backdrop-blur-sm"
+            >
+              📚
+            </div>
+            <h1 className="slide-in-left mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">
+              Packs de Libros en Inglés
+            </h1>
+            <p className="slide-in-left mb-6 max-w-2xl text-lg text-white/90 delay-100 md:text-xl">
+              Ahorra con nuestros paquetes especiales que incluyen libros, materiales digitales y
+              recursos adicionales diseñados para maximizar tu aprendizaje del inglés.
+            </p>
+            <div
+              className="slide-in-left flex flex-wrap justify-center gap-4 delay-200 md:justify-start"
+            >
+              <a
+                href="#catalog-section"
+                className="bg-secondary hover:bg-secondary-dark text-primary-dark rounded-lg px-6 py-3 font-bold shadow-lg transition-all duration-300 hover:shadow-xl"
+              >
+                Ver Packs
+              </a>
+              <a
+                href="#contact-form"
+                className="rounded-lg bg-white/20 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/30"
+              >
+                Consultar Disponibilidad
+              </a>
+            </div>
+          </div>
+        </div>
 
-				<!-- Decorative element -->
-				<div
-					class='hidden md:flex items-center justify-center relative overflow-hidden rounded-lg shadow-2xl border-4 border-white/20 fade-in delay-300'>
-					<div
-						class='aspect-[3/4] bg-gradient-to-br from-primary/40 to-accent/30 backdrop-blur-sm flex items-center justify-center w-full h-full'>
-						<img
-							src='/images/book-sample/book-sample-01.jpg'
-							alt='Muestra de pack de libros de inglés'
-							class='object-cover w-full h-full'
-						/>
-					</div>
-				</div>
-			</div>
-		</div>
+        <!-- Decorative element -->
+        <div
+          className="fade-in relative hidden items-center justify-center overflow-hidden rounded-lg border-4 border-white/20 shadow-2xl delay-300 md:flex"
+        >
+          <div
+            className="from-primary/40 to-accent/30 flex aspect-[3/4] h-full w-full items-center justify-center bg-gradient-to-br backdrop-blur-sm"
+          >
+            <img
+              src="/images/book-sample/book-sample-01.jpg"
+              alt="Muestra de pack de libros de inglés"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<!-- Decorative shapes -->
-		<div
-			class='absolute -bottom-8 left-0 right-0 h-16 bg-white'
-			style='clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);'>
-		</div>
-		<div
-			class='absolute -bottom-8 left-0 right-0 h-16 bg-white/20 backdrop-blur-sm'
-			style='clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);'>
-		</div>
-	</section>
+    <!-- Decorative shapes -->
+    <div
+      className="absolute right-0 -bottom-8 left-0 h-16 bg-white"
+      style="clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);"
+     />
+    <div
+      className="absolute right-0 -bottom-8 left-0 h-16 bg-white/20 backdrop-blur-sm"
+      style="clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);"
+     />
+  </section>
 
-	<!-- Main Catalog Section -->
-	<section class='py-12 relative catalog-section' id='catalog-section'>
-		<div class='absolute inset-0 catalog-pattern opacity-[0.03]'></div>
-		<div class='container mx-auto px-4 relative z-10'>
-			<!-- Main catalog container component -->
-			<CatalogPackContainer
-				packs={safePacks}
-				initialLevel={level}
-				initialFormat={format}
-				initialSort={sort}
-				gridCols={3}
-				productSize='medium'
-			/>
-		</div>
-	</section>
+  <!-- Main Catalog Section -->
+  <section className="catalog-section relative py-12" id="catalog-section">
+    <div className="catalog-pattern absolute inset-0 opacity-[0.03]" />
+    <div className="relative z-10 container mx-auto px-4">
+      <!-- Main catalog container component -->
+      <CatalogPackContainer
+        packs={safePacks}
+        initialLevel={level}
+        initialFormat={format}
+        initialSort={sort}
+        gridCols={3}
+        productSize="medium"
+      />
+    </div>
+  </section>
 
-	<!-- Related Categories Section -->
-	<section class='py-12 bg-neutral-light'>
-		<div class='container mx-auto px-4'>
-			<div class='text-center mb-10'>
-				<SectionTitle>Explora otras categorías</SectionTitle>
-				<p class='text-gray-600 max-w-3xl mx-auto'>
-					Descubre nuestra selección completa de materiales educativos
-					en inglés
-				</p>
-			</div>
-			<CategoryCards />
-		</div>
-	</section>
+  <!-- Related Categories Section -->
+  <section className="bg-neutral-light py-12">
+    <div className="container mx-auto px-4">
+      <div className="mb-10 text-center">
+        <SectionTitle>Explora otras categorías</SectionTitle>
+        <p className="mx-auto max-w-3xl text-gray-600">
+          Descubre nuestra selección completa de materiales educativos en inglés
+        </p>
+      </div>
+      <CategoryCards />
+    </div>
+  </section>
 
-	<!-- Promotional Section -->
-	<PromoSection
-		title='Ofertas y Promociones Exclusivas'
-		subtitle='Ofertas Especiales'
-		className='bg-gradient-to-br from-primary/5 to-accent/5 py-16'
-		countdownDays={5}
-		cardSize='large'
-	/>
+  <!-- Promotional Section -->
+  <PromoSection
+    title="Ofertas y Promociones Exclusivas"
+    subtitle="Ofertas Especiales"
+    className="from-primary/5 to-accent/5 bg-gradient-to-br py-16"
+    countdownDays={5}
+    cardSize="large"
+  />
 
-	<!-- FAQ Section -->
-	<FAQ
-		className='py-16'
-		dataset='catalog'
-		title='Preguntas frecuentes sobre nuestros packs'
-		description='Resolvemos tus dudas sobre nuestros paquetes de materiales en inglés.'
-	/>
+  <!-- FAQ Section -->
+  <FAQ
+    className="py-16"
+    dataset="catalog"
+    title="Preguntas frecuentes sobre nuestros packs"
+    description="Resolvemos tus dudas sobre nuestros paquetes de materiales en inglés."
+  />
 
-	<!-- CTA Banner -->
-	<div class='container mx-auto px-4 mb-16'>
-		<CTABanner type='default' />
-	</div>
+  <!-- CTA Banner -->
+  <div className="container mx-auto mb-16 px-4">
+    <CTABanner type="default" />
+  </div>
 </Layout>
 
 <style>
-	.catalog-hero {
-		background-position: center;
-		background-size: cover;
-		position: relative;
-	}
+  .catalog-hero {
+    background-position: center;
+    background-size: cover;
+    position: relative;
+  }
 
-	.catalog-pattern {
-		background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-	}
+  .catalog-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
 
-	/* Animation Classes */
-	.slide-in-left {
-		animation: slideInLeft 0.8s ease forwards;
-		opacity: 0;
-		transform: translateX(-20px);
-	}
+  /* Animation Classes */
+  .slide-in-left {
+    animation: slideInLeft 0.8s ease forwards;
+    opacity: 0;
+    transform: translateX(-20px);
+  }
 
-	.delay-100 {
-		animation-delay: 0.1s;
-	}
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
 
-	.delay-200 {
-		animation-delay: 0.2s;
-	}
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
 
-	.delay-300 {
-		animation-delay: 0.3s;
-	}
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
 
-	.fade-in {
-		animation: fadeIn 1s ease forwards;
-		opacity: 0;
-	}
+  .fade-in {
+    animation: fadeIn 1s ease forwards;
+    opacity: 0;
+  }
 
-	@keyframes slideInLeft {
-		from {
-			opacity: 0;
-			transform: translateX(-20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateX(0);
-		}
-	}
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 </style>
 
 <script>
-	document.addEventListener('DOMContentLoaded', () => {
-		// Smooth scroll to sections when clicking navigation links
-		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-			anchor.addEventListener(
-				'click',
-				function (this: HTMLAnchorElement, e) {
-					e.preventDefault();
-					const targetId = this.getAttribute('href');
-					if (targetId) {
-						const targetElement = document.querySelector(targetId);
-						if (targetElement) {
-							targetElement.scrollIntoView({
-								behavior: 'smooth',
-								block: 'start',
-							});
-						}
-					}
-				}
-			);
-		});
-	});
+  document.addEventListener('DOMContentLoaded', () => {
+    // Smooth scroll to sections when clicking navigation links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (this: HTMLAnchorElement, e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if (targetId) {
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
+          }
+        }
+      });
+    });
+  });
 </script>

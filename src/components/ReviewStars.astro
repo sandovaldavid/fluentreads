@@ -1,19 +1,19 @@
 ---
 import StarIcon from './icons/Star.astro';
 interface Props {
-	score: number;
-	size?: 'small' | 'medium' | 'large';
-	showScore?: boolean;
-	reviewCount?: number;
-	className?: string;
+  score: number;
+  size?: 'small' | 'medium' | 'large';
+  showScore?: boolean;
+  reviewCount?: number;
+  className?: string;
 }
 
 const {
-	score,
-	size = 'medium',
-	showScore = true,
-	reviewCount = undefined,
-	className,
+  score,
+  size = 'medium',
+  showScore = true,
+  reviewCount = undefined,
+  className,
 } = Astro.props;
 
 // Calculate full and partial stars
@@ -23,69 +23,66 @@ const emptyStarsCount = 5 - fullStarsCount - (partialFill > 0 ? 1 : 0);
 
 // Size classes
 const sizeClasses = {
-	small: 'w-4 h-4 text-sm',
-	medium: 'w-5 h-5 text-base',
-	large: 'w-6 h-6 text-lg',
+  small: 'w-4 h-4 text-sm',
+  medium: 'w-5 h-5 text-base',
+  large: 'w-6 h-6 text-lg',
 };
 
 const starSizeClass = sizeClasses[size];
 ---
 
 <div class=`flex items-center ${className}`>
-	<div class='flex items-center justify-between'>
-		{/* Full stars */}
-		{
-			Array.from({ length: fullStarsCount }).map(() => (
-				<StarIcon class='w-5 h-5 text-yellow-400 mr-0.5' />
-			))
-		}
+  <div className="flex items-center justify-between">
+    {/* Full stars */}
+    {
+      Array.from({ length: fullStarsCount }).map(() => (
+        <StarIcon class="mr-0.5 h-5 w-5 text-yellow-400" />
+      ))
+    }
 
-		{/* Partial star */}
-		{
-			partialFill > 0 && (
-				<div class='relative mr-0.5'>
-					{/* Background star (empty) */}
-					<StarIcon class={`${starSizeClass} text-gray-300`} />
+    {/* Partial star */}
+    {
+      partialFill > 0 && (
+        <div className="relative mr-0.5">
+          {/* Background star (empty) */}
+          <StarIcon class={`${starSizeClass} text-gray-300`} />
 
-					{/* Foreground star (partial fill) */}
-					<div
-						class='absolute inset-0 overflow-hidden'
-						style={`width: ${partialFill * 100}%`}>
-						<StarIcon class={`${starSizeClass} text-yellow-400`} />
-					</div>
-				</div>
-			)
-		}
+          {/* Foreground star (partial fill) */}
+          <div className="absolute inset-0 overflow-hidden" style={`width: ${partialFill * 100}%`}>
+            <StarIcon class={`${starSizeClass} text-yellow-400`} />
+          </div>
+        </div>
+      )
+    }
 
-		{/* Empty stars */}
-		{
-			Array.from({ length: emptyStarsCount }).map(() => (
-				<svg
-					class={`${starSizeClass} text-gray-300 mr-0.5`}
-					fill='currentColor'
-					viewBox='0 0 24 24'
-					stroke='none'
-					aria-hidden='true'>
-					<path d='M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z' />
-				</svg>
-			))
-		}
-	</div>
+    {/* Empty stars */}
+    {
+      Array.from({ length: emptyStarsCount }).map(() => (
+        <svg
+          className={`${starSizeClass} mr-0.5 text-gray-300`}
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="none"
+          aria-hidden="true"
+        >
+          <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" />
+        </svg>
+      ))
+    }
+  </div>
 
-	{
-		showScore && (
-			<span class='text-sm text-gray-500 ml-1.5'>
-				{score.toFixed(1)}
-				{reviewCount !== undefined && (
-					<span class='ml-1'>({reviewCount})</span>
-				)}
-			</span>
-		)
-	}
+  {
+    showScore && (
+      <span className="ml-1.5 text-sm text-gray-500">
+        {score.toFixed(1)}
+        {reviewCount !== undefined && <span className="ml-1">({reviewCount})</span>}
+      </span>
+    )
+  }
 </div>
 
 <style>
-	div:hover svg {
-		transform: scale(1.1);
-	}
+  div:hover svg {
+    transform: scale(1.1);
+  }
 </style>

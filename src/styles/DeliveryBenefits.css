@@ -1,52 +1,53 @@
 /* Progressive entrance animation for cards */
 .benefit-card {
-	opacity: 0;
-	transform: translateY(20px);
-	animation: fadeIn 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
 .benefit-card[data-index='0'] {
-	animation-delay: 0.1s;
+  animation-delay: 0.1s;
 }
 
 .benefit-card[data-index='1'] {
-	animation-delay: 0.3s;
+  animation-delay: 0.3s;
 }
 
 .benefit-card[data-index='2'] {
-	animation-delay: 0.5s;
+  animation-delay: 0.5s;
 }
 
 @keyframes fadeIn {
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Hover state improvements for mobile touch */
 @media (hover: hover) {
-	.benefit-card:hover {
-		transform: translateY(-5px);
-	}
+  .benefit-card:hover {
+    transform: translateY(-5px);
+  }
 }
 
 /* Better focus states for accessibility */
 .benefit-card:focus-within {
-	outline: 2px solid var(--color-primary);
-	outline-offset: 2px;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 /* Custom responsive adjustments */
 @media (max-width: 640px) {
-	.benefit-card {
-		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-			0 2px 4px -1px rgba(0, 0, 0, 0.06);
-	}
+  .benefit-card {
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
 
-	/* Force showing the "more info" on mobile since hover is not available */
-	.benefit-card .text-sm {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  /* Force showing the "more info" on mobile since hover is not available */
+  .benefit-card .text-sm {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

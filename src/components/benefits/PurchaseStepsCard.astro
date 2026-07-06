@@ -40,42 +40,42 @@ const {className= ''} = Astro.props;
 
 <div class=`${className}`>
 	<div
-		class='bg-white rounded-xl shadow-lg h-ful p-4 sm:p-6 md:p-8 transform transition-all duration-500 hover:shadow-xl steps-container h-full'>
+		className='bg-white rounded-xl shadow-lg h-ful p-4 sm:p-6 md:p-8 transform transition-all duration-500 hover:shadow-xl steps-container h-full'>
 		<h3
-			class='text-xl md:text-2xl font-bold text-primary-dark mb-5 md:mb-8 flex items-center'>
+			className='text-xl md:text-2xl font-bold text-primary-dark mb-5 md:mb-8 flex items-center'>
 			<span
-				class='bg-secondary text-black p-2 rounded-full mr-3 step-icon-header'>
+				className='bg-secondary text-black p-2 rounded-full mr-3 step-icon-header'>
 				<CartIcon class='h-6 w-6'/>
 			</span>
 			Guía de compra en 3 pasos
 		</h3>
 
 		<!-- Purchase steps -->
-		<div class='relative space-y-8 sm:space-y-10 lg:w-3/4 mx-auto steps-list'>
+		<div className='relative space-y-8 sm:space-y-10 lg:w-3/4 mx-auto steps-list'>
 			<!-- Step connector line -->
-			<div class='absolute left-6 sm:left-7 top-2 bottom-2 w-0.5 bg-gray-200 hidden sm:block md:hidden'></div>
+			<div className='absolute left-6 sm:left-7 top-2 bottom-2 w-0.5 bg-gray-200 hidden sm:block md:hidden' />
 			
 			{
 				purchaseSteps.map((step, index) => (
-					<div class={`step-container group benefit-item benefit-item-${index + 1}`}>
-						<div class='flex flex-col sm:flex-row items-center sm:items-start relative'>
-							<div class='step-icon-container mb-4 sm:mb-0 flex-shrink-0 relative z-10'>
+					<div className={`step-container group benefit-item benefit-item-${index + 1}`}>
+						<div className='flex flex-col sm:flex-row items-center sm:items-start relative'>
+							<div className='step-icon-container mb-4 sm:mb-0 flex-shrink-0 relative z-10'>
 								<!-- Numbered circle with improved visibility -->
-								<div class='step-number bg-primary text-white text-lg font-bold rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-md group-hover:bg-primary-dark transition-colors duration-300'>
+								<div className='step-number bg-primary text-white text-lg font-bold rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-md group-hover:bg-primary-dark transition-colors duration-300'>
 									{step.number}
 								</div>
 								<!-- Icon with hover effect -->
-								<div class='step-icon text-primary h-12 w-12 sm:h-14 sm:w-14 my-3 mx-auto transform transition-transform duration-300 group-hover:scale-110'>
+								<div className='step-icon text-primary h-12 w-12 sm:h-14 sm:w-14 my-3 mx-auto transform transition-transform duration-300 group-hover:scale-110'>
 									<step.icon />
 								</div>
 							</div>
 							
 							<!-- Content with better padding and hover effects -->
-							<div class='ml-0 text-center sm:text-left step-content sm:p-4 sm:rounded-lg sm:-ml-2 transition-all duration-300'>
-								<h4 class='font-bold text-primary-dark text-lg sm:text-xl mb-2 group-hover:text-primary transition-colors duration-300'>
+							<div className='ml-0 text-center sm:text-left step-content sm:p-4 sm:rounded-lg sm:-ml-2 transition-all duration-300'>
+								<h4 className='font-bold text-primary-dark text-lg sm:text-xl mb-2 group-hover:text-primary transition-colors duration-300'>
 									{step.title}
 								</h4>
-								<p class='text-gray-600 text-sm sm:text-base max-w-sm'>
+								<p className='text-gray-600 text-sm sm:text-base max-w-sm'>
 									{step.description}
 								</p>
 							</div>
@@ -88,13 +88,13 @@ const {className= ''} = Astro.props;
 			}
 		</div>
 
-		<div class='text-center cta-container'>
+		<div className='text-center cta-container'>
 			<Button
 				variant='primary'
 				size='large'
 				href='/paymentMethods'
 				class='shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-1 pulse-animation'>
-				<span class='flex items-center'>
+				<span className='flex items-center'>
 					<span>Métodos de Pago</span>
 					<ArrowRightIcon class='w-6 h-6 ml-2' />
 				</span>

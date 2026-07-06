@@ -34,9 +34,9 @@ To learn more about the folder structure of an Astro project, refer to [our guid
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
+| Command               | Action                                           |
+| :-------------------- | :----------------------------------------------- |
+| `bun install`         | Installs dependencies                            |
 | `bun dev`             | Starts local dev server at `localhost:4321`      |
 | `bun build`           | Build your production site to `./dist/`          |
 | `bun preview`         | Preview your build locally, before deploying     |
@@ -46,3 +46,12 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## 🔐 Secrets Requeridos en GitHub Actions
+
+Para que el deploy a Vercel funcione correctamente desde GitHub Actions, se deben configurar los siguientes secrets en el repositorio de GitHub (`Settings > Secrets and variables > Actions`):
+
+- `VERCEL_TOKEN`: Token de acceso personal de Vercel (obtenido en tu cuenta de Vercel en `Account Settings > Tokens`).
+- `VERCEL_ORG_ID`: ID del equipo u organización en Vercel (se encuentra en `.vercel/project.json` tras vincular el proyecto localmente, o en los settings del equipo en Vercel).
+- `VERCEL_PROJECT_ID`: ID del proyecto en Vercel (se encuentra en `.vercel/project.json` tras vincular el proyecto localmente, o en los settings del proyecto en Vercel).
+

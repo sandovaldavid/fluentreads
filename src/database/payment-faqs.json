@@ -1,22 +1,22 @@
 [
-	{
-		"question": "¿Puedo pagar con tarjeta?",
-		"answer": "Por ahora solo aceptamos transferencias directas y PayPal. Si deseas pagar con tarjeta, puedes hacerlo a través de PayPal sin necesidad de crear una cuenta."
-	},
-	{
-		"question": "¿Puedo pagar desde otro país?",
-		"answer": "Sí, puedes pagar con PayPal desde cualquier país. Este método es ideal para clientes internacionales ya que acepta diferentes monedas y medios de pago."
-	},
-	{
-		"question": "¿Qué hacer si mi pago no se confirma?",
-		"answer": "Si después de 15 minutos no has recibido confirmación, por favor contáctanos por WhatsApp con tu comprobante nuevamente. Resolveremos tu caso de inmediato."
-	},
-	{
-		"question": "¿Ofrecen factura por la compra?",
-		"answer": "Sí, podemos enviarte una factura electrónica. Solo debes solicitarla al momento de enviar tu comprobante de pago e incluir tus datos fiscales."
-	},
-	{
-		"question": "¿Hay costos adicionales por el envío digital?",
-		"answer": "No, el envío digital es totalmente gratuito. El precio que ves por el material incluye la entrega inmediata a través de Google Drive/OneDrive."
-	}
+  {
+    "question": "¿Puedo pagar con tarjeta?",
+    "answer": "Por ahora solo aceptamos transferencias directas y PayPal. Si deseas pagar con tarjeta, puedes hacerlo a través de PayPal sin necesidad de crear una cuenta."
+  },
+  {
+    "question": "¿Puedo pagar desde otro país?",
+    "answer": "Sí, puedes pagar con PayPal desde cualquier país. Este método es ideal para clientes internacionales ya que acepta diferentes monedas y medios de pago."
+  },
+  {
+    "question": "¿Qué hacer si mi pago no se confirma?",
+    "answer": "Si después de 15 minutos no has recibido confirmación, por favor contáctanos por WhatsApp con tu comprobante nuevamente. Resolveremos tu caso de inmediato."
+  },
+  {
+    "question": "¿Ofrecen factura por la compra?",
+    "answer": "Sí, podemos enviarte una factura electrónica. Solo debes solicitarla al momento de enviar tu comprobante de pago e incluir tus datos fiscales."
+  },
+  {
+    "question": "¿Hay costos adicionales por el envío digital?",
+    "answer": "No, el envío digital es totalmente gratuito. El precio que ves por el material incluye la entrega inmediata a través de Google Drive/OneDrive."
+  }
 ]

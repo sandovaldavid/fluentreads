@@ -15,60 +15,61 @@ const ogDescription = siteInfo.seo.metaDescription;
 const ogImage = new URL(siteInfo.seo.defaultImage, siteInfo.siteURL).toString();
 
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@type': 'WebSite',
-	name: siteInfo.siteName,
-	url: siteInfo.siteURL,
-	description: siteInfo.siteDescription,
-	potentialAction: {
-		'@type': 'SearchAction',
-		target: `${siteInfo.siteURL}/catalogo?search={search_term_string}`,
-		'query-input': 'required name=search_term_string',
-	},
-	publisher: {
-		'@type': 'Organization',
-		name: siteInfo.seo.organizationInfo.name,
-		logo: {
-			'@type': 'ImageObject',
-			url: new URL(siteInfo.logo, siteInfo.siteURL).toString(),
-			width: 192,
-			height: 192,
-		},
-		foundingDate: siteInfo.seo.organizationInfo.foundingDate,
-		address: {
-			'@type': 'PostalAddress',
-			streetAddress: siteInfo.seo.organizationInfo.address.street,
-			addressLocality: siteInfo.seo.organizationInfo.address.city,
-			addressRegion: siteInfo.seo.organizationInfo.address.region,
-			postalCode: siteInfo.seo.organizationInfo.address.postalCode,
-			addressCountry: siteInfo.seo.organizationInfo.address.country,
-		},
-	},
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteInfo.siteName,
+  url: siteInfo.siteURL,
+  description: siteInfo.siteDescription,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${siteInfo.siteURL}/catalogo?search={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteInfo.seo.organizationInfo.name,
+    logo: {
+      '@type': 'ImageObject',
+      url: new URL(siteInfo.logo, siteInfo.siteURL).toString(),
+      width: 192,
+      height: 192,
+    },
+    foundingDate: siteInfo.seo.organizationInfo.foundingDate,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: siteInfo.seo.organizationInfo.address.street,
+      addressLocality: siteInfo.seo.organizationInfo.address.city,
+      addressRegion: siteInfo.seo.organizationInfo.address.region,
+      postalCode: siteInfo.seo.organizationInfo.address.postalCode,
+      addressCountry: siteInfo.seo.organizationInfo.address.country,
+    },
+  },
 };
 ---
 
 <Layout
-	title={pageTitle}
-	description={pageDescription}
-	ogTitle={ogTitle}
-	ogDescription={ogDescription}
-	ogImage={ogImage}
-	canonicalURL={new URL('/', siteInfo.siteURL)}
-	twitterCard={siteInfo.seo.twitterCard}
-	twitterSite={siteInfo.seo.twitterSite}
-	structuredData={structuredData}>
-	<HeroBanner
-		title='Aprende inglés con Nosotros'
-		subtitle='Tu mejor aliado para dominar el inglés con los mejores recursos educativos'
-		ctaText='Explorar Catálogo'
-		ctaLink='/catalogo'
-	/>
-	<FeaturedCatalog
-		maxBooks={4}
-		showOnlyFeatured={true}
-		title='Libros Destacados'
-		subtitle='Explora nuestra selección de recursos educativos premium diseñados para ayudarte a dominar el inglés'
-	/>
-	<Benefits />
-	<TestimoniesList count={3} />
+  title={pageTitle}
+  description={pageDescription}
+  ogTitle={ogTitle}
+  ogDescription={ogDescription}
+  ogImage={ogImage}
+  canonicalURL={new URL('/', siteInfo.siteURL)}
+  twitterCard={siteInfo.seo.twitterCard}
+  twitterSite={siteInfo.seo.twitterSite}
+  structuredData={structuredData}
+>
+  <HeroBanner
+    title="Aprende inglés con Nosotros"
+    subtitle="Tu mejor aliado para dominar el inglés con los mejores recursos educativos"
+    ctaText="Explorar Catálogo"
+    ctaLink="/catalogo"
+  />
+  <FeaturedCatalog
+    maxBooks={4}
+    showOnlyFeatured={true}
+    title="Libros Destacados"
+    subtitle="Explora nuestra selección de recursos educativos premium diseñados para ayudarte a dominar el inglés"
+  />
+  <Benefits />
+  <TestimoniesList count={3} />
 </Layout>

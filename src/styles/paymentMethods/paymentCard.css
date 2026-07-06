@@ -1,71 +1,73 @@
 .payment-method-card {
-	transform: translateY(0);
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-		0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(0);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .payment-method-card:hover {
-	transform: translateY(-10px);
-	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
-		0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-10px);
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Estilos para el grupo de pago y el botón de copiar */
 .group-payment {
-	position: relative;
+  position: relative;
 }
 
 .group-payment:hover .copy-button {
-	opacity: 1 !important;
+  opacity: 1 !important;
 }
 
 /* botón de copiar */
 .copy-button {
-	position: absolute;
-	top: 50%;
-	right: 12px;
-	transition: all 0.3s ease;
-	z-index: 10;
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transition: all 0.3s ease;
+  z-index: 10;
 }
 
 /* Subtle pulse animation for the copy button on hover */
 .copy-button:hover {
-	animation: pulse 1.5s infinite;
+  animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-	0% {
-		transform: translateY(-50%) scale(1);
-	}
-	50% {
-		transform: translateY(-50%) scale(1.1);
-	}
-	100% {
-		transform: translateY(-50%) scale(1);
-	}
+  0% {
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    transform: translateY(-50%) scale(1.1);
+  }
+  100% {
+    transform: translateY(-50%) scale(1);
+  }
 }
 
 .copied-message {
-	z-index: 20;
-	position: absolute;
-	top: 80%;
-	right: 35%;
-	transform: translateY(-50%);
-	opacity: 0;
-	transition: opacity 0.3s ease;
+  z-index: 20;
+  position: absolute;
+  top: 80%;
+  right: 35%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 /* Shimmer effect */
 .shimmer-effect {
-	background-size: 200% 100%;
-	animation: shimmer 2s infinite linear;
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
 }
 
 @keyframes shimmer {
-	0% {
-		background-position: -100% 0;
-	}
-	100% {
-		background-position: 100% 0;
-	}
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
 }

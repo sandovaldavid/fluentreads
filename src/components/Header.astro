@@ -8,85 +8,80 @@ const logoImage = '/assets/logo_v4.webp';
 import siteInfo from '../database/pageInformation.json';
 ---
 
-<header class='bg-primary text-white shadow-md sticky top-0 w-full z-50'>
-	<div
-		class='container mx-auto px-4 py-3 flex flex-wrap items-center justify-between md:justify-center lg:justify-between'>
-		<!-- Logo -->
-		<a href='/' class='flex items-center lg:pl-8'>
-			<img
-				src={logoImage}
-				alt='FluentReads'
-				class='size-12 rounded-full'
-			/>
-			<span class='font-lora ml-2 font-bold text-2xl md:text-3xl'
-				>{siteInfo.siteName}</span
-			>
-		</a>
+<header className="bg-primary sticky top-0 z-50 w-full text-white shadow-md">
+  <div
+    className="container mx-auto flex flex-wrap items-center justify-between px-4 py-3 md:justify-center lg:justify-between"
+  >
+    <!-- Logo -->
+    <a href="/" className="flex items-center lg:pl-8">
+      <img src={logoImage} alt="FluentReads" className="size-12 rounded-full" />
+      <span className="font-lora ml-2 text-2xl font-bold md:text-3xl">{siteInfo.siteName}</span>
+    </a>
 
-		<!-- Mobile menu button -->
-		<button
-			id='mobile-menu-button'
-			class='md:hidden flex items-center px-3 py-2'>
-			<MobileIcon class='w-6 h-6' />
-		</button>
+    <!-- Mobile menu button -->
+    <button id="mobile-menu-button" className="flex items-center px-3 py-2 md:hidden">
+      <MobileIcon class="h-6 w-6" />
+    </button>
 
-		<!-- Navigation and social icons -->
-		<div
-			id='menu'
-			class='mobile-menu md:flex flex-col w-full md:w-auto md:mt-0 max-h-0 md:max-h-none overflow-hidden opacity-0 md:opacity-100 transition-all duration-300 ease-in-out'>
-			<Navbar />
-		</div>
-	</div>
+    <!-- Navigation and social icons -->
+    <div
+      id="menu"
+      className="mobile-menu max-h-0 w-full flex-col overflow-hidden opacity-0 transition-all duration-300 ease-in-out md:mt-0 md:flex md:max-h-none md:w-auto md:opacity-100"
+    >
+      <Navbar />
+    </div>
+  </div>
 </header>
 
 <!-- Floating WhatsApp Button -->
 <SocialMediaButton
-	network='WhatsApp'
-	href='https://wa.me/1234567890'
-	class='fixed bottom-5 right-2 md:bottom-8 md:right-6 bg-accent text-white p-3 rounded-full shadow-lg hover:bg-accent-dark transition-colors z-50'>
-	<WhatsAppIcon class='size-8' />
+  network="WhatsApp"
+  href="https://wa.me/1234567890"
+  class="bg-accent hover:bg-accent-dark fixed right-2 bottom-5 z-50 rounded-full p-3 text-white shadow-lg transition-colors md:right-6 md:bottom-8"
+>
+  <WhatsAppIcon class="size-8" />
 </SocialMediaButton>
 
 <script>
-	// Mobile menu toggle functionality with animations
-	document.addEventListener('DOMContentLoaded', () => {
-		const mobileMenuButton = document.getElementById('mobile-menu-button');
-		const menu = document.getElementById('menu');
+  // Mobile menu toggle functionality with animations
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('menu');
 
-		// Function to open the menu with animation
-		const openMenu = () => {
-			menu?.classList.add('menu-open');
-			menu?.classList.remove('max-h-0', 'opacity-0');
-			menu?.classList.add('max-h-[500px]', 'opacity-100');
-		};
+    // Function to open the menu with animation
+    const openMenu = () => {
+      menu?.classList.add('menu-open');
+      menu?.classList.remove('max-h-0', 'opacity-0');
+      menu?.classList.add('max-h-[500px]', 'opacity-100');
+    };
 
-		// Function to close the menu with animation
-		const closeMenu = () => {
-			menu?.classList.remove('menu-open');
-			menu?.classList.remove('max-h-[500px]', 'opacity-100');
-			menu?.classList.add('max-h-0', 'opacity-0');
-		};
+    // Function to close the menu with animation
+    const closeMenu = () => {
+      menu?.classList.remove('menu-open');
+      menu?.classList.remove('max-h-[500px]', 'opacity-100');
+      menu?.classList.add('max-h-0', 'opacity-0');
+    };
 
-		// Toggle menu function
-		const toggleMenu = () => {
-			if (menu?.classList.contains('menu-open')) {
-				closeMenu();
-			} else {
-				openMenu();
-			}
-		};
+    // Toggle menu function
+    const toggleMenu = () => {
+      if (menu?.classList.contains('menu-open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    };
 
-		mobileMenuButton?.addEventListener('click', toggleMenu);
+    mobileMenuButton?.addEventListener('click', toggleMenu);
 
-		// Handle window resize to ensure menu works correctly when switching between mobile and desktop
-		window.addEventListener('resize', () => {
-			if (window.innerWidth >= 768) {
-				menu?.classList.remove('max-h-0', 'opacity-0');
-				menu?.classList.add('max-h-[500px]', 'opacity-100');
-			} else if (!menu?.classList.contains('menu-open')) {
-				menu?.classList.remove('max-h-[500px]', 'opacity-100');
-				menu?.classList.add('max-h-0', 'opacity-0');
-			}
-		});
-	});
+    // Handle window resize to ensure menu works correctly when switching between mobile and desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        menu?.classList.remove('max-h-0', 'opacity-0');
+        menu?.classList.add('max-h-[500px]', 'opacity-100');
+      } else if (!menu?.classList.contains('menu-open')) {
+        menu?.classList.remove('max-h-[500px]', 'opacity-100');
+        menu?.classList.add('max-h-0', 'opacity-0');
+      }
+    });
+  });
 </script>

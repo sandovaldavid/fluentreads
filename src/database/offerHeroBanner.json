@@ -1,26 +1,26 @@
 [
-	{
-		"id": "essential-grammar-advanced",
-		"type": "book",
-		"expiration": "30 de agosto",
-		"customLink": "/catalogo/libros/essential-grammar-advanced"
-	},
-	{
-		"id": "complete-english-pack",
-		"type": "pack",
-		"expiration": "Tiempo limitado",
-		"customLink": "/catalogo/packs/complete-english-pack"
-	},
-	{
-		"id": "toefl-complete-guide",
-		"type": "exam",
-		"expiration": "¡Solo hoy!",
-		"customLink": "/catalogo/examenes-internacionales/toefl-complete-guide"
-	},
-	{
-		"id": "english-pronunciation-guide",
-		"type": "book",
-		"expiration": "Hasta agotar existencias",
-		"customLink": "/catalogo/libros/english-pronunciation-guide"
-	}
+  {
+    "id": "essential-grammar-advanced",
+    "type": "book",
+    "expiration": "30 de agosto",
+    "customLink": "/catalogo/libros/essential-grammar-advanced"
+  },
+  {
+    "id": "complete-english-pack",
+    "type": "pack",
+    "expiration": "Tiempo limitado",
+    "customLink": "/catalogo/packs/complete-english-pack"
+  },
+  {
+    "id": "toefl-complete-guide",
+    "type": "exam",
+    "expiration": "¡Solo hoy!",
+    "customLink": "/catalogo/examenes-internacionales/toefl-complete-guide"
+  },
+  {
+    "id": "english-pronunciation-guide",
+    "type": "book",
+    "expiration": "Hasta agotar existencias",
+    "customLink": "/catalogo/libros/english-pronunciation-guide"
+  }
 ]

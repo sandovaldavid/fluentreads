@@ -6,19 +6,19 @@ import TimerIcon from '../icons/Timer.astro';
 import '../../styles/benefits/specialOffersCard.css';
 
 interface Props {
-	offerUrl?: string;
-	offerTitle?: string;
-	offerDescription?: string;
-	discount?: string;
-	daysRemaining?: number;
+  offerUrl?: string;
+  offerTitle?: string;
+  offerDescription?: string;
+  discount?: string;
+  daysRemaining?: number;
 }
 
 const {
-	offerUrl = '/ofertas',
-	offerTitle = '¡Ofertas Especiales Limitadas!',
-	offerDescription = 'Obtén hasta un 20% de descuento en compras de más de 3 packs. ¡Una oportunidad ideal para completar tu colección!',
-	discount = '20%',
-	daysRemaining = 7,
+  offerUrl = '/ofertas',
+  offerTitle = '¡Ofertas Especiales Limitadas!',
+  offerDescription = 'Obtén hasta un 20% de descuento en compras de más de 3 packs. ¡Una oportunidad ideal para completar tu colección!',
+  discount = '20%',
+  daysRemaining = 7,
 } = Astro.props;
 
 // Get a date N days from now for the countdown
@@ -28,129 +28,110 @@ const endDateString = offerEndDate.toISOString();
 ---
 
 <div
-	class='overflow-hidden rounded-lg border-l-4 sm:border-l-0 sm:border-t-4 lg:border-l-4 lg:border-t-0 border-accent bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 p-4 sm:p-5 shadow-md hover:shadow-lg transition-all duration-300 special-offer-banner'>
-	<div
-		class='flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4'>
-		<!-- Icon (smaller on mobile/tablet) -->
-		<div
-			class='flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent'>
-			<SalesIcon class='h-7 w-7 sm:h-8 sm:w-8 animate-pulse' />
-		</div>
+  className="border-accent from-primary/10 via-primary/5 to-secondary/10 special-offer-banner overflow-hidden rounded-lg border-l-4 bg-gradient-to-br p-4 shadow-md transition-all duration-300 hover:shadow-lg sm:border-t-4 sm:border-l-0 sm:p-5 lg:border-t-0 lg:border-l-4"
+>
+  <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">
+    <!-- Icon (smaller on mobile/tablet) -->
+    <div
+      className="bg-accent/15 text-accent flex h-12 w-12 shrink-0 items-center justify-center rounded-full sm:h-14 sm:w-14"
+    >
+      <SalesIcon class="h-7 w-7 animate-pulse sm:h-8 sm:w-8" />
+    </div>
 
-		<div class='flex-1 text-center sm:text-left'>
-			<!-- Title with timer on the right -->
-			<div
-				class='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2'>
-				<h4
-					class='font-bold text-primary-dark text-lg sm:text-xl leading-tight'>
-					{offerTitle}
-				</h4>
+    <div className="flex-1 text-center sm:text-left">
+      <!-- Title with timer on the right -->
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+        <h4 className="text-primary-dark text-lg leading-tight font-bold sm:text-xl">
+          {offerTitle}
+        </h4>
 
-				<!-- Timer (hidden on smaller mobile, visible on larger screens) -->
-				<div
-					class='hidden sm:flex items-center text-accent space-x-1 sm:ml-auto'>
-					<TimerIcon class='h-4 w-4' />
-					<span
-						class='text-xs font-medium countdown-text'
-						data-end-date={endDateString}>
-						Oferta termina pronto
-					</span>
-				</div>
-			</div>
+        <!-- Timer (hidden on smaller mobile, visible on larger screens) -->
+        <div className="text-accent hidden items-center space-x-1 sm:ml-auto sm:flex">
+          <TimerIcon class="h-4 w-4" />
+          <span className="countdown-text text-xs font-medium" data-end-date={endDateString}>
+            Oferta termina pronto
+          </span>
+        </div>
+      </div>
 
-			<!-- Description (shorter on mobile) -->
-			<p
-				class='text-sm sm:text-base text-gray-700 my-2 line-clamp-2 sm:line-clamp-none'>
-				<span class='text-accent font-bold animate-pulse'
-					>{discount} de descuento</span
-				>
-				{' '}{offerDescription}
-			</p>
+      <!-- Description (shorter on mobile) -->
+      <p className="my-2 line-clamp-2 text-sm text-gray-700 sm:line-clamp-none sm:text-base">
+        <span className="text-accent animate-pulse font-bold">{discount} de descuento</span>
+        {' '}{offerDescription}
+      </p>
 
-			<!-- Timer on mobile -->
-			<div
-				class='sm:hidden flex items-center justify-center text-accent space-x-1 mb-2'>
-				<TimerIcon class='h-4 w-4' />
-				<span
-					class='text-xs font-medium countdown-text'
-					data-end-date={endDateString}>
-					Oferta termina pronto
-				</span>
-			</div>
+      <!-- Timer on mobile -->
+      <div className="text-accent mb-2 flex items-center justify-center space-x-1 sm:hidden">
+        <TimerIcon class="h-4 w-4" />
+        <span className="countdown-text text-xs font-medium" data-end-date={endDateString}>
+          Oferta termina pronto
+        </span>
+      </div>
 
-			<!-- Compact button layout -->
-			<div
-				class='flex flex-row justify-center sm:justify-start items-center space-x-3 mt-1'>
-				<!-- Primary CTA button -->
-				<Button
-					variant='accent'
-					size='small'
-					href={offerUrl}
-					class='relative overflow-hidden shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group'>
-					<span class='relative z-10'>Ver ofertas</span>
-					<span
-						class='absolute inset-0 bg-accent-dark transform scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300'
-					></span>
-				</Button>
-			</div>
-		</div>
-	</div>
+      <!-- Compact button layout -->
+      <div className="mt-1 flex flex-row items-center justify-center space-x-3 sm:justify-start">
+        <!-- Primary CTA button -->
+        <Button
+          variant="accent"
+          size="small"
+          href={offerUrl}
+          class="group relative overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+        >
+          <span className="relative z-10">Ver ofertas</span>
+          <span
+            className="bg-accent-dark absolute inset-0 origin-left scale-x-0 transform transition-transform duration-300 group-hover:scale-x-100"
+           />
+        </Button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-	// TypeScript type for countdown elements
-	interface CountdownElement extends HTMLElement {
-		dataset: {
-			endDate: string;
-		};
-	}
+  // TypeScript type for countdown elements
+  interface CountdownElement extends HTMLElement {
+    dataset: {
+      endDate: string;
+    };
+  }
 
-	// Countdown timer functionality
-	function updateCountdown(): void {
-		document
-			.querySelectorAll<CountdownElement>('.countdown-text')
-			.forEach((el) => {
-				const endDateStr = el.dataset.endDate || '';
-				const endDate = new Date(endDateStr);
-				const now = new Date();
-				const timeLeft = endDate.getTime() - now.getTime();
+  // Countdown timer functionality
+  function updateCountdown(): void {
+    document.querySelectorAll<CountdownElement>('.countdown-text').forEach((el) => {
+      const endDateStr = el.dataset.endDate || '';
+      const endDate = new Date(endDateStr);
+      const now = new Date();
+      const timeLeft = endDate.getTime() - now.getTime();
 
-				if (timeLeft <= 0) {
-					el.textContent = '¡Oferta finalizada!';
-					return;
-				}
+      if (timeLeft <= 0) {
+        el.textContent = '¡Oferta finalizada!';
+        return;
+      }
 
-				const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-				const hours = Math.floor(
-					(timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-				);
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-				if (days > 0) {
-					el.textContent = `Termina en ${days}d ${hours}h`;
-				} else {
-					const minutes = Math.floor(
-						(timeLeft % (1000 * 60 * 60)) / (1000 * 60)
-					);
-					el.textContent = `${hours}h ${minutes}m`;
-				}
-			});
-	}
+      if (days > 0) {
+        el.textContent = `Termina en ${days}d ${hours}h`;
+      } else {
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        el.textContent = `${hours}h ${minutes}m`;
+      }
+    });
+  }
 
-	// Update every minute
-	updateCountdown();
-	setInterval(updateCountdown, 60000);
+  // Update every minute
+  updateCountdown();
+  setInterval(updateCountdown, 60000);
 
-	// Add entrance animation
-	document.addEventListener('DOMContentLoaded', () => {
-		const offerBanner = document.querySelector('.special-offer-banner');
-		if (offerBanner) {
-			setTimeout(() => {
-				offerBanner.classList.add('animate-bounce-once');
-				setTimeout(
-					() => offerBanner.classList.remove('animate-bounce-once'),
-					1000
-				);
-			}, 1500);
-		}
-	});
+  // Add entrance animation
+  document.addEventListener('DOMContentLoaded', () => {
+    const offerBanner = document.querySelector('.special-offer-banner');
+    if (offerBanner) {
+      setTimeout(() => {
+        offerBanner.classList.add('animate-bounce-once');
+        setTimeout(() => offerBanner.classList.remove('animate-bounce-once'), 1000);
+      }, 1500);
+    }
+  });
 </script>

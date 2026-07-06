@@ -7,19 +7,19 @@ import PromoCard from '../PromoCard.astro';
 import offers from '../../database/offers.json';
 
 interface Props {
-	className?: string;
-	title?: string;
-	subtitle?: string;
-	countdownDays?: number;
-	cardSize?: 'small' | 'medium' | 'large';
+  className?: string;
+  title?: string;
+  subtitle?: string;
+  countdownDays?: number;
+  cardSize?: 'small' | 'medium' | 'large';
 }
 
 const {
-	className = '',
-	title = 'Aprovecha nuestras promociones',
-	subtitle = 'Ofertas Especiales',
-	countdownDays = 7,
-	cardSize = 'large',
+  className = '',
+  title = 'Aprovecha nuestras promociones',
+  subtitle = 'Ofertas Especiales',
+  countdownDays = 7,
+  cardSize = 'large',
 } = Astro.props;
 
 // Get a date for countdown
@@ -29,188 +29,171 @@ const endDateString = offerEndDate.toISOString();
 
 // Determine grid column configuration based on card size and viewport
 const gridColumns =
-	cardSize === 'small'
-		? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4'
-		: cardSize === 'medium'
-			? 'grid-cols-2 md:grid-cols-3'
-			: 'grid-cols-2';
+  cardSize === 'small'
+    ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4'
+    : cardSize === 'medium'
+      ? 'grid-cols-2 md:grid-cols-3'
+      : 'grid-cols-2';
 
 // Determine gap size based on card size
 const gapSize =
-	cardSize === 'small'
-		? 'gap-2 sm:gap-3'
-		: cardSize === 'medium'
-			? 'gap-3 sm:gap-4 md:gap-6'
-			: 'gap-4 sm:gap-6 lg:gap-8';
+  cardSize === 'small'
+    ? 'gap-2 sm:gap-3'
+    : cardSize === 'medium'
+      ? 'gap-3 sm:gap-4 md:gap-6'
+      : 'gap-4 sm:gap-6 lg:gap-8';
 ---
 
 <section
-	class={`py-12 md:py-16 bg-gradient-to-br from-primary/5 to-secondary/5 relative overflow-hidden ${className}`}>
-	<!-- Decorative elements -->
-	<div
-		class='absolute top-0 left-0 w-24 h-24 rounded-full bg-primary/20 -translate-x-1/2 -translate-y-1/2 blur-xl'>
-	</div>
-	<div
-		class='absolute bottom-0 right-0 w-32 h-32 rounded-full bg-secondary/20 translate-x-1/2 translate-y-1/2 blur-xl'>
-	</div>
+  className={`py-12 md:py-16 bg-gradient-to-br from-primary/5 to-secondary/5 relative overflow-hidden ${className}`}
+>
+  <!-- Decorative elements -->
+  <div
+    className="bg-primary/20 absolute top-0 left-0 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full blur-xl"
+   />
+  <div
+    className="bg-secondary/20 absolute right-0 bottom-0 h-32 w-32 translate-x-1/2 translate-y-1/2 rounded-full blur-xl"
+   />
 
-	<div class='container mx-auto px-4 relative z-10'>
-		<!-- Section header -->
-		<div class='text-center mb-8 md:mb-12 slide-up'>
-			<div class='flex flex-col items-center mb-4'>
-				<span
-					class='inline-block py-1 px-4 rounded-full bg-primary/10 text-primary font-medium text-sm mb-4'>
-					{subtitle}
-				</span>
-				<SectionTitle
-					tag='h2'
-					class='text-2xl md:text-4xl font-bold text-primary-dark mb-4'>
-					{title}
-				</SectionTitle>
-			</div>
-			<div class='flex items-center justify-center text-accent space-x-2'>
-				<TimerIcon class='w-5 h-5' />
-				<span
-					class='text-sm font-medium countdown-text'
-					data-end-date={endDateString}>
-					Ofertas por tiempo limitado
-				</span>
-			</div>
-		</div>
+  <div className="relative z-10 container mx-auto px-4">
+    <!-- Section header -->
+    <div className="slide-up mb-8 text-center md:mb-12">
+      <div className="mb-4 flex flex-col items-center">
+        <span
+          className="bg-primary/10 text-primary mb-4 inline-block rounded-full px-4 py-1 text-sm font-medium"
+        >
+          {subtitle}
+        </span>
+        <SectionTitle tag="h2" class="text-primary-dark mb-4 text-2xl font-bold md:text-4xl">
+          {title}
+        </SectionTitle>
+      </div>
+      <div className="text-accent flex items-center justify-center space-x-2">
+        <TimerIcon class="h-5 w-5" />
+        <span className="countdown-text text-sm font-medium" data-end-date={endDateString}>
+          Ofertas por tiempo limitado
+        </span>
+      </div>
+    </div>
 
-		<!-- Refactored promo cards grid with responsive layout based on card size -->
-		<div class={`grid ${gridColumns} ${gapSize} max-w-7xl mx-auto`}>
-			{
-				offers.map((offer, index) => (
-					<div
-						class='promo-grid-item'
-						style={`animation-delay: ${index * 0.15}s`}>
-						<PromoCard
-							Offer={offer}
-							index={index}
-							size={cardSize}
-						/>
-					</div>
-				))
-			}
-		</div>
+    <!-- Refactored promo cards grid with responsive layout based on card size -->
+    <div className={`grid ${gridColumns} ${gapSize} max-w-7xl mx-auto`}>
+      {
+        offers.map((offer, index) => (
+          <div className="promo-grid-item" style={`animation-delay: ${index * 0.15}s`}>
+            <PromoCard Offer={offer} index={index} size={cardSize} />
+          </div>
+        ))
+      }
+    </div>
 
-		{/* Empty state for when there are no offers */}
-		{
-			offers.length === 0 && (
-				<div class='bg-white rounded-lg shadow-sm p-8 text-center'>
-					<p class='text-gray-500'>
-						No hay ofertas disponibles actualmente.
-					</p>
-				</div>
-			)
-		}
+    {/* Empty state for when there are no offers */}
+    {
+      offers.length === 0 && (
+        <div className="rounded-lg bg-white p-8 text-center shadow-sm">
+          <p className="text-gray-500">No hay ofertas disponibles actualmente.</p>
+        </div>
+      )
+    }
 
-		{/* View all button - shown when there are more than 4 offers */}
-		{
-			offers.length > 4 && (
-				<div class='text-center mt-8'>
-					<a
-						href='/ofertas'
-						class='inline-block bg-primary hover:bg-primary-dark text-white font-medium py-2 px-6 rounded-md transition-colors duration-300'>
-						Ver todas las ofertas
-					</a>
-				</div>
-			)
-		}
-	</div>
+    {/* View all button - shown when there are more than 4 offers */}
+    {
+      offers.length > 4 && (
+        <div className="mt-8 text-center">
+          <a
+            href="/ofertas"
+            className="bg-primary hover:bg-primary-dark inline-block rounded-md px-6 py-2 font-medium text-white transition-colors duration-300"
+          >
+            Ver todas las ofertas
+          </a>
+        </div>
+      )
+    }
+  </div>
 </section>
 
 <script>
-	// Define type for countdown element
-	interface CountdownElement extends HTMLElement {
-		dataset: {
-			endDate: string;
-		};
-	}
+  // Define type for countdown element
+  interface CountdownElement extends HTMLElement {
+    dataset: {
+      endDate: string;
+    };
+  }
 
-	// Countdown timer functionality
-	function updateCountdown(): void {
-		document
-			.querySelectorAll<CountdownElement>('.countdown-text')
-			.forEach((el) => {
-				const endDateStr = el.dataset.endDate || '';
-				const endDate = new Date(endDateStr);
-				const now = new Date();
-				const timeLeft = endDate.getTime() - now.getTime();
+  // Countdown timer functionality
+  function updateCountdown(): void {
+    document.querySelectorAll<CountdownElement>('.countdown-text').forEach((el) => {
+      const endDateStr = el.dataset.endDate || '';
+      const endDate = new Date(endDateStr);
+      const now = new Date();
+      const timeLeft = endDate.getTime() - now.getTime();
 
-				if (timeLeft <= 0) {
-					el.textContent = '¡Oferta finalizada!';
-					return;
-				}
+      if (timeLeft <= 0) {
+        el.textContent = '¡Oferta finalizada!';
+        return;
+      }
 
-				const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-				const hours = Math.floor(
-					(timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-				);
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-				if (days > 0) {
-					el.textContent = `Termina en ${days}d ${hours}h`;
-				} else {
-					const minutes = Math.floor(
-						(timeLeft % (1000 * 60 * 60)) / (1000 * 60)
-					);
-					el.textContent = `Termina en ${hours}h ${minutes}m`;
-				}
-			});
-	}
+      if (days > 0) {
+        el.textContent = `Termina en ${days}d ${hours}h`;
+      } else {
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        el.textContent = `Termina en ${hours}h ${minutes}m`;
+      }
+    });
+  }
 
-	// Initialize everything when the DOM is loaded
-	document.addEventListener('DOMContentLoaded', () => {
-		// Update countdown initially and set interval
-		updateCountdown();
-		setInterval(updateCountdown, 60000);
+  // Initialize everything when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Update countdown initially and set interval
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
 
-		// Set up intersection observer for animations
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('in-view');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{ threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-		);
+    // Set up intersection observer for animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
 
-		// Observe all elements that should animate on scroll
-		document
-			.querySelectorAll(
-				'.promo-grid-item, .fade-in, .slide-up, .category-card, .promo-item'
-			)
-			.forEach((el) => {
-				observer.observe(el);
-			});
+    // Observe all elements that should animate on scroll
+    document
+      .querySelectorAll('.promo-grid-item, .fade-in, .slide-up, .category-card, .promo-item')
+      .forEach((el) => {
+        observer.observe(el);
+      });
 
-		// Scroll to section if needed based on URL hash
-		const hash = window.location.hash;
-		if (hash === '#full-catalog') {
-			setTimeout(() => {
-				const catalogSection = document.getElementById('full-catalog');
-				if (catalogSection) {
-					catalogSection.scrollIntoView({ behavior: 'smooth' });
-				}
-			}, 500);
-		}
-	});
+    // Scroll to section if needed based on URL hash
+    const hash = window.location.hash;
+    if (hash === '#full-catalog') {
+      setTimeout(() => {
+        const catalogSection = document.getElementById('full-catalog');
+        if (catalogSection) {
+          catalogSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
+    }
+  });
 </script>
 
 <style>
-	/* Animation styles for grid items */
-	.promo-grid-item {
-		opacity: 0;
-		transform: translateY(20px);
-		transition: all 0.5s ease-out;
-	}
+  /* Animation styles for grid items */
+  .promo-grid-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-out;
+  }
 
-	.promo-grid-item.in-view {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  .promo-grid-item.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>

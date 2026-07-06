@@ -1,42 +1,42 @@
 [
-	{
-		"id": "pack-negocios",
-		"title": "Pack Negocios",
-		"description": "Todo lo que necesitas para dominar el inglés en el entorno empresarial.",
-		"discount": "25%",
-		"originalPrice": "S/199.99",
-		"salePrice": "S/149.99",
-		"image": "/images/libros-template.jpg",
-		"link": "/checkout/pack-negocios"
-	},
-	{
-		"id": "pack-certificaciones",
-		"title": "Pack Certificaciones",
-		"description": "Prepárate para el TOEFL, IELTS o Cambridge con nuestros materiales especializados.",
-		"discount": "20%",
-		"originalPrice": "S/249.99",
-		"salePrice": "S/199.99",
-		"image": "/images/libros-template.jpg",
-		"link": "/checkout/pack-certificaciones"
-	},
-	{
-		"id": "pack-certificaciones-2",
-		"title": "Pack Certificaciones 2",
-		"description": "Prepárate para el TOEFL, IELTS o Cambridge con nuestros materiales especializados.",
-		"discount": "20%",
-		"originalPrice": "S/249.99",
-		"salePrice": "S/199.99",
-		"image": "/images/libros-template.jpg",
-		"link": "/checkout/pack-certificaciones"
-	},
-	{
-		"id": "pack-certificaciones-3",
-		"title": "Pack Certificaciones 3",
-		"description": "Prepárate para el TOEFL, IELTS o Cambridge con nuestros materiales especializados.",
-		"discount": "20%",
-		"originalPrice": "S/249.99",
-		"salePrice": "S/199.99",
-		"image": "/images/libros-template.jpg",
-		"link": "/checkout/pack-certificaciones"
-	}
+  {
+    "id": "pack-negocios",
+    "title": "Pack Negocios",
+    "description": "Todo lo que necesitas para dominar el inglés en el entorno empresarial.",
+    "discount": "25%",
+    "originalPrice": "S/199.99",
+    "salePrice": "S/149.99",
+    "image": "/images/libros-template.jpg",
+    "link": "/checkout/pack-negocios"
+  },
+  {
+    "id": "pack-certificaciones",
+    "title": "Pack Certificaciones",
+    "description": "Prepárate para el TOEFL, IELTS o Cambridge con nuestros materiales especializados.",
+    "discount": "20%",
+    "originalPrice": "S/249.99",
+    "salePrice": "S/199.99",
+    "image": "/images/libros-template.jpg",
+    "link": "/checkout/pack-certificaciones"
+  },
+  {
+    "id": "pack-certificaciones-2",
+    "title": "Pack Certificaciones 2",
+    "description": "Prepárate para el TOEFL, IELTS o Cambridge con nuestros materiales especializados.",
+    "discount": "20%",
+    "originalPrice": "S/249.99",
+    "salePrice": "S/199.99",
+    "image": "/images/libros-template.jpg",
+    "link": "/checkout/pack-certificaciones"
+  },
+  {
+    "id": "pack-certificaciones-3",
+    "title": "Pack Certificaciones 3",
+    "description": "Prepárate para el TOEFL, IELTS o Cambridge con nuestros materiales especializados.",
+    "discount": "20%",
+    "originalPrice": "S/249.99",
+    "salePrice": "S/199.99",
+    "image": "/images/libros-template.jpg",
+    "link": "/checkout/pack-certificaciones"
+  }
 ]
