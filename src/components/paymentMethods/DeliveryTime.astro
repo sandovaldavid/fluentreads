@@ -12,9 +12,9 @@ import '../../styles/paymentMethods/DeliveryTime.css';
   className="bg-neutral-light delivery-time-section relative overflow-hidden py-12 md:py-16 lg:px-8"
 >
   <!-- Background decorative elements -->
-  <div className="delivery-dots-pattern absolute inset-0 opacity-10" />
-  <div className="delivery-shape-1" />
-  <div className="delivery-shape-2" />
+  <div className="delivery-dots-pattern absolute inset-0 opacity-10"></div>
+  <div className="delivery-shape-1"></div>
+  <div className="delivery-shape-2"></div>
 
   <div className="relative z-10 container mx-auto px-4">
     <div className="animate-on-scroll fade-up mx-auto mb-8 max-w-4xl text-center md:mb-12">
@@ -39,7 +39,7 @@ import '../../styles/paymentMethods/DeliveryTime.css';
         <div className="delivery-timeline border-primary/30 relative border-l-2 pl-8">
           <!-- Timeline steps -->
           <div className="timeline-item pb-8">
-            <div className="timeline-marker" />
+            <div className="timeline-marker"></div>
             <h4 className="mb-2 text-lg font-bold">Confirmación del pago</h4>
             <p className="text-gray-600">
               Una vez recibido y confirmado tu pago, comienza el proceso de entrega inmediata.
@@ -47,7 +47,7 @@ import '../../styles/paymentMethods/DeliveryTime.css';
           </div>
 
           <div className="timeline-item pb-8">
-            <div className="timeline-marker" />
+            <div className="timeline-marker"></div>
             <h4 className="mb-2 text-lg font-bold">Preparación del material</h4>
             <p className="text-gray-600">
               Preparamos tu acceso personalizado a todo el material seleccionado.
@@ -55,7 +55,7 @@ import '../../styles/paymentMethods/DeliveryTime.css';
           </div>
 
           <div className="timeline-item">
-            <div className="timeline-marker" />
+            <div className="timeline-marker"></div>
             <h4 className="mb-2 text-lg font-bold">Entrega digital</h4>
             <p className="text-gray-600">
               Recibes enlaces de acceso a Google Drive/OneDrive con todos tus libros y materiales.
@@ -111,11 +111,11 @@ import '../../styles/paymentMethods/DeliveryTime.css';
             >
           </div>
           <div className="mb-4 flex items-center space-x-3">
-            <div className="delivery-pulse" />
+            <div className="delivery-pulse"></div>
             <div className="text-sm">Entregas procesándose en tiempo real</div>
           </div>
           <div className="delivery-progress-container">
-            <div className="delivery-progress-bar" />
+            <div className="delivery-progress-bar"></div>
           </div>
           <div className="mt-4 text-center text-sm text-gray-500">
             Tiempo promedio de entrega actual: <strong className="text-primary">~5 minutos</strong>
@@ -168,13 +168,13 @@ import '../../styles/paymentMethods/DeliveryTime.css';
           <div className="mt-6 flex justify-center space-x-2">
             <button
               className="bg-primary testimonial-dot active h-3 w-3 rounded-full opacity-100"
-              aria-label="Testimonial 1" />
+              aria-label="Testimonial 1"></button>
             <button
               className="bg-primary testimonial-dot h-3 w-3 rounded-full opacity-40"
-              aria-label="Testimonial 2" />
+              aria-label="Testimonial 2"></button>
             <button
               className="bg-primary testimonial-dot h-3 w-3 rounded-full opacity-40"
-              aria-label="Testimonial 3" />
+              aria-label="Testimonial 3"></button>
           </div>
         </div>
       </div>
@@ -205,45 +205,6 @@ import '../../styles/paymentMethods/DeliveryTime.css';
 
     document.querySelectorAll('.animate-on-scroll').forEach((el) => {
       observer.observe(el);
-    });
-
-    // Testimonial slider functionality
-    const testimonials = document.querySelectorAll('.delivery-testimonial');
-    const dots = document.querySelectorAll('.testimonial-dot');
-
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        // Remove active class from all testimonials and dots
-        testimonials.forEach((t) => t.classList.remove('active'));
-        dots.forEach((d) => d.classList.remove('active', 'opacity-100'));
-        dots.forEach((d) => d.classList.add('opacity-40'));
-
-        // Add active class to current testimonial and dot
-        testimonials[index].classList.add('active');
-        dot.classList.add('active', 'opacity-100');
-        dot.classList.remove('opacity-40');
-      });
-    });
-
-    // Auto-rotate testimonials every 5 seconds
-    let currentIndex = 0;
-    const autoRotate = setInterval(() => {
-      currentIndex = (currentIndex + 1) % testimonials.length;
-
-      // Remove active class from all testimonials and dots
-      testimonials.forEach((t) => t.classList.remove('active'));
-      dots.forEach((d) => d.classList.remove('active', 'opacity-100'));
-      dots.forEach((d) => d.classList.add('opacity-40'));
-
-      // Add active class to current testimonial and dot
-      testimonials[currentIndex].classList.add('active');
-      dots[currentIndex].classList.add('active', 'opacity-100');
-      dots[currentIndex].classList.remove('opacity-40');
-    }, 5000);
-
-    // Clear interval on mouse interaction
-    document.querySelector('.delivery-testimonial-slider')?.addEventListener('mouseenter', () => {
-      clearInterval(autoRotate);
     });
   });
 

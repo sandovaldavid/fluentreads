@@ -15,13 +15,16 @@ const {
   question,
   answer,
   expanded = false,
-  id = `question-${Math.random().toString(36).substring(2, 9)}`,
+  id = `question-${question
+    .replace(/[^a-zA-Z0-9]/g, '-')
+    .toLowerCase()
+    .substring(0, 30)}`,
   className = '',
 } = Astro.props;
 ---
 
 <div
-  className={`bg-white rounded-xl shadow-sm border border-neutral hover:border-primary/30 transition-all duration-300 overflow-hidden question-card group ${expanded ? 'expanded' : ''} ${className}`}
+  className={`border-neutral hover:border-primary/30 question-card group overflow-hidden rounded-xl border bg-white shadow-sm transition-all duration-300 ${expanded ? 'expanded' : ''} ${className}`}
 >
   <button
     id={`${id}-header`}
@@ -46,7 +49,7 @@ const {
         <path
           fillRule="evenodd"
           d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-          clipRule="evenodd" />
+          clipRule="evenodd"></path>
       </svg>
     </div>
   </button>

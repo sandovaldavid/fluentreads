@@ -31,7 +31,7 @@ const sizeClasses = {
 const starSizeClass = sizeClasses[size];
 ---
 
-<div class=`flex items-center ${className}`>
+<div class={`flex items-center ${className || ''}`}>
   <div className="flex items-center justify-between">
     {/* Full stars */}
     {

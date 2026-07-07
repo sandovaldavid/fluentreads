@@ -7,6 +7,7 @@ const logoImage = '/assets/logo_v4.webp';
 
 import { siteConfig } from '@config/site';
 import siteInfo from '../database/pageInformation.json';
+import CartIndicator from './CartIndicator.astro';
 ---
 
 <header className="bg-primary sticky top-0 z-50 w-full text-white shadow-md">
@@ -19,10 +20,35 @@ import siteInfo from '../database/pageInformation.json';
       <span className="font-lora ml-2 text-2xl font-bold md:text-3xl">{siteConfig.name}</span>
     </a>
 
-    <!-- Mobile menu button -->
-    <button id="mobile-menu-button" className="flex items-center px-3 py-2 md:hidden">
-      <MobileIcon class="h-6 w-6" />
-    </button>
+    <!-- Cart and Mobile Menu Button -->
+    <div className="flex items-center space-x-2 md:order-last">
+      <a
+        href="/checkout"
+        className="hover:text-secondary relative flex items-center p-2 text-white"
+        aria-label="Ver carrito de compras"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          ></path>
+        </svg>
+        <CartIndicator className="absolute -top-1 -right-1" />
+      </a>
+
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-button" className="flex items-center px-3 py-2 md:hidden">
+        <MobileIcon class="h-6 w-6" />
+      </button>
+    </div>
 
     <!-- Navigation and social icons -->
     <div

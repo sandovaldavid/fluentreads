@@ -4,9 +4,9 @@ export enum BookLevel {
   BASIC = 'basic',
   INTERMEDIATE = 'intermediate',
   ADVANCED = 'advanced',
-  ALL_LEVELS = 'all_levels',
+  ALL_LEVELS = 'all-levels',
   PROFESSIONAL = 'professional',
-  INTERNATIONAL_EXAM = 'internationalExam',
+  INTERNATIONAL_EXAM = 'international-exam',
 }
 
 export enum FormatTag {

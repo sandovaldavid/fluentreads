@@ -157,7 +157,9 @@ const whatsappNumber = siteConfig.whatsapp;
         const btn = target.classList.contains('quantity-btn')
           ? target
           : target.closest('.quantity-btn');
-        const index = parseInt(btn.getAttribute('data-index'));
+        const indexAttr = btn.getAttribute('data-index');
+        const index = parseInt(indexAttr || '', 10);
+        if (isNaN(index)) return;
         const isIncrease = btn.classList.contains('increase');
 
         // Get current cart
@@ -180,7 +182,9 @@ const whatsappNumber = siteConfig.whatsapp;
         const btn = target.classList.contains('remove-item')
           ? target
           : target.closest('.remove-item');
-        const index = parseInt(btn.getAttribute('data-index'));
+        const indexAttr = btn.getAttribute('data-index');
+        const index = parseInt(indexAttr || '', 10);
+        if (isNaN(index)) return;
 
         // Get current cart
         const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];

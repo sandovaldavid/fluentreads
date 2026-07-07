@@ -50,16 +50,19 @@ const benefits = [
 const { className = '' } = Astro.props;
 ---
 
-<div class=`${className}`>
+<div class={className}>
   <!-- Background gradient effect -->
-  <div className="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-50" />
+  <div className="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-50">
+  </div>
 
   <div
     className="relative h-full overflow-hidden rounded-xl bg-white p-4 shadow-lg sm:p-6 md:p-8 lg:transform lg:transition-all lg:duration-500 lg:hover:shadow-xl"
   >
     <!-- Content wrapper -->
     <div className="relative z-10">
-      <h3 className="text-primary-dark mb-5 flex items-center text-xl font-bold md:mb-7 md:text-2xl">
+      <h3
+        className="text-primary-dark mb-5 flex items-center text-xl font-bold md:mb-7 md:text-2xl"
+      >
         <span
           className="bg-primary mr-3 transform rounded-full p-2 text-white shadow-md transition-all duration-300 hover:scale-110"
         >
@@ -69,7 +72,9 @@ const { className = '' } = Astro.props;
       </h3>
 
       <!-- Benefits cards with improved grid -->
-      <div className="benefits-grid grid h-full grid-cols-1 gap-3 sm:gap-4 md:gap-10 lg:grid-cols-2">
+      <div
+        className="benefits-grid grid h-full grid-cols-1 gap-3 sm:gap-4 md:gap-10 lg:grid-cols-2"
+      >
         {
           benefits.map((benefit, index) => (
             <div

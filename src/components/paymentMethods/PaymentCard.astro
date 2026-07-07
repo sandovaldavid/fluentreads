@@ -27,7 +27,7 @@ const {
 } = Astro.props;
 
 // Generate a unique ID for this payment method (for copy functionality)
-const paymentId = `payment-${Math.random().toString(36).substring(2, 9)}`;
+const paymentId = `payment-${title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
 ---
 
 <div
@@ -36,12 +36,13 @@ const paymentId = `payment-${Math.random().toString(36).substring(2, 9)}`;
   <!-- Subtle background effect on hover -->
   <div
     className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-   />
+  >
+  </div>
 
   <div className="relative z-10">
     <div className="mb-4 flex justify-center">
       <div
-        className={`w-16 h-16 flex items-center justify-center rounded-full ${color} transition-transform duration-300 group-hover:scale-110 shadow-sm group-hover:shadow-md`}
+        className={`flex h-16 w-16 items-center justify-center rounded-full ${color} shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md`}
       >
         {
           image ? (
@@ -74,7 +75,8 @@ const paymentId = `payment-${Math.random().toString(36).substring(2, 9)}`;
       <!-- Subtle shimmer effect on hover -->
       <div
         className="shimmer-effect absolute inset-0 bg-gradient-to-r from-transparent via-gray-200/20 to-transparent opacity-0 group-hover:opacity-100"
-       />
+      >
+      </div>
 
       <button
         className="copy-button bg-primary group-payment-hover:opacity-100 hover:bg-primary-dark absolute top-1/2 right-3 -translate-y-1/2 transform rounded-full p-1.5 text-white transition-all duration-300 group-hover:opacity-100 lg:opacity-0"
@@ -115,27 +117,32 @@ const paymentId = `payment-${Math.random().toString(36).substring(2, 9)}`;
             navigator.clipboard
               .writeText(text)
               .then(() => {
-                // Hide the button temporarily
-                (button as HTMLElement).style.opacity = '0';
+                // Hide the button temporarily by adding opacity-0 (instead of inline styles that break hover states)
+                (button as HTMLElement).classList.add('opacity-0');
+                (button as HTMLElement).classList.remove(
+                  'group-payment-hover:opacity-100',
+                  'group-hover:opacity-100'
+                );
 
                 // Find the success message element
                 const successMessage = button.parentElement?.querySelector(
                   `.copied-message[data-for="${targetId}"]`
                 ) as HTMLElement;
 
-                const copyButton = button.parentElement?.querySelector(
-                  '.copy-button'
-                ) as HTMLElement;
-
                 if (successMessage) {
                   // Show the copied message
-                  successMessage.style.opacity = '1';
+                  successMessage.classList.remove('opacity-0');
+                  successMessage.classList.add('opacity-100');
 
                   // Hide the message and show the button after delay
                   setTimeout(() => {
-                    successMessage.style.opacity = '0';
-                    (button as HTMLElement).style.opacity = '1';
-                    copyButton.style.opacity = '0';
+                    successMessage.classList.remove('opacity-100');
+                    successMessage.classList.add('opacity-0');
+                    (button as HTMLElement).classList.remove('opacity-0');
+                    (button as HTMLElement).classList.add(
+                      'group-payment-hover:opacity-100',
+                      'group-hover:opacity-100'
+                    );
                   }, 1500);
                 }
               })

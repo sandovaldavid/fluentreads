@@ -84,19 +84,6 @@ editorialsData.forEach((editorial) => {
 // Get all products with our utility function
 const allProducts: Product[] = getAllProducts();
 
-// Log the count of each product type for debugging
-console.log(`Total products: ${allProducts.length}`);
-console.log(`Books: ${allProducts.filter((p) => p.productType === 'book').length}`);
-console.log(`Exams: ${allProducts.filter((p) => p.productType === 'exam').length}`);
-console.log(`Packs: ${allProducts.filter((p) => p.productType === 'pack').length}`);
-
-// Add a check to see if we have exam products
-const haveExams = allProducts.some((p) => p.productType === 'exam');
-console.log(`Have exam products: ${haveExams}`);
-if (!haveExams) {
-  console.warn('No exam products found - check exams.json format');
-}
-
 // Build canonical URL
 const canonicalURL = new URL('/catalogo', siteConfig.url).toString();
 
@@ -140,10 +127,7 @@ const breadcrumbData = {
 };
 
 // Build OG image URL based on filters or use default
-const ogImage =
-  level !== 'all' || format !== 'all' || type !== 'any'
-    ? `${siteConfig.url}/api/og?title=${encodeURIComponent(pageTitle)}&filter=true`
-    : siteInfo.seo.images.home || siteInfo.seo.defaultImage;
+const ogImage = siteInfo.seo.images.catalog || siteInfo.seo.defaultImage;
 ---
 
 <Layout
@@ -155,7 +139,7 @@ const ogImage =
   ogDescription={pageDescription}
   ogImage={ogImage}
   ogSiteName={siteInfo.siteName}
-  twitterCard={siteInfo.seo.images.catalog}
+  twitterCard="summary_large_image"
   twitterTitle={pageTitle}
   twitterDescription={pageDescription}
   twitterImage={ogImage}

@@ -6,6 +6,7 @@ export enum ExamType {
   CAMBRIDGE = 'Cambridge',
   SAT = 'SAT',
   PTE = 'PTE',
+  FCE = 'FCE',
   CPE = 'CPE',
   GRE = 'GRE',
   OTHER = 'Other',
@@ -15,6 +16,8 @@ export enum ExamDifficulty {
   BEGINNER = 'beginner',
   INTERMEDIATE = 'intermediate',
   ADVANCED = 'advanced',
+  UPPER_INTERMEDIATE = 'upper-intermediate',
+  PROFICIENT = 'proficient',
 }
 
 export interface Exam {

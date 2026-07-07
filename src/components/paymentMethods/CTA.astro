@@ -140,23 +140,45 @@ import { siteConfig } from '@config/site';
   // Countdown timer functionality
   document.addEventListener('DOMContentLoaded', () => {
     function updateCountdown() {
-      // Set a 24-hour countdown from when the user first visits
-      const countdownEnd = localStorage.getItem('countdownEnd');
+      let countdownEnd: string | null = null;
+      try {
+        countdownEnd = localStorage.getItem('countdownEnd');
+      } catch (e) {
+        // Silently handle localStorage access error
+      }
 
       if (!countdownEnd) {
         // Set end time to 24 hours from now
         const end = new Date();
         end.setHours(end.getHours() + 24);
-        localStorage.setItem('countdownEnd', end.getTime().toString());
+        try {
+          localStorage.setItem('countdownEnd', end.getTime().toString());
+        } catch (e) {
+          // Silently handle localStorage set error
+        }
       }
 
-      const endTime = parseInt(localStorage.getItem('countdownEnd') || '0');
+      let endTimeVal: string;
+      try {
+        endTimeVal = localStorage.getItem('countdownEnd') || '0';
+      } catch (e) {
+        // Fallback end time (24h from now in memory if localStorage fails)
+        const fallbackEnd = new Date();
+        fallbackEnd.setHours(fallbackEnd.getHours() + 24);
+        endTimeVal = fallbackEnd.getTime().toString();
+      }
+
+      const endTime = parseInt(endTimeVal, 10);
       const now = new Date().getTime();
       const timeLeft = endTime - now;
 
       if (timeLeft <= 0) {
         // Reset the timer when it reaches zero
-        localStorage.removeItem('countdownEnd');
+        try {
+          localStorage.removeItem('countdownEnd');
+        } catch (e) {
+          // Silently handle localStorage remove error
+        }
         updateCountdown();
         return;
       }
@@ -166,10 +188,14 @@ import { siteConfig } from '@config/site';
       const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-      // Update the HTML
-      document.getElementById('hours')!.textContent = hours.toString().padStart(2, '0');
-      document.getElementById('minutes')!.textContent = minutes.toString().padStart(2, '0');
-      document.getElementById('seconds')!.textContent = seconds.toString().padStart(2, '0');
+      // Update the HTML safely without non-null assertions
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+
+      if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+      if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+      if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
     }
 
     // Update the countdown immediately and then every second
