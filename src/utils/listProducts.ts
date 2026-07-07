@@ -33,11 +33,6 @@ export function getAllProducts(): Product[] {
     detailsLink: exam.detailsLink || `/catalogo/examenes-internacionales/${exam.id}`, // Ensure proper link format
   }));
 
-  // Log counts for debugging
-  console.log(`Processed ${processedBooks.length} books`);
-  console.log(`Processed ${processedPacks.length} packs`);
-  console.log(`Processed ${processedExams.length} exams`);
-
   // Return the combined array of products
   return [...processedBooks, ...processedPacks, ...processedExams];
 }

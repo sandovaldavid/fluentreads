@@ -19,21 +19,21 @@ const tagDesktopClasses = 'text-xs px-2 py-1 mb-2 mr-1.5';
 const tagClasses = `${tagBaseClasses} ${isLikelyMobile ? tagMobileClasses : tagDesktopClasses}`;
 ---
 
-<div className="tag-container">
+<div class="tag-container">
   {/* Format tags */}
   {
     formatTags && formatTags.length > 0 && (
-      <div className="mb-1 flex flex-wrap">
+      <div class="mb-1 flex flex-wrap">
         {formatTags.map((tag) => {
           const config = formatConfig[tag as keyof typeof formatConfig];
           const colorClass = config?.color || 'bg-gray-100 text-gray-800';
 
           return (
-            <span className={`${tagClasses} ${colorClass}`}>
+            <span class={`${tagClasses} ${colorClass}`}>
               {/* Always show icon if available */}
-              {config?.icon && <span className="mr-0.5 sm:mr-1">{config.icon}</span>}
+              {config?.icon && <span class="mr-0.5 sm:mr-1">{config.icon}</span>}
               {/* Show label text only on larger screens */}
-              <span className="xs:inline hidden">{config?.label || tag}</span>
+              <span class="hidden sm:inline">{config?.label || tag}</span>
             </span>
           );
         })}
@@ -44,17 +44,17 @@ const tagClasses = `${tagBaseClasses} ${isLikelyMobile ? tagMobileClasses : tagD
   {/* Popularity tags */}
   {
     popularityTags && popularityTags.length > 0 && (
-      <div className="flex flex-wrap">
+      <div class="flex flex-wrap">
         {popularityTags.map((tag) => {
           const config = popularityConfig[tag as keyof typeof popularityConfig];
           const colorClass = config?.color || 'bg-gray-100 text-gray-800';
 
           return (
-            <span className={`${tagClasses} ${colorClass}`}>
+            <span class={`${tagClasses} ${colorClass}`}>
               {/* Always show emoji icon if available */}
-              {config?.icon && <span className="mr-0.5 sm:mr-1">{config.icon}</span>}
+              {config?.icon && <span class="mr-0.5 sm:mr-1">{config.icon}</span>}
               {/* Show label text only on larger screens */}
-              <span className="xs:inline hidden">{config?.label || tag}</span>
+              <span class="hidden sm:inline">{config?.label || tag}</span>
             </span>
           );
         })}
@@ -70,11 +70,7 @@ const tagClasses = `${tagBaseClasses} ${isLikelyMobile ? tagMobileClasses : tagD
     gap: 0.25rem;
   }
 
-  @media (min-width: 400px) {
-    .xs\:inline {
-      display: inline;
-    }
-
+  @media (min-width: 640px) {
     .tag-container {
       gap: 0.5rem;
     }

@@ -70,7 +70,8 @@ const isFeaturedOrBestseller =
     />
     <div
       className="cover-overlay absolute inset-0 bg-gradient-to-b from-transparent to-black/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-     />
+    >
+    </div>
 
     <!-- Featured & Level badges -->
     {
@@ -137,7 +138,9 @@ const isFeaturedOrBestseller =
             </span>
           </>
         ) : (
-          <span className="text-secondary-dark normal-price text-2xl font-bold">{formattedPrice}</span>
+          <span className="text-secondary-dark normal-price text-2xl font-bold">
+            {formattedPrice}
+          </span>
         )
       }
     </div>

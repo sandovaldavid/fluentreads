@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import siteInfo from '../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 interface Props {
   // SEO Básico
@@ -55,12 +56,12 @@ const {
   ogTitle = title,
   ogDescription = description,
   ogImage = image,
-  ogSiteName = siteInfo.siteName,
+  ogSiteName = siteConfig.name,
   twitterCard = 'summary_large_image',
   twitterTitle = title,
   twitterDescription = description,
   twitterImage = image,
-  twitterSite = siteInfo.socialMediaHandles.twitter,
+  twitterSite = siteConfig.social.twitterHandle,
   structuredData,
   breadcrumbData,
   language = 'es',
@@ -69,7 +70,7 @@ const {
   bodyClass = '',
 } = Astro.props;
 
-const siteUrl = import.meta.env.PUBLIC_SITE_URL || siteInfo.siteURL || Astro.url.origin;
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || siteConfig.url || Astro.url.origin;
 
 // Función para asegurar URLs absolutas
 const getAbsoluteUrl = (path: string | URL): string =>
@@ -172,7 +173,7 @@ const metaData = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- Mobile specific meta tags -->
     <meta name="theme-color" content="#1e3a8a" />
@@ -221,7 +222,7 @@ const metaData = {
 
     <!-- Preload de fuentes optimizado -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,600&display=swap"
       rel="stylesheet"
@@ -230,7 +231,7 @@ const metaData = {
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       media="print"
-      onLoad="this.media='all'"
+      onload="this.media='all'"
     />
     <noscript>
       <link

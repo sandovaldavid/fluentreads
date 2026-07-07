@@ -114,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Optional: Log offer views (can be connected to analytics)
   function logOfferView(offerInfo: OfferInfo) {
-    console.log(`Viewing offer: ${offerInfo.id} of type ${offerInfo.type}`);
     // Here you could implement actual analytics tracking
   }
 
@@ -128,8 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resizeObserver.observe(carousel);
   }
 
-  // Add keyboard navigation for accessibility
-  document.addEventListener('keydown', (e) => {
+  function handleKeyDown(e: KeyboardEvent) {
     if (!isCarouselInViewport()) return;
 
     if (e.key === 'ArrowLeft') {
@@ -137,7 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.key === 'ArrowRight') {
       nextSlide();
     }
-  });
+  }
+
+  // Add keyboard navigation for accessibility
+  document.addEventListener('keydown', handleKeyDown);
 
   // Check if carousel is in viewport (for keyboard navigation)
   function isCarouselInViewport() {
@@ -183,4 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
       prevSlide();
     }
   }
+
+  // Cleanup function for memory leaks
+  function cleanup() {
+    clearInterval(autoplayInterval);
+    resizeObserver.disconnect();
+    document.removeEventListener('keydown', handleKeyDown);
+  }
+
+  // Astro page change support
+  document.addEventListener('astro:before-swap', cleanup, { once: true });
 });

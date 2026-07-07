@@ -1,38 +1,38 @@
 ---
 interface OfferReference {
-    id: string;
-    type: "book" | "pack" | "exam";
-    expiration?: string;
-    customLink?: string;
+  id: string;
+  type: 'book' | 'pack' | 'exam';
+  expiration?: string;
+  customLink?: string;
 }
 
 interface Offer {
-    id: string;
-    title: string;
-    description: string;
-    image: string;
-    discount?: string;
-    expiration?: string;
-    link: string;
-    type: "book" | "pack" | "exam";
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  discount?: string;
+  expiration?: string;
+  link: string;
+  type: 'book' | 'pack' | 'exam';
 }
 
 interface Props {
-    title: string;
-    subtitle?: string;
-    ctaText?: string;
-    ctaLink?: string;
-    showCarousel?: boolean;
-    maxOffersToShow?: number;
+  title: string;
+  subtitle?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  showCarousel?: boolean;
+  maxOffersToShow?: number;
 }
 
-const { 
-    title, 
-    subtitle = "Tu fuente principal de recursos para aprender inglés",
-    ctaText = "Explorar Catálogo",
-    ctaLink = "/catalogo",
-    showCarousel = true,
-    maxOffersToShow = 4
+const {
+  title,
+  subtitle = 'Tu fuente principal de recursos para aprender inglés',
+  ctaText = 'Explorar Catálogo',
+  ctaLink = '/catalogo',
+  showCarousel = true,
+  maxOffersToShow = 4,
 } = Astro.props;
 
 // Import references from offerHeroBanner.json
@@ -44,66 +44,66 @@ import examsData from '../database/exams.json';
 
 // Function to get product details based on type and ID
 function getProductDetails(reference: OfferReference): Offer | null {
-    let product;
-    
-    switch (reference.type) {
-        case "book":
-            product = booksData.find(book => book.id === reference.id);
-            if (product) {
-                return {
-                    id: product.id,
-                    title: product.title,
-                    description: product.description,
-                    image: product.coverImage,
-                    discount: product.discount ? `${product.discount}%` : undefined,
-                    expiration: reference.expiration,
-                    link: reference.customLink || product.detailsLink,
-                    type: "book"
-                };
-            }
-            break;
-        
-        case "pack":
-            product = packsData.find(pack => pack.id === reference.id);
-            if (product) {
-                return {
-                    id: product.id,
-                    title: product.title,
-                    description: product.description,
-                    image: product.coverImage,
-                    discount: product.discount ? `${product.discount}%` : undefined,
-                    expiration: reference.expiration,
-                    link: reference.customLink || product.detailsLink,
-                    type: "pack"
-                };
-            }
-            break;
-        
-        case "exam":
-            product = examsData.find(exam => exam.id === reference.id);
-            if (product) {
-                return {
-                    id: product.id,
-                    title: product.title,
-                    description: product.description,
-                    image: product.coverImage,
-                    discount: product.discount ? `${product.discount}%` : undefined,
-                    expiration: reference.expiration,
-                    link: reference.customLink || product.detailsLink,
-                    type: "exam"
-                };
-            }
-            break;
-    }
-    
-    return null;
+  let product;
+
+  switch (reference.type) {
+    case 'book':
+      product = booksData.find((book) => book.id === reference.id);
+      if (product) {
+        return {
+          id: product.id,
+          title: product.title,
+          description: product.description,
+          image: product.coverImage,
+          discount: product.discount ? `${product.discount}%` : undefined,
+          expiration: reference.expiration,
+          link: reference.customLink || product.detailsLink,
+          type: 'book',
+        };
+      }
+      break;
+
+    case 'pack':
+      product = packsData.find((pack) => pack.id === reference.id);
+      if (product) {
+        return {
+          id: product.id,
+          title: product.title,
+          description: product.description,
+          image: product.coverImage,
+          discount: product.discount ? `${product.discount}%` : undefined,
+          expiration: reference.expiration,
+          link: reference.customLink || product.detailsLink,
+          type: 'pack',
+        };
+      }
+      break;
+
+    case 'exam':
+      product = examsData.find((exam) => exam.id === reference.id);
+      if (product) {
+        return {
+          id: product.id,
+          title: product.title,
+          description: product.description,
+          image: product.coverImage,
+          discount: product.discount ? `${product.discount}%` : undefined,
+          expiration: reference.expiration,
+          link: reference.customLink || product.detailsLink,
+          type: 'exam',
+        };
+      }
+      break;
+  }
+
+  return null;
 }
 
 // Process offer references to get complete offer data
 const offerReferencesLimited = offerReferences.slice(0, maxOffersToShow);
 const offers: Offer[] = offerReferencesLimited
-    .map(ref => getProductDetails(ref as OfferReference))
-    .filter((offer): offer is Offer => offer !== null);
+  .map((ref) => getProductDetails(ref as OfferReference))
+  .filter((offer): offer is Offer => offer !== null);
 
 import { fade } from 'astro:transitions';
 import '../styles/HeroBanner.css';
@@ -112,101 +112,116 @@ import CarruselButtons from './CarruselButtons.astro';
 import Button from './Button.astro';
 ---
 
-<section className="hero-banner bg-primary-dark text-white py-6 md:py-18 lg:py-10 overflow-hidden relative lg:px-8">
-    <!-- Animated particles background effect -->
-    <div className="particles-background absolute inset-0 opacity-20" />
-    
-    <div className="container mx-auto px-4 mt-6 relative z-10">
-        <div className="max-w-5xl mx-auto text-center mb-12">
-            <h1 
-                className="text-4xl md:text-6xl font-bold mb-6 animate-title"
-                transition:animate={fade({ duration: '0.8s' })}
-            >
-                {title}
-            </h1>
-            <p 
-                className="text-xl md:text-2xl mb-10 text-secondary-light animate-subtitle"
-                transition:animate={fade({ duration: '0.8s' })}
-            >
-                {subtitle}
-            </p>
-            <Button 
-                href={ctaLink} 
-                variant="secondary"
-                size="large"
-                class="text-primary-dark font-extrabold animate-button-bounce"
-            >
-                {ctaText}
-                <ArrowRightIcon class='h-5 w-5 ml-2 animate-arrow'/>
-            </Button>
-        </div>
+<section
+  className="hero-banner bg-primary-dark relative overflow-hidden py-6 text-white md:py-18 lg:px-8 lg:py-10"
+>
+  <!-- Animated particles background effect -->
+  <div className="particles-background absolute inset-0 opacity-20"></div>
 
-        {showCarousel && offers.length > 0 && (
-            <div className="offers-carousel mt-12 relative" data-offers-count={offers.length}>
-                <div className="carousel-container overflow-hidden rounded-xl shadow-2xl">
-                    <div className="carousel-track flex transition-transform duration-500">
-                        {offers.map((offer, index) => (
-                            <div className="carousel-slide w-full flex-shrink-0 p-6 md:p-8 bg-gradient-to-r from-primary to-primary-light rounded-xl overflow-hidden relative" data-offer-id={offer.id} data-offer-type={offer.type}>
-                                <div className="flex flex-col md:flex-row items-center gap-8">
-                                    <div className="md:w-2/5 relative">
-                                        {offer.discount && (
-                                            <div className="absolute -top-2 -left-2 bg-accent text-white px-4 py-1 rounded-lg font-bold z-20 animate-pulse">
-                                                {offer.discount}
-                                            </div>
-                                        )}
-                                        <div className="absolute -top-2 -right-2 bg-primary-light text-white px-3 py-1 rounded-lg font-bold z-20">
-                                            {offer.type === "book" ? "Libro" : offer.type === "pack" ? "Pack" : "Examen"}
-                                        </div>
-                                        <img 
-                                            src={offer.image} 
-                                            alt={offer.title} 
-                                            className="rounded-lg shadow-lg object-cover w-full h-60 md:h-80 transform transition-transform hover:scale-105"
-                                            loading={index === 0 ? "eager" : "lazy"}
-                                        />
-                                    </div>
-                                    <div className="md:w-3/5 text-left">
-                                        <h3 className="text-2xl md:text-3xl font-bold mb-4 text-secondary">{offer.title}</h3>
-                                        <p className="text-lg md:text-xl mb-6">{offer.description}</p>
-                                        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-                                            <Button 
-                                                variant="accent"
-                                                size="medium"
-                                                href={offer.link}
-                                                class="animate-button-slide">
-                                                <span>Ver detalles</span>
-                                                <ArrowRightIcon class='h-5 w-5 ml-2 animate-arrow'/>
-                                            </Button>
-                                            {offer.expiration && (
-                                                <p className="text-sm opacity-80">Expira: {offer.expiration}</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <!-- Carousel controls with proper aria labels -->
-                <CarruselButtons 
-                    ariaLabelPrev="Ver oferta anterior"
-                    ariaLabelNext="Ver oferta siguiente"
-                    className="carousel-buttons"
-                />
-
-                <!-- Carousel indicators -->
-                <div className="carousel-indicators flex justify-center gap-2 mt-6">
-                    {offers.map((_, index) => (
-                        <button 
-                            className={`indicator-dot h-3 w-3 rounded-full ${index === 0 ? 'bg-secondary' : 'bg-gray-400'} hover:bg-secondary transition-colors duration-300 cursor-pointer`} 
-                            data-index={index}
-                            aria-label={`Ver oferta ${index + 1}`}
-                         />
-                    ))}
-                </div>
-            </div>
-        )}
+  <div className="relative z-10 container mx-auto mt-6 px-4">
+    <div className="mx-auto mb-12 max-w-5xl text-center">
+      <h1
+        className="animate-title mb-6 text-4xl font-bold md:text-6xl"
+        transition:animate={fade({ duration: '0.8s' })}
+      >
+        {title}
+      </h1>
+      <p
+        className="text-secondary-light animate-subtitle mb-10 text-xl md:text-2xl"
+        transition:animate={fade({ duration: '0.8s' })}
+      >
+        {subtitle}
+      </p>
+      <Button
+        href={ctaLink}
+        variant="secondary"
+        size="large"
+        class="text-primary-dark animate-button-bounce font-extrabold"
+      >
+        {ctaText}
+        <ArrowRightIcon class="animate-arrow ml-2 h-5 w-5" />
+      </Button>
     </div>
+
+    {
+      showCarousel && offers.length > 0 && (
+        <div className="offers-carousel mt-12 relative" data-offers-count={offers.length}>
+          <div className="carousel-container overflow-hidden rounded-xl shadow-2xl">
+            <div className="carousel-track flex transition-transform duration-500">
+              {offers.map((offer, index) => (
+                <div
+                  className="carousel-slide w-full flex-shrink-0 p-6 md:p-8 bg-gradient-to-r from-primary to-primary-light rounded-xl overflow-hidden relative"
+                  data-offer-id={offer.id}
+                  data-offer-type={offer.type}
+                >
+                  <div className="flex flex-col md:flex-row items-center gap-8">
+                    <div className="md:w-2/5 relative">
+                      {offer.discount && (
+                        <div className="absolute -top-2 -left-2 bg-accent text-white px-4 py-1 rounded-lg font-bold z-20 animate-pulse">
+                          {offer.discount}
+                        </div>
+                      )}
+                      <div className="absolute -top-2 -right-2 bg-primary-light text-white px-3 py-1 rounded-lg font-bold z-20">
+                        {offer.type === 'book'
+                          ? 'Libro'
+                          : offer.type === 'pack'
+                            ? 'Pack'
+                            : 'Examen'}
+                      </div>
+                      <img
+                        src={offer.image}
+                        alt={offer.title}
+                        className="rounded-lg shadow-lg object-cover w-full h-60 md:h-80 transform transition-transform hover:scale-105"
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                      />
+                    </div>
+                    <div className="md:w-3/5 text-left">
+                      <h3 className="text-2xl md:text-3xl font-bold mb-4 text-secondary">
+                        {offer.title}
+                      </h3>
+                      <p className="text-lg md:text-xl mb-6">{offer.description}</p>
+                      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                        <Button
+                          variant="accent"
+                          size="medium"
+                          href={offer.link}
+                          class="animate-button-slide"
+                        >
+                          <span>Ver detalles</span>
+                          <ArrowRightIcon class="animate-arrow ml-2 h-5 w-5" />
+                        </Button>
+                        {offer.expiration && (
+                          <p className="text-sm opacity-80">Expira: {offer.expiration}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Carousel controls with proper aria labels */}
+          <CarruselButtons
+            ariaLabelPrev="Ver oferta anterior"
+            ariaLabelNext="Ver oferta siguiente"
+            className="carousel-buttons"
+          />
+
+          {/* Carousel indicators */}
+          <div className="carousel-indicators flex justify-center gap-2 mt-6">
+            {offers.map((_, index) => (
+              <button
+                className={`indicator-dot h-3 w-3 rounded-full ${index === 0 ? 'bg-secondary' : 'bg-gray-400'} hover:bg-secondary cursor-pointer transition-colors duration-300`}
+                data-index={index}
+                aria-label={`Ver oferta ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
 </section>
 
-<script src="../scripts/HeroBanner.ts" />
+<script src="../scripts/HeroBanner.ts"></script>

@@ -53,7 +53,9 @@ const ctaConfig = {
 const currentCta = ctaConfig[type];
 ---
 
-<div className={`cta-banner ${currentCta.bgClass} rounded-xl overflow-hidden shadow-xl ${className}`}>
+<div
+  className={`cta-banner ${currentCta.bgClass} overflow-hidden rounded-xl shadow-xl ${className}`}
+>
   <div className="relative container mx-auto px-6 py-10">
     <!-- Background decoration -->
     <CTABackground class="absolute top-0 right-0 h-64 w-64 text-amber-50 opacity-10" />

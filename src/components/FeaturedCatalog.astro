@@ -14,275 +14,283 @@ import { BookLevel, FormatTag, PopularityTag } from '../types/book';
 import type { Book } from '../types/book';
 
 interface Props {
-	title?: string;
-	subtitle?: string;
-	maxBooks?: number;
-	showStatistics?: boolean;
-	isLoading?: boolean;
-	filterByTag?: PopularityTag | string;
-	showOnlyFeatured?: boolean;
+  title?: string;
+  subtitle?: string;
+  maxBooks?: number;
+  showStatistics?: boolean;
+  isLoading?: boolean;
+  filterByTag?: PopularityTag | string;
+  showOnlyFeatured?: boolean;
 }
 
-const { 
-	title = "Libros Destacados",
-	subtitle = "Descubre nuestra selección de libros más populares y materiales educativos diseñados para ayudarte a dominar el inglés en tu ámbito profesional.",
-	maxBooks = 4,
-	showStatistics = true,
-	isLoading = false,
-	filterByTag,
-	showOnlyFeatured = true
+const {
+  title = 'Libros Destacados',
+  subtitle = 'Descubre nuestra selección de libros más populares y materiales educativos diseñados para ayudarte a dominar el inglés en tu ámbito profesional.',
+  maxBooks = 4,
+  showStatistics = true,
+  isLoading = false,
+  filterByTag,
+  showOnlyFeatured = true,
 } = Astro.props;
 
 // Get featured books - first filter by tag if specified, then take the max number
 let booksToShow: Book[] = [];
 try {
-	// Step 1: Apply initial filters
-	let filteredBooks = booksData;
-	
-	// Filter by tag if specified
-	if (filterByTag) {
-		filteredBooks = filteredBooks.filter(book => 
-			book.popularityTags?.includes(filterByTag)
-		);
-	}
-	
-	// Filter by featured if specified
-	if (showOnlyFeatured) {
-		filteredBooks = filteredBooks.filter(book => book.featured === true);
-	}
-	
-	// Step 2: Sort - featured books first, then others
-	const sortedBooks = showOnlyFeatured ? 
-		filteredBooks : // If we're only showing featured books, we don't need to sort
-		[
-			...filteredBooks.filter(book => book.featured),
-			...filteredBooks.filter(book => !book.featured)
-		];
-	
-	// Step 3: Limit the number of books and map to safe objects
-	booksToShow = sortedBooks.slice(0, maxBooks).map((book) => ({
-		id: book.id || '',
-		title: book.title || '',
-		description: book.description || '',
-		price: book.price || 0,
-		coverImage: book.coverImage || '',
-		altText: book.altText || `${book.title} Book cover`,
-		includedItems: book.includedItems || [],
-		rating: book.rating || { score: 0, reviewCount: 0 },
-		buyLink: book.buyLink || '#',
-		detailsLink: book.detailsLink || '#',
-		discount: book.discount || 0,
-		level: book.level as BookLevel,
-		featured: book.featured || false,
-		formatTags: (book.formatTags || []) as FormatTag[],
-		popularityTags: (book.popularityTags || []) as PopularityTag[],
-		editorialId: book.editorialId || '',
-	}));
-	
-	console.log(`FeaturedCatalog: Showing ${booksToShow.length} books, featured only: ${showOnlyFeatured}`);
+  // Step 1: Apply initial filters
+  let filteredBooks = booksData;
+
+  // Filter by tag if specified
+  if (filterByTag) {
+    filteredBooks = filteredBooks.filter((book) => book.popularityTags?.includes(filterByTag));
+  }
+
+  // Filter by featured if specified
+  if (showOnlyFeatured) {
+    filteredBooks = filteredBooks.filter((book) => book.featured === true);
+  }
+
+  // Step 2: Sort - featured books first, then others
+  const sortedBooks = showOnlyFeatured
+    ? filteredBooks // If we're only showing featured books, we don't need to sort
+    : [
+        ...filteredBooks.filter((book) => book.featured),
+        ...filteredBooks.filter((book) => !book.featured),
+      ];
+
+  // Step 3: Limit the number of books and map to safe objects
+  booksToShow = sortedBooks.slice(0, maxBooks).map((book) => ({
+    id: book.id || '',
+    title: book.title || '',
+    description: book.description || '',
+    price: book.price || 0,
+    coverImage: book.coverImage || '',
+    altText: book.altText || `${book.title} Book cover`,
+    includedItems: book.includedItems || [],
+    rating: book.rating || { score: 0, reviewCount: 0 },
+    buyLink: book.buyLink || '#',
+    detailsLink: book.detailsLink || '#',
+    discount: book.discount || 0,
+    level: book.level as BookLevel,
+    featured: book.featured || false,
+    formatTags: (book.formatTags || []) as FormatTag[],
+    popularityTags: (book.popularityTags || []) as PopularityTag[],
+    editorialId: book.editorialId || '',
+  }));
+
+  console.log(
+    `FeaturedCatalog: Showing ${booksToShow.length} books, featured only: ${showOnlyFeatured}`
+  );
 } catch (error) {
-	console.error("Error processing books data:", error);
+  console.error('Error processing books data:', error);
 }
 
 // Calculate appropriate grid class based on number of books
 const getGridClass = (bookCount: number = maxBooks) => {
-	if (bookCount === 0) return 'grid-cols-1';
-	if (bookCount === 1) return 'grid-cols-1 max-w-sm mx-auto';
-	if (bookCount === 2) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 max-w-3xl mx-auto';
-	if (bookCount === 3) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto';
-	if (bookCount === 4) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto';
-	return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4';
+  if (bookCount === 0) return 'grid-cols-1';
+  if (bookCount === 1) return 'grid-cols-1 max-w-sm mx-auto';
+  if (bookCount === 2) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 max-w-3xl mx-auto';
+  if (bookCount === 3) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto';
+  if (bookCount === 4) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto';
+  return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4';
 };
 
 // Get total count for display
 const totalBooks = booksData.length;
-const totalFeaturedBooks = booksData.filter(book => book.featured).length;
+const totalFeaturedBooks = booksData.filter((book) => book.featured).length;
 ---
 
-<section class='featured-catalog pt-16 mx-auto relative'>
-	<!-- Background elements -->
-	<div class='pattern-bg'></div>
-	<div class='accent-shape'></div>
-	<div class='floating-icons'>
-		<div class='floating-icon'>📚</div>
-		<div class='floating-icon delay-1'>🌟</div>
-		<div class='floating-icon delay-2'>🎓</div>
-		<div class='floating-icon delay-3'>✨</div>
-	</div>
+<section class="featured-catalog relative mx-auto pt-16">
+  <!-- Background elements -->
+  <div class="pattern-bg"></div>
+  <div class="accent-shape"></div>
+  <div class="floating-icons">
+    <div class="floating-icon">📚</div>
+    <div class="floating-icon delay-1">🌟</div>
+    <div class="floating-icon delay-2">🎓</div>
+    <div class="floating-icon delay-3">✨</div>
+  </div>
 
-	<div class='container mx-auto px-4 relative z-10'>
-		<!-- Section header with enhanced title and description -->
-		<div class='text-center mb-12'>
-			<div class='flex justify-center flex-wrap flex-col items-center'>
-				<div class='section-badge mb-3'>
-					<span>Lo más destacado</span>
-				</div>
-				<SectionTitle class='featured-title'>{title}</SectionTitle>
-			</div>
-			<p class='text-lg text-gray-600 max-w-3xl mx-auto mt-6 description-text'>
-				{subtitle}
-			</p>
-		</div>
+  <div class="relative z-10 container mx-auto px-4">
+    <!-- Section header with enhanced title and description -->
+    <div class="mb-12 text-center">
+      <div class="flex flex-col flex-wrap items-center justify-center">
+        <div class="section-badge mb-3">
+          <span>Lo más destacado</span>
+        </div>
+        <SectionTitle class="featured-title">{title}</SectionTitle>
+      </div>
+      <p class="description-text mx-auto mt-6 max-w-3xl text-lg text-gray-600">
+        {subtitle}
+      </p>
+    </div>
 
-		{showStatistics && (
-			<div class='statistics-bar mx-auto max-w-4xl mb-12 py-4 px-6 rounded-xl bg-white shadow-md flex flex-wrap justify-center gap-8 sm:gap-12'>
-				<div class='stat-item text-center'>
-					<div class='stat-value text-3xl font-bold text-primary counter-animation' data-target={`${totalBooks}+`}>
-						0
-					</div>
-					<div class='stat-label text-sm text-gray-500'>
-						Libros disponibles
-					</div>
-				</div>
-				<div class='stat-item text-center'>
-					<div class='stat-value text-3xl font-bold text-primary counter-animation' data-target="4.8">
-						0
-					</div>
-					<div class='stat-label text-sm text-gray-500'>
-						Calificación promedio
-					</div>
-				</div>
-				<div class='stat-item text-center'>
-					<div class='stat-value text-3xl font-bold text-primary counter-animation' data-target="24h">
-						0
-					</div>
-					<div class='stat-label text-sm text-gray-500'>
-						Entrega inmediata
-					</div>
-				</div>
-				<div class='stat-item text-center'>
-					<div class='stat-value text-3xl font-bold text-primary counter-animation' data-target="100%">
-						0
-					</div>
-					<div class='stat-label text-sm text-gray-500'>
-						Satisfacción garantizada
-					</div>
-				</div>
-			</div>
-		)}
+    {
+      showStatistics && (
+        <div class="statistics-bar mx-auto mb-12 flex max-w-4xl flex-wrap justify-center gap-8 rounded-xl bg-white px-6 py-4 shadow-md sm:gap-12">
+          <div class="stat-item text-center">
+            <div
+              class="stat-value text-primary counter-animation text-3xl font-bold"
+              data-target={`${totalBooks}+`}
+            >
+              0
+            </div>
+            <div class="stat-label text-sm text-gray-500">Libros disponibles</div>
+          </div>
+          <div class="stat-item text-center">
+            <div
+              class="stat-value text-primary counter-animation text-3xl font-bold"
+              data-target="4.8"
+            >
+              0
+            </div>
+            <div class="stat-label text-sm text-gray-500">Calificación promedio</div>
+          </div>
+          <div class="stat-item text-center">
+            <div
+              class="stat-value text-primary counter-animation text-3xl font-bold"
+              data-target="24h"
+            >
+              0
+            </div>
+            <div class="stat-label text-sm text-gray-500">Entrega inmediata</div>
+          </div>
+          <div class="stat-item text-center">
+            <div
+              class="stat-value text-primary counter-animation text-3xl font-bold"
+              data-target="100%"
+            >
+              0
+            </div>
+            <div class="stat-label text-sm text-gray-500">Satisfacción garantizada</div>
+          </div>
+        </div>
+      )
+    }
 
-		<!-- Books grid with enhanced layout -->
-		<div
-			class={`grid ${getGridClass(booksToShow.length)} gap-6 md:gap-8 mb-12 books-grid relative min-h-[300px]`}>
-			{
-				isLoading ? (
-					<div class='absolute inset-0 flex items-center justify-center col-span-full'>
-						<LoadingAnimation
-							size='large'
-							text='Cargando libros...'
-						/>
-					</div>
-				) : booksToShow.length > 0 ? (
-					booksToShow.map((book, index) => (
-						<div class={`book-item flex appear-${index + 1} justify-center`}>
-							<Card book={book} />
-						</div>
-					))
-				) : (
-					<div class='col-span-full text-center py-10'>
-						<p class='text-gray-500'>
-							{showOnlyFeatured 
-								? 'No hay libros destacados disponibles en este momento.'
-								: 'No hay libros disponibles en este momento.'}
-						</p>
-					</div>
-				)
-			}
-		</div>
+    <!-- Books grid with enhanced layout -->
+    <div
+      class={`grid ${getGridClass(booksToShow.length)} gap-6 md:gap-8 mb-12 books-grid relative min-h-[300px]`}
+    >
+      {
+        isLoading ? (
+          <div class="absolute inset-0 col-span-full flex items-center justify-center">
+            <LoadingAnimation size="large" text="Cargando libros..." />
+          </div>
+        ) : booksToShow.length > 0 ? (
+          booksToShow.map((book, index) => (
+            <div class={`book-item flex appear-${index + 1} justify-center`}>
+              <Card book={book} />
+            </div>
+          ))
+        ) : (
+          <div class="col-span-full py-10 text-center">
+            <p class="text-gray-500">
+              {showOnlyFeatured
+                ? 'No hay libros destacados disponibles en este momento.'
+                : 'No hay libros disponibles en este momento.'}
+            </p>
+          </div>
+        )
+      }
+    </div>
 
-		<!-- CTA banner -->
-		<CTABanner />
-	</div>
+    <!-- CTA banner -->
+    <CTABanner />
+  </div>
 </section>
 
 <script>
-	// Intersection Observer to trigger animations when elements enter viewport
-	document.addEventListener('DOMContentLoaded', () => {
-		// Animation for elements entering viewport
-		const setupAnimations = () => {
-			const observer = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							entry.target.classList.add('in-view');
-							observer.unobserve(entry.target);
-						}
-					});
-				},
-				{
-					threshold: 0.1,
-					rootMargin: '0px 0px -100px 0px',
-				}
-			);
+  // Intersection Observer to trigger animations when elements enter viewport
+  document.addEventListener('DOMContentLoaded', () => {
+    // Animation for elements entering viewport
+    const setupAnimations = () => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.1,
+          rootMargin: '0px 0px -100px 0px',
+        }
+      );
 
-			// Observe all animated elements
-			document.querySelectorAll(
-				'.book-item, .section-badge, .description-text, .statistics-bar, .cta-banner, .testimonial-snippet'
-			).forEach((el) => {
-				observer.observe(el);
-			});
-		};
+      // Observe all animated elements
+      document
+        .querySelectorAll(
+          '.book-item, .section-badge, .description-text, .statistics-bar, .cta-banner, .testimonial-snippet'
+        )
+        .forEach((el) => {
+          observer.observe(el);
+        });
+    };
 
-		// Counter animation for stats
-		const setupCounters = () => {
-			const counterElements = document.querySelectorAll('.counter-animation');
+    // Counter animation for stats
+    const setupCounters = () => {
+      const counterElements = document.querySelectorAll('.counter-animation');
 
-			counterElements.forEach((element) => {
-				const target = element.getAttribute('data-target') || '0';
-				const targetValue = parseInt(target);
-				
-				if (!isNaN(targetValue)) {
-					// Start from zero and animate to target
-					let counter = 0;
-					const increment = Math.ceil(targetValue / 40);
-					const duration = 1500;
-					const interval = duration / (targetValue / increment);
+      counterElements.forEach((element) => {
+        const target = element.getAttribute('data-target') || '0';
+        const targetValue = parseInt(target);
 
-					element.textContent = '0';
+        if (!isNaN(targetValue)) {
+          // Start from zero and animate to target
+          let counter = 0;
+          const increment = Math.ceil(targetValue / 40);
+          const duration = 1500;
+          const interval = duration / (targetValue / increment);
 
-					const timer = setInterval(() => {
-						counter += increment;
-						if (counter >= targetValue) {
-							element.textContent = target;
-							clearInterval(timer);
-						} else {
-							element.textContent = counter + (target.includes('+') || target.includes('%') ? target.replace(/\d+/, '') : '');
-						}
-					}, interval);
-				} else if (target.includes('h')) {
-					// Handle special cases like "24h"
-					const numericPart = parseInt(target.replace(/\D/g, ''));
-					let counter = 0;
-					const increment = Math.ceil(numericPart / 20);
-					const timer = setInterval(() => {
-						counter += increment;
-						if (counter >= numericPart) {
-							element.textContent = target;
-							clearInterval(timer);
-						} else {
-							element.textContent = `${counter}h`;
-						}
-					}, 75);
-				} else if (target.includes('.')) {
-					// Handle floating point numbers like "4.8"
-					const targetNum = parseFloat(target);
-					let counter = 0;
-					const increment = targetNum / 20;
-					const timer = setInterval(() => {
-						counter += increment;
-						if (counter >= targetNum) {
-							element.textContent = target;
-							clearInterval(timer);
-						} else {
-							element.textContent = counter.toFixed(1);
-						}
-					}, 75);
-				}
-			});
-		};
+          element.textContent = '0';
 
-		// Initialize all features
-		setupAnimations();
-		setupCounters();
-	});
+          const timer = setInterval(() => {
+            counter += increment;
+            if (counter >= targetValue) {
+              element.textContent = target;
+              clearInterval(timer);
+            } else {
+              element.textContent =
+                counter +
+                (target.includes('+') || target.includes('%') ? target.replace(/\d+/, '') : '');
+            }
+          }, interval);
+        } else if (target.includes('h')) {
+          // Handle special cases like "24h"
+          const numericPart = parseInt(target.replace(/\D/g, ''));
+          let counter = 0;
+          const increment = Math.ceil(numericPart / 20);
+          const timer = setInterval(() => {
+            counter += increment;
+            if (counter >= numericPart) {
+              element.textContent = target;
+              clearInterval(timer);
+            } else {
+              element.textContent = `${counter}h`;
+            }
+          }, 75);
+        } else if (target.includes('.')) {
+          // Handle floating point numbers like "4.8"
+          const targetNum = parseFloat(target);
+          let counter = 0;
+          const increment = targetNum / 20;
+          const timer = setInterval(() => {
+            counter += increment;
+            if (counter >= targetNum) {
+              element.textContent = target;
+              clearInterval(timer);
+            } else {
+              element.textContent = counter.toFixed(1);
+            }
+          }, 75);
+        }
+      });
+    };
+
+    // Initialize all features
+    setupAnimations();
+    setupCounters();
+  });
 </script>

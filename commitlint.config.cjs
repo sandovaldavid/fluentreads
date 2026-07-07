@@ -66,7 +66,6 @@ module.exports = {
         'release',
       ],
     ],
-    'subject-not-enumerated': [0],
     'body-leading-blank': [1, 'always'],
     'footer-leading-blank': [1, 'always'],
   },

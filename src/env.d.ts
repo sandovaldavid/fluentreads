@@ -31,3 +31,10 @@ declare var Pageclip: {
 };
 
 declare var gtag: (...args: unknown[]) => void;
+
+// Support className on HTML elements in Astro files to avoid JSX typescript conflicts
+declare namespace astroHTML.JSX {
+  interface HTMLAttributes {
+    className?: string;
+  }
+}

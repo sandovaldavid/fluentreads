@@ -41,12 +41,13 @@ const starSize = compact ? 'text-sm' : 'text-lg';
   <!-- Background accent -->
   <div
     className="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-   />
+  >
+  </div>
 
   <!-- Avatar image -->
   <div className={`${avatarMargin} relative z-10`}>
     <div
-      className={`${avatarSize} mx-auto rounded-full overflow-hidden border-2 border-secondary shadow-md transform transition-transform duration-300 group-hover:scale-105`}
+      className={`${avatarSize} border-secondary mx-auto transform overflow-hidden rounded-full border-2 shadow-md transition-transform duration-300 group-hover:scale-105`}
     >
       <img src={avatarUrl} alt={`Foto de ${author}`} className="h-full w-full object-cover" />
     </div>
@@ -54,13 +55,13 @@ const starSize = compact ? 'text-sm' : 'text-lg';
 
   <!-- Quote icon with animation -->
   <div
-    className={`quote-icon ${marginBottom} ${quoteSize} text-secondary opacity-80 leading-none relative z-10 transform transition-transform duration-300 group-hover:scale-110`}
+    className={`quote-icon ${marginBottom} ${quoteSize} text-secondary relative z-10 transform leading-none opacity-80 transition-transform duration-300 group-hover:scale-110`}
   >
     ❝
   </div>
 
   <!-- Testimonial text -->
-  <p className={`${textSize} italic text-gray-700 max-w-3xl mx-auto ${marginBottom} relative z-10`}>
+  <p className={`${textSize} mx-auto max-w-3xl text-gray-700 italic ${marginBottom} relative z-10`}>
     {quote}
   </p>
 

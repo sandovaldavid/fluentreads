@@ -7,7 +7,7 @@ const BookLevel = {
   ADVANCED: 'advanced',
   ALL_LEVELS: 'all-levels',
   PROFESSIONAL: 'professional',
-  INTERNATIONAL_EXAM: 'International Exam',
+  INTERNATIONAL_EXAM: 'international-exam',
 };
 
 const FormatTag = {

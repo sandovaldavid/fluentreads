@@ -2,6 +2,7 @@
 import SocialMediaContent from './SocialMediaContent.astro';
 import Button from './Button.astro';
 import '../styles/Footer.css';
+import { siteConfig } from '@config/site';
 
 const currentYear = new Date().getFullYear();
 const footerLinks = [
@@ -11,7 +12,6 @@ const footerLinks = [
       { text: 'Inicio', url: '/' },
       { text: 'Catálogo', url: '/catalogo' },
       { text: 'Testimonios', url: '/testimonios' },
-      { text: 'Blog', url: '/blog' },
       { text: 'Contacto', url: '/contacto' },
     ],
   },
@@ -29,9 +29,6 @@ const footerLinks = [
     title: 'Ayuda',
     links: [
       { text: 'Preguntas Frecuentes', url: '/ayuda/faq' },
-      { text: 'Envíos y Entregas', url: '/ayuda/envios' },
-      { text: 'Formas de Pago', url: '/ayuda/pagos' },
-      { text: 'Devoluciones', url: '/ayuda/devoluciones' },
       { text: 'Soporte', url: '/contacto' },
     ],
   },
@@ -56,10 +53,10 @@ const footerLinks = [
             showInstagram={true}
             showTwitter={true}
             showWhatsApp={true}
-            facebookUrl="#"
-            instagramUrl="#"
-            twitterUrl="#"
-            whatsAppUrl="https://wa.me/1234567890"
+            facebookUrl={siteConfig.social.facebook}
+            instagramUrl={siteConfig.social.instagram}
+            twitterUrl={siteConfig.social.twitter}
+            whatsAppUrl={siteConfig.whatsappUrl}
             class="flex justify-center space-x-4 sm:justify-start"
             iconSize="h-6 w-6"
           />
@@ -115,9 +112,8 @@ const footerLinks = [
               {section.links.map((link) => (
                 <li>
                   <a
-                    target="_blank"
                     href={link.url}
-                    className="text-neutral-light hover:text-secondary inline-block py-1 text-sm transition-colors duration-200 md:text-base" rel="noreferrer"
+                    className="text-neutral-light hover:text-secondary inline-block py-1 text-sm transition-colors duration-200 md:text-base"
                   >
                     {link.text}
                   </a>
@@ -129,21 +125,8 @@ const footerLinks = [
       }
     </div>
 
-    <!-- Bottom Section with Copyright and Terms -->
+    <!-- Bottom Section with Copyright -->
     <div className="text-neutral-light mt-6 text-center text-xs md:mt-8 md:text-sm">
-      <div
-        className="mb-3 flex flex-wrap justify-center gap-3 md:mb-4 md:flex-row md:items-center md:gap-0 md:space-x-4"
-      >
-        <a href="/terminos-condiciones" className="hover:text-secondary transition-colors">
-          Términos y Condiciones
-        </a>
-        <span className="hidden md:inline">•</span>
-        <a href="/politica-privacidad" className="hover:text-secondary transition-colors">
-          Política de Privacidad
-        </a>
-        <span className="hidden md:inline">•</span>
-        <a href="/cookies" className="hover:text-secondary transition-colors"> Política de Cookies </a>
-      </div>
       <p>© {currentYear} FluentReads. Todos los derechos reservados.</p>
     </div>
   </div>

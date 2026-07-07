@@ -129,7 +129,7 @@ const walletIconComponents = {
 
 <!-- Enhanced value card with better visual hierarchy and persuasive elements -->
 <div
-  className={`rounded-xl p-5 border border-gray-200 shadow-md mb-6 transform transition-all duration-300 hover:shadow-lg bg-gradient-to-br ${colorScheme.bgGradient}`}
+  className={`mb-6 transform rounded-xl border border-gray-200 bg-gradient-to-br p-5 shadow-md transition-all duration-300 hover:shadow-lg ${colorScheme.bgGradient}`}
 >
   <!-- Price section with enhanced visual hierarchy -->
   <div className="flex flex-col">
@@ -145,7 +145,9 @@ const walletIconComponents = {
           <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
             <div className="flex items-center">
               <span className="text-sm text-gray-600">{valueLabel}</span>
-              <span className="ml-1 font-bold text-gray-500 line-through">{formattedRetailValue}</span>
+              <span className="ml-1 font-bold text-gray-500 line-through">
+                {formattedRetailValue}
+              </span>
             </div>
 
             <div
@@ -208,7 +210,7 @@ const walletIconComponents = {
 
       <!-- Limited-time offer message with urgency -->
       <div className="mb-4 flex items-center">
-        <div className="pulse-animation mr-2 h-2 w-2 rounded-full bg-red-500" />
+        <div className="pulse-animation mr-2 h-2 w-2 rounded-full bg-red-500"></div>
         <p className="text-sm font-medium text-gray-700">
           Oferta válida hasta el <span className="font-bold">{formattedDate}</span>
         </p>

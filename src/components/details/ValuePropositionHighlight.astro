@@ -89,7 +89,7 @@ const colors = colorSchemeByType[productType];
 
 <!-- Value proposition highlight with improved UI -->
 <div
-  className={`${colors.bg} rounded-xl p-4 sm:p-5 border ${colors.border} shadow-sm mb-6 transform transition-all duration-300 hover:shadow-md`}
+  className={`${colors.bg} rounded-xl border p-4 sm:p-5 ${colors.border} mb-6 transform shadow-sm transition-all duration-300 hover:shadow-md`}
 >
   <div className="mb-3 flex items-center">
     <SparklesIcon class="mr-2 h-5 w-5 text-amber-500" />
@@ -116,7 +116,9 @@ const colors = colorSchemeByType[productType];
           </span>
           {
             hasDiscount && (
-              <span className="ml-1 text-xs text-gray-500 line-through">{formattedOriginalPrice}</span>
+              <span className="ml-1 text-xs text-gray-500 line-through">
+                {formattedOriginalPrice}
+              </span>
             )
           }
         </p>
@@ -124,7 +126,9 @@ const colors = colorSchemeByType[productType];
     </div>
 
     <div className="flex flex-col items-center">
-      <div className={`${colors.savings} px-4 py-2 rounded-lg flex items-center font-bold value-badge`}>
+      <div
+        className={`${colors.savings} value-badge flex items-center rounded-lg px-4 py-2 font-bold`}
+      >
         <BadgeIcon class="mr-1.5 h-4 w-4" />
         {
           bonusValue > 0 ? (

@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import ExamDetails from '../../../components/details/ExamDetails.astro';
 import examsData from '../../../database/exams.json';
 import siteInfo from '../../../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 import type { Exam } from '../../../types/exam';
 import type { Product } from '../../../types/product';
 import { difficultyConfig } from '../../../utils/examTags';
@@ -59,7 +60,7 @@ const description =
       `Material de preparación para examen de inglés: ${exam.title}. Ideal para certificar tu nivel de inglés.`;
 
 // Canonical URL
-const siteUrl = new URL(siteInfo.siteURL);
+const siteUrl = new URL(siteConfig.url);
 const canonicalURL = new URL(`/catalogo/examenes-internacionales/${exam.id}`, siteUrl);
 
 // Structured data for rich snippets

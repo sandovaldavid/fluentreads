@@ -6,23 +6,24 @@ import '../styles/global.css';
 import Benefits from '../components/Benefits.astro';
 import TestimoniesList from '../components/TestimoniesList.astro';
 import siteInfo from '../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 const pageTitle = `${siteInfo.seo.metaTitle}`;
 const pageDescription = siteInfo.seo.metaDescription;
 
 const ogTitle = siteInfo.seo.metaTitle;
 const ogDescription = siteInfo.seo.metaDescription;
-const ogImage = new URL(siteInfo.seo.defaultImage, siteInfo.siteURL).toString();
+const ogImage = new URL(siteInfo.seo.defaultImage, siteConfig.url).toString();
 
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: siteInfo.siteName,
-  url: siteInfo.siteURL,
+  name: siteConfig.name,
+  url: siteConfig.url,
   description: siteInfo.siteDescription,
   potentialAction: {
     '@type': 'SearchAction',
-    target: `${siteInfo.siteURL}/catalogo?search={search_term_string}`,
+    target: `${siteConfig.url}/catalogo?search={search_term_string}`,
     'query-input': 'required name=search_term_string',
   },
   publisher: {
@@ -30,7 +31,7 @@ const structuredData = {
     name: siteInfo.seo.organizationInfo.name,
     logo: {
       '@type': 'ImageObject',
-      url: new URL(siteInfo.logo, siteInfo.siteURL).toString(),
+      url: new URL(siteInfo.logo, siteConfig.url).toString(),
       width: 192,
       height: 192,
     },
@@ -53,7 +54,7 @@ const structuredData = {
   ogTitle={ogTitle}
   ogDescription={ogDescription}
   ogImage={ogImage}
-  canonicalURL={new URL('/', siteInfo.siteURL)}
+  canonicalURL={new URL('/', siteConfig.url)}
   twitterCard={siteInfo.seo.twitterCard}
   twitterSite={siteInfo.seo.twitterSite}
   structuredData={structuredData}

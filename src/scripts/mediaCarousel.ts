@@ -25,6 +25,29 @@ export class MediaCarouselManager {
   private imageUrls: string[] = [];
   private currentModalImageIndex: number = 0;
 
+  private handleKeyDownGlobal = (e: KeyboardEvent) => {
+    const carousel = document.getElementById('media-carousel');
+    if (carousel && this.isElementInViewport(carousel) && !this.isModalOpen()) {
+      if (e.key === 'ArrowLeft') {
+        this.moveToSlide(this.currentIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        this.moveToSlide(this.currentIndex + 1);
+      }
+    }
+  };
+
+  private handleKeyDownModal = (e: KeyboardEvent) => {
+    if (this.isModalOpen()) {
+      if (e.key === 'Escape') {
+        this.closeModal();
+      } else if (e.key === 'ArrowLeft') {
+        this.navigateModal('prev');
+      } else if (e.key === 'ArrowRight') {
+        this.navigateModal('next');
+      }
+    }
+  };
+
   constructor() {
     // Initialize carousel elements
     this.track = document.querySelector('.carousel-track');
@@ -136,17 +159,7 @@ export class MediaCarouselManager {
     });
 
     // Add keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      // Only if the carousel is visible/in viewport
-      const carousel = document.getElementById('media-carousel');
-      if (carousel && this.isElementInViewport(carousel) && !this.isModalOpen()) {
-        if (e.key === 'ArrowLeft') {
-          this.moveToSlide(this.currentIndex - 1);
-        } else if (e.key === 'ArrowRight') {
-          this.moveToSlide(this.currentIndex + 1);
-        }
-      }
-    });
+    document.addEventListener('keydown', this.handleKeyDownGlobal);
   }
 
   /**
@@ -179,17 +192,7 @@ export class MediaCarouselManager {
     });
 
     // Modal keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (this.isModalOpen()) {
-        if (e.key === 'Escape') {
-          this.closeModal();
-        } else if (e.key === 'ArrowLeft') {
-          this.navigateModal('prev');
-        } else if (e.key === 'ArrowRight') {
-          this.navigateModal('next');
-        }
-      }
-    });
+    document.addEventListener('keydown', this.handleKeyDownModal);
   }
 
   /**
@@ -529,10 +532,28 @@ export class MediaCarouselManager {
       }
     });
   }
+
+  /**
+   * Clean up event listeners to prevent memory leaks
+   */
+  public destroy(): void {
+    document.removeEventListener('keydown', this.handleKeyDownGlobal);
+    document.removeEventListener('keydown', this.handleKeyDownModal);
+  }
 }
+
+let carouselInstance: MediaCarouselManager | null = null;
 
 // Initialize the carousel when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-  const carousel = new MediaCarouselManager();
-  carousel.init();
+  carouselInstance = new MediaCarouselManager();
+  carouselInstance.init();
+});
+
+// Clean up if Astro view transitions are used
+document.addEventListener('astro:before-swap', () => {
+  if (carouselInstance) {
+    carouselInstance.destroy();
+    carouselInstance = null;
+  }
 });

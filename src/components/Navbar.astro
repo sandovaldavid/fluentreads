@@ -12,7 +12,7 @@ const { pathname } = Astro.url;
 const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path));
 ---
 
-<nav class=`flex flex-col md:flex-row md:items-center md:justify-between py-2`>
+<nav class="flex flex-col py-2 md:flex-row md:items-center md:justify-between">
   <!-- Navigation links -->
   <div className="flex flex-col md:flex-row md:items-center lg:mr-4">
     <a
@@ -51,18 +51,7 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
       <TestimonialIcon class="mr-2 h-5 w-5" />
       Testimonios</a
     >
-    <a
-      href="/blog"
-      class:list={[
-        'flex items-center rounded-md px-4 py-2 text-lg font-medium transition-colors',
-        isActive('/blog')
-          ? 'text-secondary bg-primary-dark active'
-          : 'hover:text-secondary hover:bg-primary-dark/20',
-      ]}
-    >
-      <BlogIcon class="mr-2 h-5 w-5" />
-      Blog</a
-    >
+
     <a
       href="/contacto"
       class:list={[

@@ -1,12 +1,10 @@
 {
   "siteName": "FluentReads",
-  "siteURL": "https://fluentreads.devsolution.software",
   "siteDescription": "La mejor tienda online para aprender inglés con libros digitales, packs de estudio y material para exámenes internacionales.",
   "logo": "/favicon.webp",
   "contact": {
     "email": "contacto@fluentreads.com",
     "phone": "+51 987 654 321",
-    "whatsapp": "+51 987 654 321",
     "address": "Av. Principal 123, Piura, Perú"
   },
   "socialMedia": {
@@ -61,11 +59,9 @@
     "geoPlacename": "Piura",
     "defaultImage": "https://res.cloudinary.com/didokliuv/image/upload/f_auto,q_auto/v1743196081/default-og-image_uejs6g.png",
     "twitterHandle": "@fluentreads",
-    "facebookAppID": "1234567890",
-    "twitterCard": "https://res.cloudinary.com/didokliuv/image/upload/f_auto,q_auto/v1743196081/default-og-image_uejs6g.png",
+    "twitterCard": "summary_large_image",
     "twitterSite": "@fluentreads",
     "twitterCreator": "@fluentreads",
-    "fbAppId": "1234567890",
     "images": {
       "home": "https://res.cloudinary.com/didokliuv/image/upload/f_auto,q_auto/v1743196081/default-og-image_uejs6g.png",
       "catalog": "https://res.cloudinary.com/didokliuv/image/upload/f_auto,q_auto/v1743197372/catalog-og-image_ei8y2e.png",
@@ -77,11 +73,11 @@
     "languageAlternates": [
       {
         "language": "es",
-        "url": "https://fluentreads.devsolution.software/es/"
+        "url": "https://fluentreads.sandovaldavid.com/es/"
       },
       {
         "language": "en",
-        "url": "https://fluentreads.devsolution.software/en/"
+        "url": "https://fluentreads.sandovaldavid.com/en/"
       }
     ],
     "organizationInfo": {

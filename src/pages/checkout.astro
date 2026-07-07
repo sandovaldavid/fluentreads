@@ -5,8 +5,10 @@ import WhatsAppIcon from '../components/icons/WhatsApp.astro';
 import CartIcon from '../components/icons/Cart.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 
+import { siteConfig } from '@config/site';
+
 // WhatsApp business number
-const whatsappNumber = '+51987654321'; // Replace with your actual WhatsApp number
+const whatsappNumber = siteConfig.whatsapp;
 ---
 
 <Layout
@@ -27,7 +29,7 @@ const whatsappNumber = '+51987654321'; // Replace with your actual WhatsApp numb
 
     <div id="cart-container" className="hidden">
       <!-- Cart items will be displayed here -->
-      <div id="cart-items" className="mt-8 mb-8 space-y-4" />
+      <div id="cart-items" className="mt-8 mb-8 space-y-4"></div>
 
       <!-- Order summary -->
       <div className="mt-8 border-t border-gray-200 pt-6">
@@ -155,7 +157,9 @@ const whatsappNumber = '+51987654321'; // Replace with your actual WhatsApp numb
         const btn = target.classList.contains('quantity-btn')
           ? target
           : target.closest('.quantity-btn');
-        const index = parseInt(btn.getAttribute('data-index'));
+        const indexAttr = btn.getAttribute('data-index');
+        const index = parseInt(indexAttr || '', 10);
+        if (isNaN(index)) return;
         const isIncrease = btn.classList.contains('increase');
 
         // Get current cart
@@ -178,7 +182,9 @@ const whatsappNumber = '+51987654321'; // Replace with your actual WhatsApp numb
         const btn = target.classList.contains('remove-item')
           ? target
           : target.closest('.remove-item');
-        const index = parseInt(btn.getAttribute('data-index'));
+        const indexAttr = btn.getAttribute('data-index');
+        const index = parseInt(indexAttr || '', 10);
+        if (isNaN(index)) return;
 
         // Get current cart
         const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];

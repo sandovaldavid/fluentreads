@@ -7,7 +7,7 @@ export const levelStyles = {
   advanced: 'bg-purple-100 text-purple-800 border-purple-200',
   'all-levels': 'bg-amber-100 text-amber-800 border-amber-200',
   professional: 'bg-rose-100 text-rose-800 border-rose-200',
-  'International Exam': 'bg-cyan-100 text-cyan-800 border-cyan-200',
+  'international-exam': 'bg-cyan-100 text-cyan-800 border-cyan-200',
 };
 
 // Global style variables for format tags
@@ -64,7 +64,7 @@ export const levelConfig = {
     label: 'Avanzado',
     tag: BookLevel.ADVANCED,
   },
-  all_levels: {
+  'all-levels': {
     color: levelStyles['all-levels'],
     label: 'Todos los Niveles',
     tag: BookLevel.ALL_LEVELS,
@@ -74,8 +74,8 @@ export const levelConfig = {
     label: 'Profesional',
     tag: BookLevel.PROFESSIONAL,
   },
-  internationalExam: {
-    color: levelStyles['International Exam'],
+  'international-exam': {
+    color: levelStyles['international-exam'],
     label: 'Examen Internacional',
     tag: BookLevel.INTERNATIONAL_EXAM,
   },
