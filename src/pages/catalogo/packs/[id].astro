@@ -4,6 +4,7 @@ import PackDetails from '../../../components/details/PackDetails.astro';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
 import packsData from '../../../database/packs.json';
 import siteInfo from '../../../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 import type { Pack } from '../../../types/pack';
 import type { Product } from '../../../types/product';
 import { levelConfig } from '../../../utils/bookTags';
@@ -62,7 +63,7 @@ const description =
       `Pack de libros de inglés: ${pack.title}. Material educativo ideal para aprender inglés.`;
 
 // Canonical URL
-const siteUrl = new URL(siteInfo.siteURL);
+const siteUrl = new URL(siteConfig.url);
 const canonicalURL = new URL(`/catalogo/packs/${pack.id}`, siteUrl);
 
 // Structured data for rich snippets

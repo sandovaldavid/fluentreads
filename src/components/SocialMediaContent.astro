@@ -4,6 +4,7 @@ import InstagramIcon from './icons/Instagram.astro';
 import TwitterIcon from './icons/X.astro';
 import WhatsAppIcon from './icons/WhatsApp.astro';
 import SocialMediaButton from './SocialMediaButton.astro';
+import { siteConfig } from '@config/site';
 
 interface Props {
   showFacebook?: boolean;
@@ -25,11 +26,11 @@ const {
   showInstagram = true,
   showTwitter = true,
   showWhatsApp = false,
-  facebookUrl = '#',
-  instagramUrl = '#',
-  twitterUrl = '#',
-  whatsAppUrl = '',
-  whatsAppNumber = '1234567890',
+  facebookUrl = siteConfig.social.facebook,
+  instagramUrl = siteConfig.social.instagram,
+  twitterUrl = siteConfig.social.twitter,
+  whatsAppUrl = siteConfig.whatsappUrl,
+  whatsAppNumber = siteConfig.whatsapp,
   iconSize = 'w-6 h-6',
   class: className = '',
   direction = 'horizontal',

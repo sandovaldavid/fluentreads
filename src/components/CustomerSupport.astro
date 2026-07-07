@@ -2,12 +2,12 @@
 import WhatsAppIcon from './icons/WhatsApp.astro';
 import ContactIcon from './icons/Contact.astro';
 import SupportIcon from './icons/Support.astro';
-import PageInfo from '../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 // WhatsApp contact information
-const whatsappNumber = PageInfo.contact.whatsapp;
+const whatsappNumber = siteConfig.contact.phone;
 const whatsappMessage = 'Hola, tengo una consulta sobre los libros digitales.';
-const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/\+|\s/g, '')}?text=${encodeURIComponent(whatsappMessage)}`;
+const whatsappUrl = `${siteConfig.whatsappUrl}?text=${encodeURIComponent(whatsappMessage)}`;
 const Schedule = 'Lun-Vie 9am-6pm | Sáb 9am-1pm';
 
 interface Props {
@@ -18,7 +18,7 @@ const { class: className = '' } = Astro.props;
 ---
 
 <div
-  className={`customer-support-widget rounded-lg bg-primary/5 p-3 border border-primary/20 shadow-sm ${className}`}
+  className={`customer-support-widget bg-primary/5 border-primary/20 rounded-lg border p-3 shadow-sm ${className}`}
 >
   <h3 className="text-primary-dark mb-2 flex items-center text-base font-bold">
     <span className="bg-primary mr-2 rounded-full p-1 text-white">

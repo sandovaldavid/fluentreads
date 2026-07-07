@@ -7,12 +7,13 @@ import Schedule from '../../components/contact/Schedule.astro';
 import SocialNetwork from '../../components/contact/SocialNetwork.astro';
 import LocationCard from '../../components/contact/LocationCard.astro';
 import siteInfo from '../../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 // SEO metadata
 const pageTitle = 'Contacto | FluentReads';
 const pageDescription =
   '¿Tienes alguna duda o comentario? ¡Contáctanos y te responderemos a la brevedad! Encuentra todas las formas de comunicarte con el equipo de FluentReads.';
-const canonicalURL = new URL('/contacto', siteInfo.siteURL).toString();
+const canonicalURL = new URL('/contacto', siteConfig.url).toString();
 
 // Get OG image from site info or use default
 const ogImage = siteInfo.seo.images.contact || siteInfo.seo.defaultImage;
@@ -27,8 +28,8 @@ const structuredData = {
   mainEntity: {
     '@type': 'Organization',
     name: siteInfo.seo.organizationInfo.name,
-    telephone: siteInfo.contact.phone,
-    email: siteInfo.contact.email,
+    telephone: siteConfig.contact.phone,
+    email: siteConfig.contact.email,
     address: {
       '@type': 'PostalAddress',
       streetAddress: siteInfo.seo.organizationInfo.address.street,
@@ -38,10 +39,10 @@ const structuredData = {
       addressCountry: siteInfo.seo.organizationInfo.address.country,
     },
     sameAs: [
-      siteInfo.socialMedia.facebook,
-      siteInfo.socialMedia.instagram,
-      siteInfo.socialMedia.linkedin,
-      siteInfo.socialMedia.twitter,
+      siteConfig.social.facebook,
+      siteConfig.social.instagram,
+      siteConfig.social.linkedin,
+      siteConfig.social.twitter,
     ],
   },
 };
@@ -55,7 +56,7 @@ const breadcrumbData = {
       '@type': 'ListItem',
       position: 1,
       name: 'Inicio',
-      item: siteInfo.siteURL,
+      item: siteConfig.url,
     },
     {
       '@type': 'ListItem',

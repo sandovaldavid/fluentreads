@@ -6,11 +6,13 @@ import SmartPhoneIcon from '../icons/SmartPhone.astro';
 import Button from '../Button.astro';
 import '../../styles/contact/contactInfo.css';
 
+import { siteConfig } from '@config/site';
+
 // Contact data
 const contactData = {
-  email: 'support@fluentreads.com',
-  whatsapp: '1234567890',
-  telegram: 'FluentReads',
+  email: siteConfig.contact.email,
+  whatsapp: siteConfig.whatsapp,
+  telegram: siteConfig.social.telegram,
   supportHours: 'Lunes a Viernes: 9:00 AM - 6:00 PM | Sábados: 9:00 AM - 1:00 PM',
 };
 ---

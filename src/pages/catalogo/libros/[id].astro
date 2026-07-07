@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import BookDetails from '../../../components/details/BookDetails.astro';
 import booksData from '../../../database/books.json';
 import siteInfo from '../../../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 import type { Book } from '../../../types/book';
 import type { Product } from '../../../types/product';
 import { levelConfig } from '../../../utils/bookTags';
@@ -58,7 +59,7 @@ const description =
       `Libro de inglés: ${book.title}. Material educativo ideal para aprender inglés.`;
 
 // Canonical URL
-const siteUrl = new URL(siteInfo.siteURL);
+const siteUrl = new URL(siteConfig.url);
 const canonicalURL = new URL(`/catalogo/libros/${book.id}`, siteUrl);
 
 // Structured data for rich snippets

@@ -6,6 +6,7 @@ import Button from '../../components/Button.astro';
 import FAQ from '../../components/FAQ.astro';
 import CTABanner from '../../components/CTA-Banner.astro';
 import siteInfo from '../../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 // Import testimonies data
 import testimonies from '../../database/testimonies.json';
@@ -21,7 +22,7 @@ const satisfactionRate = '98%';
 const pageTitle = 'Testimonios de Clientes | FluentReads';
 const pageDescription =
   'Descubre qué opinan nuestros clientes sobre nuestros libros y materiales en inglés. Historias reales de éxito y experiencias positivas con FluentReads.';
-const canonicalUrl = new URL('/testimonios', siteInfo.siteURL).toString();
+const canonicalUrl = new URL('/testimonios', siteConfig.url).toString();
 
 // Get OG image from site info or use default
 const ogImage = siteInfo.seo.images.testimonials || siteInfo.seo.defaultImage;
@@ -64,7 +65,7 @@ const breadcrumbData = {
       '@type': 'ListItem',
       position: 1,
       name: 'Inicio',
-      item: siteInfo.siteURL,
+      item: siteConfig.url,
     },
     {
       '@type': 'ListItem',
@@ -94,12 +95,18 @@ const breadcrumbData = {
   breadcrumbData={breadcrumbData}
 >
   <!-- Hero section with statistics -->
-  <section className="from-primary/10 to-secondary/5 relative overflow-hidden bg-gradient-to-br py-12">
+  <section
+    className="from-primary/10 to-secondary/5 relative overflow-hidden bg-gradient-to-br py-12"
+  >
     <!-- Decorative elements -->
-    <div className="bg-primary/10 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl" />
+    <div
+      className="bg-primary/10 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl"
+    >
+    </div>
     <div
       className="bg-secondary/10 absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full blur-3xl"
-     />
+    >
+    </div>
 
     <div className="container mx-auto px-4">
       <div className="mx-auto max-w-4xl text-center">
@@ -122,7 +129,9 @@ const breadcrumbData = {
         </p>
 
         <!-- Statistics cards -->
-        <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+        <div
+          className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+        >
           <div
             className="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
@@ -188,7 +197,10 @@ const breadcrumbData = {
       <div className="testimonials-grid grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {
           testimonies.map((testimony, index) => (
-            <div className={`testimony-item appear-${(index % 9) + 1}`} data-rating={testimony.rating}>
+            <div
+              className={`testimony-item appear-${(index % 9) + 1}`}
+              data-rating={testimony.rating}
+            >
               <TestimoniesCard
                 quote={testimony.quote}
                 author={testimony.author}
@@ -203,7 +215,9 @@ const breadcrumbData = {
 
       <!-- No results message (hidden by default) -->
       <div id="no-results" className="hidden py-16 text-center">
-        <div className="mb-3 text-xl font-semibold text-gray-600">No se encontraron testimonios</div>
+        <div className="mb-3 text-xl font-semibold text-gray-600">
+          No se encontraron testimonios
+        </div>
         <p className="mb-6 text-gray-500">Por favor, intenta con otro filtro.</p>
         <Button id="reset-filters" variant="primary" size="medium">Mostrar todos</Button>
       </div>

@@ -2,6 +2,7 @@
 import SocialMediaContent from './SocialMediaContent.astro';
 import Button from './Button.astro';
 import '../styles/Footer.css';
+import { siteConfig } from '@config/site';
 
 const currentYear = new Date().getFullYear();
 const footerLinks = [
@@ -56,10 +57,10 @@ const footerLinks = [
             showInstagram={true}
             showTwitter={true}
             showWhatsApp={true}
-            facebookUrl="#"
-            instagramUrl="#"
-            twitterUrl="#"
-            whatsAppUrl="https://wa.me/1234567890"
+            facebookUrl={siteConfig.social.facebook}
+            instagramUrl={siteConfig.social.instagram}
+            twitterUrl={siteConfig.social.twitter}
+            whatsAppUrl={siteConfig.whatsappUrl}
             class="flex justify-center space-x-4 sm:justify-start"
             iconSize="h-6 w-6"
           />
@@ -117,7 +118,8 @@ const footerLinks = [
                   <a
                     target="_blank"
                     href={link.url}
-                    className="text-neutral-light hover:text-secondary inline-block py-1 text-sm transition-colors duration-200 md:text-base" rel="noreferrer"
+                    className="text-neutral-light hover:text-secondary inline-block py-1 text-sm transition-colors duration-200 md:text-base"
+                    rel="noreferrer"
                   >
                     {link.text}
                   </a>
@@ -142,7 +144,9 @@ const footerLinks = [
           Política de Privacidad
         </a>
         <span className="hidden md:inline">•</span>
-        <a href="/cookies" className="hover:text-secondary transition-colors"> Política de Cookies </a>
+        <a href="/cookies" className="hover:text-secondary transition-colors">
+          Política de Cookies
+        </a>
       </div>
       <p>© {currentYear} FluentReads. Todos los derechos reservados.</p>
     </div>

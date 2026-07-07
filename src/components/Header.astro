@@ -5,6 +5,7 @@ import MobileIcon from '../components/icons/Mobile.astro';
 import Navbar from '../components/Navbar.astro';
 const logoImage = '/assets/logo_v4.webp';
 
+import { siteConfig } from '@config/site';
 import siteInfo from '../database/pageInformation.json';
 ---
 
@@ -15,7 +16,7 @@ import siteInfo from '../database/pageInformation.json';
     <!-- Logo -->
     <a href="/" className="flex items-center lg:pl-8">
       <img src={logoImage} alt="FluentReads" className="size-12 rounded-full" />
-      <span className="font-lora ml-2 text-2xl font-bold md:text-3xl">{siteInfo.siteName}</span>
+      <span className="font-lora ml-2 text-2xl font-bold md:text-3xl">{siteConfig.name}</span>
     </a>
 
     <!-- Mobile menu button -->
@@ -36,7 +37,7 @@ import siteInfo from '../database/pageInformation.json';
 <!-- Floating WhatsApp Button -->
 <SocialMediaButton
   network="WhatsApp"
-  href="https://wa.me/1234567890"
+  href={siteConfig.whatsappUrl}
   class="bg-accent hover:bg-accent-dark fixed right-2 bottom-5 z-50 rounded-full p-3 text-white shadow-lg transition-colors md:right-6 md:bottom-8"
 >
   <WhatsAppIcon class="size-8" />

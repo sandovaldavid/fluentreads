@@ -14,6 +14,7 @@ import type { Product } from '../../types/product';
 import { getAllProducts } from '../../utils/listProducts';
 import editorialsData from '../../database/editorial.json';
 import siteInfo from '../../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 // Get filter parameters from URL if any
 const { searchParams } = Astro.url;
@@ -97,7 +98,7 @@ if (!haveExams) {
 }
 
 // Build canonical URL
-const canonicalURL = new URL('/catalogo', siteInfo.siteURL).toString();
+const canonicalURL = new URL('/catalogo', siteConfig.url).toString();
 
 // Create structured data for catalog page
 const structuredData = {
@@ -108,8 +109,8 @@ const structuredData = {
   url: canonicalURL,
   isPartOf: {
     '@type': 'WebSite',
-    name: siteInfo.siteName,
-    url: siteInfo.siteURL,
+    name: siteConfig.name,
+    url: siteConfig.url,
   },
   about: {
     '@type': 'Thing',
@@ -127,7 +128,7 @@ const breadcrumbData = {
       '@type': 'ListItem',
       position: 1,
       name: 'Inicio',
-      item: siteInfo.siteURL,
+      item: siteConfig.url,
     },
     {
       '@type': 'ListItem',
@@ -141,7 +142,7 @@ const breadcrumbData = {
 // Build OG image URL based on filters or use default
 const ogImage =
   level !== 'all' || format !== 'all' || type !== 'any'
-    ? `${siteInfo.siteURL}/api/og?title=${encodeURIComponent(pageTitle)}&filter=true`
+    ? `${siteConfig.url}/api/og?title=${encodeURIComponent(pageTitle)}&filter=true`
     : siteInfo.seo.images.home || siteInfo.seo.defaultImage;
 ---
 
@@ -180,8 +181,8 @@ const ogImage =
   <!-- Main Catalog Section -->
   <section className="catalog-section relative py-12" id="catalog">
     <!-- Background decorative elements -->
-    <div className="catalog-pattern absolute inset-0 opacity-[0.03]" />
-    <div className="accent-shape" />
+    <div className="catalog-pattern absolute inset-0 opacity-[0.03]"></div>
+    <div className="accent-shape"></div>
 
     <div className="relative z-10 container mx-auto px-4">
       <div className="fade-in mb-8 flex flex-col items-center">

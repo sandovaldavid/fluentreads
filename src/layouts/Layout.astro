@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import siteInfo from '../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 interface Props {
   // SEO Básico
@@ -55,12 +56,12 @@ const {
   ogTitle = title,
   ogDescription = description,
   ogImage = image,
-  ogSiteName = siteInfo.siteName,
+  ogSiteName = siteConfig.name,
   twitterCard = 'summary_large_image',
   twitterTitle = title,
   twitterDescription = description,
   twitterImage = image,
-  twitterSite = siteInfo.socialMediaHandles.twitter,
+  twitterSite = siteConfig.social.twitterHandle,
   structuredData,
   breadcrumbData,
   language = 'es',
@@ -69,7 +70,7 @@ const {
   bodyClass = '',
 } = Astro.props;
 
-const siteUrl = import.meta.env.PUBLIC_SITE_URL || siteInfo.siteURL || Astro.url.origin;
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || siteConfig.url || Astro.url.origin;
 
 // Función para asegurar URLs absolutas
 const getAbsoluteUrl = (path: string | URL): string =>

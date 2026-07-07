@@ -9,16 +9,17 @@ import ClockIcon from '../icons/Clock.astro';
 import CardIcon from '../icons/Card.astro';
 import TrustIndicator from '../TrustIndicator.astro';
 import TestimoniesCard from '../TestimoniesCard.astro';
+import { siteConfig } from '@config/site';
 ---
 
 <section className="bg-primary cta-payment-container relative overflow-hidden py-16 text-white">
   <!-- Animated background elements -->
-  <div className="cta-animated-bg" />
+  <div className="cta-animated-bg"></div>
 
   <!-- Decorative circles -->
-  <div className="cta-circle cta-circle-1" />
-  <div className="cta-circle cta-circle-2" />
-  <div className="cta-circle cta-circle-3" />
+  <div className="cta-circle cta-circle-1"></div>
+  <div className="cta-circle cta-circle-2"></div>
+  <div className="cta-circle cta-circle-3"></div>
 
   <div className="relative z-10 container mx-auto px-4 text-center md:px-8">
     <div className="mx-auto max-w-5xl">
@@ -28,7 +29,9 @@ import TestimoniesCard from '../TestimoniesCard.astro';
         </span>
       </div>
 
-      <h2 className="cta-title mb-6 text-3xl font-bold md:text-4xl">¿Listo para mejorar tu inglés?</h2>
+      <h2 className="cta-title mb-6 text-3xl font-bold md:text-4xl">
+        ¿Listo para mejorar tu inglés?
+      </h2>
 
       <!-- Fixed horizontal stars -->
       <div className="mb-6 flex items-center justify-center gap-1">
@@ -104,7 +107,7 @@ import TestimoniesCard from '../TestimoniesCard.astro';
         <Button
           variant="accent"
           size="large"
-          href="https://wa.me/1234567890"
+          href={siteConfig.whatsappUrl}
           class="secondary-cta-button"
         >
           <WhatsAppIcon class="mr-2 h-5 w-5" />

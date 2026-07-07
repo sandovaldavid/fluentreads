@@ -7,6 +7,7 @@ import DeliveryTime from '../../components/paymentMethods/DeliveryTime.astro';
 import FAQ from '../../components/FAQ.astro';
 import CTA from '../../components/paymentMethods/CTA.astro';
 import siteInfo from '../../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 import '../../styles/paymentMethods.css';
 
@@ -14,7 +15,7 @@ import '../../styles/paymentMethods.css';
 const pageTitle = 'Métodos de Pago | FluentReads';
 const pageDescription =
   'Conoce los diferentes métodos de pago que aceptamos en FluentReads para adquirir tus materiales educativos en inglés.';
-const canonicalURL = new URL('/paymentMethods', siteInfo.siteURL).toString();
+const canonicalURL = new URL('/paymentMethods', siteConfig.url).toString();
 
 // Get OG image from site info or use default
 const ogImage = siteInfo.seo.images.paymentMethods || siteInfo.seo.defaultImage;
@@ -60,7 +61,7 @@ const breadcrumbData = {
       '@type': 'ListItem',
       position: 1,
       name: 'Inicio',
-      item: siteInfo.siteURL,
+      item: siteConfig.url,
     },
     {
       '@type': 'ListItem',
