@@ -112,7 +112,7 @@ const showEditorial = size !== 'small' && editorial;
 ---
 
 <div
-  className={`product-card relative flex flex-col overflow-hidden rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 ${cardClasses[size]} ${className}`}
+  className={`product-card relative flex flex-col overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg ${cardClasses[size]} ${className}`}
 >
   <!-- Product Image Container -->
   <a href={detailsLink} className="book-cover-container relative block overflow-hidden">
@@ -155,7 +155,7 @@ const showEditorial = size !== 'small' && editorial;
     {showEditorial && <div className="mb-1 hidden text-xs text-gray-500 sm:block">{editorial}</div>}
 
     {/* Title - Improved font scaling */}
-    <h3 className={`font-bold text-gray-800 mb-1 line-clamp-2 ${fontSizes[size]}`}>
+    <h3 className={`mb-1 line-clamp-2 font-bold text-gray-800 ${fontSizes[size]}`}>
       <a href={detailsLink} className="hover:text-primary transition-colors">
         {title}
       </a>
@@ -206,7 +206,9 @@ const showEditorial = size !== 'small' && editorial;
         {
           hasDiscount ? (
             <div className="flex flex-col">
-              <span className="text-primary text-sm font-bold sm:text-base">{formattedFinalPrice}</span>
+              <span className="text-primary text-sm font-bold sm:text-base">
+                {formattedFinalPrice}
+              </span>
               <span className="text-[10px] text-gray-500 line-through sm:text-xs">
                 {formattedPrice}
               </span>

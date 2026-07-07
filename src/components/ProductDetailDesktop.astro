@@ -17,19 +17,19 @@ import '../styles/ProductDetail.css';
 
 // Define proper interface for MediaItem
 interface MediaItem {
-    type: 'image' | 'video';
-    url: string;
-    title?: string;
-    thumbnail?: string;
+  type: 'image' | 'video';
+  url: string;
+  title?: string;
+  thumbnail?: string;
 }
 
 // Define a ProductType type that can be any of our product types
 type ProductType = Book | Exam | Pack;
 
 interface Props {
-    product: ProductType;
-    relatedProducts?: ProductType[];
-    type: 'book' | 'exam' | 'pack';
+  product: ProductType;
+  relatedProducts?: ProductType[];
+  type: 'book' | 'exam' | 'pack';
 }
 
 const { product, relatedProducts = [], type } = Astro.props;
@@ -37,38 +37,42 @@ const { product, relatedProducts = [], type } = Astro.props;
 // Prepare formatted price display
 const hasDiscount = product.discount && product.discount > 0;
 const originalPrice = product.price;
-const discountedPrice = hasDiscount ? product.price * (1 - (product.discount || 0) / 100) : product.price;
+const discountedPrice = hasDiscount
+  ? product.price * (1 - (product.discount || 0) / 100)
+  : product.price;
 const formattedDiscountedPrice = `S/${discountedPrice.toFixed(2)}`;
 const formattedOriginalPrice = `S/${originalPrice.toFixed(2)}`;
 
 // Generate JSON-LD for SEO
 const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": type === 'book' ? "Book" : "Product",
-    "name": product.title,
-    "description": product.description,
-    "image": product.coverImage,
-    "offers": {
-        "@type": "Offer",
-        "price": discountedPrice,
-        "priceCurrency": "PEN",
-        "availability": "https://schema.org/InStock",
-    },
-    "aggregateRating": product.rating ? {
-        "@type": "AggregateRating",
-        "ratingValue": product.rating.score,
-        "reviewCount": product.rating.reviewCount
-    } : undefined
+  '@context': 'https://schema.org',
+  '@type': type === 'book' ? 'Book' : 'Product',
+  name: product.title,
+  description: product.description,
+  image: product.coverImage,
+  offers: {
+    '@type': 'Offer',
+    price: discountedPrice,
+    priceCurrency: 'PEN',
+    availability: 'https://schema.org/InStock',
+  },
+  aggregateRating: product.rating
+    ? {
+        '@type': 'AggregateRating',
+        ratingValue: product.rating.score,
+        reviewCount: product.rating.reviewCount,
+      }
+    : undefined,
 };
 
 // Determine product type text for display
-const productTypeLabel = type === 'book' ? 'Libro' : (type === 'exam' ? 'Examen' : 'Pack');
+const productTypeLabel = type === 'book' ? 'Libro' : type === 'exam' ? 'Examen' : 'Pack';
 const pageTitle = `${product.title} - ${productTypeLabel} en inglés | FluentReads`;
 
 // Extract YouTube video ID if present
 let youtubeVideoId = '';
 if (product.video) {
-    youtubeVideoId = extractYoutubeId(product.video);
+  youtubeVideoId = extractYoutubeId(product.video);
 }
 
 // Prepare media items for carousel
@@ -76,35 +80,36 @@ const mediaItems: MediaItem[] = [];
 
 // Add up to 3 images if available
 if (product.images && Array.isArray(product.images)) {
-    product.images.forEach(img => {
-        mediaItems.push({
-            type: 'image',
-            url: img,
-            title: `${product.title} - Imagen`
-        });
+  product.images.forEach((img) => {
+    mediaItems.push({
+      type: 'image',
+      url: img,
+      title: `${product.title} - Imagen`,
     });
+  });
 }
 
 // Add the cover image if it's not already included
 if (product.coverImage && (!product.images || !product.images.includes(product.coverImage))) {
-    mediaItems.unshift({
-        type: 'image',
-        url: product.coverImage,
-        title: `${product.title} - Portada`,
-    });
+  mediaItems.unshift({
+    type: 'image',
+    url: product.coverImage,
+    title: `${product.title} - Portada`,
+  });
 }
 
 // Add video if available
 if (product.video) {
-    mediaItems.push({
-        type: 'video',
-        url: product.video,
-        title: `${product.title} - Video`,
-    });
+  mediaItems.push({
+    type: 'video',
+    url: product.video,
+    title: `${product.title} - Video`,
+  });
 }
 
 // Determine level display for books
-const levelDisplay = type === 'book' && (product as Book).level
+const levelDisplay =
+  type === 'book' && (product as Book).level
     ? levelInfo[(product as Book).level as keyof typeof levelInfo]
     : null;
 
@@ -113,332 +118,383 @@ const formatTags = type === 'book' ? (product as Book).formatTags : null;
 ---
 
 <div class="product-detail-container">
-    <!-- JSON-LD Schema for SEO -->
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  <!-- JSON-LD Schema for SEO -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <!-- Breadcrumbs navigation -->
-        <nav class="flex text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                <li class="inline-flex items-center">
-                    <a href="/" class="hover:text-primary transition-colors">
-                        Inicio
-                    </a>
-                </li>
-                <li>
-                    <div class="flex items-center">
-                        <span class="mx-2">/</span>
-                        <a href={type === 'book' ? '/catalogo' : (type === 'exam' ? '/examenes-internacionales' : '/packs')} class="hover:text-primary transition-colors">
-                            {type === 'book' ? 'Catálogo' : (type === 'exam' ? 'Exámenes' : 'Packs')}
-                        </a>
-                    </div>
-                </li>
-                <li aria-current="page">
-                    <div class="flex items-center">
-                        <span class="mx-2">/</span>
-                        <span class="text-gray-600 font-medium truncate max-w-[200px]">{product.title}</span>
-                    </div>
-                </li>
-            </ol>
-        </nav>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
+    <!-- Breadcrumbs navigation -->
+    <nav class="mb-6 flex text-sm text-gray-500" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-1 md:space-x-3">
+        <li class="inline-flex items-center">
+          <a href="/" class="hover:text-primary transition-colors"> Inicio </a>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <span class="mx-2">/</span>
+            <a
+              href={type === 'book'
+                ? '/catalogo'
+                : type === 'exam'
+                  ? '/examenes-internacionales'
+                  : '/packs'}
+              class="hover:text-primary transition-colors"
+            >
+              {type === 'book' ? 'Catálogo' : type === 'exam' ? 'Exámenes' : 'Packs'}
+            </a>
+          </div>
+        </li>
+        <li aria-current="page">
+          <div class="flex items-center">
+            <span class="mx-2">/</span>
+            <span class="max-w-[200px] truncate font-medium text-gray-600">{product.title}</span>
+          </div>
+        </li>
+      </ol>
+    </nav>
 
-        <!-- Product details grid with more contrast and visual separation -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-            <!-- Left column with media carousel -->
-            <div class="flex flex-col">
-                {mediaItems.length > 0 ? (
-                    <MediaCarousel 
-                        mediaItems={mediaItems} 
-                        title={product.title} 
-                        height={product.video ? "500px" : "450px"} 
-                    />
-                ) : (
-                    <!-- Fallback for when no media items are available -->
-                    <div class="relative overflow-hidden rounded-2xl shadow-xl mb-6 product-cover-container group">
-                        <img 
-                            src={product.coverImage} 
-                            alt={product.altText || `Portada de ${product.title}`}
-                            class="w-full h-auto object-cover transition-transform duration-700 transform group-hover:scale-105"
-                        />
-                        
-                        {hasDiscount && product.discount && (
-                            <div class="absolute top-4 right-4 bg-accent text-white font-bold py-2 px-4 rounded-full shadow-md text-lg animate-pulse-slow">
-                                {product.discount}% OFF
-                            </div>
-                        )}
+    <!-- Product details grid with more contrast and visual separation -->
+    <div class="grid grid-cols-1 gap-8 md:gap-12 lg:grid-cols-2">
+      <!-- Left column with media carousel -->
+      <div class="flex flex-col">
+        {
+          mediaItems.length > 0 ? (
+            <MediaCarousel
+              mediaItems={mediaItems}
+              title={product.title}
+              height={product.video ? '500px' : '450px'}
+            />
+          ) : (
+            <div class="product-cover-container group relative mb-6 overflow-hidden rounded-2xl shadow-xl">
+              {/* Fallback for when no media items are available */}
+              <img
+                src={product.coverImage}
+                alt={product.altText || `Portada de ${product.title}`}
+                class="h-auto w-full transform object-cover transition-transform duration-700 group-hover:scale-105"
+              />
 
-                        {product.featured && (
-                            <div class="absolute top-4 left-4 bg-secondary text-primary font-bold py-2 px-4 rounded-full shadow-md text-sm">
-                                Recomendado
-                            </div>
-                        )}
-                    </div>
+              {hasDiscount && product.discount && (
+                <div class="bg-accent animate-pulse-slow absolute top-4 right-4 rounded-full px-4 py-2 text-lg font-bold text-white shadow-md">
+                  {product.discount}% OFF
+                </div>
+              )}
+
+              {product.featured && (
+                <div class="bg-secondary text-primary absolute top-4 left-4 rounded-full px-4 py-2 text-sm font-bold shadow-md">
+                  Recomendado
+                </div>
+              )}
+            </div>
+          )
+        }
+
+        <!-- Customer support widget -->
+        <div class="mt-6">
+          <CustomerSupport />
+        </div>
+      </div>
+
+      <!-- Right column with product details -->
+      <div class="flex flex-col">
+        <!-- Product title and main details -->
+        <div class="mb-6">
+          <h1 class="text-primary-dark product-title mb-4 text-3xl font-bold md:text-4xl">
+            {product.title}
+          </h1>
+
+          <!-- Level and format tags for books -->
+          {
+            type === 'book' && (
+              <div class="mb-4 flex flex-wrap gap-2">
+                {levelDisplay && (
+                  <span
+                    class={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${levelDisplay.color}`}
+                  >
+                    {levelDisplay.label}
+                  </span>
                 )}
 
-                <!-- Customer support widget -->
-                <div class="mt-6">
-                    <CustomerSupport />
-                </div>
-            </div>
-
-            <!-- Right column with product details -->
-            <div class="flex flex-col">
-                <!-- Product title and main details -->
-                <div class="mb-6">
-                    <h1 class="text-3xl md:text-4xl font-bold text-primary-dark mb-4 product-title">{product.title}</h1>
-                    
-                    <!-- Level and format tags for books -->
-                    {type === 'book' && (
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            {levelDisplay && (
-                                <span class={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${levelDisplay.color}`}>
-                                    {levelDisplay.label}
-                                </span>
-                            )}
-                            
-                            {formatTags && formatTags.map(tag => (
-                                <span class={`inline-flex items-center px-3 py-1 rounded-full border text-sm font-medium ${formatInfo[tag as keyof typeof formatInfo].color}`}>
-                                    <span class="mr-1">{formatInfo[tag as keyof typeof formatInfo].icon}</span>
-                                    {formatInfo[tag as keyof typeof formatInfo].label}
-                                </span>
-                            ))}
-                        </div>
-                    )}
-                    
-                    <!-- Products badges for exams and packs -->
-                    {type === 'exam' && (
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border bg-cyan-100 text-cyan-800 border-cyan-200">
-                                Examen Internacional
-                            </span>
-                        </div>
-                    )}
-                    
-                    {type === 'pack' && (
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border bg-indigo-100 text-indigo-800 border-indigo-200">
-                                Pack Completo
-                            </span>
-                        </div>
-                    )}
-                    
-                    <!-- Rating and reviews with stars -->
-                    {product.rating && (
-                        <div class="flex items-center mb-4">
-                            <div class="flex text-yellow-400">
-                                <ReviewStars score={product.rating.score} />
-                            </div>
-                            <span class="ml-2 text-gray-600">
-                                {product.rating.score}/5 ({product.rating.reviewCount} reseñas)
-                            </span>
-                        </div>
-                    )}
-                    
-                    <!-- Product description with better readability -->
-                    <div class="prose prose-lg max-w-none text-gray-700 mb-6">
-                        <p>{product.description}</p>
-                    </div>
-                    
-                    <!-- Price section with better visual hierarchy -->
-                    <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 shadow-sm mb-6">
-                        <div class="flex items-center mb-2">
-                            {hasDiscount ? (
-                                <>
-                                    <span class="text-3xl font-bold text-primary mr-3">{formattedDiscountedPrice}</span>
-                                    <span class="text-xl text-gray-500 line-through">{formattedOriginalPrice}</span>
-                                    {product.discount && (
-                                        <span class="ml-3 bg-accent/10 text-accent text-sm font-bold px-3 py-1 rounded-full">
-                                            {product.discount}% DESCUENTO
-                                        </span>
-                                    )}
-                                </>
-                            ) : (
-                                <span class="text-3xl font-bold text-primary">{formattedOriginalPrice}</span>
-                            )}
-                        </div>
-                        <p class="text-green-700 font-medium text-sm">✓ Entrega inmediata por correo electrónico</p>
-                    </div>
-                    
-                    <!-- Call to action buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
-                        <Button 
-                            variant="primary" 
-                            size="large" 
-                            class="add-to-cart-btn flex-1 shadow-lg hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1 group cursor-pointer"
-                            data-id={product.id}
-                            data-title={product.title}
-                            data-price={discountedPrice}
-                            data-image={product.coverImage}
-                            data-type={type}
-                        >
-                            <span class="flex items-center justify-center">
-                                <CartIcon class="w-5 h-5 mr-2" />
-                                Agregar al carrito
-                            </span>
-                        </Button>
-                        
-                        <Button 
-                            variant="accent" 
-                            size="large" 
-                            href="/checkout" 
-                            class="view-cart-btn flex-1 shadow-lg hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1 group"
-                        >
-                            <span class="flex items-center justify-center">
-                                <WhatsAppIcon class="w-5 h-5 mr-2" />
-                                Ver carrito
-                            </span>
-                        </Button>
-                    </div>
-                    
-                    <!-- Product contents/included items with improved styling -->
-                    <div class="border border-gray-200 rounded-xl bg-white p-5 shadow-sm">
-                        <h2 class="text-xl font-bold text-primary-dark mb-4 flex items-center">
-                            <span class="bg-primary text-white p-1 rounded-full mr-2">
-                                <CheckIcon class="w-5 h-5" />
-                            </span>
-                            Contenido incluido
-                        </h2>
-                        
-                        <ul class="space-y-3 included-items-list">
-                            {product.includedItems && product.includedItems.map(item => (
-                                <li class="flex items-start">
-                                    <span class="text-green-500 mr-2 mt-1">✓</span>
-                                    <span>{item}</span>
-                                </li>
-                            ))}
-                        </ul>
-                        
-                        <div class="mt-5 bg-blue-50 rounded-lg p-4 border border-blue-100">
-                            <p class="text-blue-800 text-sm">
-                                <strong>Importante:</strong> Al realizar tu compra, recibirás acceso inmediato a todos los materiales a través de un enlace de descarga enviado a tu correo electrónico o WhatsApp.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Related products section -->
-        {relatedProducts.length > 0 && (
-            <div class="mt-16 related-section">
-                <SectionTitle>Productos relacionados</SectionTitle>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-                    {/* Related products grid would go here */}
-                </div>
-                
-                <div class="text-center mt-8">
-                    <Button 
-                        variant="outline" 
-                        size="medium" 
-                        href={type === 'book' ? "/catalogo" : (type === 'exam' ? "/examenes-internacionales" : "/packs")} 
-                        class="inline-flex items-center group"
+                {formatTags &&
+                  formatTags.map((tag) => (
+                    <span
+                      class={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${formatInfo[tag as keyof typeof formatInfo].color}`}
                     >
-                        Ver catálogo completo
-                        <ArrowRightIcon class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                      <span class="mr-1">{formatInfo[tag as keyof typeof formatInfo].icon}</span>
+                      {formatInfo[tag as keyof typeof formatInfo].label}
+                    </span>
+                  ))}
+              </div>
+            )
+          }
+
+          <!-- Products badges for exams and packs -->
+          {
+            type === 'exam' && (
+              <div class="mb-4 flex flex-wrap gap-2">
+                <span class="inline-flex items-center rounded-full border border-cyan-200 bg-cyan-100 px-3 py-1 text-sm font-medium text-cyan-800">
+                  Examen Internacional
+                </span>
+              </div>
+            )
+          }
+
+          {
+            type === 'pack' && (
+              <div class="mb-4 flex flex-wrap gap-2">
+                <span class="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-800">
+                  Pack Completo
+                </span>
+              </div>
+            )
+          }
+
+          <!-- Rating and reviews with stars -->
+          {
+            product.rating && (
+              <div class="mb-4 flex items-center">
+                <div class="flex text-yellow-400">
+                  <ReviewStars score={product.rating.score} />
                 </div>
+                <span class="ml-2 text-gray-600">
+                  {product.rating.score}/5 ({product.rating.reviewCount} reseñas)
+                </span>
+              </div>
+            )
+          }
+
+          <!-- Product description with better readability -->
+          <div class="prose prose-lg mb-6 max-w-none text-gray-700">
+            <p>{product.description}</p>
+          </div>
+
+          <!-- Price section with better visual hierarchy -->
+          <div class="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
+            <div class="mb-2 flex items-center">
+              {
+                hasDiscount ? (
+                  <>
+                    <span class="text-primary mr-3 text-3xl font-bold">
+                      {formattedDiscountedPrice}
+                    </span>
+                    <span class="text-xl text-gray-500 line-through">{formattedOriginalPrice}</span>
+                    {product.discount && (
+                      <span class="bg-accent/10 text-accent ml-3 rounded-full px-3 py-1 text-sm font-bold">
+                        {product.discount}% DESCUENTO
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <span class="text-primary text-3xl font-bold">{formattedOriginalPrice}</span>
+                )
+              }
             </div>
-        )}
+            <p class="text-sm font-medium text-green-700">
+              ✓ Entrega inmediata por correo electrónico
+            </p>
+          </div>
+
+          <!-- Call to action buttons -->
+          <div class="mb-8 flex flex-col gap-4 sm:flex-row">
+            <Button
+              variant="primary"
+              size="large"
+              class="add-to-cart-btn group flex-1 transform cursor-pointer shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              data-id={product.id}
+              data-title={product.title}
+              data-price={discountedPrice}
+              data-image={product.coverImage}
+              data-type={type}
+            >
+              <span class="flex items-center justify-center">
+                <CartIcon class="mr-2 h-5 w-5" />
+                Agregar al carrito
+              </span>
+            </Button>
+
+            <Button
+              variant="accent"
+              size="large"
+              href="/checkout"
+              class="view-cart-btn group flex-1 transform shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            >
+              <span class="flex items-center justify-center">
+                <WhatsAppIcon class="mr-2 h-5 w-5" />
+                Ver carrito
+              </span>
+            </Button>
+          </div>
+
+          <!-- Product contents/included items with improved styling -->
+          <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h2 class="text-primary-dark mb-4 flex items-center text-xl font-bold">
+              <span class="bg-primary mr-2 rounded-full p-1 text-white">
+                <CheckIcon class="h-5 w-5" />
+              </span>
+              Contenido incluido
+            </h2>
+
+            <ul class="included-items-list space-y-3">
+              {
+                product.includedItems &&
+                  product.includedItems.map((item) => (
+                    <li class="flex items-start">
+                      <span class="mt-1 mr-2 text-green-500">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))
+              }
+            </ul>
+
+            <div class="mt-5 rounded-lg border border-blue-100 bg-blue-50 p-4">
+              <p class="text-sm text-blue-800">
+                <strong>Importante:</strong> Al realizar tu compra, recibirás acceso inmediato a todos
+                los materiales a través de un enlace de descarga enviado a tu correo electrónico o WhatsApp.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Related products section -->
+    {
+      relatedProducts.length > 0 && (
+        <div class="related-section mt-16">
+          <SectionTitle>Productos relacionados</SectionTitle>
+          <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Related products grid would go here */}
+          </div>
+
+          <div class="mt-8 text-center">
+            <Button
+              variant="outline"
+              size="medium"
+              href={
+                type === 'book'
+                  ? '/catalogo'
+                  : type === 'exam'
+                    ? '/examenes-internacionales'
+                    : '/packs'
+              }
+              class="group inline-flex items-center"
+            >
+              Ver catálogo completo
+              <ArrowRightIcon class="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+        </div>
+      )
+    }
+  </div>
 </div>
 
 <script>
-    import { CartManager } from '../utils/cartManager';
+  import { CartManager } from '../utils/cartManager';
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // Add event listeners to "Add to Cart" buttons
-        const addToCartBtn = document.querySelector('.add-to-cart-btn');
-        if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', () => {
-                const productId = addToCartBtn.getAttribute('data-id');
-                const productTitle = addToCartBtn.getAttribute('data-title');
-                const productPriceStr = addToCartBtn.getAttribute('data-price');
-                const productImage = addToCartBtn.getAttribute('data-image');
-                const productType = addToCartBtn.getAttribute('data-type');
-                
-                if (productId && productTitle && productPriceStr && productImage && productType) {
-                    const productPrice = parseFloat(productPriceStr);
-                    
-                    // Add item to cart using CartManager
-                    CartManager.addItem({
-                        id: productId,
-                        title: productTitle,
-                        price: productPrice,
-                        image: productImage,
-                        type: productType as 'book' | 'exam' | 'pack'
-                    });
-                    
-                    // Show success message
-                    CartManager.showNotification(`"${productTitle}" agregado al carrito`);
-                    
-                    // Dispatch event to notify other components about cart update
-                    window.dispatchEvent(new CustomEvent('cartUpdated'));
-                }
-            });
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add event listeners to "Add to Cart" buttons
+    const addToCartBtn = document.querySelector('.add-to-cart-btn');
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', () => {
+        const productId = addToCartBtn.getAttribute('data-id');
+        const productTitle = addToCartBtn.getAttribute('data-title');
+        const productPriceStr = addToCartBtn.getAttribute('data-price');
+        const productImage = addToCartBtn.getAttribute('data-image');
+        const productType = addToCartBtn.getAttribute('data-type');
+
+        if (productId && productTitle && productPriceStr && productImage && productType) {
+          const productPrice = parseFloat(productPriceStr);
+
+          // Add item to cart using CartManager
+          CartManager.addItem({
+            id: productId,
+            title: productTitle,
+            price: productPrice,
+            image: productImage,
+            type: productType as 'book' | 'exam' | 'pack',
+          });
+
+          // Show success message
+          CartManager.showNotification(`"${productTitle}" agregado al carrito`);
+
+          // Dispatch event to notify other components about cart update
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
         }
-    });
+      });
+    }
+  });
 </script>
 
 <style>
-    .product-cover-container {
-        max-height: 600px;
-        overflow: hidden;
+  .product-cover-container {
+    max-height: 600px;
+    overflow: hidden;
+  }
+
+  .included-items-list li {
+    animation: fadeIn 0.5s ease-in-out forwards;
+    opacity: 0;
+  }
+
+  .included-items-list li:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .included-items-list li:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .included-items-list li:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .included-items-list li:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .included-items-list li:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
     }
-    
-    .included-items-list li {
-        animation: fadeIn 0.5s ease-in-out forwards;
-        opacity: 0;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
-    
-    .included-items-list li:nth-child(1) { animation-delay: 0.1s; }
-    .included-items-list li:nth-child(2) { animation-delay: 0.2s; }
-    .included-items-list li:nth-child(3) { animation-delay: 0.3s; }
-    .included-items-list li:nth-child(4) { animation-delay: 0.4s; }
-    .included-items-list li:nth-child(5) { animation-delay: 0.5s; }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(5px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+  }
+
+  .animate-pulse-slow {
+    animation: pulseSlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulseSlow {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
     }
-    
-    .animate-pulse-slow {
-        animation: pulseSlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    50% {
+      opacity: 0.9;
+      transform: scale(1.05);
     }
-    
-    @keyframes pulseSlow {
-        0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.9;
-            transform: scale(1.05);
-        }
+  }
+
+  /* Product title animation */
+  .product-title {
+    background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary));
+    background-size: 200% auto;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShine 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes textShine {
+    0% {
+      background-position: 0% center;
     }
-    
-    /* Product title animation */
-    .product-title {
-        background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary));
-        background-size: 200% auto;
-        background-clip: text;
-        text-fill-color: transparent;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: textShine 3s ease-in-out infinite alternate;
+    100% {
+      background-position: 100% center;
     }
-    
-    @keyframes textShine {
-        0% {
-            background-position: 0% center;
-        }
-        100% {
-            background-position: 100% center;
-        }
-    }
+  }
 </style>

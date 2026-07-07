@@ -9,60 +9,66 @@ interface Props {
 const { count = 6 } = Astro.props;
 ---
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8 min-h-[300px] px-8">
-  {Array(count).fill(0).map((_, i) => (
-    <div className="skeleton-card bg-white rounded-xl overflow-hidden w-full max-w-sm flex flex-col h-full shadow-md">
-      <!-- Skeleton para imagen de portada -->
-      <div className="h-52 bg-gray-200 animate-pulse-subtle">
-        <!-- Tags de nivel y destacado -->
-        <div className="flex justify-between p-3">
-          <div className="h-6 w-20 bg-gray-300 rounded-full" />
-          <div className="h-6 w-24 bg-gray-300 rounded-full" />
+<div
+  class="mt-8 grid min-h-[300px] grid-cols-1 gap-6 px-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+>
+  {
+    Array(count)
+      .fill(0)
+      .map((_, i) => (
+        <div class="skeleton-card flex h-full w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-md">
+          {/* Skeleton para imagen de portada */}
+          <div class="animate-pulse-subtle h-52 bg-gray-200">
+            {/* Tags de nivel y destacado */}
+            <div class="flex justify-between p-3">
+              <div class="h-6 w-20 rounded-full bg-gray-300" />
+              <div class="h-6 w-24 rounded-full bg-gray-300" />
+            </div>
+          </div>
+
+          {/* Skeleton para contenido */}
+          <div class="flex flex-grow flex-col space-y-4 p-5">
+            {/* Título */}
+            <div class="animate-pulse-subtle h-7 w-4/5 rounded-md bg-gray-200" />
+
+            {/* Tags */}
+            <div class="flex flex-wrap gap-2">
+              <div class="animate-pulse-subtle h-6 w-16 rounded-md bg-gray-200" />
+              <div class="animate-pulse-subtle h-6 w-20 rounded-md bg-gray-200" />
+              <div class="animate-pulse-subtle h-6 w-24 rounded-md bg-gray-200" />
+            </div>
+
+            {/* Descripción */}
+            <div class="space-y-2">
+              <div class="animate-pulse-subtle h-4 w-full rounded-md bg-gray-200" />
+              <div class="animate-pulse-subtle h-4 w-5/6 rounded-md bg-gray-200" />
+            </div>
+
+            {/* Precio */}
+            <div class="animate-pulse-subtle h-8 w-1/3 rounded-md bg-gray-300" />
+
+            {/* Elementos incluidos */}
+            <div class="flex-grow space-y-2">
+              <div class="animate-pulse-subtle h-5 w-1/3 rounded-md bg-gray-200" />
+              <div class="animate-pulse-subtle h-4 w-full rounded-md bg-gray-200" />
+              <div class="animate-pulse-subtle h-4 w-11/12 rounded-md bg-gray-200" />
+              <div class="animate-pulse-subtle h-4 w-10/12 rounded-md bg-gray-200" />
+            </div>
+
+            {/* Rating */}
+            <div class="flex items-center gap-2">
+              <div class="animate-pulse-subtle h-5 w-32 rounded-md bg-gray-200" />
+            </div>
+
+            {/* Buttons */}
+            <div class="mt-auto flex space-x-2">
+              <div class="animate-pulse-subtle h-10 w-2/3 rounded-lg bg-gray-300" />
+              <div class="animate-pulse-subtle h-10 w-1/3 rounded-lg bg-gray-200" />
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <!-- Skeleton para contenido -->
-      <div className="p-5 flex flex-col flex-grow space-y-4">
-        <!-- Título -->
-        <div className="h-7 bg-gray-200 rounded-md w-4/5 animate-pulse-subtle" />
-        
-        <!-- Tags -->
-        <div className="flex flex-wrap gap-2">
-          <div className="h-6 w-16 bg-gray-200 rounded-md animate-pulse-subtle" />
-          <div className="h-6 w-20 bg-gray-200 rounded-md animate-pulse-subtle" />
-          <div className="h-6 w-24 bg-gray-200 rounded-md animate-pulse-subtle" />
-        </div>
-        
-        <!-- Descripción -->
-        <div className="space-y-2">
-          <div className="h-4 bg-gray-200 rounded-md w-full animate-pulse-subtle" />
-          <div className="h-4 bg-gray-200 rounded-md w-5/6 animate-pulse-subtle" />
-        </div>
-        
-        <!-- Precio -->
-        <div className="h-8 bg-gray-300 rounded-md w-1/3 animate-pulse-subtle" />
-        
-        <!-- Elementos incluidos -->
-        <div className="space-y-2 flex-grow">
-          <div className="h-5 bg-gray-200 rounded-md w-1/3 animate-pulse-subtle" />
-          <div className="h-4 bg-gray-200 rounded-md w-full animate-pulse-subtle" />
-          <div className="h-4 bg-gray-200 rounded-md w-11/12 animate-pulse-subtle" />
-          <div className="h-4 bg-gray-200 rounded-md w-10/12 animate-pulse-subtle" />
-        </div>
-        
-        <!-- Rating -->
-        <div className="flex items-center gap-2">
-          <div className="h-5 bg-gray-200 rounded-md w-32 animate-pulse-subtle" />
-        </div>
-        
-        <!-- Buttons -->
-        <div className="flex space-x-2 mt-auto">
-          <div className="h-10 bg-gray-300 rounded-lg w-2/3 animate-pulse-subtle" />
-          <div className="h-10 bg-gray-200 rounded-lg w-1/3 animate-pulse-subtle" />
-        </div>
-      </div>
-    </div>
-  ))}
+      ))
+  }
 </div>
 
 <style>
@@ -85,16 +91,18 @@ const { count = 6 } = Astro.props;
   }
 
   .animate-pulse-subtle::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background: linear-gradient(to right, 
+    background: linear-gradient(
+      to right,
       rgba(255, 255, 255, 0) 0%,
       rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0) 100%);
+      rgba(255, 255, 255, 0) 100%
+    );
     background-size: 100% 100%;
     animation: shimmer 2s infinite;
   }

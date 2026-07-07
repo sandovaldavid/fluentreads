@@ -197,7 +197,9 @@ const jsonLd = {
             exam.rating && (
               <div className="flex items-center">
                 <ReviewStars score={exam.rating.score} size="small" />
-                <span className="ml-2 text-sm text-gray-600">({exam.rating.reviewCount} reseñas)</span>
+                <span className="ml-2 text-sm text-gray-600">
+                  ({exam.rating.reviewCount} reseñas)
+                </span>
               </div>
             )
           }

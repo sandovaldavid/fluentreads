@@ -47,8 +47,8 @@ const positionToUse =
 const animationClass = animate ? 'discount-badge-animate' : '';
 ---
 
-<div className={`${positionToUse} z-10 discount-badge ${className} ${animationClass}`}>
-  <div className={`bg-accent text-white font-bold shadow-md flex items-center gap-1 ${badgeSize}`}>
+<div className={`${positionToUse} discount-badge z-10 ${className} ${animationClass}`}>
+  <div className={`bg-accent flex items-center gap-1 font-bold text-white shadow-md ${badgeSize}`}>
     <TagIcon class={iconSize} />
     <span>{discount}</span>
   </div>

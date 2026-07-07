@@ -1,126 +1,135 @@
 ---
-import ClockIcon from "./icons/Clock.astro";
-import SecurityIcon from "./icons/Security.astro";
-import CloudIcon from "./icons/Cloud.astro";
+import ClockIcon from './icons/Clock.astro';
+import SecurityIcon from './icons/Security.astro';
+import CloudIcon from './icons/Cloud.astro';
 
 import '../styles/DeliveryBenefits.css';
 
 interface BenefitItem {
-    icon: any;
-    title: string;
-    description: string;
-    color: string;
-    colorClass: string;
+  icon: any;
+  title: string;
+  description: string;
+  color: string;
+  colorClass: string;
 }
 
 const benefits: BenefitItem[] = [
-    {
-        icon: ClockIcon,
-        title: "Ahorra tiempo",
-        description: "Comienza a estudiar de inmediato sin esperar envíos físicos o procesos largos.",
-        color: "secondary",
-        colorClass: "bg-secondary/20 text-secondary"
-    },
-    {
-        icon: SecurityIcon,
-        title: "Acceso permanente",
-        description: "Tu material estará siempre disponible en la nube, accede cuando y donde quieras.",
-        color: "primary",
-        colorClass: "bg-primary/20 text-primary"
-    },
-    {
-        icon: CloudIcon,
-        title: "Sin costos ocultos",
-        description: "La entrega digital está incluida en el precio, sin gastos adicionales por envío.",
-        color: "accent",
-        colorClass: "bg-accent/20 text-accent"
-    }
+  {
+    icon: ClockIcon,
+    title: 'Ahorra tiempo',
+    description: 'Comienza a estudiar de inmediato sin esperar envíos físicos o procesos largos.',
+    color: 'secondary',
+    colorClass: 'bg-secondary/20 text-secondary',
+  },
+  {
+    icon: SecurityIcon,
+    title: 'Acceso permanente',
+    description: 'Tu material estará siempre disponible en la nube, accede cuando y donde quieras.',
+    color: 'primary',
+    colorClass: 'bg-primary/20 text-primary',
+  },
+  {
+    icon: CloudIcon,
+    title: 'Sin costos ocultos',
+    description: 'La entrega digital está incluida en el precio, sin gastos adicionales por envío.',
+    color: 'accent',
+    colorClass: 'bg-accent/20 text-accent',
+  },
 ];
 ---
 
-<div className="mt-12 md:mt-16 relative px-4 sm:px-0">
-    <!-- Background elements for visual interest -->
-    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent rounded-3xl -z-10" />
-    
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
-        {benefits.map((benefit, index) => (
-            <div 
-                className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group benefit-card"
-                data-index={index}
-            >
-                <div className="p-6 sm:p-7 flex flex-col h-full">
-                    <div className="flex items-start">
-                        <div className={`p-3 rounded-full mr-3 ${benefit.colorClass} transition-all duration-300 group-hover:scale-110`}>
-                            <benefit.icon class="h-6 w-6" />
-                        </div>
-                        <h4 className="text-lg font-bold text-gray-800 group-hover:text-primary transition-colors duration-300">
-                            {benefit.title}
-                        </h4>
-                    </div>
-                    
-                    <p className="text-gray-600 mt-4 flex-grow">
-                        {benefit.description}
-                    </p>
-                </div>
-                
-                <!-- Subtle bottom border that extends on hover -->
-                <div className={`h-1 w-0 bg-${benefit.color} transition-all duration-300 group-hover:w-full rounded-b-xl`} />
+<div className="relative mt-12 px-4 sm:px-0 md:mt-16">
+  <!-- Background elements for visual interest -->
+  <div
+    className="via-primary/5 absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-transparent to-transparent"
+  >
+  </div>
+
+  <div
+    className="mx-auto grid max-w-6xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8"
+  >
+    {
+      benefits.map((benefit, index) => (
+        <div
+          className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group benefit-card"
+          data-index={index}
+        >
+          <div className="p-6 sm:p-7 flex flex-col h-full">
+            <div className="flex items-start">
+              <div
+                className={`mr-3 rounded-full p-3 ${benefit.colorClass} transition-all duration-300 group-hover:scale-110`}
+              >
+                <benefit.icon class="h-6 w-6" />
+              </div>
+              <h4 className="text-lg font-bold text-gray-800 group-hover:text-primary transition-colors duration-300">
+                {benefit.title}
+              </h4>
             </div>
-        ))}
-    </div>
-    
-    <!-- Additional text for better context -->
-    <div className="text-center mt-8 md:mt-10">
-        <p className="text-gray-500 text-sm max-w-2xl mx-auto">
-            Nos enfocamos en ofrecerte la mejor experiencia posible, con entrega rápida y sin complicaciones, 
-            para que puedas concentrarte en lo que realmente importa: aprender inglés.
-        </p>
-    </div>
+
+            <p className="text-gray-600 mt-4 flex-grow">{benefit.description}</p>
+          </div>
+
+          {/* Subtle bottom border that extends on hover */}
+          <div
+            className={`h-1 w-0 bg-${benefit.color} rounded-b-xl transition-all duration-300 group-hover:w-full`}
+          />
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Additional text for better context -->
+  <div className="mt-8 text-center md:mt-10">
+    <p className="mx-auto max-w-2xl text-sm text-gray-500">
+      Nos enfocamos en ofrecerte la mejor experiencia posible, con entrega rápida y sin
+      complicaciones, para que puedas concentrarte en lo que realmente importa: aprender inglés.
+    </p>
+  </div>
 </div>
 
 <script>
-    // Add interaction for animation when card comes into view
-    document.addEventListener('DOMContentLoaded', () => {
-        // Configure intersection observer
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Reset animation to ensure it plays again when scrolling back
-                        const card = entry.target as HTMLElement;
-                        const index = card.getAttribute('data-index');
-                        
-                        card.style.animation = 'none';
-                        card.offsetHeight; // Trigger reflow
-                        card.style.animation = `fadeIn 0.6s ease-out ${Number(index) * 0.2}s forwards`;
-                        
-                        // Stop observing after animation is triggered
-                        observer.unobserve(card);
-                    }
-                });
-            },
-            {
-                threshold: 0.2, // Trigger when 20% of the element is visible
-                rootMargin: '0px 0px -50px 0px' // Adjust based on when you want animation to trigger
-            }
-        );
-        
-        // Observe all benefit cards
-        document.querySelectorAll('.benefit-card').forEach(card => {
-            observer.observe(card);
+  // Add interaction for animation when card comes into view
+  document.addEventListener('DOMContentLoaded', () => {
+    // Configure intersection observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Reset animation to ensure it plays again when scrolling back
+            const card = entry.target as HTMLElement;
+            const index = card.getAttribute('data-index');
+
+            card.style.animation = 'none';
+            card.offsetHeight; // Trigger reflow
+            card.style.animation = `fadeIn 0.6s ease-out ${Number(index) * 0.2}s forwards`;
+
+            // Stop observing after animation is triggered
+            observer.unobserve(card);
+          }
         });
-        
-        // Add click handler for mobile experiences
-        document.querySelectorAll('.benefit-card').forEach(card => {
-            card.addEventListener('click', () => {
-                // This will trigger the hover state on mobile
-                if (window.innerWidth < 768) {
-                    card.classList.add('active');
-                    setTimeout(() => {
-                        card.classList.remove('active');
-                    }, 1500);
-                }
-            });
-        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of the element is visible
+        rootMargin: '0px 0px -50px 0px', // Adjust based on when you want animation to trigger
+      }
+    );
+
+    // Observe all benefit cards
+    document.querySelectorAll('.benefit-card').forEach((card) => {
+      observer.observe(card);
     });
+
+    // Add click handler for mobile experiences
+    document.querySelectorAll('.benefit-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        // This will trigger the hover state on mobile
+        if (window.innerWidth < 768) {
+          card.classList.add('active');
+          setTimeout(() => {
+            card.classList.remove('active');
+          }, 1500);
+        }
+      });
+    });
+  });
 </script>

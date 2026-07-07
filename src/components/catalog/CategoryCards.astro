@@ -1,62 +1,69 @@
 ---
-import CategoriesData from '../../database/categories.json'
-import ArrowRightIcon from '../icons/ArrowRight.astro'
+import CategoriesData from '../../database/categories.json';
+import ArrowRightIcon from '../icons/ArrowRight.astro';
 
-const categories = CategoriesData
+const categories = CategoriesData;
 ---
 
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="catalog-categories">
-    {categories.map((category, index) => (
-        <a href={category.link} className={`category-card group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-xl category-${index+1}`}>
-            <!-- Background image with overlay -->
-            <div className="absolute inset-0 bg-primary-dark/40 group-hover:bg-primary-dark/60 transition-colors duration-300" />
-            <img 
-                src={category.image} 
-                alt={category.name} 
-                className="w-full h-64 object-cover object-center transition-transform duration-700 group-hover:scale-110"
-            />
-            
-            <!-- Content overlay -->
-            <div className="absolute inset-0 flex flex-col justify-between p-6">
-                <div className="bg-neutral-light w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-md category-icon">
-                    {category.icon}
-                </div>
-                
-                <div className="z-10 bg-neutral-light p-4 rounded-xl transition-colors duration-300">
-                    <h3 className="text-xl font-bold text-primary-dark mb-2 category-title">{category.name}</h3>
-                    <p className="text-primary text-sm mb-4">{category.description}</p>
-                    
-                    <div className="inline-flex items-center text-secondary-dark font-medium text-sm group-hover:translate-x-2 transition-transform duration-300">
-                        <span>Explorar</span>
-                        <ArrowRightIcon class="w-4 h-4 ml-1" />
-                    </div>
-                </div>
+<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" id="catalog-categories">
+  {
+    categories.map((category, index) => (
+      <a
+        href={category.link}
+        className={`category-card group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-xl category-${index + 1}`}
+      >
+        {/* Background image with overlay */}
+        <div className="absolute inset-0 bg-primary-dark/40 group-hover:bg-primary-dark/60 transition-colors duration-300" />
+        <img
+          src={category.image}
+          alt={category.name}
+          className="w-full h-64 object-cover object-center transition-transform duration-700 group-hover:scale-110"
+        />
+
+        {/* Content overlay */}
+        <div className="absolute inset-0 flex flex-col justify-between p-6">
+          <div className="bg-neutral-light w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-md category-icon">
+            {category.icon}
+          </div>
+
+          <div className="z-10 bg-neutral-light p-4 rounded-xl transition-colors duration-300">
+            <h3 className="text-xl font-bold text-primary-dark mb-2 category-title">
+              {category.name}
+            </h3>
+            <p className="text-primary text-sm mb-4">{category.description}</p>
+
+            <div className="inline-flex items-center text-secondary-dark font-medium text-sm group-hover:translate-x-2 transition-transform duration-300">
+              <span>Explorar</span>
+              <ArrowRightIcon class="ml-1 h-4 w-4" />
             </div>
-        </a>
-    ))}
+          </div>
+        </div>
+      </a>
+    ))
+  }
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Staggered animation for category cards
-        const categoryCards = document.querySelectorAll('.category-card');
-        categoryCards.forEach((card, index) => {
-            setTimeout(() => {
-                card.classList.add('animate-fade-in');
-            }, index * 150);
-        });
-        
-        // Add hover animation
-        categoryCards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                const icon = card.querySelector('.category-icon');
-                if (icon) {
-                    icon.classList.add('animate-bounce-once');
-                    setTimeout(() => {
-                        icon.classList.remove('animate-bounce-once');
-                    }, 1000);
-                }
-            });
-        });
+  document.addEventListener('DOMContentLoaded', () => {
+    // Staggered animation for category cards
+    const categoryCards = document.querySelectorAll('.category-card');
+    categoryCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('animate-fade-in');
+      }, index * 150);
     });
+
+    // Add hover animation
+    categoryCards.forEach((card) => {
+      card.addEventListener('mouseenter', () => {
+        const icon = card.querySelector('.category-icon');
+        if (icon) {
+          icon.classList.add('animate-bounce-once');
+          setTimeout(() => {
+            icon.classList.remove('animate-bounce-once');
+          }, 1000);
+        }
+      });
+    });
+  });
 </script>

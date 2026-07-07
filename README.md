@@ -54,4 +54,3 @@ Para que el deploy a Vercel funcione correctamente desde GitHub Actions, se debe
 - `VERCEL_TOKEN`: Token de acceso personal de Vercel (obtenido en tu cuenta de Vercel en `Account Settings > Tokens`).
 - `VERCEL_ORG_ID`: ID del equipo u organización en Vercel (se encuentra en `.vercel/project.json` tras vincular el proyecto localmente, o en los settings del equipo en Vercel).
 - `VERCEL_PROJECT_ID`: ID del proyecto en Vercel (se encuentra en `.vercel/project.json` tras vincular el proyecto localmente, o en los settings del proyecto en Vercel).
-

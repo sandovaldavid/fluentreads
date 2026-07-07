@@ -67,7 +67,11 @@ function getGridClass(count: number): string {
 const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
 ---
 
-<div className="catalog-container" id="exams-container" data-is-loading={showSkeletonOnLoad.toString()}>
+<div
+  className="catalog-container"
+  id="exams-container"
+  data-is-loading={showSkeletonOnLoad.toString()}
+>
   <!-- Filter component integration with props -->
   <Filter
     client:load
@@ -110,7 +114,7 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
   <!-- Exams grid -->
   <div
     id="exams-grid"
-    className={`grid ${getGridClass(filteredExams.length)} gap-6 md:gap-8 mb-12 relative transition-all duration-300 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
+    className={`grid ${getGridClass(filteredExams.length)} relative mb-12 gap-6 transition-all duration-300 md:gap-8 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
   >
     {
       filteredExams.map((exam) => (
