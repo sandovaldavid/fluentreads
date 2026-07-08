@@ -308,22 +308,7 @@ const walletIconComponents = {
   }
 
   .discount-badge {
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.2);
-    }
-    70% {
-      transform: scale(1.05);
-      box-shadow: 0 0 0 10px rgba(22, 163, 74, 0);
-    }
-    100% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
-    }
+    animation: pulse-value 2s infinite;
   }
 
   .savings-highlight {
@@ -365,14 +350,5 @@ const walletIconComponents = {
       padding: 1rem;
       margin-bottom: 1rem;
     }
-  }
-
-  /* Use global theme variables from global.css */
-  .text-primary {
-    color: var(--color-primary, #1e3a8a);
-  }
-
-  .text-accent {
-    color: var(--color-accent, #16a34a);
   }
 </style>
