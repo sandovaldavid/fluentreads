@@ -1,5 +1,11 @@
 {
   "framework": "astro",
   "buildCommand": "bun run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "git": {
+    "deploymentEnabled": {
+      "main": false,
+      "develop": false
+    }
+  }
 }
