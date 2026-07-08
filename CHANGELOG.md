@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.2.0...fluentreads-v0.3.0) (2026-07-08)
+
+
+### Features
+
+* **cms:** integrate decap cms and complete pending features (B9-B10) ([#28](https://github.com/sandovaldavid/fluentreads/issues/28)) ([0617a32](https://github.com/sandovaldavid/fluentreads/commit/0617a32fcf9fef25dcf33346b106c534b1f6a3a9))
+
 ## [0.2.0](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.1.0...fluentreads-v0.2.0) (2026-07-08)
 
 
