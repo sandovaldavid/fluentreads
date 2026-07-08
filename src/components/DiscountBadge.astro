@@ -2,7 +2,7 @@
 import TagIcon from './icons/Offer.astro';
 
 interface Props {
-  discount: string;
+  discount: string | number;
   size?: 'small' | 'medium' | 'large';
   className?: string;
   position?: string;
@@ -50,7 +50,7 @@ const animationClass = animate ? 'discount-badge-animate' : '';
 <div className={`${positionToUse} discount-badge z-10 ${className} ${animationClass}`}>
   <div className={`bg-accent flex items-center gap-1 font-bold text-white shadow-md ${badgeSize}`}>
     <TagIcon class={iconSize} />
-    <span>{discount}</span>
+    <span>{typeof discount === 'number' ? `${discount}%` : discount}</span>
   </div>
 </div>
 

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "penguin",
+    "name": "Penguin Random House",
+    "description": "Una de las editoriales más grandes del mundo. Publica ficción, no ficción y literatura juvenil."
+  },
+  {
+    "id": "harpercollins",
+    "name": "HarperCollins",
+    "description": "Publica una amplia gama de libros, desde bestsellers hasta clásicos literarios."
+  },
+  {
+    "id": "cambridge",
+    "name": "Cambridge University Press",
+    "description": "Materiales para exámenes como IELTS, FCE, CAE, CPE, y libros académicos."
+  },
+  {
+    "id": "oxford",
+    "name": "Oxford University Press",
+    "description": "Publica English File, Headway y Oxford Advanced Learner's Dictionary."
+  },
+  {
+    "id": "pearson",
+    "name": "Pearson Education",
+    "description": "Conocida por Speakout, Market Leader y Longman Dictionary."
+  },
+  {
+    "id": "barrons",
+    "name": "Barron's Educational Series",
+    "description": "Especializada en materiales para TOEFL, SAT, GRE y GMAT."
+  },
+  {
+    "id": "kaplan",
+    "name": "Kaplan Publishing",
+    "description": "Provee libros y recursos para SAT, GRE, GMAT y otros exámenes."
+  },
+  {
+    "id": "macmillan",
+    "name": "Macmillan Education",
+    "description": "Publica libros de texto y materiales para exámenes como Ready for First."
+  },
+  {
+    "id": "cengage",
+    "name": "Cengage Learning",
+    "description": "Publica libros de texto y materiales para exámenes como IELTS."
+  },
+  {
+    "id": "heinemann",
+    "name": "Heinemann",
+    "description": "Publica libros de texto y materiales para exámenes como TOEFL."
+  },
+  {
+    "id": "longman",
+    "name": "Longman",
+    "description": "Longman (parte de Pearson Education) es una de las editoriales de inglés más reconocidas a nivel mundial."
+  }
+]

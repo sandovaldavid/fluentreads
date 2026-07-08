@@ -36,11 +36,11 @@ const {
 } = Astro.props;
 
 // Import references from offerHeroBanner.json
-import offerReferences from '../database/offerHeroBanner.json';
+import offerReferences from '../data/offer-hero-banner.json';
 // Import source data files
-import booksData from '../database/books.json';
-import packsData from '../database/packs.json';
-import examsData from '../database/exams.json';
+import booksData from '../data/books.json';
+import packsData from '../data/packs.json';
+import examsData from '../data/exams.json';
 
 // Function to get product details based on type and ID
 function getProductDetails(reference: OfferReference): Offer | null {

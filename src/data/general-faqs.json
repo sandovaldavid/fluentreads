@@ -1,0 +1,22 @@
+[
+  {
+    "id": "formatos-materiales",
+    "question": "¿Qué formatos incluyen los materiales?",
+    "answer": "Nuestros materiales incluyen formatos PDF, archivos de audio MP3, videos MP4 y software interactivo dependiendo del pack seleccionado. Todos son compatibles con dispositivos móviles y computadoras."
+  },
+  {
+    "id": "acceso-libros",
+    "question": "¿Cómo accedo a mis libros después de comprar?",
+    "answer": "Una vez confirmado tu pago, recibirás un enlace de acceso a una carpeta compartida en Google Drive o OneDrive con todos los materiales. Este acceso es permanente y puedes descargarlos o consultarlos online."
+  },
+  {
+    "id": "tiempo-entrega",
+    "question": "¿Cuánto tiempo tarda el proceso de entrega?",
+    "answer": "La entrega es inmediata una vez verificado tu pago. Generalmente, nuestro tiempo de respuesta es de 5 a 15 minutos durante el horario de atención. Fuera de este horario, la entrega se realizará a primera hora del siguiente día hábil."
+  },
+  {
+    "id": "descuentos-estudiantes",
+    "question": "¿Ofrecen descuentos para estudiantes?",
+    "answer": "Sí, contamos con descuentos especiales para estudiantes y profesores. Contáctanos directamente mencionando tu institución educativa para conocer las promociones vigentes."
+  }
+]

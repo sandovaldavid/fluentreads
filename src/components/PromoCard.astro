@@ -6,9 +6,9 @@ import ArrowRightIcon from './icons/ArrowRight.astro';
 interface OfferProps {
   title: string;
   description: string;
-  discount: string;
-  originalPrice: string;
-  salePrice: string;
+  discount: number;
+  originalPrice: number;
+  salePrice: number;
   image: string;
   link: string;
   detailsLink?: string; // Optional details link
@@ -87,10 +87,12 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
           <div
             className={`flex items-center rounded-full px-1 ${isSmallLayout ? 'bg-blue-50/80' : 'bg-blue-50 md:px-2 md:py-1'}`}
           >
-            <span className={`text-accent font-bold ${priceSize}`}>{Offer.salePrice}</span>
+            <span className={`text-accent font-bold ${priceSize}`}
+              >S/{Offer.salePrice.toFixed(2)}</span
+            >
             <span
               className={`text-primary ml-1 line-through ${isSmallLayout ? 'text-3xs' : 'text-xs'}`}
-              >{Offer.originalPrice}</span
+              >S/{Offer.originalPrice.toFixed(2)}</span
             >
           </div>
         </div>
@@ -168,8 +170,10 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
           <div className="flex items-center justify-between mt-4">
             {/* Price display on desktop */}
             <div className="flex items-baseline gap-2">
-              <span className="text-primary-dark font-bold text-2xl">{Offer.salePrice}</span>
-              <span className="text-gray-500 line-through">{Offer.originalPrice}</span>
+              <span className="text-primary-dark font-bold text-2xl">
+                S/{Offer.salePrice.toFixed(2)}
+              </span>
+              <span className="text-gray-500 line-through">S/{Offer.originalPrice.toFixed(2)}</span>
             </div>
 
             {/* Action buttons */}

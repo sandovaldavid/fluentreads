@@ -13,7 +13,7 @@ import '../../../styles/catalog.css';
 import type { Book } from '../../../types/book';
 import { BookLevel, FormatTag, PopularityTag } from '../../../types/book';
 import { getProductsByType } from '../../../utils/listProducts';
-import editorialsData from '../../../database/editorial.json';
+import editorialsData from '../../../data/editorial.json';
 
 // Get filter parameters from URL if any
 const { searchParams } = Astro.url;
@@ -65,7 +65,7 @@ if (format !== 'all') {
 // Create editorial lookup map
 const editorialMap = new Map<string, string>();
 editorialsData.forEach((editorial) => {
-  editorialMap.set(editorial.id, editorial.nombre);
+  editorialMap.set(editorial.id, editorial.name);
 });
 
 // Get book data using the utility function

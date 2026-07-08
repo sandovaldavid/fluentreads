@@ -1,0 +1,158 @@
+[
+  {
+    "id": "ielts-preparation-guide",
+    "title": "IELTS Preparation Guide",
+    "description": "Guía completa para obtener una puntuación alta en el IELTS.",
+    "price": 39.99,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848807/book-sample-02_s2kr5g.jpg",
+    "examType": "IELTS",
+    "difficulty": "intermediate",
+    "duration": "4 semanas",
+    "formatTags": ["pdf", "audio"],
+    "popularityTags": ["recommended"],
+    "featured": true,
+    "buyLink": "/checkout/ielts-prep-guide",
+    "detailsLink": "/catalogo/examenes-internacionales/ielts-preparation-guide",
+    "includedItems": [
+      "Simulacros oficiales",
+      "Ejercicios de listening",
+      "Guía de writing",
+      "Clases en video"
+    ],
+    "discount": 10,
+    "rating": {
+      "score": 4.5,
+      "reviewCount": 32
+    }
+  },
+  {
+    "id": "toefl-complete-guide",
+    "title": "TOEFL Complete Guide",
+    "description": "Prepárate para el TOEFL con estrategias efectivas y ejercicios prácticos.",
+    "price": 44.99,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848806/book-sample-03_tgi57l.jpg",
+    "examType": "TOEFL",
+    "difficulty": "advanced",
+    "duration": "6 semanas",
+    "formatTags": ["pdf", "audio", "video"],
+    "popularityTags": ["bestSeller"],
+    "featured": true,
+    "buyLink": "/checkout/toefl-complete-guide",
+    "detailsLink": "/catalogo/examenes-internacionales/toefl-complete-guide",
+    "includedItems": [
+      "Simulacros completos",
+      "Estrategias de reading y listening",
+      "Prácticas de writing con correcciones",
+      "Videos explicativos"
+    ],
+    "discount": 15,
+    "rating": {
+      "score": 4.7,
+      "reviewCount": 45
+    }
+  },
+  {
+    "id": "cambridge-first-certification",
+    "title": "Cambridge First Certification (FCE) Prep",
+    "description": "Todo lo que necesitas para aprobar el examen FCE de Cambridge.",
+    "price": 34.99,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848806/book-sample-01_zm2gtc.jpg",
+    "examType": "FCE",
+    "difficulty": "upper-intermediate",
+    "duration": "5 semanas",
+    "formatTags": ["pdf"],
+    "popularityTags": ["bestSeller"],
+    "featured": false,
+    "buyLink": "/checkout/cambridge-fce-prep",
+    "detailsLink": "/catalogo/examenes-internacionales/cambridge-fce-prep",
+    "includedItems": [
+      "Prácticas de speaking",
+      "Ejercicios de grammar y vocabulary",
+      "Exámenes de prueba",
+      "Explicaciones detalladas"
+    ],
+    "discount": 10,
+    "rating": {
+      "score": 4.6,
+      "reviewCount": 38
+    }
+  },
+  {
+    "id": "cpe-masterclass",
+    "title": "CPE Masterclass",
+    "description": "Material avanzado para obtener la certificación Cambridge CPE.",
+    "price": 49.99,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848807/book-sample-02_s2kr5g.jpg",
+    "examType": "CPE",
+    "difficulty": "proficient",
+    "duration": "8 semanas",
+    "formatTags": ["pdf", "audio"],
+    "popularityTags": ["bestSeller"],
+    "featured": true,
+    "buyLink": "/checkout/cpe-masterclass",
+    "detailsLink": "/catalogo/examenes-internacionales/cpe-masterclass",
+    "includedItems": [
+      "Ejercicios avanzados",
+      "Material de comprensión auditiva",
+      "Clases magistrales en video",
+      "Modelos de writing"
+    ],
+    "discount": 20,
+    "rating": {
+      "score": 4.8,
+      "reviewCount": 50
+    }
+  },
+  {
+    "id": "pte-exam-prep",
+    "title": "PTE Exam Prep",
+    "description": "Guía completa para obtener una puntuación alta en el PTE.",
+    "price": 39.99,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848806/book-sample-03_tgi57l.jpg",
+    "examType": "PTE",
+    "difficulty": "intermediate",
+    "duration": "4 semanas",
+    "formatTags": ["pdf", "audio", "video"],
+    "popularityTags": ["new"],
+    "featured": false,
+    "buyLink": "/checkout/pte-exam-prep",
+    "detailsLink": "/catalogo/examenes-internacionales/pte-exam-prep",
+    "includedItems": [
+      "Simulacros en tiempo real",
+      "Guía de respuesta rápida",
+      "Estrategias de speaking",
+      "Ejercicios de listening"
+    ],
+    "discount": 10,
+    "rating": {
+      "score": 4.5,
+      "reviewCount": 29
+    }
+  },
+  {
+    "id": "gre-verbal-strategies",
+    "title": "GRE Verbal Strategies",
+    "description": "Material intensivo para mejorar tu puntaje en la sección verbal del GRE.",
+    "price": 42.99,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848806/book-sample-01_zm2gtc.jpg",
+    "examType": "GRE",
+    "difficulty": "advanced",
+    "duration": "6 semanas",
+    "formatTags": ["pdf", "workbook"],
+    "popularityTags": ["bestSeller"],
+    "featured": true,
+    "buyLink": "/checkout/gre-verbal-strategies",
+    "detailsLink": "/catalogo/examenes-internacionales/gre-verbal-strategies",
+    "includedItems": [
+      "Ejercicios de vocabulario avanzado",
+      "Prácticas de lectura crítica",
+      "Guía de redacción analítica",
+      "Simulaciones de examen"
+    ],
+    "discount": 15,
+    "rating": {
+      "score": 4.7,
+      "reviewCount": 40
+    }
+  }
+]
