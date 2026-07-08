@@ -171,9 +171,10 @@ const offers = defineCollection({
 const categories = defineCollection({
   loader: file('src/data/categories.json'),
   schema: z.object({
+    id: z.string(),
     name: z.string(),
     description: z.string(),
-    icon: z.string(),
+    icon: z.enum(['Book', 'Books', 'GraduationCap']),
     image: z.string(),
     link: z.string(),
   }),

@@ -1,45 +1,57 @@
 ---
 import CategoriesData from '../../data/categories.json';
 import ArrowRightIcon from '../icons/ArrowRight.astro';
+import BookIcon from '../icons/Book.astro';
+import BooksIcon from '../icons/Books.astro';
+import GraduationCapIcon from '../icons/GraduationCap.astro';
 
 const categories = CategoriesData;
+
+const iconMap: Record<string, (_props: Record<string, unknown>) => unknown> = {
+  Book: BookIcon,
+  Books: BooksIcon,
+  GraduationCap: GraduationCapIcon,
+};
 ---
 
 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" id="catalog-categories">
   {
-    categories.map((category, index) => (
-      <a
-        href={category.link}
-        className={`category-card group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-xl category-${index + 1}`}
-      >
-        {/* Background image with overlay */}
-        <div className="absolute inset-0 bg-primary-dark/40 group-hover:bg-primary-dark/60 transition-colors duration-300" />
-        <img
-          src={category.image}
-          alt={category.name}
-          className="w-full h-64 object-cover object-center transition-transform duration-700 group-hover:scale-110"
-        />
+    categories.map((category, index) => {
+      const IconComponent = iconMap[category.icon] ?? BookIcon;
+      return (
+        <a
+          href={category.link}
+          className={`category-card group relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-xl category-${index + 1}`}
+        >
+          {/* Background image with overlay */}
+          <div className="absolute inset-0 bg-primary-dark/40 group-hover:bg-primary-dark/60 transition-colors duration-300" />
+          <img
+            src={category.image}
+            alt={category.name}
+            className="w-full h-64 object-cover object-center transition-transform duration-700 group-hover:scale-110"
+          />
 
-        {/* Content overlay */}
-        <div className="absolute inset-0 flex flex-col justify-between p-6">
-          <div className="bg-neutral-light w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-md category-icon">
-            {category.icon}
-          </div>
+          {/* Content overlay */}
+          <div className="absolute inset-0 flex flex-col justify-between p-6">
+            <div className="bg-neutral-light w-12 h-12 rounded-full flex items-center justify-center shadow-md category-icon">
+              <IconComponent class="text-primary h-6 w-6" />
+            </div>
 
-          <div className="z-10 bg-neutral-light p-4 rounded-xl transition-colors duration-300">
-            <h3 className="text-xl font-bold text-primary-dark mb-2 category-title">
-              {category.name}
-            </h3>
-            <p className="text-primary text-sm mb-4">{category.description}</p>
+            <div className="z-10 bg-neutral-light p-4 rounded-xl transition-colors duration-300">
+              <h3 className="text-xl font-bold text-primary-dark mb-2 category-title">
+                {category.name}
+              </h3>
+              <p className="text-primary text-sm mb-4">{category.description}</p>
 
-            <div className="inline-flex items-center text-secondary-dark font-medium text-sm group-hover:translate-x-2 transition-transform duration-300">
-              <span>Explorar</span>
-              <ArrowRightIcon class="ml-1 h-4 w-4" />
+              <div className="inline-flex items-center text-secondary-dark font-medium text-sm group-hover:translate-x-2 transition-transform duration-300">
+                <span>Explorar</span>
+                <ArrowRightIcon class="ml-1 h-4 w-4" />
+              </div>
             </div>
           </div>
-        </div>
-      </a>
-    ))
+        </a>
+      );
+    })
   }
 </div>
 
