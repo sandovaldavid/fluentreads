@@ -11,6 +11,7 @@ interface Props {
   initialFormat?: string;
   initialSort?: string;
   initialResourceType?: string;
+  initialSearch?: string;
   editorialMap?: Map<string, string>;
   gridCols?: number;
   productSize?: 'small' | 'medium' | 'large';
@@ -27,10 +28,18 @@ const {
   gridCols = 4,
   productSize = 'medium',
   enableResourceTypeFilter = false,
+  initialSearch = '',
 } = Astro.props;
 
 // Apply initial filters on the server
 let filteredProducts = [...products];
+
+if (initialSearch) {
+  const normalizedSearch = initialSearch.toLowerCase();
+  filteredProducts = filteredProducts.filter((product) =>
+    product.title.toLowerCase().includes(normalizedSearch)
+  );
+}
 
 // Filter by resource type if specified
 if (initialResourceType !== 'any') {
@@ -86,7 +95,7 @@ const getGridClassFromColumns = (cols: number): string => {
 const gridClass = getGridClassFromColumns(gridCols);
 ---
 
-<div className="catalog-container flex flex-col items-center">
+<div class="catalog-container flex flex-col items-center">
   <!-- Filtro en React (Isla) con parámetros iniciales -->
   <Filter
     client:visible
@@ -94,17 +103,18 @@ const gridClass = getGridClassFromColumns(gridCols);
     initialFormat={initialFormat}
     initialSort={initialSort}
     initialResourceType={initialResourceType}
+    initialSearch={initialSearch}
     enableResourceTypeFilter={enableResourceTypeFilter}
     productType={initialResourceType !== 'any' ? initialResourceType : undefined}
     productCount={filteredProducts.length}
   />
 
   <!-- Contenedor del grid con posición relativa para el loading indicator -->
-  <div className="relative w-full">
+  <div class="relative w-full">
     <!-- Loading indicator dentro del contenedor del grid -->
     <div
       id="loading-indicator"
-      className="loading-container absolute inset-0 z-10 hidden rounded-lg bg-white/80"
+      class="loading-container absolute inset-0 z-10 hidden rounded-lg bg-white/80"
     >
       <!-- Skeleton loader que se muestra durante la carga -->
       <SkeletonCatalog count={gridCols * 2} />
@@ -113,7 +123,7 @@ const gridClass = getGridClassFromColumns(gridCols);
     <!-- Grid de productos -->
     <div
       id="products-grid"
-      className={`grid ${gridClass} mt-8 min-h-[300px] px-1 sm:px-4 md:gap-6 md:px-8`}
+      class={`grid ${gridClass} mt-8 min-h-[300px] px-1 sm:px-4 md:gap-6 md:px-8`}
     >
       {
         filteredProducts.map((product) => {
@@ -128,7 +138,7 @@ const gridClass = getGridClassFromColumns(gridCols);
 
           return (
             <div
-              className="product-grid-item"
+              class="product-grid-item"
               data-product-id={product.id}
               data-type={product.productType}
               data-level={product.level}
@@ -148,17 +158,17 @@ const gridClass = getGridClassFromColumns(gridCols);
   </div>
 
   <!-- Empty state message that will be shown when no products match filters -->
-  <div id="empty-state" className="hidden px-4 py-16 text-center">
-    <div className="mb-4 text-6xl">📚</div>
-    <h3 className="mb-2 text-2xl font-bold text-gray-700">
+  <div id="empty-state" class="hidden px-4 py-16 text-center">
+    <div class="mb-4 text-6xl">📚</div>
+    <h3 class="mb-2 text-2xl font-bold text-gray-700">
       No hay resultados que coincidan con tus filtros
     </h3>
-    <p className="mb-6 text-gray-500">
+    <p class="mb-6 text-gray-500">
       Intenta con otros filtros o revisa todas nuestras opciones disponibles
     </p>
     <button
       id="reset-filters"
-      className="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 text-white transition-colors"
+      class="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 text-white transition-colors"
     >
       Limpiar filtros
     </button>
@@ -440,6 +450,24 @@ const gridClass = getGridClassFromColumns(gridCols);
         }
       });
     };
+
+    // Sync to URL parameters on load
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlType = urlParams.get('type') || 'any';
+    const urlLevel = urlParams.get('level') || 'all';
+    const urlFormat = urlParams.get('format') || 'all';
+    const urlSort = urlParams.get('sort') || 'featured';
+    const urlSearch = urlParams.get('q') || urlParams.get('search') || '';
+
+    if (
+      urlType !== 'any' ||
+      urlLevel !== 'all' ||
+      urlFormat !== 'all' ||
+      urlSort !== 'featured' ||
+      urlSearch
+    ) {
+      filterProducts(urlType, urlLevel, urlFormat, urlSort, urlSearch);
+    }
 
     // Initialize animations
     observeElements();
