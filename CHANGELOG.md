@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.3.1...fluentreads-v0.3.2) (2026-07-08)
+
+
+### Bug Fixes
+
+* **cart:** update Comprar buttons to add to cart and redirect to checkout ([#35](https://github.com/sandovaldavid/fluentreads/issues/35)) ([73ecf82](https://github.com/sandovaldavid/fluentreads/commit/73ecf82e206994f0527fdb074390247da045eddb))
+
 ## [0.3.1](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.3.0...fluentreads-v0.3.1) (2026-07-08)
 
 
