@@ -4,6 +4,8 @@ import DiscountBadge from './DiscountBadge.astro';
 import ArrowRightIcon from './icons/ArrowRight.astro';
 
 interface OfferProps {
+  id?: string;
+  type?: string;
   title: string;
   description: string;
   discount: number;
@@ -21,6 +23,10 @@ interface Props {
 }
 
 const { Offer, index, size = 'large' } = Astro.props;
+
+// Extract ID and type from the link if they aren't provided directly
+const offerId = Offer.id || (Offer.link ? Offer.link.replace('/checkout/', '') : '');
+const offerType = Offer.type || (offerId.startsWith('pack-') ? 'pack' : 'book');
 
 // Default details link if not provided
 const detailsLink =
@@ -131,8 +137,12 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
         <Button
           variant="primary"
           size={buttonSize}
-          href={Offer.link}
-          class={`${isSmallLayout ? 'w-full' : 'flex-1'} flex items-center justify-center`}
+          class={`${isSmallLayout ? 'w-full' : 'flex-1'} flex items-center justify-center promo-add-to-cart cursor-pointer`}
+          data-id={offerId}
+          data-title={Offer.title}
+          data-price={Offer.salePrice}
+          data-image={Offer.image}
+          data-type={offerType}
         >
           Comprar
         </Button>
@@ -190,8 +200,12 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
               <Button
                 variant="primary"
                 size="small"
-                href={Offer.link}
-                class="shadow-md hover:shadow-lg"
+                class="promo-add-to-cart cursor-pointer shadow-md hover:shadow-lg"
+                data-id={offerId}
+                data-title={Offer.title}
+                data-price={Offer.salePrice}
+                data-image={Offer.image}
+                data-type={offerType}
               >
                 Comprar
               </Button>
@@ -202,6 +216,37 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
     )
   }
 </div>
+
+<script>
+  import { CartManager } from '../utils/cartManager';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.promo-add-to-cart').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const id = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title');
+        const priceStr = btn.getAttribute('data-price');
+        const image = btn.getAttribute('data-image');
+        const type = btn.getAttribute('data-type');
+
+        if (id && title && priceStr && image && type) {
+          CartManager.addItem({
+            id,
+            title,
+            price: parseFloat(priceStr),
+            image,
+            type: type as any,
+          });
+
+          window.location.href = '/checkout';
+        }
+      });
+    });
+  });
+</script>
 
 <style>
   .promo-item {

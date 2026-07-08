@@ -15,6 +15,7 @@ interface Props {
 const { book } = Astro.props;
 
 const {
+  id,
   title,
   description,
   price,
@@ -29,6 +30,7 @@ const {
   featured = false,
   formatTags = [],
   popularityTags = [],
+  productType,
 } = book;
 
 // Truncate description if too long
@@ -169,13 +171,16 @@ const isFeaturedOrBestseller =
       <Button
         variant="primary"
         size="small"
-        href={buyLink}
         fullWidth={true}
-        newTab={false}
-        class="group buy-button shadow-md hover:shadow-lg"
+        class="group buy-button add-to-cart-and-checkout cursor-pointer shadow-md hover:shadow-lg"
+        data-id={id}
+        data-title={title}
+        data-price={discountedPrice}
+        data-image={coverImage}
+        data-type="book"
       >
         <span>Comprar</span>
-        <ArrowRightIcon class="ml h-6 w-6" />
+        <ArrowRightIcon class="ml-1 h-6 w-6" />
       </Button>
       <Button
         variant="outline"
@@ -191,6 +196,8 @@ const isFeaturedOrBestseller =
 </div>
 
 <script>
+  import { CartManager } from '../utils/cartManager';
+
   // Mobile click to expand functionality
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.book-card').forEach((card) => {
@@ -214,6 +221,32 @@ const isFeaturedOrBestseller =
             card.classList.toggle('expanded');
             keyboardEvent.preventDefault();
           }
+        }
+      });
+    });
+
+    // Handle "Comprar" button clicks
+    document.querySelectorAll('.add-to-cart-and-checkout').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const id = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title');
+        const priceStr = btn.getAttribute('data-price');
+        const image = btn.getAttribute('data-image');
+        const type = btn.getAttribute('data-type');
+
+        if (id && title && priceStr && image && type) {
+          CartManager.addItem({
+            id,
+            title,
+            price: parseFloat(priceStr),
+            image,
+            type: type as any,
+          });
+
+          window.location.href = '/checkout';
         }
       });
     });
