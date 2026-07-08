@@ -82,7 +82,6 @@ const safeExams: Exam[] = allExams.map((exam) => ({
   coverImage: exam.coverImage,
   altText: exam.altText || `${exam.title} Exam cover`,
   includedItems: (exam as any).includedItems || [],
-  requirements: (exam as any).requirements || [],
   rating: exam.rating || { score: 0, reviewCount: 0 },
   buyLink: (exam as any).buyLink || `/checkout/${exam.id}`,
   detailsLink: exam.detailsLink || `/catalogo/examenes-internacionales/${exam.id}`,

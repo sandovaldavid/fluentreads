@@ -41,5 +41,4 @@ export interface Exam {
   detailsLink: string;
   altText?: string;
   includedItems: string[];
-  requirements?: string[];
 }
