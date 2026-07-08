@@ -375,7 +375,7 @@ const gridClass = getGridClassFromColumns(gridCols);
         // Show/hide products based on filter results
         let visibleCount = 0;
         productItems.forEach((item) => {
-          const productId = item.getAttribute('data-product-id');
+          const productId = item.getAttribute('data-product-id') || '';
           if (filteredIds.has(productId)) {
             item.classList.remove('hidden');
             visibleCount++;
