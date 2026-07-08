@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.1.0...fluentreads-v0.2.0) (2026-07-08)
+
+
+### Features
+
+* **a11y:** implement wcag accessibility guidelines for interactive components and forms ([#24](https://github.com/sandovaldavid/fluentreads/issues/24)) ([1427560](https://github.com/sandovaldavid/fluentreads/commit/1427560e83496c3905928c0c7c5ab34638be9d2f))
+
+
+### Performance Improvements
+
+* **perf:** implement sitemap, prefetch, inline CSS and client:visible migrations ([#26](https://github.com/sandovaldavid/fluentreads/issues/26)) ([37c439b](https://github.com/sandovaldavid/fluentreads/commit/37c439b2663a530b9d40c315eea89d208256d563))
+
 ## [0.1.0](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.0.1...fluentreads-v0.1.0) (2026-07-08)
 
 
