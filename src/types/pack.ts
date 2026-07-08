@@ -6,6 +6,7 @@ export interface Pack {
   description: string;
   price: number;
   discount?: number | 0;
+  offerDays?: number;
   coverImage: string;
   images?: string[];
   video?: string;

@@ -12,8 +12,8 @@ import type { Product } from '../../types/product';
 
 // Import our products utility functions
 import { getAllProducts } from '../../utils/listProducts';
-import editorialsData from '../../database/editorial.json';
-import siteInfo from '../../database/pageInformation.json';
+import editorialsData from '../../data/editorial.json';
+import siteInfo from '../../data/page-information.json';
 import { siteConfig } from '@config/site';
 
 // Get filter parameters from URL if any
@@ -78,7 +78,7 @@ if (type !== 'any') {
 // Create editorial lookup map
 const editorialMap = new Map();
 editorialsData.forEach((editorial) => {
-  editorialMap.set(editorial.id, editorial.nombre);
+  editorialMap.set(editorial.id, editorial.name);
 });
 
 // Get all products with our utility function

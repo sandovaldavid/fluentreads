@@ -1,8 +1,8 @@
 import type { Product } from '../types/product';
 
-import booksData from '../database/books.json';
-import packsData from '../database/packs.json';
-import examsData from '../database/exams.json';
+import booksData from '../data/books.json';
+import packsData from '../data/packs.json';
+import examsData from '../data/exams.json';
 
 /**
  * Retrieves all products from the database, converting them to the unified Product type

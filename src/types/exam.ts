@@ -33,6 +33,7 @@ export interface Exam {
   rating?: Rating;
   examType: ExamType | string;
   difficulty: ExamDifficulty | string;
+  duration?: string;
   formatTags?: (FormatTag | string)[];
   popularityTags?: (PopularityTag | string)[];
   featured?: boolean;
