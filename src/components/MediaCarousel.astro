@@ -57,20 +57,23 @@ const thumbnails = mediaItems.map((item, index) => {
           id={`slide-${index}`}
         >
           {item.type === 'image' ? (
-            <div className="media-image-container h-full cursor-zoom-in">
+            <button
+              class="media-image-container focus-visible:ring-primary block h-full w-full cursor-zoom-in overflow-hidden rounded-lg border-0 bg-transparent p-0 text-left focus:outline-none focus-visible:ring-2"
+              aria-label={`Ampliar imagen ${index + 1}`}
+            >
               <img
                 src={item.url}
                 alt={item.title || `${title} - Imagen ${index + 1}`}
-                className="media-image"
+                class="media-image"
                 loading={index === 0 ? 'eager' : 'lazy'}
                 data-full-img={item.url}
               />
-              <div className="bg-opacity-0 hover:bg-opacity-20 absolute inset-0 flex items-center justify-center transition-opacity">
-                <div className="zoom-icon opacity-0 transition-opacity group-hover:opacity-100">
+              <div class="bg-opacity-0 hover:bg-opacity-20 absolute inset-0 flex items-center justify-center transition-opacity">
+                <div class="zoom-icon opacity-0 transition-opacity group-hover:opacity-100">
                   <ZoomInIcon class="h-10 w-10 text-white" />
                 </div>
               </div>
-            </div>
+            </button>
           ) : (
             <div className="media-video-container h-full">
               <lite-youtube
@@ -98,23 +101,24 @@ const thumbnails = mediaItems.map((item, index) => {
     <div className="thumbnails-track flex gap-2">
       {
         thumbnails.map((thumb, index) => (
-          <div
-            className={`thumbnail-item flex-shrink-0 cursor-pointer overflow-hidden rounded border-2 transition-all duration-300 ${index === 0 ? 'initial-active' : 'border-transparent'}`}
+          <button
+            class={`thumbnail-item flex-shrink-0 cursor-pointer overflow-hidden rounded border-2 transition-all duration-300 ${index === 0 ? 'initial-active' : 'border-transparent'} focus-visible:ring-primary focus:outline-none focus-visible:ring-2`}
             data-index={index}
+            aria-label={`Ver miniatura ${index + 1}`}
           >
-            <div className="relative h-16 w-16 sm:h-20 sm:w-20">
+            <div class="relative h-16 w-16 sm:h-20 sm:w-20">
               <img
                 src={thumb.thumb}
                 alt={`Miniatura ${index + 1}`}
-                className="h-full w-full object-cover"
+                class="h-full w-full object-cover"
               />
               {thumb.type === 'video' && (
-                <div className="bg-opacity-30 absolute inset-0 flex items-center justify-center bg-black">
+                <div class="bg-opacity-30 absolute inset-0 flex items-center justify-center bg-black">
                   <PlayIcon class="h-8 w-8 text-white" />
                 </div>
               )}
             </div>
-          </div>
+          </button>
         ))
       }
     </div>

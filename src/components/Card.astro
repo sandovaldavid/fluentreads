@@ -53,12 +53,15 @@ const isFeaturedOrBestseller =
 
 <div
   class:list={[
-    'book-card book-card-tilt flex h-full w-full max-w-sm transform flex-col overflow-hidden rounded-xl bg-white transition-all duration-500',
+    'book-card book-card-tilt focus-visible:ring-primary flex h-full w-full max-w-sm transform flex-col overflow-hidden rounded-xl bg-white transition-all duration-500 focus:outline-none focus-visible:ring-2',
     isFeaturedOrBestseller
       ? 'card-highlighted shadow-xl hover:-translate-y-2 hover:shadow-2xl'
       : 'shadow-md hover:-translate-y-1 hover:shadow-xl',
     isSpecialOffer && 'special-offer-card',
   ]}
+  tabindex="0"
+  role="button"
+  aria-label={`Detalles de libro: ${title}. Presiona para expandir en dispositivos móviles.`}
 >
   <!-- Book Cover Image with Badge -->
   <div className="book-cover-container relative h-52 overflow-hidden">
@@ -197,6 +200,20 @@ const isFeaturedOrBestseller =
           const target = e.target as Element;
           if (target && !target.closest('a') && !target.closest('button')) {
             card.classList.toggle('expanded');
+          }
+        }
+      });
+
+      card.addEventListener('keydown', (e) => {
+        const keyboardEvent = e as KeyboardEvent;
+        if (
+          window.innerWidth <= 768 &&
+          (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ')
+        ) {
+          const target = keyboardEvent.target as Element;
+          if (target && !target.closest('a') && !target.closest('button')) {
+            card.classList.toggle('expanded');
+            keyboardEvent.preventDefault();
           }
         }
       });

@@ -24,6 +24,7 @@ export class MediaCarouselManager {
   private modalCloseBtn: HTMLElement | null;
   private imageUrls: string[] = [];
   private currentModalImageIndex: number = 0;
+  private lastFocusedElement: HTMLElement | null = null;
 
   private handleKeyDownGlobal = (e: KeyboardEvent) => {
     const carousel = document.getElementById('media-carousel');
@@ -44,6 +45,8 @@ export class MediaCarouselManager {
         this.navigateModal('prev');
       } else if (e.key === 'ArrowRight') {
         this.navigateModal('next');
+      } else if (e.key === 'Tab') {
+        this.trapFocus(e);
       }
     }
   };
@@ -206,8 +209,8 @@ export class MediaCarouselManager {
   /**
    * Open the image modal with the specified image
    */
-  private openImageModal(imageUrl: string, slideIndex: number): void {
-    const modal = document.querySelector('#image-modal');
+  private openImageModal(imageUrl: string, _slideIndex: number): void {
+    const modal = document.querySelector('#image-modal') as HTMLElement;
     const modalImage = document.querySelector('#modal-image') as HTMLImageElement;
     const modalSpinner = document.querySelector('#modal-spinner');
 
@@ -216,8 +219,12 @@ export class MediaCarouselManager {
       return;
     }
 
+    // Save last focused element
+    this.lastFocusedElement = document.activeElement as HTMLElement;
+
     // Show modal
     modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
 
     // Set current image index for navigation
     this.currentModalImageIndex = this.imageUrls.indexOf(imageUrl);
@@ -240,16 +247,24 @@ export class MediaCarouselManager {
 
     // Prevent page scrolling while modal is open
     document.body.style.overflow = 'hidden';
+
+    // Move focus to close button
+    const closeBtn = document.getElementById('modal-close-btn');
+    if (closeBtn) {
+      closeBtn.focus();
+    }
   }
 
   /**
    * Close the image modal
    */
   private closeModal(): void {
-    const modal = document.querySelector('#image-modal');
+    const modal = document.querySelector('#image-modal') as HTMLElement;
     const modalImage = document.querySelector('#modal-image');
 
     if (!modal) return;
+
+    modal.setAttribute('aria-hidden', 'true');
 
     // Add fade-out classes for animation
     if (modalImage) {
@@ -267,7 +282,49 @@ export class MediaCarouselManager {
       if (modalImage) {
         modalImage.classList.remove('modal-image-fadeout');
       }
+
+      // Restore focus
+      if (this.lastFocusedElement) {
+        this.lastFocusedElement.focus();
+      }
     }, 300);
+  }
+
+  /**
+   * Traps the focus inside the modal for accessibility
+   */
+  private trapFocus(e: KeyboardEvent): void {
+    const modal = document.querySelector('#image-modal');
+    if (!modal) return;
+
+    // Find all visible focusable elements
+    const focusableElements = Array.from(
+      modal.querySelectorAll(
+        'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]'
+      )
+    ).filter((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 && window.getComputedStyle(el).display !== 'none';
+    }) as HTMLElement[];
+
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) {
+      // Shift + Tab
+      if (document.activeElement === firstElement) {
+        lastElement.focus();
+        e.preventDefault();
+      }
+    } else {
+      // Tab
+      if (document.activeElement === lastElement) {
+        firstElement.focus();
+        e.preventDefault();
+      }
+    }
   }
 
   /**

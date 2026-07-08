@@ -31,7 +31,11 @@ const tagClasses = `${tagBaseClasses} ${isLikelyMobile ? tagMobileClasses : tagD
           return (
             <span class={`${tagClasses} ${colorClass}`}>
               {/* Always show icon if available */}
-              {config?.icon && <span class="mr-0.5 sm:mr-1">{config.icon}</span>}
+              {config?.icon && (
+                <span class="mr-0.5 sm:mr-1" aria-hidden="true">
+                  {config.icon}
+                </span>
+              )}
               {/* Show label text only on larger screens */}
               <span class="hidden sm:inline">{config?.label || tag}</span>
             </span>
@@ -52,7 +56,11 @@ const tagClasses = `${tagBaseClasses} ${isLikelyMobile ? tagMobileClasses : tagD
           return (
             <span class={`${tagClasses} ${colorClass}`}>
               {/* Always show emoji icon if available */}
-              {config?.icon && <span class="mr-0.5 sm:mr-1">{config.icon}</span>}
+              {config?.icon && (
+                <span class="mr-0.5 sm:mr-1" aria-hidden="true">
+                  {config.icon}
+                </span>
+              )}
               {/* Show label text only on larger screens */}
               <span class="hidden sm:inline">{config?.label || tag}</span>
             </span>

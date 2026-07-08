@@ -144,17 +144,18 @@ const contactForm = {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <!-- Name Field -->
         <div className="form-group">
-          <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700"
+          <label htmlFor="name" class="mb-1 block text-sm font-medium text-gray-700"
             >{contactForm.fields[0].label}
-            <span className="text-accent">*</span></label
+            <span class="text-accent" aria-hidden="true">*</span></label
           >
-          <div className="relative">
+          <div class="relative">
             <input
               type="text"
               id="name"
               name="name"
               required
-              className="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
+              aria-required="true"
+              class="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
               placeholder={contactForm.fields[0].placeholder}
             />
             <span className="form-validation-icon"></span>
@@ -166,17 +167,18 @@ const contactForm = {
 
         <!-- Email Field -->
         <div className="form-group">
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700"
+          <label htmlFor="email" class="mb-1 block text-sm font-medium text-gray-700"
             >{contactForm.fields[1].label}
-            <span className="text-accent">*</span></label
+            <span class="text-accent" aria-hidden="true">*</span></label
           >
-          <div className="relative">
+          <div class="relative">
             <input
               type="email"
               id="email"
               name="email"
               required
-              className="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
+              aria-required="true"
+              class="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
               placeholder={contactForm.fields[1].placeholder}
             />
             <span className="form-validation-icon"></span>
@@ -189,17 +191,18 @@ const contactForm = {
 
       <!-- Subject Field -->
       <div className="form-group">
-        <label htmlFor="subject" className="mb-1 block text-sm font-medium text-gray-700"
+        <label htmlFor="subject" class="mb-1 block text-sm font-medium text-gray-700"
           >{contactForm.fields[2].label}
-          <span className="text-accent">*</span></label
+          <span class="text-accent" aria-hidden="true">*</span></label
         >
-        <div className="relative">
+        <div class="relative">
           <input
             type="text"
             id="subject"
             name="subject"
             required
-            className="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
+            aria-required="true"
+            class="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
             placeholder={contactForm.fields[2].placeholder}
           />
           <span className="form-validation-icon"></span>
@@ -211,17 +214,18 @@ const contactForm = {
 
       <!-- Message Field -->
       <div className="form-group">
-        <label htmlFor="body" className="mb-1 block text-sm font-medium text-gray-700"
+        <label htmlFor="body" class="mb-1 block text-sm font-medium text-gray-700"
           >{contactForm.fields[3].label}
-          <span className="text-accent">*</span></label
+          <span class="text-accent" aria-hidden="true">*</span></label
         >
-        <div className="relative">
+        <div class="relative">
           <textarea
             id="body"
             name="body"
             rows="6"
             required
-            className="form-textarea border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
+            aria-required="true"
+            class="form-textarea border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
             placeholder={contactForm.fields[3].placeholder}></textarea>
           <span className="form-validation-icon"></span>
         </div>
@@ -290,9 +294,9 @@ const contactForm = {
       </div>
     </form>
 
-    <div className="mt-6 text-center text-sm text-gray-500">
+    <div class="mt-6 text-center text-sm text-gray-500">
       <p>
-        Todos los campos marcados con <span className="text-accent">*</span>
+        Todos los campos marcados con <span class="text-accent" aria-hidden="true">*</span>
         son obligatorios
       </p>
     </div>
