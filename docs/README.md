@@ -14,7 +14,7 @@ Indice de la auditoria tecnica completa del proyecto FluentReads (Astro 7 + Reac
 | B5     | Accesibilidad                                | done    | S3     |
 | B6     | Performance                                  | done    | S4     |
 | B7     | Seguridad                                    | done    | S4     |
-| B8     | Refactor arquitectonico: content collections | pending | S5-S6  |
+| B8     | Refactor arquitectonico: content collections | done    | S5-S6  |
 | B9     | Features incompletas                         | pending | S6-S7  |
 | B10    | README + docs finales                        | pending | S8     |
 
