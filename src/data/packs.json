@@ -102,7 +102,7 @@
     "buyLink": "/checkout/ielts-preparation-pack",
     "includedItems": ["Simulaciones de examen", "Consejos de expertos"],
     "stock": 20,
-    "level": "advanced",
+    "level": "international-exam",
     "offerDays": 7,
     "rating": {
       "score": 4.8,
