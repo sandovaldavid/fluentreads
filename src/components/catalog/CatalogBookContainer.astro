@@ -93,7 +93,7 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
     productCount={filteredBooks.length}
     productType="book"
     className="mb-8 shadow-lg"
-    client:load
+    client:visible
   />
 
   <div id="books-container" data-is-loading={showSkeletonOnLoad.toString()}>

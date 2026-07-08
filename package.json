@@ -22,6 +22,9 @@
   },
   "dependencies": {
     "@astrojs/react": "6.0.1",
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource/lora": "^5.2.8",
+    "@fontsource/poppins": "^5.2.7",
     "@justinribeiro/lite-youtube": "^1.9.0",
     "@tailwindcss/vite": "^4.3.2",
     "@types/react": "^19.2.17",

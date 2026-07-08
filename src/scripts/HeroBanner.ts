@@ -36,6 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle automatic sliding every 5 seconds with a longer time for reading
   let autoplayInterval = setInterval(nextSlide, 7000);
 
+  // Pause autoplay when document is hidden to conserve CPU
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      clearInterval(autoplayInterval);
+    } else {
+      clearInterval(autoplayInterval);
+      autoplayInterval = setInterval(nextSlide, 7000);
+    }
+  };
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
   // Handle previous slide button click
   prevButton?.addEventListener('click', () => {
     clearInterval(autoplayInterval);
@@ -190,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(autoplayInterval);
     resizeObserver.disconnect();
     document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
   }
 
   // Astro page change support

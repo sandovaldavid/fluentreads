@@ -68,8 +68,9 @@ const isFeaturedOrBestseller =
     <img
       src={coverImage}
       alt={altText}
-      className="book-cover h-full w-full object-cover transition-transform duration-700"
+      class="book-cover h-full w-full object-cover transition-transform duration-700"
       loading="lazy"
+      decoding="async"
     />
     <div
       className="cover-overlay absolute inset-0 bg-gradient-to-b from-transparent to-black/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100"

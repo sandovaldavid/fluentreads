@@ -19,8 +19,12 @@ export class CartManager {
    * Initialize the shopping cart in localStorage if it doesn't exist
    */
   static initializeCart(): void {
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
+    try {
+      if (!localStorage.getItem(this.STORAGE_KEY)) {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
+      }
+    } catch (e) {
+      console.warn('LocalStorage error during cart initialization:', e);
     }
   }
 
@@ -28,8 +32,13 @@ export class CartManager {
    * Get all items from the cart
    */
   static getCart(): CartItem[] {
-    const cart = localStorage.getItem(this.STORAGE_KEY);
-    return cart ? JSON.parse(cart) : [];
+    try {
+      const cart = localStorage.getItem(this.STORAGE_KEY);
+      return cart ? JSON.parse(cart) : [];
+    } catch (e) {
+      console.error('Error parsing cart from localStorage:', e);
+      return [];
+    }
   }
 
   /**
@@ -52,8 +61,13 @@ export class CartManager {
       });
     }
 
-    // Update cart in localStorage
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cart));
+    // Update cart in localStorage safely
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cart));
+    } catch (e) {
+      console.error('Failed to save cart to localStorage:', e);
+      this.showNotification('No se pudo guardar en el carrito. Espacio insuficiente.', 'error');
+    }
   }
 
   /**
@@ -62,7 +76,11 @@ export class CartManager {
   static removeItem(id: string): void {
     const cart = this.getCart();
     const updatedCart = cart.filter((item) => item.id !== id);
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedCart));
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedCart));
+    } catch (e) {
+      console.error('Failed to update cart after removal:', e);
+    }
   }
 
   /**
@@ -76,7 +94,12 @@ export class CartManager {
 
     if (itemIndex !== -1) {
       cart[itemIndex].quantity = quantity;
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cart));
+      try {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cart));
+      } catch (e) {
+        console.error('Failed to update cart quantity:', e);
+        this.showNotification('No se pudo actualizar la cantidad.', 'error');
+      }
     }
   }
 
@@ -84,7 +107,11 @@ export class CartManager {
    * Clear the entire cart
    */
   static clearCart(): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
+    } catch (e) {
+      console.error('Failed to clear cart:', e);
+    }
   }
 
   /**

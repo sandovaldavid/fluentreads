@@ -2,6 +2,12 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource/lora/600-italic.css';
 import siteInfo from '../database/pageInformation.json';
 import { siteConfig } from '@config/site';
 
@@ -223,31 +229,15 @@ const metaData = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Preload de fuentes optimizado -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,600&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      />
-    </noscript>
-
     <!-- JSON-LD (Structured Data) -->
-    <script type="application/ld+json" set:html={JSON.stringify(finalStructuredData)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(finalStructuredData)} />
     {
       finalBreadcrumbData && (
-        <script type="application/ld+json" set:html={JSON.stringify(finalBreadcrumbData)} />
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(finalBreadcrumbData)}
+        />
       )
     }
   </head>

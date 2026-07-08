@@ -21,21 +21,28 @@ interface FormField {
   errorMessage: string;
 }
 
-// Environment variables configuration with improved development mode handling
-const pageclipKey = import.meta.env.PAGECLIP_KEY;
-const isDevelopment = import.meta.env.IS_DEVELOPMENT === 'true';
+// Environment variables configuration supporting both client (PUBLIC_) and server scopes (Issues 5, 11)
+const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY || import.meta.env.PAGECLIP_KEY;
+const isDevelopment =
+  import.meta.env.PUBLIC_IS_DEVELOPMENT === 'true' || import.meta.env.IS_DEVELOPMENT === 'true';
 
 // In development mode, always disable reCAPTCHA to avoid COEP errors
-const enableRecaptcha = isDevelopment ? false : import.meta.env.ENABLE_RECAPTCHA !== 'false';
-const recaptchaSiteKey = import.meta.env.RECAPTCHA_SITE_KEY || process.env.RECAPTCHA_SITE_KEY;
+const enableRecaptcha = isDevelopment
+  ? false
+  : import.meta.env.PUBLIC_ENABLE_RECAPTCHA !== 'false' &&
+    import.meta.env.ENABLE_RECAPTCHA !== 'false';
+const recaptchaSiteKey =
+  import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY || import.meta.env.RECAPTCHA_SITE_KEY;
 
-// Configure form with environment variables
+// Configure form with environment variables (Issue 6)
+const isConfigured = !!pageclipKey;
 const contactForm = {
   // Use the PAGECLIP_KEY from environment variables
-  action: `https://send.pageclip.co/${pageclipKey}/FluentReads-form`,
+  action: isConfigured ? `https://send.pageclip.co/${pageclipKey}/FluentReads-form` : '#',
+  isConfigured,
   // Recaptcha configuration
   recaptcha: {
-    enabled: enableRecaptcha,
+    enabled: enableRecaptcha && !!recaptchaSiteKey,
     siteKey: recaptchaSiteKey,
     isDevelopment: isDevelopment,
   },
@@ -128,6 +135,25 @@ const contactForm = {
             </div>
             <div className="ml-3">
               <p className="text-sm text-yellow-700">Modo desarrollo: reCAPTCHA desactivado</p>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      !contactForm.isConfigured && (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <WarningIcon class="h-5 w-5 text-red-500" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700 font-medium">Formulario Desactivado</p>
+              <p className="text-sm text-red-700">
+                La clave del formulario (Pageclip Key) no está configurada. Por favor, configure la
+                variable de entorno PUBLIC_PAGECLIP_KEY.
+              </p>
             </div>
           </div>
         </div>
@@ -278,7 +304,8 @@ const contactForm = {
           variant="primary"
           size="large"
           id="submit-button"
-          class="group pageclip-form__submit relative transform shadow-md transition-all duration-300 hover:shadow-lg active:scale-95"
+          class={`group pageclip-form__submit relative transform shadow-md transition-all duration-300 hover:shadow-lg active:scale-95 ${!contactForm.isConfigured ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
+          disabled={!contactForm.isConfigured}
         >
           <span className="submit-button-content flex items-center">
             <span className="mr-2">Enviar mensaje</span>

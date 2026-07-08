@@ -171,8 +171,10 @@ import Button from './Button.astro';
                       <img
                         src={offer.image}
                         alt={offer.title}
-                        className="rounded-lg shadow-lg object-cover w-full h-60 md:h-80 transform transition-transform hover:scale-105"
+                        class="h-60 w-full transform rounded-lg object-cover shadow-lg transition-transform hover:scale-105 md:h-80"
                         loading={index === 0 ? 'eager' : 'lazy'}
+                        decoding={index === 0 ? 'sync' : 'async'}
+                        fetchpriority={index === 0 ? 'high' : 'auto'}
                       />
                     </div>
                     <div className="md:w-3/5 text-left">
