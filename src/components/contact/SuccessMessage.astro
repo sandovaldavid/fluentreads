@@ -11,45 +11,45 @@ const { id, class: className = '' } = Astro.props;
 
 <div
   id={id}
-  className={`success-message from-accent-light/30 to-accent/20 border-accent rounded-lg border-l-4 bg-gradient-to-br p-6 shadow-md ${className}`}
+  class={`success-message from-accent-light/30 to-accent/20 border-accent rounded-lg border-l-4 bg-gradient-to-br p-6 shadow-md ${className}`}
 >
-  <div className="flex items-center">
+  <div class="flex items-center">
     <!-- Success icon -->
     <div
-      className="success-icon from-accent to-accent-dark shadow-accent/30 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-white shadow-md"
+      class="success-icon from-accent to-accent-dark shadow-accent/30 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-white shadow-md"
     >
       <SuccessIcon class="h-7 w-7" />
     </div>
 
-    <div className="ml-5">
-      <h3 className="text-accent-dark text-xl font-semibold">¡Mensaje enviado con éxito!</h3>
-      <p className="text-accent-dark/80 mt-1">
+    <div class="ml-5">
+      <h3 class="text-accent-dark text-xl font-semibold">¡Mensaje enviado con éxito!</h3>
+      <p class="text-accent-dark/80 mt-1">
         Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos lo antes posible.
       </p>
     </div>
   </div>
 
   <!-- Additional information -->
-  <div className="border-accent/20 mt-6 rounded-lg border bg-white/60 p-4 text-gray-700">
-    <p className="font-medium">Mientras tanto, puedes:</p>
-    <ul className="mt-3 list-none space-y-2.5 pl-1">
-      <li className="flex items-center">
-        <span className="bg-primary mr-2 inline-block h-2 w-2 rounded-full"></span>
+  <div class="border-accent/20 mt-6 rounded-lg border bg-white/60 p-4 text-gray-700">
+    <p class="font-medium">Mientras tanto, puedes:</p>
+    <ul class="mt-3 list-none space-y-2.5 pl-1">
+      <li class="flex items-center">
+        <span class="bg-primary mr-2 inline-block h-2 w-2 rounded-full"></span>
         <span
           >Explorar nuestro <a
             href="/catalogo"
-            className="text-primary hover:text-primary-dark font-medium transition-all duration-200 hover:underline"
+            class="text-primary hover:text-primary-dark font-medium transition-all duration-200 hover:underline"
             >catálogo</a
           > de libros</span
         >
       </li>
 
-      <li className="flex items-center">
-        <span className="bg-primary mr-2 inline-block h-2 w-2 rounded-full"></span>
+      <li class="flex items-center">
+        <span class="bg-primary mr-2 inline-block h-2 w-2 rounded-full"></span>
         <span
           >Seguirnos en nuestras <a
             href="#"
-            className="text-primary hover:text-primary-dark font-medium transition-all duration-200 hover:underline"
+            class="text-primary hover:text-primary-dark font-medium transition-all duration-200 hover:underline"
             >redes sociales</a
           > para contenido exclusivo</span
         >
@@ -58,22 +58,22 @@ const { id, class: className = '' } = Astro.props;
   </div>
 
   <!-- Back to home button -->
-  <div className="mt-6">
+  <div class="mt-6">
     <a
       href="/"
-      className="bg-primary hover:bg-primary-dark group inline-flex transform items-center rounded-lg px-5 py-2.5 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+      class="bg-primary hover:bg-primary-dark group inline-flex transform items-center rounded-lg px-5 py-2.5 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="mr-2 h-5 w-5 group-hover:animate-pulse"
+        class="mr-2 h-5 w-5 group-hover:animate-pulse"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
       >
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
           d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
         ></path>
       </svg>

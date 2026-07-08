@@ -82,7 +82,7 @@ const gridClass = getGridClassFromColumns(gridCols);
 const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
 ---
 
-<div className="catalog-pack-container">
+<div class="catalog-pack-container">
   <!-- Filter UI using React component as a client-side island -->
   <Filter
     initialLevel={initialLevel}
@@ -90,7 +90,7 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
     initialSort={initialSort}
     productCount={filteredPacks.length}
     productType="pack"
-    className="mb-8 shadow-lg"
+    class="mb-8 shadow-lg"
     client:visible
   />
 
@@ -98,7 +98,7 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
     <!-- Skeleton loading state -->
     <div
       id="skeleton-loader"
-      className="skeleton-container"
+      class="skeleton-container"
       style={showSkeletonOnLoad ? '' : 'display: none;'}
     >
       <SkeletonCatalog count={gridCols * 2} />
@@ -107,13 +107,13 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
     <!-- Packs Grid -->
     <div
       id="packs-grid"
-      className={`grid ${gridClass} gap-4 sm:gap-6 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
+      class={`grid ${gridClass} gap-4 sm:gap-6 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
     >
       {
         filteredPacks.length > 0 ? (
           filteredPacks.map((pack) => (
             <div
-              className="catalog-product-card"
+              class="catalog-product-card"
               data-level={pack.level}
               data-formats={pack.formatTags?.join(',')}
               data-price={pack.price}
@@ -133,17 +133,15 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
             </div>
           ))
         ) : (
-          <div className="bg-neutral-light/50 col-span-full rounded-lg py-16 text-center">
-            <div className="mb-4 text-5xl">🔍</div>
-            <h3 className="text-primary-dark mb-2 text-xl font-semibold">
-              No se encontraron packs
-            </h3>
-            <p className="mb-6 text-gray-500">
+          <div class="bg-neutral-light/50 col-span-full rounded-lg py-16 text-center">
+            <div class="mb-4 text-5xl">🔍</div>
+            <h3 class="text-primary-dark mb-2 text-xl font-semibold">No se encontraron packs</h3>
+            <p class="mb-6 text-gray-500">
               Lo sentimos, no hay packs de materiales que coincidan con los filtros seleccionados.
             </p>
             <button
               id="reset-filters"
-              className="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 font-medium text-white transition-all duration-300"
+              class="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 font-medium text-white transition-all duration-300"
             >
               Reiniciar filtros
             </button>
@@ -155,9 +153,9 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
     <!-- Results Summary -->
     {
       filteredPacks.length > 0 && (
-        <div className="mt-6 rounded-lg bg-white p-4 text-center shadow-sm">
-          <p className="text-sm text-gray-600">
-            Mostrando <span className="font-semibold">{filteredPacks.length}</span>{' '}
+        <div class="mt-6 rounded-lg bg-white p-4 text-center shadow-sm">
+          <p class="text-sm text-gray-600">
+            Mostrando <span class="font-semibold">{filteredPacks.length}</span>{' '}
             {filteredPacks.length === 1 ? 'pack' : 'packs'}
             {initialLevel !== 'all' && ` de nivel ${initialLevel}`}
             {initialFormat !== 'all' && ` en formato ${initialFormat}`}

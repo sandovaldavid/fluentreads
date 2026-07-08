@@ -5,7 +5,7 @@ interface Props {
   size?: 'small' | 'medium' | 'large';
   showScore?: boolean;
   reviewCount?: number;
-  className?: string;
+  class?: string;
 }
 
 const {
@@ -13,7 +13,7 @@ const {
   size = 'medium',
   showScore = true,
   reviewCount = undefined,
-  className,
+  class: className,
 } = Astro.props;
 
 // Calculate full and partial stars
@@ -43,12 +43,12 @@ const starSizeClass = sizeClasses[size];
     {/* Partial star */}
     {
       partialFill > 0 && (
-        <div className="relative mr-0.5">
+        <div class="relative mr-0.5">
           {/* Background star (empty) */}
           <StarIcon class={`${starSizeClass} text-gray-300`} />
 
           {/* Foreground star (partial fill) */}
-          <div className="absolute inset-0 overflow-hidden" style={`width: ${partialFill * 100}%`}>
+          <div class="absolute inset-0 overflow-hidden" style={`width: ${partialFill * 100}%`}>
             <StarIcon class={`${starSizeClass} text-yellow-400`} />
           </div>
         </div>
@@ -59,7 +59,7 @@ const starSizeClass = sizeClasses[size];
     {
       Array.from({ length: emptyStarsCount }).map(() => (
         <svg
-          className={`${starSizeClass} mr-0.5 text-gray-300`}
+          class={`${starSizeClass} mr-0.5 text-gray-300`}
           fill="currentColor"
           viewBox="0 0 24 24"
           stroke="none"
@@ -73,9 +73,9 @@ const starSizeClass = sizeClasses[size];
 
   {
     showScore && (
-      <span className="ml-1.5 text-sm text-gray-500">
+      <span class="ml-1.5 text-sm text-gray-500">
         {score.toFixed(1)}
-        {reviewCount !== undefined && <span className="ml-1">({reviewCount})</span>}
+        {reviewCount !== undefined && <span class="ml-1">({reviewCount})</span>}
       </span>
     )
   }

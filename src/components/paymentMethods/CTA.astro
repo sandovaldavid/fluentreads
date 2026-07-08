@@ -12,26 +12,24 @@ import TestimoniesCard from '../TestimoniesCard.astro';
 import { siteConfig } from '@config/site';
 ---
 
-<section className="bg-primary cta-payment-container relative overflow-hidden py-16 text-white">
+<section class="bg-primary cta-payment-container relative overflow-hidden py-16 text-white">
   <!-- Animated background elements -->
-  <div className="cta-animated-bg"></div>
+  <div class="cta-animated-bg"></div>
 
   <!-- Decorative circles -->
-  <div className="cta-circle cta-circle-1"></div>
-  <div className="cta-circle cta-circle-2"></div>
-  <div className="cta-circle cta-circle-3"></div>
+  <div class="cta-circle cta-circle-1"></div>
+  <div class="cta-circle cta-circle-2"></div>
+  <div class="cta-circle cta-circle-3"></div>
 
-  <div className="relative z-10 container mx-auto px-4 text-center md:px-8">
-    <div className="mx-auto max-w-5xl">
-      <div className="cta-payment-icon">
-        <span className="cta-icon-pulse">
+  <div class="relative z-10 container mx-auto px-4 text-center md:px-8">
+    <div class="mx-auto max-w-5xl">
+      <div class="cta-payment-icon">
+        <span class="cta-icon-pulse">
           <DollarIcon class="h-10 w-10" />
         </span>
       </div>
 
-      <h2 className="cta-title mb-6 text-3xl font-bold md:text-4xl">
-        ¿Listo para mejorar tu inglés?
-      </h2>
+      <h2 class="cta-title mb-6 text-3xl font-bold md:text-4xl">¿Listo para mejorar tu inglés?</h2>
 
       <!-- Fixed horizontal stars -->
       <div class="mb-6 flex items-center justify-center gap-1">
@@ -42,31 +40,31 @@ import { siteConfig } from '@config/site';
           <span class="star">★</span>
           <span class="star">★</span>
         </div>
-        <span className="rating-count">(+2,500 clientes satisfechos)</span>
+        <span class="rating-count">(+2,500 clientes satisfechos)</span>
       </div>
 
-      <p className="mx-auto mb-8 max-w-3xl text-lg leading-relaxed opacity-90 md:text-xl">
+      <p class="mx-auto mb-8 max-w-3xl text-lg leading-relaxed opacity-90 md:text-xl">
         Elige el material que necesitas, realiza el pago y comienza a aprender hoy mismo. <span
-          className="highlight pulse-text">¡Tu futuro profesional te espera!</span
+          class="highlight pulse-text">¡Tu futuro profesional te espera!</span
         >
       </p>
 
       <!-- Trust badges with improved layout -->
-      <div className="trust-badges-container">
-        <div className="trust-badge">
-          <div className="badge-icon">
+      <div class="trust-badges-container">
+        <div class="trust-badge">
+          <div class="badge-icon">
             <SecurityIcon class="h-7 w-7" />
           </div>
           <span>Pago 100% Seguro</span>
         </div>
-        <div className="trust-badge">
-          <div className="badge-icon">
+        <div class="trust-badge">
+          <div class="badge-icon">
             <ClockIcon class="h-7 w-7" />
           </div>
           <span>Entrega Inmediata</span>
         </div>
-        <div className="trust-badge">
-          <div className="badge-icon">
+        <div class="trust-badge">
+          <div class="badge-icon">
             <CardIcon class="h-7 w-7" />
           </div>
           <span>Múltiples Métodos de Pago</span>
@@ -74,32 +72,32 @@ import { siteConfig } from '@config/site';
       </div>
 
       <!-- Enhanced countdown timer -->
-      <div className="countdown-container">
-        <div className="countdown-header">
-          <span className="flash-icon">⚡</span> Oferta especial termina en:
+      <div class="countdown-container">
+        <div class="countdown-header">
+          <span class="flash-icon">⚡</span> Oferta especial termina en:
         </div>
-        <div className="countdown-display">
-          <div className="countdown-unit">
-            <div className="countdown-value" id="hours">24</div>
-            <div className="countdown-label">Horas</div>
+        <div class="countdown-display">
+          <div class="countdown-unit">
+            <div class="countdown-value" id="hours">24</div>
+            <div class="countdown-label">Horas</div>
           </div>
-          <div className="countdown-separator">:</div>
-          <div className="countdown-unit">
-            <div className="countdown-value" id="minutes">00</div>
-            <div className="countdown-label">Minutos</div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="minutes">00</div>
+            <div class="countdown-label">Minutos</div>
           </div>
-          <div className="countdown-separator">:</div>
-          <div className="countdown-unit">
-            <div className="countdown-value" id="seconds">00</div>
-            <div className="countdown-label">Segundos</div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="seconds">00</div>
+            <div class="countdown-label">Segundos</div>
           </div>
         </div>
       </div>
 
       <!-- Action buttons with better spacing and emphasis -->
-      <div className="cta-action-buttons">
+      <div class="cta-action-buttons">
         <Button variant="secondary" size="large" href="/catalogo" class="primary-cta-button">
-          <span className="flex items-center">
+          <span class="flex items-center">
             Ver Catálogo
             <ArrowRightIcon class="bounce-right ml-2 h-5 w-5" />
           </span>
@@ -116,7 +114,7 @@ import { siteConfig } from '@config/site';
       </div>
 
       <!-- Enhanced testimonial -->
-      <div className="animate-on-scroll lg:mx-auto lg:max-w-xl">
+      <div class="animate-on-scroll lg:mx-auto lg:max-w-xl">
         <TestimoniesCard
           quote="FluentReads me ayudó a mejorar mi inglés de forma rápida y sencilla. ¡Lo recomiendo!"
           author="María Fernández"
@@ -128,7 +126,7 @@ import { siteConfig } from '@config/site';
       </div>
 
       <!-- Added satisfaction guarantee -->
-      <div className="satisfaction-guarantee">
+      <div class="satisfaction-guarantee">
         <TrustIndicator />
         <p>100% Garantía de satisfacción o te devolvemos tu dinero</p>
       </div>

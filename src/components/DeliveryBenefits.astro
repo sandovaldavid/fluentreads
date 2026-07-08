@@ -38,40 +38,40 @@ const benefits: BenefitItem[] = [
 ];
 ---
 
-<div className="relative mt-12 px-4 sm:px-0 md:mt-16">
+<div class="relative mt-12 px-4 sm:px-0 md:mt-16">
   <!-- Background elements for visual interest -->
   <div
-    className="via-primary/5 absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-transparent to-transparent"
+    class="via-primary/5 absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-transparent to-transparent"
   >
   </div>
 
   <div
-    className="mx-auto grid max-w-6xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8"
+    class="mx-auto grid max-w-6xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8"
   >
     {
       benefits.map((benefit, index) => (
         <div
-          className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group benefit-card"
+          class="group benefit-card rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-lg"
           data-index={index}
         >
-          <div className="p-6 sm:p-7 flex flex-col h-full">
-            <div className="flex items-start">
+          <div class="flex h-full flex-col p-6 sm:p-7">
+            <div class="flex items-start">
               <div
-                className={`mr-3 rounded-full p-3 ${benefit.colorClass} transition-all duration-300 group-hover:scale-110`}
+                class={`mr-3 rounded-full p-3 ${benefit.colorClass} transition-all duration-300 group-hover:scale-110`}
               >
                 <benefit.icon class="h-6 w-6" />
               </div>
-              <h4 className="text-lg font-bold text-gray-800 group-hover:text-primary transition-colors duration-300">
+              <h4 class="group-hover:text-primary text-lg font-bold text-gray-800 transition-colors duration-300">
                 {benefit.title}
               </h4>
             </div>
 
-            <p className="text-gray-600 mt-4 flex-grow">{benefit.description}</p>
+            <p class="mt-4 flex-grow text-gray-600">{benefit.description}</p>
           </div>
 
           {/* Subtle bottom border that extends on hover */}
           <div
-            className={`h-1 w-0 bg-${benefit.color} rounded-b-xl transition-all duration-300 group-hover:w-full`}
+            class={`h-1 w-0 bg-${benefit.color} rounded-b-xl transition-all duration-300 group-hover:w-full`}
           />
         </div>
       ))
@@ -79,8 +79,8 @@ const benefits: BenefitItem[] = [
   </div>
 
   <!-- Additional text for better context -->
-  <div className="mt-8 text-center md:mt-10">
-    <p className="mx-auto max-w-2xl text-sm text-gray-500">
+  <div class="mt-8 text-center md:mt-10">
+    <p class="mx-auto max-w-2xl text-sm text-gray-500">
       Nos enfocamos en ofrecerte la mejor experiencia posible, con entrega rápida y sin
       complicaciones, para que puedas concentrarte en lo que realmente importa: aprender inglés.
     </p>

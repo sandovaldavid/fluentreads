@@ -4,23 +4,23 @@ import LocationIcon from '../icons/Location.astro';
 const { class: className = '' } = Astro.props;
 ---
 
-<div className={`schedule-banner ${className}`}>
+<div class={`schedule-banner ${className}`}>
   <div
-    className="from-primary/10 to-primary-light/5 border-primary-light/20 rounded-xl border bg-gradient-to-r p-5 lg:shadow-md lg:transition-all lg:duration-300 lg:hover:shadow-lg"
+    class="from-primary/10 to-primary-light/5 border-primary-light/20 rounded-xl border bg-gradient-to-r p-5 lg:shadow-md lg:transition-all lg:duration-300 lg:hover:shadow-lg"
   >
-    <div className="flex flex-col items-center gap-4 md:flex-row">
-      <div className="flex flex-1 flex-col space-y-3">
-        <div className="mb-4 flex items-center">
-          <span className="bg-primary mr-3 rounded-full p-2 text-white">
+    <div class="flex flex-col items-center gap-4 md:flex-row">
+      <div class="flex flex-1 flex-col space-y-3">
+        <div class="mb-4 flex items-center">
+          <span class="bg-primary mr-3 rounded-full p-2 text-white">
             <LocationIcon class="h-5 w-5" />
           </span>
-          <h3 className="text-primary-dark text-lg font-bold md:text-xl lg:text-2xl">
+          <h3 class="text-primary-dark text-lg font-bold md:text-xl lg:text-2xl">
             Ubicación virtual
           </h3>
         </div>
       </div>
     </div>
-    <p className="mb-4 text-gray-600">
+    <p class="mb-4 text-gray-600">
       FluentReads es una tienda completamente digital. Ofrecemos todos nuestros materiales en
       formato electrónico con entrega inmediata.
     </p>

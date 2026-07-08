@@ -33,29 +33,27 @@ const averageRating =
 const roundedRating = Math.round(averageRating * 10) / 10;
 ---
 
-<section className="testimonies-section relative overflow-hidden py-16 lg:px-8">
+<section class="testimonies-section relative overflow-hidden py-16 lg:px-8">
   <!-- Background elements for visual appeal -->
-  <div className="bg-pattern absolute inset-0 z-0 opacity-5"></div>
-  <div
-    className="bg-primary/10 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl"
-  >
+  <div class="bg-pattern absolute inset-0 z-0 opacity-5"></div>
+  <div class="bg-primary/10 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl">
   </div>
   <div
-    className="bg-secondary/10 absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full blur-3xl"
+    class="bg-secondary/10 absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full blur-3xl"
   >
   </div>
 
-  <div className="relative z-10 container mx-auto px-4">
+  <div class="relative z-10 container mx-auto px-4">
     <!-- Header with trust indicators -->
     {
       showTitle && (
-        <div className="mb-10 flex flex-col items-center text-center">
-          <div className="bg-primary/10 text-primary trust-badge mb-3 inline-block rounded-full px-4 py-1 font-medium">
-            <span className="mr-1 text-yellow-400">★</span> {roundedRating}/5 basado en{' '}
+        <div class="mb-10 flex flex-col items-center text-center">
+          <div class="bg-primary/10 text-primary trust-badge mb-3 inline-block rounded-full px-4 py-1 font-medium">
+            <span class="mr-1 text-yellow-400">★</span> {roundedRating}/5 basado en{' '}
             {totalTestimonials} opiniones
           </div>
           <SectionTitle>{titleText}</SectionTitle>
-          <p className="mx-auto mt-4 max-w-2xl text-gray-600">
+          <p class="mx-auto mt-4 max-w-2xl text-gray-600">
             Descubre cómo nuestros materiales han transformado la carrera profesional de miles de
             estudiantes en todo el país.
           </p>
@@ -65,35 +63,35 @@ const roundedRating = Math.round(averageRating * 10) / 10;
 
     <!-- Trust stats bar -->
     <div
-      className="trust-stats mx-auto mb-12 grid max-w-4xl grid-cols-2 gap-4 rounded-xl bg-white p-6 shadow-md md:grid-cols-4"
+      class="trust-stats mx-auto mb-12 grid max-w-4xl grid-cols-2 gap-4 rounded-xl bg-white p-6 shadow-md md:grid-cols-4"
     >
-      <div className="text-center">
-        <div className="text-primary mb-1 text-3xl font-bold">
+      <div class="text-center">
+        <div class="text-primary mb-1 text-3xl font-bold">
           {totalTestimonials}+
         </div>
-        <div className="text-sm text-gray-500">Testimonios</div>
+        <div class="text-sm text-gray-500">Testimonios</div>
       </div>
-      <div className="text-center">
-        <div className="text-primary mb-1 text-3xl font-bold">
+      <div class="text-center">
+        <div class="text-primary mb-1 text-3xl font-bold">
           {roundedRating}/5
         </div>
-        <div className="text-sm text-gray-500">Valoración media</div>
+        <div class="text-sm text-gray-500">Valoración media</div>
       </div>
-      <div className="text-center">
-        <div className="text-primary mb-1 text-3xl font-bold">24h</div>
-        <div className="text-sm text-gray-500">Soporte rápido</div>
+      <div class="text-center">
+        <div class="text-primary mb-1 text-3xl font-bold">24h</div>
+        <div class="text-sm text-gray-500">Soporte rápido</div>
       </div>
-      <div className="text-center">
-        <div className="text-primary mb-1 text-3xl font-bold">98%</div>
-        <div className="text-sm text-gray-500">Satisfacción</div>
+      <div class="text-center">
+        <div class="text-primary mb-1 text-3xl font-bold">98%</div>
+        <div class="text-sm text-gray-500">Satisfacción</div>
       </div>
     </div>
 
     <!-- Testimonial cards with staggered animation -->
-    <div className="testimonies-grid grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+    <div class="testimonies-grid grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
       {
         testimoniesToShow.map((testimony, index) => (
-          <div className={`testimony-item appear-${index + 1}`}>
+          <div class={`testimony-item appear-${index + 1}`}>
             <TestimoniesCard
               quote={testimony.quote}
               author={testimony.author}
@@ -109,26 +107,26 @@ const roundedRating = Math.round(averageRating * 10) / 10;
     <!-- Call to action for more testimonials -->
     {
       showCTA && totalTestimonials > count && (
-        <div className="mt-10 text-center">
+        <div class="mt-10 text-center">
           <Button
             variant="primary"
             size="large"
             href={ctaLink}
             class="group transform shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
-            <span className="relative z-10 flex items-center">
+            <span class="relative z-10 flex items-center">
               {ctaText}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-1"
+                class="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-1"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
                   d="M14 5l7 7m0 0l-7 7m7-7H3"
                 />
               </svg>
@@ -139,21 +137,21 @@ const roundedRating = Math.round(averageRating * 10) / 10;
     }
 
     <!-- Trust badges for social proof -->
-    <div className="mt-12 flex flex-wrap justify-center gap-4">
+    <div class="mt-12 flex flex-wrap justify-center gap-4">
       <div
-        className="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
+        class="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
       >
-        <span className="text-primary mr-2">✓</span> 100% Garantía de satisfacción
+        <span class="text-primary mr-2">✓</span> 100% Garantía de satisfacción
       </div>
       <div
-        className="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
+        class="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
       >
-        <span className="text-primary mr-2">✓</span> Soporte personalizado
+        <span class="text-primary mr-2">✓</span> Soporte personalizado
       </div>
       <div
-        className="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
+        class="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
       >
-        <span className="text-primary mr-2">✓</span> Acceso inmediato
+        <span class="text-primary mr-2">✓</span> Acceso inmediato
       </div>
     </div>
   </div>

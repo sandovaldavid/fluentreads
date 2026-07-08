@@ -32,49 +32,49 @@ const purchaseSteps = [
   },
 ];
 
-const { className = '' } = Astro.props;
+const { class: className = '' } = Astro.props;
 ---
 
 <div class={className}>
   <div
-    className="h-ful steps-container h-full transform rounded-xl bg-white p-4 shadow-lg transition-all duration-500 hover:shadow-xl sm:p-6 md:p-8"
+    class="h-ful steps-container h-full transform rounded-xl bg-white p-4 shadow-lg transition-all duration-500 hover:shadow-xl sm:p-6 md:p-8"
   >
-    <h3 className="text-primary-dark mb-5 flex items-center text-xl font-bold md:mb-8 md:text-2xl">
-      <span className="bg-secondary step-icon-header mr-3 rounded-full p-2 text-black">
+    <h3 class="text-primary-dark mb-5 flex items-center text-xl font-bold md:mb-8 md:text-2xl">
+      <span class="bg-secondary step-icon-header mr-3 rounded-full p-2 text-black">
         <CartIcon class="h-6 w-6" />
       </span>
       Guía de compra en 3 pasos
     </h3>
 
     <!-- Purchase steps -->
-    <div className="steps-list relative mx-auto space-y-8 sm:space-y-10 lg:w-3/4">
+    <div class="steps-list relative mx-auto space-y-8 sm:space-y-10 lg:w-3/4">
       <!-- Step connector line -->
       <div
-        className="absolute top-2 bottom-2 left-6 hidden w-0.5 bg-gray-200 sm:left-7 sm:block md:hidden"
+        class="absolute top-2 bottom-2 left-6 hidden w-0.5 bg-gray-200 sm:left-7 sm:block md:hidden"
       >
       </div>
 
       {
         purchaseSteps.map((step, index) => (
-          <div className={`step-container group benefit-item benefit-item-${index + 1}`}>
-            <div className="flex flex-col sm:flex-row items-center sm:items-start relative">
-              <div className="step-icon-container mb-4 sm:mb-0 flex-shrink-0 relative z-10">
+          <div class={`step-container group benefit-item benefit-item-${index + 1}`}>
+            <div class="relative flex flex-col items-center sm:flex-row sm:items-start">
+              <div class="step-icon-container relative z-10 mb-4 flex-shrink-0 sm:mb-0">
                 {/* Numbered circle with improved visibility */}
-                <div className="step-number bg-primary text-white text-lg font-bold rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-md group-hover:bg-primary-dark transition-colors duration-300">
+                <div class="step-number bg-primary group-hover:bg-primary-dark flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold text-white shadow-md transition-colors duration-300 sm:h-14 sm:w-14">
                   {step.number}
                 </div>
                 {/* Icon with hover effect */}
-                <div className="step-icon text-primary h-12 w-12 sm:h-14 sm:w-14 my-3 mx-auto transform transition-transform duration-300 group-hover:scale-110">
+                <div class="step-icon text-primary mx-auto my-3 h-12 w-12 transform transition-transform duration-300 group-hover:scale-110 sm:h-14 sm:w-14">
                   <step.icon />
                 </div>
               </div>
 
               {/* Content with better padding and hover effects */}
-              <div className="ml-0 text-center sm:text-left step-content sm:p-4 sm:rounded-lg sm:-ml-2 transition-all duration-300">
-                <h4 className="font-bold text-primary-dark text-lg sm:text-xl mb-2 group-hover:text-primary transition-colors duration-300">
+              <div class="step-content ml-0 text-center transition-all duration-300 sm:-ml-2 sm:rounded-lg sm:p-4 sm:text-left">
+                <h4 class="text-primary-dark group-hover:text-primary mb-2 text-lg font-bold transition-colors duration-300 sm:text-xl">
                   {step.title}
                 </h4>
-                <p className="text-gray-600 text-sm sm:text-base max-w-sm">{step.description}</p>
+                <p class="max-w-sm text-sm text-gray-600 sm:text-base">{step.description}</p>
               </div>
 
               {/* Next step indicator (except for last item) */}
@@ -87,14 +87,14 @@ const { className = '' } = Astro.props;
       }
     </div>
 
-    <div className="cta-container text-center">
+    <div class="cta-container text-center">
       <Button
         variant="primary"
         size="large"
         href="/paymentMethods"
         class="pulse-animation transform shadow-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-xl"
       >
-        <span className="flex items-center">
+        <span class="flex items-center">
           <span>Métodos de Pago</span>
           <ArrowRightIcon class="ml-2 h-6 w-6" />
         </span>

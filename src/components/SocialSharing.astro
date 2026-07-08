@@ -32,19 +32,17 @@ const socialOptions = [
 ---
 
 <div
-  className="from-primary-light to-primary mx-auto mb-8 flex max-w-sm min-w-full flex-col overflow-hidden rounded-lg bg-gradient-to-br p-4 shadow-lg sm:mb-10 sm:max-w-md sm:p-6 md:max-w-lg md:p-7 lg:max-w-2xl"
+  class="from-primary-light to-primary mx-auto mb-8 flex max-w-sm min-w-full flex-col overflow-hidden rounded-lg bg-gradient-to-br p-4 shadow-lg sm:mb-10 sm:max-w-md sm:p-6 md:max-w-lg md:p-7 lg:max-w-2xl"
 >
   <!-- Header -->
-  <div className="mb-4 flex items-center space-x-3 border-b border-white/20 pb-3 sm:mb-5">
+  <div class="mb-4 flex items-center space-x-3 border-b border-white/20 pb-3 sm:mb-5">
     <CellphoneMessageIcon class="text-secondary h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7" />
-    <h3 className="text-sm font-semibold text-white sm:text-base md:text-lg">
-      Envía tu comprobante:
-    </h3>
+    <h3 class="text-sm font-semibold text-white sm:text-base md:text-lg">Envía tu comprobante:</h3>
   </div>
 
   <!-- Social buttons -->
   <div
-    className="my-2 flex flex-1 flex-col justify-around gap-3 overflow-y-auto pr-1 sm:flex-row sm:gap-4 md:gap-6"
+    class="my-2 flex flex-1 flex-col justify-around gap-3 overflow-y-auto pr-1 sm:flex-row sm:gap-4 md:gap-6"
   >
     {
       socialOptions.map((option) => (
@@ -55,21 +53,19 @@ const socialOptions = [
           aria-label={`Enviar por ${option.name}`}
         >
           {/* Icon with badge */}
-          <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white/10 rounded-lg flex items-center justify-center mr-3 relative">
+          <div class="relative mr-3 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/10 sm:h-10 sm:w-10 md:h-12 md:w-12">
             <option.icon class="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center bg-white text-xs sm:text-sm text-black rounded-full">
+            <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-xs text-black sm:h-5 sm:w-5 sm:text-sm">
               {option.emoji}
             </span>
           </div>
 
           {/* Text content */}
-          <div className="flex-1 min-w-0 text-left">
-            <span className="block font-medium text-sm sm:text-base md:text-lg truncate">
+          <div class="min-w-0 flex-1 text-left">
+            <span class="block truncate text-sm font-medium sm:text-base md:text-lg">
               {option.name}
             </span>
-            <span className="block text-xs sm:text-sm opacity-80 truncate">
-              {option.description}
-            </span>
+            <span class="block truncate text-xs opacity-80 sm:text-sm">{option.description}</span>
           </div>
 
           {/* Arrow icon */}
@@ -80,9 +76,9 @@ const socialOptions = [
   </div>
 
   <!-- Footer -->
-  <div className="mt-2 flex justify-center space-x-2 border-t border-white/20 pt-3 sm:mt-3">
+  <div class="mt-2 flex justify-center space-x-2 border-t border-white/20 pt-3 sm:mt-3">
     <ShieldCheckIcon class="text-secondary h-3 w-3 sm:h-4 sm:w-4" />
-    <p className="text-xs text-white/70 sm:text-sm">Datos protegidos</p>
+    <p class="text-xs text-white/70 sm:text-sm">Datos protegidos</p>
   </div>
 </div>
 

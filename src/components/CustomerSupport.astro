@@ -18,35 +18,35 @@ const { class: className = '' } = Astro.props;
 ---
 
 <div
-  className={`customer-support-widget bg-primary/5 border-primary/20 rounded-lg border p-3 shadow-sm ${className}`}
+  class={`customer-support-widget bg-primary/5 border-primary/20 rounded-lg border p-3 shadow-sm ${className}`}
 >
-  <h3 className="text-primary-dark mb-2 flex items-center text-base font-bold">
-    <span className="bg-primary mr-2 rounded-full p-1 text-white">
+  <h3 class="text-primary-dark mb-2 flex items-center text-base font-bold">
+    <span class="bg-primary mr-2 rounded-full p-1 text-white">
       <SupportIcon class="h-4 w-4" />
     </span>
     ¿Necesitas ayuda?
   </h3>
 
-  <div className="space-y-2">
+  <div class="space-y-2">
     <a
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center rounded-lg border border-green-200 bg-green-50 p-2 text-green-800 transition-colors duration-300 hover:bg-green-100"
+      class="flex items-center rounded-lg border border-green-200 bg-green-50 p-2 text-green-800 transition-colors duration-300 hover:bg-green-100"
     >
       <WhatsAppIcon class="mr-2 h-5 w-5 text-green-600" />
-      <div className="font-medium">{whatsappNumber}</div>
+      <div class="font-medium">{whatsappNumber}</div>
     </a>
 
-    <a href="/contacto" className="text-primary hover:text-primary-dark flex items-center text-sm">
+    <a href="/contacto" class="text-primary hover:text-primary-dark flex items-center text-sm">
       <ContactIcon class="text-primary mr-1 h-4 w-4" />
       <span>Más opciones de contacto</span>
     </a>
   </div>
 
-  <div className="mt-2 border-t border-gray-200 pt-2">
-    <p className="text-xs text-gray-500">
-      Horario: <span className="border-0 font-bold">{Schedule}</span>
+  <div class="mt-2 border-t border-gray-200 pt-2">
+    <p class="text-xs text-gray-500">
+      Horario: <span class="border-0 font-bold">{Schedule}</span>
     </p>
   </div>
 </div>

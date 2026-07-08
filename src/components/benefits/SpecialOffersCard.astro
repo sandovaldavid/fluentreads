@@ -28,48 +28,48 @@ const endDateString = offerEndDate.toISOString();
 ---
 
 <div
-  className="border-accent from-primary/10 via-primary/5 to-secondary/10 special-offer-banner overflow-hidden rounded-lg border-l-4 bg-gradient-to-br p-4 shadow-md transition-all duration-300 hover:shadow-lg sm:border-t-4 sm:border-l-0 sm:p-5 lg:border-t-0 lg:border-l-4"
+  class="border-accent from-primary/10 via-primary/5 to-secondary/10 special-offer-banner overflow-hidden rounded-lg border-l-4 bg-gradient-to-br p-4 shadow-md transition-all duration-300 hover:shadow-lg sm:border-t-4 sm:border-l-0 sm:p-5 lg:border-t-0 lg:border-l-4"
 >
-  <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">
+  <div class="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">
     <!-- Icon (smaller on mobile/tablet) -->
     <div
-      className="bg-accent/15 text-accent flex h-12 w-12 shrink-0 items-center justify-center rounded-full sm:h-14 sm:w-14"
+      class="bg-accent/15 text-accent flex h-12 w-12 shrink-0 items-center justify-center rounded-full sm:h-14 sm:w-14"
     >
       <SalesIcon class="h-7 w-7 animate-pulse sm:h-8 sm:w-8" />
     </div>
 
-    <div className="flex-1 text-center sm:text-left">
+    <div class="flex-1 text-center sm:text-left">
       <!-- Title with timer on the right -->
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
-        <h4 className="text-primary-dark text-lg leading-tight font-bold sm:text-xl">
+      <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+        <h4 class="text-primary-dark text-lg leading-tight font-bold sm:text-xl">
           {offerTitle}
         </h4>
 
         <!-- Timer (hidden on smaller mobile, visible on larger screens) -->
-        <div className="text-accent hidden items-center space-x-1 sm:ml-auto sm:flex">
+        <div class="text-accent hidden items-center space-x-1 sm:ml-auto sm:flex">
           <TimerIcon class="h-4 w-4" />
-          <span className="countdown-text text-xs font-medium" data-end-date={endDateString}>
+          <span class="countdown-text text-xs font-medium" data-end-date={endDateString}>
             Oferta termina pronto
           </span>
         </div>
       </div>
 
       <!-- Description (shorter on mobile) -->
-      <p className="my-2 line-clamp-2 text-sm text-gray-700 sm:line-clamp-none sm:text-base">
-        <span className="text-accent animate-pulse font-bold">{discount} de descuento</span>
+      <p class="my-2 line-clamp-2 text-sm text-gray-700 sm:line-clamp-none sm:text-base">
+        <span class="text-accent animate-pulse font-bold">{discount} de descuento</span>
         {' '}{offerDescription}
       </p>
 
       <!-- Timer on mobile -->
-      <div className="text-accent mb-2 flex items-center justify-center space-x-1 sm:hidden">
+      <div class="text-accent mb-2 flex items-center justify-center space-x-1 sm:hidden">
         <TimerIcon class="h-4 w-4" />
-        <span className="countdown-text text-xs font-medium" data-end-date={endDateString}>
+        <span class="countdown-text text-xs font-medium" data-end-date={endDateString}>
           Oferta termina pronto
         </span>
       </div>
 
       <!-- Compact button layout -->
-      <div className="mt-1 flex flex-row items-center justify-center space-x-3 sm:justify-start">
+      <div class="mt-1 flex flex-row items-center justify-center space-x-3 sm:justify-start">
         <!-- Primary CTA button -->
         <Button
           variant="accent"
@@ -77,9 +77,9 @@ const endDateString = offerEndDate.toISOString();
           href={offerUrl}
           class="group relative overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
         >
-          <span className="relative z-10">Ver ofertas</span>
+          <span class="relative z-10">Ver ofertas</span>
           <span
-            className="bg-accent-dark absolute inset-0 origin-left scale-x-0 transform transition-transform duration-300 group-hover:scale-x-100"
+            class="bg-accent-dark absolute inset-0 origin-left scale-x-0 transform transition-transform duration-300 group-hover:scale-x-100"
           ></span>
         </Button>
       </div>

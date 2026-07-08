@@ -37,19 +37,19 @@ const starSize = compact ? 'text-sm' : 'text-lg';
 ---
 
 <!-- Enhanced Testimonial Card -->
-<div className={containerClasses}>
+<div class={containerClasses}>
   <!-- Background accent -->
   <div
-    className="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+    class="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100"
   >
   </div>
 
   <!-- Avatar image -->
-  <div className={`${avatarMargin} relative z-10`}>
+  <div class={`${avatarMargin} relative z-10`}>
     <div
-      className={`${avatarSize} border-secondary mx-auto transform overflow-hidden rounded-full border-2 shadow-md transition-transform duration-300 group-hover:scale-105`}
+      class={`${avatarSize} border-secondary mx-auto transform overflow-hidden rounded-full border-2 shadow-md transition-transform duration-300 group-hover:scale-105`}
     >
-      <img src={avatarUrl} alt={`Foto de ${author}`} className="h-full w-full object-cover" />
+      <img src={avatarUrl} alt={`Foto de ${author}`} class="h-full w-full object-cover" />
     </div>
   </div>
 
@@ -62,28 +62,28 @@ const starSize = compact ? 'text-sm' : 'text-lg';
   </div>
 
   <!-- Testimonial text -->
-  <p className={`${textSize} mx-auto max-w-3xl text-gray-700 italic ${marginBottom} relative z-10`}>
+  <p class={`${textSize} mx-auto max-w-3xl text-gray-700 italic ${marginBottom} relative z-10`}>
     {quote}
   </p>
 
   <!-- Star rating -->
-  <div className="star-rating mb-3 flex justify-center">
+  <div class="star-rating mb-3 flex justify-center">
     {
       Array(fullStars)
         .fill(0)
-        .map(() => <span className={`text-yellow-400 ${starSize} shine-effect`}>★</span>)
+        .map(() => <span class={`text-yellow-400 ${starSize} shine-effect`}>★</span>)
     }
-    {hasHalfStar && <span className={`text-yellow-400 ${starSize} shine-effect`}>★</span>}
+    {hasHalfStar && <span class={`text-yellow-400 ${starSize} shine-effect`}>★</span>}
     {
       Array(emptyStars)
         .fill(0)
-        .map(() => <span className={`text-gray-300 ${starSize}`}>☆</span>)
+        .map(() => <span class={`text-gray-300 ${starSize}`}>☆</span>)
     }
   </div>
 
   <!-- Author information -->
-  <div className="text-primary relative z-10 font-medium">
-    <span className="font-bold">{author}</span>, <span className="text-gray-600">{position}</span>
+  <div class="text-primary relative z-10 font-medium">
+    <span class="font-bold">{author}</span>, <span class="text-gray-600">{position}</span>
   </div>
 </div>
 

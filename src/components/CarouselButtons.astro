@@ -2,42 +2,47 @@
 interface Props {
   ariaLabelPrev: string;
   ariaLabelNext: string;
-  className?: string;
+  class?: string;
 }
 
-const { ariaLabelPrev = 'Anterior', ariaLabelNext = 'Siguiente', className = '' } = Astro.props;
+const {
+  ariaLabelPrev = 'Anterior',
+  ariaLabelNext = 'Siguiente',
+  class: className = '',
+} = Astro.props;
 ---
 
-<div className={`carousel-controls ${className}`}>
+<div class={`carousel-controls ${className}`}>
   <button
     type="button"
-    className="carousel-control prev absolute top-1/2 left-4 z-10 -translate-y-1/2 transform cursor-pointer"
+    class="carousel-control prev absolute top-1/2 left-4 z-10 -translate-y-1/2 transform cursor-pointer"
     aria-label={ariaLabelPrev}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="text-primary h-6 w-6"
+      class="text-primary h-6 w-6"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
     >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
+      ></path>
     </svg>
   </button>
 
   <button
     type="button"
-    className="carousel-control next absolute top-1/2 right-4 z-10 -translate-y-1/2 transform cursor-pointer"
+    class="carousel-control next absolute top-1/2 right-4 z-10 -translate-y-1/2 transform cursor-pointer"
     aria-label={ariaLabelNext}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="text-primary h-6 w-6"
+      class="text-primary h-6 w-6"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
     >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
     </svg>
   </button>
 </div>

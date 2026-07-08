@@ -64,7 +64,7 @@ const isFeaturedOrBestseller =
   aria-label={`Detalles de libro: ${title}. Presiona para expandir en dispositivos móviles.`}
 >
   <!-- Book Cover Image with Badge -->
-  <div className="book-cover-container relative h-52 overflow-hidden">
+  <div class="book-cover-container relative h-52 overflow-hidden">
     <img
       src={coverImage}
       alt={altText}
@@ -73,14 +73,14 @@ const isFeaturedOrBestseller =
       decoding="async"
     />
     <div
-      className="cover-overlay absolute inset-0 bg-gradient-to-b from-transparent to-black/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      class="cover-overlay absolute inset-0 bg-gradient-to-b from-transparent to-black/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
     >
     </div>
 
     <!-- Featured & Level badges -->
     {
       featured && (
-        <div className="bg-secondary animate-pulse-subtle absolute top-3 left-3 rounded-full px-3 py-1 text-sm font-bold text-black shadow-md">
+        <div class="bg-secondary animate-pulse-subtle absolute top-3 left-3 rounded-full px-3 py-1 text-sm font-bold text-black shadow-md">
           Recomendado
         </div>
       )
@@ -89,7 +89,7 @@ const isFeaturedOrBestseller =
     {
       levelDisplay && (
         <div
-          className={`absolute top-3 ${featured ? 'right-3' : 'left-3'} ${levelDisplay.color} rounded-full px-3 py-1 text-xs font-medium shadow-sm`}
+          class={`absolute top-3 ${featured ? 'right-3' : 'left-3'} ${levelDisplay.color} rounded-full px-3 py-1 text-xs font-medium shadow-sm`}
         >
           {levelDisplay.label}
         </div>
@@ -99,7 +99,7 @@ const isFeaturedOrBestseller =
     <!-- Discount badge -->
     {
       hasDiscount && (
-        <div className="bg-accent discount-badge absolute top-7 -right-12 rotate-45 transform px-10 py-1 font-bold text-white shadow-md">
+        <div class="bg-accent discount-badge absolute top-7 -right-12 rotate-45 transform px-10 py-1 font-bold text-white shadow-md">
           {discount}% OFF
         </div>
       )
@@ -107,9 +107,9 @@ const isFeaturedOrBestseller =
   </div>
 
   <!-- Book Details -->
-  <div className="card-content flex flex-grow flex-col p-5">
+  <div class="card-content flex flex-grow flex-col p-5">
     <!-- Title -->
-    <h3 className="book-title mb-2 line-clamp-2 text-xl font-bold text-gray-800">
+    <h3 class="book-title mb-2 line-clamp-2 text-xl font-bold text-gray-800">
       {title}
     </h3>
 
@@ -122,41 +122,39 @@ const isFeaturedOrBestseller =
     />
 
     <!-- Description -->
-    <p className="book-description mb-4 line-clamp-2 text-sm text-gray-700">
+    <p class="book-description mb-4 line-clamp-2 text-sm text-gray-700">
       {truncatedDescription}
     </p>
 
     <!-- Price display -->
-    <div className="price-display mb-4 flex items-center">
+    <div class="price-display mb-4 flex items-center">
       {
         hasDiscount ? (
           <>
-            <span className="text-secondary-dark discounted-price text-2xl font-bold">
+            <span class="text-secondary-dark discounted-price text-2xl font-bold">
               {formattedDiscountedPrice}
             </span>
-            <span className="original-price ml-2 text-sm text-gray-500 line-through">
+            <span class="original-price ml-2 text-sm text-gray-500 line-through">
               {formattedPrice}
             </span>
-            <span className="bg-accent/10 text-accent discount-tag ml-2 rounded-full px-2 py-0.5 text-xs font-bold">
+            <span class="bg-accent/10 text-accent discount-tag ml-2 rounded-full px-2 py-0.5 text-xs font-bold">
               {discount}% OFF
             </span>
           </>
         ) : (
-          <span className="text-secondary-dark normal-price text-2xl font-bold">
-            {formattedPrice}
-          </span>
+          <span class="text-secondary-dark normal-price text-2xl font-bold">{formattedPrice}</span>
         )
       }
     </div>
 
     <!-- Included items list -->
-    <div className="included-content mb-5 flex-grow">
-      <p className="mb-2 font-medium text-gray-700">Incluye:</p>
-      <ul className="included-list space-y-1.5 text-sm">
+    <div class="included-content mb-5 flex-grow">
+      <p class="mb-2 font-medium text-gray-700">Incluye:</p>
+      <ul class="included-list space-y-1.5 text-sm">
         {
           includedItems.map((item) => (
-            <li className="included-item flex items-start">
-              <span className="text-accent mt-0.5 mr-1.5">✓</span> {item}
+            <li class="included-item flex items-start">
+              <span class="text-accent mt-0.5 mr-1.5">✓</span> {item}
             </li>
           ))
         }
@@ -164,10 +162,10 @@ const isFeaturedOrBestseller =
     </div>
 
     <!-- Rating stars -->
-    {rating && <ReviewStars score={rating.score} className="mb-5" />}
+    {rating && <ReviewStars score={rating.score} class="mb-5" />}
 
     <!-- Action Buttons -->
-    <div className="action-buttons mt-auto flex space-x-2">
+    <div class="action-buttons mt-auto flex space-x-2">
       <Button
         variant="primary"
         size="small"

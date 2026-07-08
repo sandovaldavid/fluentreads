@@ -16,20 +16,20 @@ const paymentIcons = [
 ---
 
 <section
-  className="from-primary to-primary-dark relative overflow-hidden bg-gradient-to-br py-16 text-white md:py-24"
+  class="from-primary to-primary-dark relative overflow-hidden bg-gradient-to-br py-16 text-white md:py-24"
 >
   <!-- Decorative elements -->
-  <div className="absolute top-0 left-0 h-full w-full overflow-hidden opacity-10">
-    <div className="payment-circle payment-circle-1"></div>
-    <div className="payment-circle payment-circle-2"></div>
-    <div className="payment-circle payment-circle-3"></div>
+  <div class="absolute top-0 left-0 h-full w-full overflow-hidden opacity-10">
+    <div class="payment-circle payment-circle-1"></div>
+    <div class="payment-circle payment-circle-2"></div>
+    <div class="payment-circle payment-circle-3"></div>
   </div>
 
-  <div className="relative z-10 container mx-auto px-4">
-    <div className="mx-auto max-w-4xl text-center">
-      <div className="animate-bounce-subtle mb-6 inline-block">
+  <div class="relative z-10 container mx-auto px-4">
+    <div class="mx-auto max-w-4xl text-center">
+      <div class="animate-bounce-subtle mb-6 inline-block">
         <span
-          className="bg-secondary text-primary-dark inline-flex items-center justify-center rounded-full p-3 shadow-lg"
+          class="bg-secondary text-primary-dark inline-flex items-center justify-center rounded-full p-3 shadow-lg"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -48,22 +48,22 @@ const paymentIcons = [
         </span>
       </div>
 
-      <h1 className="text-gradient mb-6 text-3xl font-bold md:text-4xl lg:text-5xl">
+      <h1 class="text-gradient mb-6 text-3xl font-bold md:text-4xl lg:text-5xl">
         ¿Cómo puedes pagar?
       </h1>
 
-      <p className="mx-auto mb-8 max-w-3xl text-lg opacity-90 md:text-xl">
-        En <span className="text-secondary font-semibold">FluentReads</span>
+      <p class="mx-auto mb-8 max-w-3xl text-lg opacity-90 md:text-xl">
+        En <span class="text-secondary font-semibold">FluentReads</span>
         te ofrecemos diferentes métodos de pago para facilitar tu compra. Elige el que mejor se adapte
         a tus necesidades.
       </p>
 
       <!-- Payment method icons preview -->
-      <div className="payment-icons-container mb-8 flex items-center justify-center gap-4">
+      <div class="payment-icons-container mb-8 flex items-center justify-center gap-4">
         {
           paymentIcons.map((item, index) => (
             <div
-              className="transform rounded-full bg-white/40 p-3 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white/60"
+              class="transform rounded-full bg-white/40 p-3 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white/60"
               style={`animation-delay: ${index * 0.1}s`}
             >
               <item.Icon class="h-10 w-10 text-white" />
@@ -71,9 +71,9 @@ const paymentIcons = [
           ))
         }
         <div
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-all hover:bg-white/20"
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-all hover:bg-white/20"
         >
-          <span className="font-bold text-white">+</span>
+          <span class="font-bold text-white">+</span>
         </div>
       </div>
 
@@ -92,7 +92,7 @@ const paymentIcons = [
 
   <!-- Subtle wave pattern at bottom -->
   <div
-    className="absolute bottom-0 left-0 w-full overflow-hidden leading-none"
+    class="absolute bottom-0 left-0 w-full overflow-hidden leading-none"
     style="transform: rotate(180deg)"
   >
     <Wave class="relative block h-[60px] w-full" />
