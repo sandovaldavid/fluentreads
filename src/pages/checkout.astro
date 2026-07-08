@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import WhatsAppIcon from '../components/icons/WhatsApp.astro';
-import CartIcon from '../components/icons/Cart.astro';
+// CartIcon removed
 import SectionTitle from '../components/SectionTitle.astro';
 
 import { siteConfig } from '@config/site';
@@ -16,32 +16,32 @@ const whatsappNumber = siteConfig.whatsapp;
   description="Revisa y confirma tu pedido de libros digitales en inglés con FluentReads."
 >
   <div id="checkout-data" data-whatsapp={whatsappNumber} class="hidden"></div>
-  <div className="mx-auto max-w-4xl px-4 py-12">
+  <div class="mx-auto max-w-4xl px-4 py-12">
     <SectionTitle>Tu Carrito de Compras</SectionTitle>
 
-    <div id="empty-cart-message" className="hidden py-12 text-center">
-      <div className="mb-4 text-6xl">🛒</div>
-      <h2 className="mb-3 text-2xl font-bold text-gray-700">Tu carrito está vacío</h2>
-      <p className="mb-6 text-gray-500">Explora nuestro catálogo y añade productos a tu carrito</p>
+    <div id="empty-cart-message" class="hidden py-12 text-center">
+      <div class="mb-4 text-6xl">🛒</div>
+      <h2 class="mb-3 text-2xl font-bold text-gray-700">Tu carrito está vacío</h2>
+      <p class="mb-6 text-gray-500">Explora nuestro catálogo y añade productos a tu carrito</p>
       <Button variant="primary" size="medium" href="/catalogo" class="inline-flex items-center">
         Ver Catálogo
       </Button>
     </div>
 
-    <div id="cart-container" className="hidden">
+    <div id="cart-container" class="hidden">
       <!-- Cart items will be displayed here -->
-      <div id="cart-items" className="mt-8 mb-8 space-y-4"></div>
+      <div id="cart-items" class="mt-8 mb-8 space-y-4"></div>
 
       <!-- Order summary -->
-      <div className="mt-8 border-t border-gray-200 pt-6">
-        <div className="text-primary-dark mb-4 flex justify-between text-lg font-bold">
+      <div class="mt-8 border-t border-gray-200 pt-6">
+        <div class="text-primary-dark mb-4 flex justify-between text-lg font-bold">
           <span>Total:</span>
           <span id="cart-total">S/0.00</span>
         </div>
 
-        <div className="mb-8 rounded-lg border border-blue-100 bg-blue-50 p-4">
-          <h3 className="mb-2 font-bold text-blue-800">¿Cómo completar tu compra?</h3>
-          <ol className="list-inside list-decimal space-y-2 text-sm text-blue-700">
+        <div class="mb-8 rounded-lg border border-blue-100 bg-blue-50 p-4">
+          <h3 class="mb-2 font-bold text-blue-800">¿Cómo completar tu compra?</h3>
+          <ol class="list-inside list-decimal space-y-2 text-sm text-blue-700">
             <li>Haz clic en "Enviar pedido por WhatsApp"</li>
             <li>Confirma tu pedido en el chat de WhatsApp</li>
             <li>Te enviaremos los datos de pago</li>
@@ -69,13 +69,13 @@ const whatsappNumber = siteConfig.whatsapp;
 </Layout>
 
 <script>
-  import type { CartItem } from '@utils/cartManager';
+  import { CartManager, type CartItem } from '@utils/cartManager';
 
   document.addEventListener('DOMContentLoaded', () => {
     const checkoutDataEl = document.getElementById('checkout-data');
     const whatsappNumber = checkoutDataEl?.getAttribute('data-whatsapp') || '';
 
-    // Get DOM elements safely (non-null assertions after guard below)
+    // Get DOM elements safely
     const cartContainer = document.getElementById('cart-container')!;
     const emptyCartMessage = document.getElementById('empty-cart-message')!;
     const cartItemsContainer = document.getElementById('cart-items')!;
@@ -111,17 +111,9 @@ const whatsappNumber = siteConfig.whatsapp;
       );
     }
 
-    // Load cart data from localStorage
+    // Load cart data
     function loadCart() {
-      let cart: CartItem[] = [];
-      try {
-        const storedCart = localStorage.getItem('shoppingCart');
-        if (storedCart) {
-          cart = JSON.parse(storedCart);
-        }
-      } catch (e) {
-        console.error('Error parsing cart from localStorage:', e);
-      }
+      const cart = CartManager.getCart();
 
       // Show/hide appropriate elements based on cart state
       if (cart.length === 0) {
@@ -131,20 +123,16 @@ const whatsappNumber = siteConfig.whatsapp;
         cartContainer.classList.remove('hidden');
         emptyCartMessage.classList.add('hidden');
 
-        // Clear previous items safely (Issue 2)
+        // Clear previous items safely
         while (cartItemsContainer.firstChild) {
           cartItemsContainer.removeChild(cartItemsContainer.firstChild);
         }
 
-        // Calculate total price
-        let total = 0;
+        const total = CartManager.getCartTotal();
 
         // Render cart items using DOM APIs to prevent XSS
-        cart.forEach((item: CartItem, index: number) => {
-          const itemTotal = item.price * item.quantity;
-          total += itemTotal;
-
-          // Escape inputs (Issue 2)
+        cart.forEach((item: CartItem) => {
+          // Escape inputs
           const cleanTitle = escapeHTML(item.title);
           const cleanImage = escapeHTML(item.image);
           const cleanType = escapeHTML(item.type);
@@ -196,8 +184,8 @@ const whatsappNumber = siteConfig.whatsapp;
           const decBtn = document.createElement('button');
           decBtn.className =
             'quantity-btn decrease bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded-l';
-          decBtn.setAttribute('data-index', String(index));
-          decBtn.setAttribute('aria-label', 'Disminuir cantidad');
+          decBtn.setAttribute('data-id', item.id);
+          decBtn.setAttribute('aria-label', `Disminuir cantidad de ${cleanTitle}`);
           decBtn.textContent = '-';
           controlsDiv.appendChild(decBtn);
 
@@ -211,16 +199,16 @@ const whatsappNumber = siteConfig.whatsapp;
           const incBtn = document.createElement('button');
           incBtn.className =
             'quantity-btn increase bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded-r';
-          incBtn.setAttribute('data-index', String(index));
-          incBtn.setAttribute('aria-label', 'Aumentar cantidad');
+          incBtn.setAttribute('data-id', item.id);
+          incBtn.setAttribute('aria-label', `Aumentar cantidad de ${cleanTitle}`);
           incBtn.textContent = '+';
           controlsDiv.appendChild(incBtn);
 
           // Remove button
           const removeBtn = document.createElement('button');
           removeBtn.className = 'remove-item ml-4 text-red-500 hover:text-red-700';
-          removeBtn.setAttribute('data-index', String(index));
-          removeBtn.setAttribute('aria-label', 'Eliminar producto');
+          removeBtn.setAttribute('data-id', item.id);
+          removeBtn.setAttribute('aria-label', `Eliminar ${cleanTitle} del carrito`);
 
           // SVG for remove button
           const removeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -260,68 +248,45 @@ const whatsappNumber = siteConfig.whatsapp;
         const btn = target.classList.contains('quantity-btn')
           ? target
           : (target.closest('.quantity-btn') as HTMLElement);
-        const indexAttr = btn.getAttribute('data-index');
-        const index = parseInt(indexAttr || '', 10);
-        if (isNaN(index)) return;
+        const itemId = btn.getAttribute('data-id') || '';
+        if (!itemId) return;
         const isIncrease = btn.classList.contains('increase');
 
-        // Get current cart
-        const cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]') || [];
+        const cart = CartManager.getCart();
+        const item = cart.find((i) => i.id === itemId);
 
-        if (isIncrease) {
-          cart[index].quantity += 1;
-        } else if (cart[index].quantity > 1) {
-          cart[index].quantity -= 1;
+        if (item) {
+          const newQty = isIncrease ? item.quantity + 1 : item.quantity - 1;
+          CartManager.updateQuantity(itemId, newQty);
         }
-
-        // Update cart in localStorage
-        localStorage.setItem('shoppingCart', JSON.stringify(cart));
-
-        // Reload cart display
-        loadCart();
       }
 
       if (target.classList.contains('remove-item') || target.closest('.remove-item')) {
         const btn = target.classList.contains('remove-item')
           ? target
           : (target.closest('.remove-item') as HTMLElement);
-        const indexAttr = btn.getAttribute('data-index');
-        const index = parseInt(indexAttr || '', 10);
-        if (isNaN(index)) return;
+        const itemId = btn.getAttribute('data-id') || '';
+        if (!itemId) return;
 
-        // Get current cart
-        const cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]') || [];
-
-        // Remove item
-        cart.splice(index, 1);
-
-        // Update cart in localStorage
-        localStorage.setItem('shoppingCart', JSON.stringify(cart));
-
-        // Reload cart display
-        loadCart();
+        CartManager.removeItem(itemId);
       }
     });
 
     // Clear cart button
     clearCartBtn.addEventListener('click', () => {
       if (confirm('¿Estás seguro que deseas vaciar el carrito?')) {
-        localStorage.setItem('shoppingCart', JSON.stringify([]));
-        loadCart();
+        CartManager.clearCart();
       }
     });
 
     // WhatsApp checkout button
     whatsappCheckoutBtn.addEventListener('click', () => {
-      const cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]') || [];
+      const cart = CartManager.getCart();
 
       if (cart.length === 0) return;
 
       // Calculate total
-      const total = cart.reduce(
-        (sum: number, item: CartItem) => sum + item.price * item.quantity,
-        0
-      );
+      const total = CartManager.getCartTotal();
 
       // Prepare WhatsApp message
       let message = `*Nuevo pedido desde FluentReads*\n\n*Productos:*\n`;
@@ -334,6 +299,11 @@ const whatsappNumber = siteConfig.whatsapp;
 
       // Open WhatsApp with the message
       window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    });
+
+    // Listen for cart update events
+    window.addEventListener('cartUpdated', () => {
+      loadCart();
     });
 
     // Initial load

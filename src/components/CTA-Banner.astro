@@ -1,4 +1,6 @@
 ---
+const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY || '';
+const actionUrl = `https://send.pageclip.co/${pageclipKey}/newsletter`;
 import EmailIcon from './icons/Email.astro';
 import BookIcon from './icons/Book.astro';
 import HandshakeIcon from './icons/Handshake.astro';
@@ -53,15 +55,13 @@ const ctaConfig = {
 const currentCta = ctaConfig[type];
 ---
 
-<div
-  className={`cta-banner ${currentCta.bgClass} overflow-hidden rounded-xl shadow-xl ${className}`}
->
-  <div className="relative container mx-auto px-6 py-10">
+<div class={`cta-banner ${currentCta.bgClass} overflow-hidden rounded-xl shadow-xl ${className}`}>
+  <div class="relative container mx-auto px-6 py-10">
     <!-- Background decoration -->
     <CTABackground class="absolute top-0 right-0 h-64 w-64 text-amber-50 opacity-10" />
-    <div className="relative z-10 flex flex-col items-center justify-between md:flex-row">
+    <div class="relative z-10 flex flex-col items-center justify-between md:flex-row">
       <!-- Left Content -->
-      <div className="mb-6 text-center text-white md:mr-6 md:mb-0 md:text-left">
+      <div class="mb-6 text-center text-white md:mr-6 md:mb-0 md:text-left">
         {
           type === 'newsletter' ? (
             <EmailIcon class="mb-4 h-10 w-10 md:h-15 md:w-15" />
@@ -71,19 +71,25 @@ const currentCta = ctaConfig[type];
             <BookIcon class="mb-4 h-10 w-10 md:h-15 md:w-15" />
           )
         }
-        <h3 className="mb-2 text-2xl font-bold md:text-3xl">
+        <h3 class="mb-2 text-2xl font-bold md:text-3xl">
           {currentCta.title}
         </h3>
-        <p className="max-w-xl text-white/90">{currentCta.subtitle}</p>
+        <p class="max-w-xl text-white/90">{currentCta.subtitle}</p>
       </div>
 
       <!-- Right Content -->
-      <div className="flex-shrink-0">
+      <div class="flex-shrink-0">
         {
           type === 'newsletter' ? (
-            <form id="newsletter-form" className="flex flex-col items-center gap-3 sm:flex-row">
+            <form
+              id="newsletter-form"
+              action={actionUrl}
+              method="POST"
+              class="flex flex-col items-center gap-3 sm:flex-row"
+            >
               <input
                 type="email"
+                name="email"
                 placeholder="Tu correo electrónico"
                 class="rounded-lg border-2 border-white/30 bg-white/10 px-4 py-3 text-white placeholder:text-white/70 focus:border-white focus:outline-none"
                 aria-label="Correo electrónico para boletín informativo"
@@ -91,7 +97,7 @@ const currentCta = ctaConfig[type];
               />
               <button
                 type="submit"
-                className="text-primary-dark hover:bg-neutral-light rounded-lg bg-white px-6 py-3 font-bold shadow-md transition-colors"
+                class="text-primary-dark hover:bg-neutral-light rounded-lg bg-white px-6 py-3 font-bold shadow-md transition-colors"
               >
                 {currentCta.buttonText}
               </button>
@@ -99,7 +105,7 @@ const currentCta = ctaConfig[type];
           ) : (
             <a
               href={currentCta.buttonLink}
-              className="text-primary-dark hover:bg-neutral-light inline-block rounded-lg bg-white px-6 py-3 font-bold shadow-md transition-colors"
+              class="text-primary-dark hover:bg-neutral-light inline-block rounded-lg bg-white px-6 py-3 font-bold shadow-md transition-colors"
             >
               {currentCta.buttonText}
             </a>
@@ -113,15 +119,34 @@ const currentCta = ctaConfig[type];
 <script>
   // Newsletter form handling
   document.addEventListener('DOMContentLoaded', () => {
-    const newsletterForm = document.getElementById('newsletter-form');
+    const newsletterForm = document.getElementById('newsletter-form') as HTMLFormElement | null;
     if (newsletterForm) {
       newsletterForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const emailInput = newsletterForm.querySelector('input[type="email"]');
-        if (emailInput) {
-          const email = (emailInput as HTMLInputElement).value;
-          alert(`¡Gracias por suscribirte con ${email}! Pronto recibirás nuestras novedades.`);
-          (emailInput as HTMLInputElement).value = '';
+        const emailInput = newsletterForm.querySelector(
+          "input[name='email']"
+        ) as HTMLInputElement | null;
+        if (emailInput && emailInput.value) {
+          fetch(newsletterForm.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({ email: emailInput.value }),
+          })
+            .then((res) => {
+              if (res.ok) {
+                alert('¡Gracias por suscribirte! Pronto recibirás nuestras novedades.');
+                newsletterForm.reset();
+              } else {
+                throw new Error('Error en el servidor');
+              }
+            })
+            .catch((err) => {
+              console.error('Error newsletter signup:', err);
+              alert('Hubo un error al procesar tu suscripción. Por favor, inténtalo de nuevo.');
+            });
         }
       });
     }

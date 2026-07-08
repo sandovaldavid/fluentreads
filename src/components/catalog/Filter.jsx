@@ -120,6 +120,7 @@ const CatalogFilter = ({
   initialFormat = 'all',
   initialSort = 'featured',
   initialResourceType = 'any',
+  initialSearch = '',
   enableResourceTypeFilter = false, // New prop to control if resource type filtering is enabled
   resourceType: propResourceType = 'any', // Resource type passed as prop
   productType = 'book', // Default product type context
@@ -133,7 +134,7 @@ const CatalogFilter = ({
   const [resourceType, setResourceType] = useState(propResourceType || initialResourceType);
   const [mobileFiltersVisible, setMobileFiltersVisible] = useState(false);
   const [activeTags, setActiveTags] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   // New state for showing resource type filter
@@ -153,6 +154,31 @@ const CatalogFilter = ({
   useEffect(() => {
     setShowTypeFilter(enableResourceTypeFilter);
   }, [enableResourceTypeFilter]);
+
+  // Sync with URL parameters on mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('q') || urlParams.get('search') || '';
+    if (searchParam) {
+      setSearchTerm(searchParam);
+    }
+    const levelParam = urlParams.get('level') || 'all';
+    if (levelParam) {
+      setLevel(levelParam);
+    }
+    const formatParam = urlParams.get('format') || 'all';
+    if (formatParam) {
+      setFormat(formatParam);
+    }
+    const sortParam = urlParams.get('sort') || 'featured';
+    if (sortParam) {
+      setSort(sortParam);
+    }
+    const typeParam = urlParams.get('type') || 'any';
+    if (typeParam) {
+      setResourceType(typeParam);
+    }
+  }, []);
 
   // Listen for product count updates from outside the component
   useEffect(() => {

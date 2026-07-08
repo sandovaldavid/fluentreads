@@ -64,6 +64,9 @@ export class CartManager {
     // Update cart in localStorage safely
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cart));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+      }
     } catch (e) {
       console.error('Failed to save cart to localStorage:', e);
       this.showNotification('No se pudo guardar en el carrito. Espacio insuficiente.', 'error');
@@ -78,6 +81,9 @@ export class CartManager {
     const updatedCart = cart.filter((item) => item.id !== id);
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedCart));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+      }
     } catch (e) {
       console.error('Failed to update cart after removal:', e);
     }
@@ -96,6 +102,9 @@ export class CartManager {
       cart[itemIndex].quantity = quantity;
       try {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cart));
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
+        }
       } catch (e) {
         console.error('Failed to update cart quantity:', e);
         this.showNotification('No se pudo actualizar la cantidad.', 'error');
@@ -109,6 +118,9 @@ export class CartManager {
   static clearCart(): void {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+      }
     } catch (e) {
       console.error('Failed to clear cart:', e);
     }

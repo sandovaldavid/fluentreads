@@ -22,6 +22,7 @@ const level = searchParams.get('level') || 'all';
 const format = searchParams.get('format') || 'all';
 const sort = searchParams.get('sort') || 'featured';
 const type = searchParams.get('type') || 'any'; // Default to 'any' for showing all products
+const search = searchParams.get('q') || searchParams.get('search') || '';
 
 // Determine page title based on filters
 let pageTitle = 'Catálogo Completo de Materiales en Inglés';
@@ -35,6 +36,7 @@ const levelNames: Record<string, string> = {
   advanced: 'Nivel Avanzado',
   professional: 'Nivel Profesional',
   'all-levels': 'Multi-nivel',
+  'international-exam': 'Examen Internacional',
 };
 
 // Apply level filter to title if specified
@@ -152,10 +154,10 @@ const ogImage = siteInfo.seo.images.catalog || siteInfo.seo.defaultImage;
   <CatalogHero />
 
   <!-- Categories Section -->
-  <section className="container mx-auto px-4 py-12">
-    <div className="fade-in mb-10 text-center">
+  <section class="container mx-auto px-4 py-12">
+    <div class="fade-in mb-10 text-center">
       <SectionTitle>Categorías principales</SectionTitle>
-      <p className="mx-auto max-w-3xl text-gray-600">
+      <p class="mx-auto max-w-3xl text-gray-600">
         Explora nuestros materiales por categoría y encuentra exactamente lo que necesitas.
       </p>
     </div>
@@ -163,17 +165,17 @@ const ogImage = siteInfo.seo.images.catalog || siteInfo.seo.defaultImage;
   </section>
 
   <!-- Main Catalog Section -->
-  <section className="catalog-section relative py-12" id="catalog">
+  <section class="catalog-section relative py-12" id="catalog">
     <!-- Background decorative elements -->
-    <div className="catalog-pattern absolute inset-0 opacity-[0.03]"></div>
-    <div className="accent-shape"></div>
+    <div class="catalog-pattern absolute inset-0 opacity-[0.03]"></div>
+    <div class="accent-shape"></div>
 
-    <div className="relative z-10 container mx-auto px-4">
-      <div className="fade-in mb-8 flex flex-col items-center">
+    <div class="relative z-10 container mx-auto px-4">
+      <div class="fade-in mb-8 flex flex-col items-center">
         <SectionTitle tag="h2" class="mb-4 text-center">
           Explora nuestro catálogo completo
         </SectionTitle>
-        <p className="mx-auto max-w-3xl text-center text-gray-600">
+        <p class="mx-auto max-w-3xl text-center text-gray-600">
           Encuentra los mejores materiales para dominar el inglés, desde nivel principiante hasta
           profesional.
         </p>
@@ -186,6 +188,7 @@ const ogImage = siteInfo.seo.images.catalog || siteInfo.seo.defaultImage;
         initialFormat={format}
         initialSort={sort}
         initialResourceType={type}
+        initialSearch={search}
         editorialMap={editorialMap}
         gridCols={4}
         productSize="medium"
@@ -212,7 +215,7 @@ const ogImage = siteInfo.seo.images.catalog || siteInfo.seo.defaultImage;
   />
 
   <!-- CTA Banner -->
-  <div className="container mx-auto mb-16 px-4">
+  <div class="container mx-auto mb-16 px-4">
     <CTABanner />
   </div>
 </Layout>

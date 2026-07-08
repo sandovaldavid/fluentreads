@@ -27,6 +27,7 @@ const levelNames: Record<string, string> = {
   [BookLevel.ADVANCED]: 'Nivel Avanzado',
   [BookLevel.PROFESSIONAL]: 'Nivel Profesional',
   [BookLevel.ALL_LEVELS]: 'Multi-nivel',
+  [BookLevel.INTERNATIONAL_EXAM]: 'Examen Internacional',
 };
 
 const formatNames: Record<string, string> = {
@@ -84,7 +85,6 @@ const safePacks: Pack[] = allPacks.map((pack) => ({
   popularityTags: pack.popularityTags || [],
   images: 'images' in pack ? (pack.images as string[]) : [],
   video: 'video' in pack ? (pack.video as string) : '',
-  stock: 'stock' in pack ? (pack.stock as number) : 10,
 }));
 
 // Define breadcrumb items

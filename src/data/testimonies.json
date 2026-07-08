@@ -5,7 +5,8 @@
     "author": "María Rodríguez",
     "position": "Ejecutiva de Marketing",
     "avatarUrl": "https://i.pravatar.cc/200?img=25",
-    "rating": 5
+    "rating": 5,
+    "date": "2026-06-15"
   },
   {
     "id": "carlos-mendoza",
@@ -13,7 +14,8 @@
     "author": "Carlos Mendoza",
     "position": "Ingeniero de Software",
     "avatarUrl": "https://i.pravatar.cc/200?img=11",
-    "rating": 5
+    "rating": 5,
+    "date": "2026-06-01"
   },
   {
     "id": "lucia-fernandez",
@@ -21,7 +23,8 @@
     "author": "Lucía Fernández",
     "position": "Contadora Pública",
     "avatarUrl": "https://i.pravatar.cc/200?img=29",
-    "rating": 4.5
+    "rating": 4.5,
+    "date": "2025-12-01"
   },
   {
     "id": "roberto-guzman",
@@ -29,7 +32,8 @@
     "author": "Roberto Guzmán",
     "position": "Director de Operaciones",
     "avatarUrl": "https://i.pravatar.cc/200?img=15",
-    "rating": 5
+    "rating": 5,
+    "date": "2025-10-10"
   },
   {
     "id": "ana-martinez",
@@ -37,7 +41,8 @@
     "author": "Ana Martínez",
     "position": "Especialista en Recursos Humanos",
     "avatarUrl": "https://i.pravatar.cc/200?img=23",
-    "rating": 4.5
+    "rating": 4.5,
+    "date": "2026-06-10"
   },
   {
     "id": "diego-sanchez",
@@ -45,6 +50,7 @@
     "author": "Diego Sánchez",
     "position": "Gerente de Proyectos",
     "avatarUrl": "https://i.pravatar.cc/200?img=4",
-    "rating": 5
+    "rating": 5,
+    "date": "2025-05-01"
   }
 ]

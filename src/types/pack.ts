@@ -20,5 +20,4 @@ export interface Pack {
   buyLink: string;
   altText?: string;
   includedItems: string[];
-  stock?: number;
 }

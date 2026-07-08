@@ -1,0 +1,427 @@
+backend:
+  name: github
+  repo: sandovaldavid/fluentreads
+  branch: feat/b9-decap-cms
+local_backend: true
+media_folder: 'public/images'
+public_folder: '/images'
+collections:
+  - name: 'books'
+    label: 'Libros'
+    file: 'src/data/books.json'
+    format: 'json-array'
+    fields:
+      - label: 'Libros'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Título', name: 'title', widget: 'string' }
+          - { label: 'Descripción', name: 'description', widget: 'text' }
+          - { label: 'Precio (S/)', name: 'price', widget: 'number', value_type: 'float' }
+          - { label: 'ID Editorial', name: 'editorialId', widget: 'string' }
+          - {
+              label: 'Descuento (%)',
+              name: 'discount',
+              widget: 'number',
+              value_type: 'int',
+              default: 0,
+              required: false,
+            }
+          - {
+              label: 'Días de Oferta',
+              name: 'offerDays',
+              widget: 'number',
+              value_type: 'int',
+              default: 7,
+              required: false,
+            }
+          - { label: 'Imagen de Portada (URL)', name: 'coverImage', widget: 'string' }
+          - {
+              label: 'Texto Alternativo de Imagen',
+              name: 'altText',
+              widget: 'string',
+              required: false,
+            }
+          - label: 'Imágenes de Galería (URLs)'
+            name: 'images'
+            widget: 'list'
+            field: { label: 'URL', name: 'url', widget: 'string' }
+            required: false
+          - { label: 'Video (URL Embed)', name: 'video', widget: 'string', required: false }
+          - label: 'Calificación'
+            name: 'rating'
+            widget: 'object'
+            required: false
+            fields:
+              - { label: 'Puntuación', name: 'score', widget: 'number', value_type: 'float' }
+              - {
+                  label: 'Cantidad de Reseñas',
+                  name: 'reviewCount',
+                  widget: 'number',
+                  value_type: 'int',
+                }
+          - label: 'Nivel'
+            name: 'level'
+            widget: 'select'
+            required: false
+            options:
+              [
+                'basic',
+                'beginner',
+                'intermediate',
+                'advanced',
+                'professional',
+                'all-levels',
+                'international-exam',
+              ]
+          - label: 'Tags de Formato'
+            name: 'formatTags'
+            widget: 'select'
+            multiple: true
+            required: false
+            options: ['pdf', 'workbook', 'audio', 'video', 'software', 'exams']
+          - label: 'Tags de Popularidad'
+            name: 'popularityTags'
+            widget: 'select'
+            multiple: true
+            required: false
+            options: ['bestSeller', 'new', 'specialOffer', 'completePack', 'recommended']
+          - {
+              label: 'Destacado',
+              name: 'featured',
+              widget: 'boolean',
+              default: false,
+              required: false,
+            }
+          - { label: 'Enlace de Detalles', name: 'detailsLink', widget: 'string' }
+          - { label: 'Enlace de Compra', name: 'buyLink', widget: 'string' }
+          - label: 'Elementos Incluidos'
+            name: 'includedItems'
+            widget: 'list'
+            field: { label: 'Elemento', name: 'item', widget: 'string' }
+  - name: 'packs'
+    label: 'Packs de Estudio'
+    file: 'src/data/packs.json'
+    format: 'json-array'
+    fields:
+      - label: 'Packs de Estudio'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Título', name: 'title', widget: 'string' }
+          - { label: 'Descripción', name: 'description', widget: 'text' }
+          - { label: 'Precio (S/)', name: 'price', widget: 'number', value_type: 'float' }
+          - {
+              label: 'Descuento (%)',
+              name: 'discount',
+              widget: 'number',
+              value_type: 'int',
+              default: 0,
+              required: false,
+            }
+          - {
+              label: 'Días de Oferta',
+              name: 'offerDays',
+              widget: 'number',
+              value_type: 'int',
+              default: 7,
+              required: false,
+            }
+          - { label: 'Imagen de Portada (URL)', name: 'coverImage', widget: 'string' }
+          - {
+              label: 'Texto Alternativo de Imagen',
+              name: 'altText',
+              widget: 'string',
+              required: false,
+            }
+          - label: 'Imágenes de Galería (URLs)'
+            name: 'images'
+            widget: 'list'
+            field: { label: 'URL', name: 'url', widget: 'string' }
+            required: false
+          - { label: 'Video (URL Embed)', name: 'video', widget: 'string', required: false }
+          - label: 'IDs de Libros Incluidos'
+            name: 'booksIds'
+            widget: 'list'
+            field: { label: 'ID de Libro', name: 'bookId', widget: 'string' }
+          - label: 'Calificación'
+            name: 'rating'
+            widget: 'object'
+            required: false
+            fields:
+              - { label: 'Puntuación', name: 'score', widget: 'number', value_type: 'float' }
+              - {
+                  label: 'Cantidad de Reseñas',
+                  name: 'reviewCount',
+                  widget: 'number',
+                  value_type: 'int',
+                }
+          - label: 'Nivel'
+            name: 'level'
+            widget: 'select'
+            required: false
+            options:
+              [
+                'basic',
+                'beginner',
+                'intermediate',
+                'advanced',
+                'professional',
+                'all-levels',
+                'international-exam',
+              ]
+          - label: 'Tags de Formato'
+            name: 'formatTags'
+            widget: 'select'
+            multiple: true
+            required: false
+            options: ['pdf', 'workbook', 'audio', 'video', 'software', 'exams']
+          - label: 'Tags de Popularidad'
+            name: 'popularityTags'
+            widget: 'select'
+            multiple: true
+            required: false
+            options: ['bestSeller', 'new', 'specialOffer', 'completePack', 'recommended']
+          - {
+              label: 'Destacado',
+              name: 'featured',
+              widget: 'boolean',
+              default: false,
+              required: false,
+            }
+          - { label: 'Enlace de Detalles', name: 'detailsLink', widget: 'string' }
+          - { label: 'Enlace de Compra', name: 'buyLink', widget: 'string' }
+          - label: 'Elementos Incluidos'
+            name: 'includedItems'
+            widget: 'list'
+            field: { label: 'Elemento', name: 'item', widget: 'string' }
+  - name: 'exams'
+    label: 'Exámenes Internacionales'
+    file: 'src/data/exams.json'
+    format: 'json-array'
+    fields:
+      - label: 'Exámenes Internacionales'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Título', name: 'title', widget: 'string' }
+          - { label: 'Descripción', name: 'description', widget: 'text' }
+          - { label: 'Precio (S/)', name: 'price', widget: 'number', value_type: 'float' }
+          - {
+              label: 'Descuento (%)',
+              name: 'discount',
+              widget: 'number',
+              value_type: 'int',
+              default: 0,
+              required: false,
+            }
+          - { label: 'Imagen de Portada (URL)', name: 'coverImage', widget: 'string' }
+          - {
+              label: 'Texto Alternativo de Imagen',
+              name: 'altText',
+              widget: 'string',
+              required: false,
+            }
+          - label: 'Imágenes de Galería (URLs)'
+            name: 'images'
+            widget: 'list'
+            field: { label: 'URL', name: 'url', widget: 'string' }
+            required: false
+          - { label: 'Video (URL Embed)', name: 'video', widget: 'string', required: false }
+          - {
+              label: 'Tipo de Examen',
+              name: 'examType',
+              widget: 'select',
+              options: ['IELTS', 'TOEFL', 'Cambridge', 'SAT', 'PTE', 'FCE', 'CPE', 'GRE', 'Other'],
+            }
+          - {
+              label: 'Dificultad',
+              name: 'difficulty',
+              widget: 'select',
+              options: ['beginner', 'intermediate', 'advanced', 'upper-intermediate', 'proficient'],
+            }
+          - { label: 'Duración', name: 'duration', widget: 'string', required: false }
+          - label: 'Calificación'
+            name: 'rating'
+            widget: 'object'
+            required: false
+            fields:
+              - { label: 'Puntuación', name: 'score', widget: 'number', value_type: 'float' }
+              - {
+                  label: 'Cantidad de Reseñas',
+                  name: 'reviewCount',
+                  widget: 'number',
+                  value_type: 'int',
+                }
+          - label: 'Tags de Formato'
+            name: 'formatTags'
+            widget: 'select'
+            multiple: true
+            required: false
+            options: ['pdf', 'workbook', 'audio', 'video', 'software', 'exams']
+          - label: 'Tags de Popularidad'
+            name: 'popularityTags'
+            widget: 'select'
+            multiple: true
+            required: false
+            options: ['bestSeller', 'new', 'specialOffer', 'completePack', 'recommended']
+          - {
+              label: 'Destacado',
+              name: 'featured',
+              widget: 'boolean',
+              default: false,
+              required: false,
+            }
+          - { label: 'Enlace de Compra', name: 'buyLink', widget: 'string' }
+          - { label: 'Enlace de Detalles', name: 'detailsLink', widget: 'string' }
+          - label: 'Elementos Incluidos'
+            name: 'includedItems'
+            widget: 'list'
+            field: { label: 'Elemento', name: 'item', widget: 'string' }
+  - name: 'editorial'
+    label: 'Editoriales'
+    file: 'src/data/editorial.json'
+    format: 'json-array'
+    fields:
+      - label: 'Editoriales'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Nombre', name: 'name', widget: 'string' }
+          - { label: 'Descripción', name: 'description', widget: 'text' }
+  - name: 'testimonies'
+    label: 'Testimonios'
+    file: 'src/data/testimonies.json'
+    format: 'json-array'
+    fields:
+      - label: 'Testimonios'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Cita', name: 'quote', widget: 'text' }
+          - { label: 'Autor', name: 'author', widget: 'string' }
+          - { label: 'Cargo/Posición', name: 'position', widget: 'string' }
+          - { label: 'URL de Avatar', name: 'avatarUrl', widget: 'string' }
+          - { label: 'Calificación (1-5)', name: 'rating', widget: 'number', value_type: 'int' }
+          - { label: 'Fecha', name: 'date', widget: 'datetime', format: 'YYYY-MM-DD' }
+  - name: 'offers'
+    label: 'Ofertas Especiales'
+    file: 'src/data/offers.json'
+    format: 'json-array'
+    fields:
+      - label: 'Ofertas'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Título', name: 'title', widget: 'string' }
+          - { label: 'Descripción', name: 'description', widget: 'text' }
+          - { label: 'Descuento (%)', name: 'discount', widget: 'number', value_type: 'int' }
+          - {
+              label: 'Precio Original (S/)',
+              name: 'originalPrice',
+              widget: 'number',
+              value_type: 'float',
+            }
+          - {
+              label: 'Precio de Venta (S/)',
+              name: 'salePrice',
+              widget: 'number',
+              value_type: 'float',
+            }
+          - { label: 'Imagen', name: 'image', widget: 'string' }
+          - { label: 'Enlace', name: 'link', widget: 'string' }
+  - name: 'categories'
+    label: 'Categorías de Catálogo'
+    file: 'src/data/categories.json'
+    format: 'json-array'
+    fields:
+      - label: 'Categorías'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Nombre', name: 'name', widget: 'string' }
+          - { label: 'Descripción', name: 'description', widget: 'text' }
+          - {
+              label: 'Icono',
+              name: 'icon',
+              widget: 'select',
+              options: ['Book', 'Books', 'GraduationCap'],
+            }
+          - { label: 'Imagen', name: 'image', widget: 'string' }
+          - { label: 'Enlace', name: 'link', widget: 'string' }
+  - name: 'generalFaqs'
+    label: 'FAQs Generales'
+    file: 'src/data/general-faqs.json'
+    format: 'json-array'
+    fields:
+      - label: 'Preguntas'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Pregunta', name: 'question', widget: 'string' }
+          - { label: 'Respuesta', name: 'answer', widget: 'text' }
+  - name: 'catalogFaqs'
+    label: 'FAQs del Catálogo'
+    file: 'src/data/catalog-faqs.json'
+    format: 'json-array'
+    fields:
+      - label: 'Preguntas'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Pregunta', name: 'question', widget: 'string' }
+          - { label: 'Respuesta', name: 'answer', widget: 'text' }
+  - name: 'paymentFaqs'
+    label: 'FAQs de Pagos'
+    file: 'src/data/payment-faqs.json'
+    format: 'json-array'
+    fields:
+      - label: 'Preguntas'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - { label: 'Pregunta', name: 'question', widget: 'string' }
+          - { label: 'Respuesta', name: 'answer', widget: 'text' }
+  - name: 'offerHeroBanner'
+    label: 'Banner Hero de Ofertas'
+    file: 'src/data/offer-hero-banner.json'
+    format: 'json-array'
+    fields:
+      - label: 'Banners'
+        name: 'items'
+        widget: 'list'
+        fields:
+          - { label: 'ID', name: 'id', widget: 'string' }
+          - {
+              label: 'Tipo de Producto',
+              name: 'type',
+              widget: 'select',
+              options: ['book', 'pack', 'exam'],
+            }
+          - {
+              label: 'Fecha de Expiración',
+              name: 'expiration',
+              widget: 'datetime',
+              format: 'YYYY-MM-DD',
+            }
+          - { label: 'Enlace Personalizado', name: 'customLink', widget: 'string' }
+  - name: 'legal'
+    label: 'Páginas Legales'
+    folder: 'src/content/legal'
+    create: true
+    slug: '{{slug}}'
+    format: 'frontmatter'
+    fields:
+      - { label: 'Título', name: 'title', widget: 'string' }
+      - { label: 'Descripción', name: 'description', widget: 'string', required: false }
+      - { label: 'Cuerpo', name: 'body', widget: 'markdown' }

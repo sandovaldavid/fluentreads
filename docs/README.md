@@ -4,19 +4,19 @@ Indice de la auditoria tecnica completa del proyecto FluentReads (Astro 7 + Reac
 
 ## Estado de los bloques
 
-| Bloque | Documento                                    | Estado  | Sprint |
-| ------ | -------------------------------------------- | ------- | ------ |
-| B0     | Tooling de calidad + CI base                 | done    | S1     |
-| B1     | CI/CD: Vercel deploy + release-please        | done    | S1     |
-| B2     | Centralizacion de variables mudables         | done    | S2     |
-| B3     | Bugs criticos de logica y sintaxis           | done    | S2     |
-| B4     | Bugs de estilos                              | done    | S3     |
-| B5     | Accesibilidad                                | done    | S3     |
-| B6     | Performance                                  | done    | S4     |
-| B7     | Seguridad                                    | done    | S4     |
-| B8     | Refactor arquitectonico: content collections | done    | S5-S6  |
-| B9     | Features incompletas                         | pending | S6-S7  |
-| B10    | README + docs finales                        | pending | S8     |
+| Bloque | Documento                                    | Estado | Sprint |
+| ------ | -------------------------------------------- | ------ | ------ |
+| B0     | Tooling de calidad + CI base                 | done   | S1     |
+| B1     | CI/CD: Vercel deploy + release-please        | done   | S1     |
+| B2     | Centralizacion de variables mudables         | done   | S2     |
+| B3     | Bugs criticos de logica y sintaxis           | done   | S2     |
+| B4     | Bugs de estilos                              | done   | S3     |
+| B5     | Accesibilidad                                | done   | S3     |
+| B6     | Performance                                  | done   | S4     |
+| B7     | Seguridad                                    | done   | S4     |
+| B8     | Refactor arquitectonico: content collections | done   | S5-S6  |
+| B9     | Features incompletas                         | done   | S6-S7  |
+| B10    | README + docs finales                        | done   | S8     |
 
 ## Indice de documentos
 

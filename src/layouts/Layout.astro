@@ -179,6 +179,13 @@ const metaData = {
   <head>
     <script is:inline>
       document.documentElement.classList.add('js');
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .catch((err) => console.warn('SW registration failed:', err));
+        });
+      }
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
