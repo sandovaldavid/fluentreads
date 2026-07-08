@@ -124,7 +124,95 @@ declare module 'astro:content' {
 		: any;
 
 	type DataEntryMap = {
-		
+		"books": Record<string, {
+  id: string;
+  body?: string;
+  collection: "books";
+  data: InferEntrySchema<"books">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"catalogFaqs": Record<string, {
+  id: string;
+  body?: string;
+  collection: "catalogFaqs";
+  data: InferEntrySchema<"catalogFaqs">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"categories": Record<string, {
+  id: string;
+  body?: string;
+  collection: "categories";
+  data: InferEntrySchema<"categories">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"editorial": Record<string, {
+  id: string;
+  body?: string;
+  collection: "editorial";
+  data: InferEntrySchema<"editorial">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"exams": Record<string, {
+  id: string;
+  body?: string;
+  collection: "exams";
+  data: InferEntrySchema<"exams">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"generalFaqs": Record<string, {
+  id: string;
+  body?: string;
+  collection: "generalFaqs";
+  data: InferEntrySchema<"generalFaqs">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"offerHeroBanner": Record<string, {
+  id: string;
+  body?: string;
+  collection: "offerHeroBanner";
+  data: InferEntrySchema<"offerHeroBanner">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"offers": Record<string, {
+  id: string;
+  body?: string;
+  collection: "offers";
+  data: InferEntrySchema<"offers">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"packs": Record<string, {
+  id: string;
+  body?: string;
+  collection: "packs";
+  data: InferEntrySchema<"packs">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"paymentFaqs": Record<string, {
+  id: string;
+  body?: string;
+  collection: "paymentFaqs";
+  data: InferEntrySchema<"paymentFaqs">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"testimonies": Record<string, {
+  id: string;
+  body?: string;
+  collection: "testimonies";
+  data: InferEntrySchema<"testimonies">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+
 	};
 
 	type ExtractLoaderTypes<T> = T extends import('astro/loaders').LiveLoader<
@@ -154,6 +242,6 @@ declare module 'astro:content' {
 		LiveContentConfig['collections'][C]['loader']
 	>;
 
-	export type ContentConfig = never;
+	export type ContentConfig = typeof import("../src/content.config.js");
 	export type LiveContentConfig = never;
 }

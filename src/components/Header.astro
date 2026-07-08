@@ -6,13 +6,13 @@ import Navbar from '../components/Navbar.astro';
 const logoImage = '/assets/logo_v4.webp';
 
 import { siteConfig } from '@config/site';
-import siteInfo from '../data/page-information.json';
+// siteInfo removed
 import CartIndicator from './CartIndicator.astro';
 ---
 
-<header className="bg-primary sticky top-0 z-50 w-full text-white shadow-md">
+<header class="bg-primary sticky top-0 z-50 w-full text-white shadow-md">
   <div
-    className="container mx-auto flex flex-wrap items-center justify-between px-4 py-3 md:justify-center lg:justify-between"
+    class="container mx-auto flex flex-wrap items-center justify-between px-4 py-3 md:justify-center lg:justify-between"
   >
     <!-- Logo -->
     <a href="/" class="flex items-center lg:pl-8">
@@ -21,10 +21,10 @@ import CartIndicator from './CartIndicator.astro';
     </a>
 
     <!-- Cart and Mobile Menu Button -->
-    <div className="flex items-center space-x-2 md:order-last">
+    <div class="flex items-center space-x-2 md:order-last">
       <a
         href="/checkout"
-        className="hover:text-secondary relative flex items-center p-2 text-white"
+        class="hover:text-secondary relative flex items-center p-2 text-white"
         aria-label="Ver carrito de compras"
       >
         <svg
@@ -41,7 +41,7 @@ import CartIndicator from './CartIndicator.astro';
             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
           ></path>
         </svg>
-        <CartIndicator className="absolute -top-1 -right-1" />
+        <CartIndicator class="absolute -top-1 -right-1" />
       </a>
 
       <!-- Mobile menu button -->
@@ -59,7 +59,7 @@ import CartIndicator from './CartIndicator.astro';
     <!-- Navigation and social icons -->
     <div
       id="menu"
-      className="mobile-menu max-h-0 w-full flex-col overflow-hidden opacity-0 transition-all duration-300 ease-in-out md:mt-0 md:flex md:max-h-none md:w-auto md:opacity-100"
+      class="mobile-menu max-h-0 w-full flex-col overflow-hidden opacity-0 transition-all duration-300 ease-in-out md:mt-0 md:flex md:max-h-none md:w-auto md:opacity-100"
     >
       <Navbar />
     </div>
