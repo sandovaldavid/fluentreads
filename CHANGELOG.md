@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.3.0...fluentreads-v0.3.1) (2026-07-08)
+
+
+### Bug Fixes
+
+* **styles:** replace className with class across all Astro files ([#33](https://github.com/sandovaldavid/fluentreads/issues/33)) ([ca11ffc](https://github.com/sandovaldavid/fluentreads/commit/ca11ffc4f395d0fb7a19c61c97edb66da55844db))
+
 ## [0.3.0](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.2.0...fluentreads-v0.3.0) (2026-07-08)
 
 
