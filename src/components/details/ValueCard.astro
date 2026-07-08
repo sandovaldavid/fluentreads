@@ -129,29 +129,27 @@ const walletIconComponents = {
 
 <!-- Enhanced value card with better visual hierarchy and persuasive elements -->
 <div
-  className={`mb-6 transform rounded-xl border border-gray-200 bg-gradient-to-br p-5 shadow-md transition-all duration-300 hover:shadow-lg ${colorScheme.bgGradient}`}
+  class={`mb-6 transform rounded-xl border border-gray-200 bg-gradient-to-br p-5 shadow-md transition-all duration-300 hover:shadow-lg ${colorScheme.bgGradient}`}
 >
   <!-- Price section with enhanced visual hierarchy -->
-  <div className="flex flex-col">
+  <div class="flex flex-col">
     <!-- Header section with value proposition -->
     {
       showRetailValue && (
-        <div className="mb-4 border-b border-dashed border-gray-200 pb-3">
-          <div className="flex items-center">
+        <div class="mb-4 border-b border-dashed border-gray-200 pb-3">
+          <div class="flex items-center">
             <SparklesIcon class="mr-2 h-5 w-5 text-amber-500" />
-            <h3 className="font-bold text-gray-800">¡Gran valor!</h3>
+            <h3 class="font-bold text-gray-800">¡Gran valor!</h3>
           </div>
 
-          <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-            <div className="flex items-center">
-              <span className="text-sm text-gray-600">{valueLabel}</span>
-              <span className="ml-1 font-bold text-gray-500 line-through">
-                {formattedRetailValue}
-              </span>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+            <div class="flex items-center">
+              <span class="text-sm text-gray-600">{valueLabel}</span>
+              <span class="ml-1 font-bold text-gray-500 line-through">{formattedRetailValue}</span>
             </div>
 
             <div
-              className={`flex items-center rounded-full px-3 py-1 text-sm font-medium ${colorScheme.accentBg} ${colorScheme.accentText}`}
+              class={`flex items-center rounded-full px-3 py-1 text-sm font-medium ${colorScheme.accentBg} ${colorScheme.accentText}`}
             >
               <BadgeIcon class="mr-1.5 h-4 w-4" />
               <span>
@@ -164,21 +162,21 @@ const walletIconComponents = {
     }
 
     <!-- Price display with improved typography -->
-    <div className="flex flex-col">
-      <div className="mb-1 text-sm font-medium text-gray-600">Precio:</div>
-      <div className="mb-1 flex flex-wrap items-baseline gap-2">
+    <div class="flex flex-col">
+      <div class="mb-1 text-sm font-medium text-gray-600">Precio:</div>
+      <div class="mb-1 flex flex-wrap items-baseline gap-2">
         {
           hasDiscount ? (
             <>
-              <span className="text-primary price-highlight text-3xl font-bold">
+              <span class="text-primary price-highlight text-3xl font-bold">
                 {formattedDiscountedPrice}
               </span>
-              <span className="text-xl text-gray-500 line-through opacity-75">
+              <span class="text-xl text-gray-500 line-through opacity-75">
                 {formattedOriginalPrice}
               </span>
             </>
           ) : (
-            <span className="text-primary price-highlight text-3xl font-bold">
+            <span class="text-primary price-highlight text-3xl font-bold">
               {formattedOriginalPrice}
             </span>
           )
@@ -187,7 +185,7 @@ const walletIconComponents = {
         <!-- Discount pill - more prominent -->
         {
           discount && hasDiscount && (
-            <span className="bg-accent/10 text-accent discount-badge ml-auto flex-shrink-0 self-start rounded-full px-3 py-1 text-sm font-bold">
+            <span class="bg-accent/10 text-accent discount-badge ml-auto flex-shrink-0 self-start rounded-full px-3 py-1 text-sm font-bold">
               {discount}% DESCUENTO
             </span>
           )
@@ -197,9 +195,9 @@ const walletIconComponents = {
       <!-- Savings message with animation -->
       {
         hasDiscount && formattedSavingsAmount && (
-          <div className="bg-accent/10 savings-highlight mb-3 rounded-md border border-green-100 p-2">
-            <p className="flex items-center text-sm font-medium text-green-700">
-              <span className="mr-1.5">
+          <div class="bg-accent/10 savings-highlight mb-3 rounded-md border border-green-100 p-2">
+            <p class="flex items-center text-sm font-medium text-green-700">
+              <span class="mr-1.5">
                 <Sales class="h-5 w-5" />
               </span>
               ¡Ahorras {formattedSavingsAmount}!
@@ -209,74 +207,74 @@ const walletIconComponents = {
       }
 
       <!-- Limited-time offer message with urgency -->
-      <div className="mb-4 flex items-center">
-        <div className="pulse-animation mr-2 h-2 w-2 rounded-full bg-red-500"></div>
-        <p className="text-sm font-medium text-gray-700">
-          Oferta válida hasta el <span className="font-bold">{formattedDate}</span>
+      <div class="mb-4 flex items-center">
+        <div class="pulse-animation mr-2 h-2 w-2 rounded-full bg-red-500"></div>
+        <p class="text-sm font-medium text-gray-700">
+          Oferta válida hasta el <span class="font-bold">{formattedDate}</span>
         </p>
       </div>
 
       <!-- Delivery benefits with icons in a more organized layout -->
-      <div className="mb-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-        <div className="flex items-center">
-          <div className="text-accent mr-2 h-5 w-5 flex-shrink-0">
+      <div class="mb-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+        <div class="flex items-center">
+          <div class="text-accent mr-2 h-5 w-5 flex-shrink-0">
             <ShippingIcon class="size-5" />
           </div>
-          <p className="text-sm">{deliveryMessage}</p>
+          <p class="text-sm">{deliveryMessage}</p>
         </div>
 
-        <div className="flex items-center">
-          <div className="text-accent mr-2 h-5 w-5 flex-shrink-0">
+        <div class="flex items-center">
+          <div class="text-accent mr-2 h-5 w-5 flex-shrink-0">
             <CheckIcon />
           </div>
-          <p className="text-sm">{deliveryTimeMessage}</p>
+          <p class="text-sm">{deliveryTimeMessage}</p>
         </div>
 
-        <div className="flex items-center">
-          <div className="text-accent mr-2 h-5 w-5 flex-shrink-0">
+        <div class="flex items-center">
+          <div class="text-accent mr-2 h-5 w-5 flex-shrink-0">
             <CheckIcon />
           </div>
-          <p className="text-sm">Soporte técnico incluido</p>
+          <p class="text-sm">Soporte técnico incluido</p>
         </div>
 
-        <div className="flex items-center">
-          <div className="text-accent mr-2 h-5 w-5 flex-shrink-0">
+        <div class="flex items-center">
+          <div class="text-accent mr-2 h-5 w-5 flex-shrink-0">
             <CheckIcon />
           </div>
-          <p className="text-sm">Garantía de satisfacción</p>
+          <p class="text-sm">Garantía de satisfacción</p>
         </div>
       </div>
 
       <!-- Customer trust indicators -->
-      <div className="mb-4 rounded-lg border border-gray-100 bg-white p-3">
-        <div className="flex items-center justify-center gap-3 text-center">
-          <div className="flex items-center">
+      <div class="mb-4 rounded-lg border border-gray-100 bg-white p-3">
+        <div class="flex items-center justify-center gap-3 text-center">
+          <div class="flex items-center">
             <ShieldCheckIcon class="h-4 w-4 text-green-500" />
-            <span className="text-xs font-medium">100% Seguro</span>
+            <span class="text-xs font-medium">100% Seguro</span>
           </div>
-          <div className="flex items-center">
-            <span className="mr-1 flex items-center rounded-full bg-green-100 p-0.5">
+          <div class="flex items-center">
+            <span class="mr-1 flex items-center rounded-full bg-green-100 p-0.5">
               <CheckIcon class="h-3 w-3 text-green-500" />
             </span>
-            <span className="text-xs font-medium">Compra verificada</span>
+            <span class="text-xs font-medium">Compra verificada</span>
           </div>
-          <div className="flex items-center">
+          <div class="flex items-center">
             <PremiumCheckIcon class="mr-1 h-4 w-4 text-blue-500" />
-            <span className="text-xs font-medium">Calidad premium</span>
+            <span class="text-xs font-medium">Calidad premium</span>
           </div>
         </div>
       </div>
 
       <!-- Payment methods with visual icons from PageInformation -->
-      <div className="border-t border-gray-200 pt-3">
-        <p className="mb-2 text-xs text-gray-600">Métodos de pago aceptados:</p>
-        <div className="flex flex-wrap gap-2">
+      <div class="border-t border-gray-200 pt-3">
+        <p class="mb-2 text-xs text-gray-600">Métodos de pago aceptados:</p>
+        <div class="flex flex-wrap gap-2">
           {/* Digital Wallets */}
           {
             Object.entries(digitalWallets).map(([key, value]) => (
-              <span className="flex items-center rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 shadow-sm">
-                {key === 'yape' && <img src={YapeIcon.src} alt="Yape" className="h-4 w-4" />}
-                {key === 'plin' && <img src={PlinIcon.src} alt="Plin" className="h-4 w-4" />}
+              <span class="flex items-center rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 shadow-sm">
+                {key === 'yape' && <img src={YapeIcon.src} alt="Yape" class="h-4 w-4" />}
+                {key === 'plin' && <img src={PlinIcon.src} alt="Plin" class="h-4 w-4" />}
                 {key === 'paypal' && <PayPal_v2Icon class="h-5 w-12" />}
               </span>
             ))
@@ -285,7 +283,7 @@ const walletIconComponents = {
           {/* Bank Accounts */}
           {
             bankAccounts.map((bank) => (
-              <span className="flex items-center rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 shadow-sm">
+              <span class="flex items-center rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 shadow-sm">
                 {bank.bank === 'BCP' && <BCPIcon class="h-4 w-8" />}
                 {bank.bank === 'BBVA' && <BBVAIcon class="h-4 w-8" />}
                 {bank.bank === 'Scotiabank' && <ScotiabankIcon class="h-4 w-16" />}

@@ -10,7 +10,7 @@ interface Props {
   subtitle?: string;
   buttonText?: string;
   buttonLink?: string;
-  className?: string;
+  class?: string;
   type?: 'default' | 'newsletter' | 'consultation';
 }
 
@@ -19,7 +19,7 @@ const {
   subtitle = 'No esperes más para empezar a mejorar tu inglés con nuestros materiales de alta calidad',
   buttonText = 'Explorar materiales',
   buttonLink = '/catalogo',
-  className = '',
+  class: className = '',
   type = 'default',
 } = Astro.props;
 

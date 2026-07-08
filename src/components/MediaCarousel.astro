@@ -43,16 +43,16 @@ const thumbnails = mediaItems.map((item, index) => {
 ---
 
 <div
-  className="media-carousel group relative mb-6 overflow-hidden rounded-xl shadow-xl"
+  class="media-carousel group relative mb-6 overflow-hidden rounded-xl shadow-xl"
   id="media-carousel"
   style={`height: ${height};`}
 >
   <!-- Main display area for current media -->
-  <div className="carousel-track h-full w-full transition-transform duration-500">
+  <div class="carousel-track h-full w-full transition-transform duration-500">
     {
       mediaItems.map((item, index) => (
         <div
-          className={`carousel-slide absolute inset-0 aspect-video ${index === 0 ? 'active' : ''}`}
+          class={`carousel-slide absolute inset-0 aspect-video ${index === 0 ? 'active' : ''}`}
           data-index={index}
           id={`slide-${index}`}
         >
@@ -75,7 +75,7 @@ const thumbnails = mediaItems.map((item, index) => {
               </div>
             </button>
           ) : (
-            <div className="media-video-container h-full">
+            <div class="media-video-container h-full">
               <lite-youtube
                 videoId={extractYoutubeId(item.url)}
                 title={item.title || `${title} - Video`}
@@ -97,8 +97,8 @@ const thumbnails = mediaItems.map((item, index) => {
   />
 
   <!-- Thumbnails navigation -->
-  <div className="thumbnails-container mt-4 overflow-x-auto rounded-lg bg-gray-100 px-2 py-4">
-    <div className="thumbnails-track flex gap-2">
+  <div class="thumbnails-container mt-4 overflow-x-auto rounded-lg bg-gray-100 px-2 py-4">
+    <div class="thumbnails-track flex gap-2">
       {
         thumbnails.map((thumb, index) => (
           <button

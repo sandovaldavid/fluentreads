@@ -58,40 +58,37 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
 ---
 
 <div
-  className={`promo-item relative transform overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${cardHeightClass}`}
+  class={`promo-item relative transform overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${cardHeightClass}`}
   style={`animation-delay: ${animationDelay}`}
 >
   <!-- Discount badge using the new component -->
   <DiscountBadge discount={Offer.discount} size={size} />
 
   <!-- Small and Medium layouts (stacked) -->
-  <div className={`flex h-full flex-col ${isLargeLayout ? 'lg:hidden' : ''}`}>
+  <div class={`flex h-full flex-col ${isLargeLayout ? 'lg:hidden' : ''}`}>
     <!-- Image container -->
-    <div className="relative overflow-hidden">
-      <div className={imageContainerClass}>
-        <img src={Offer.image} alt={Offer.title} className="h-full w-full object-cover" />
+    <div class="relative overflow-hidden">
+      <div class={imageContainerClass}>
+        <img src={Offer.image} alt={Offer.title} class="h-full w-full object-cover" />
       </div>
       <!-- Overlay gradient -->
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
       <!-- Title overlay for compact view - FIXED FOR MOBILE -->
-      <div className="overlay-container absolute right-0 bottom-0 left-0 p-2 sm:p-3">
+      <div class="overlay-container absolute right-0 bottom-0 left-0 p-2 sm:p-3">
         <!-- Title container with appropriate sizing and improved truncation -->
-        <div className="title-container max-w-full">
-          <h3 className={`line-clamp-2 font-bold break-words text-white ${titleSize}`}>
+        <div class="title-container max-w-full">
+          <h3 class={`line-clamp-2 font-bold break-words text-white ${titleSize}`}>
             {Offer.title}
           </h3>
         </div>
         <!-- Price display on image - adjusted positioning -->
-        <div className="mt-1 flex items-center justify-between">
+        <div class="mt-1 flex items-center justify-between">
           <div
-            className={`flex items-center rounded-full px-1 ${isSmallLayout ? 'bg-blue-50/80' : 'bg-blue-50 md:px-2 md:py-1'}`}
+            class={`flex items-center rounded-full px-1 ${isSmallLayout ? 'bg-blue-50/80' : 'bg-blue-50 md:px-2 md:py-1'}`}
           >
-            <span className={`text-accent font-bold ${priceSize}`}
-              >S/{Offer.salePrice.toFixed(2)}</span
-            >
-            <span
-              className={`text-primary ml-1 line-through ${isSmallLayout ? 'text-3xs' : 'text-xs'}`}
+            <span class={`text-accent font-bold ${priceSize}`}>S/{Offer.salePrice.toFixed(2)}</span>
+            <span class={`text-primary ml-1 line-through ${isSmallLayout ? 'text-3xs' : 'text-xs'}`}
               >S/{Offer.originalPrice.toFixed(2)}</span
             >
           </div>
@@ -100,10 +97,10 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
     </div>
 
     <!-- Content container for small/medium layouts -->
-    <div className={`flex flex-grow flex-col justify-between ${isSmallLayout ? 'p-2' : 'p-3'}`}>
+    <div class={`flex flex-grow flex-col justify-between ${isSmallLayout ? 'p-2' : 'p-3'}`}>
       <!-- Description (length varies by size) -->
       <p
-        className={`mb-2 text-gray-600 ${
+        class={`mb-2 text-gray-600 ${
           isSmallLayout
             ? 'text-3xs line-clamp-1'
             : isMediumLayout
@@ -115,7 +112,7 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
       </p>
 
       <!-- Action buttons - full width -->
-      <div className="flex w-full flex-wrap gap-1 sm:gap-2">
+      <div class="flex w-full flex-wrap gap-1 sm:gap-2">
         <!-- For small size, only show the buy button -->
         {
           !isSmallLayout && (
@@ -146,38 +143,38 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
   <!-- Large layout (side by side) - Only for large size on desktop -->
   {
     isLargeLayout && (
-      <div className="hidden lg:flex flex-row h-full">
+      <div class="hidden h-full flex-row lg:flex">
         {/* Image container */}
-        <div className="relative md:w-2/5 overflow-hidden">
-          <div className="h-full">
+        <div class="relative overflow-hidden md:w-2/5">
+          <div class="h-full">
             <img
               src={Offer.image}
               alt={Offer.title}
-              className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+              class="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
             />
           </div>
           {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+          <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
         </div>
 
         {/* Content container */}
-        <div className="flex-1 p-5 md:p-6 flex flex-col justify-between">
+        <div class="flex flex-1 flex-col justify-between p-5 md:p-6">
           <div>
-            <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3">{Offer.title}</h3>
-            <p className="text-gray-600 mb-4 line-clamp-3">{Offer.description}</p>
+            <h3 class="mb-3 text-xl font-bold text-gray-800 md:text-2xl">{Offer.title}</h3>
+            <p class="mb-4 line-clamp-3 text-gray-600">{Offer.description}</p>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
+          <div class="mt-4 flex items-center justify-between">
             {/* Price display on desktop */}
-            <div className="flex items-baseline gap-2">
-              <span className="text-primary-dark font-bold text-2xl">
+            <div class="flex items-baseline gap-2">
+              <span class="text-primary-dark text-2xl font-bold">
                 S/{Offer.salePrice.toFixed(2)}
               </span>
-              <span className="text-gray-500 line-through">S/{Offer.originalPrice.toFixed(2)}</span>
+              <span class="text-gray-500 line-through">S/{Offer.originalPrice.toFixed(2)}</span>
             </div>
 
             {/* Action buttons */}
-            <div className="flex space-x-3 ml-4">
+            <div class="ml-4 flex space-x-3">
               {/* View Details Button */}
               <Button
                 variant="outline"

@@ -31,50 +31,50 @@ const paymentId = `payment-${title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`
 ---
 
 <div
-  className="payment-method-card group relative overflow-hidden rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:shadow-lg"
+  class="payment-method-card group relative overflow-hidden rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:shadow-lg"
 >
   <!-- Subtle background effect on hover -->
   <div
-    className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+    class="absolute inset-0 bg-gradient-to-b from-transparent to-gray-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
   >
   </div>
 
-  <div className="relative z-10">
-    <div className="mb-4 flex justify-center">
+  <div class="relative z-10">
+    <div class="mb-4 flex justify-center">
       <div
-        className={`flex h-16 w-16 items-center justify-center rounded-full ${color} shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md`}
+        class={`flex h-16 w-16 items-center justify-center rounded-full ${color} shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md`}
       >
         {
           image ? (
             <img
               src={image}
-              className={`${logoWidth} ${logoHeight} object-contain transition-all duration-300`}
+              class={`${logoWidth} ${logoHeight} object-contain transition-all duration-300`}
               alt={title}
             />
           ) : Icon ? (
             <Icon class={`${logoWidth} ${logoHeight} transition-all duration-300`} />
           ) : (
-            <span className="text-3xl">📱</span>
+            <span class="text-3xl">📱</span>
           )
         }
       </div>
     </div>
-    <h3 className="text-primary-dark mb-2 text-center text-xl font-bold">
+    <h3 class="text-primary-dark mb-2 text-center text-xl font-bold">
       {title}
     </h3>
-    <p className="mb-4 text-center text-gray-600">{description}</p>
+    <p class="mb-4 text-center text-gray-600">{description}</p>
 
     <!-- Payment Number with Copy Button -->
     <div
-      className="group-payment relative mb-4 overflow-hidden rounded-lg border border-transparent bg-gray-100 p-3 transition-colors duration-300 hover:border-gray-200 hover:bg-gray-50"
+      class="group-payment relative mb-4 overflow-hidden rounded-lg border border-transparent bg-gray-100 p-3 transition-colors duration-300 hover:border-gray-200 hover:bg-gray-50"
     >
-      <p id={paymentId} className="text-center font-mono text-gray-800 select-all">
+      <p id={paymentId} class="text-center font-mono text-gray-800 select-all">
         {paymentNumber}
       </p>
 
       <!-- Subtle shimmer effect on hover -->
       <div
-        className="shimmer-effect absolute inset-0 bg-gradient-to-r from-transparent via-gray-200/20 to-transparent opacity-0 group-hover:opacity-100"
+        class="shimmer-effect absolute inset-0 bg-gradient-to-r from-transparent via-gray-200/20 to-transparent opacity-0 group-hover:opacity-100"
       >
       </div>
 
@@ -88,14 +88,14 @@ const paymentId = `payment-${title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`
 
       <!-- Success message that appears when copied -->
       <div
-        className="copied-message bg-accent pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 transform rounded-full px-3 py-1 text-xs text-white opacity-0 transition-opacity duration-300"
+        class="copied-message bg-accent pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 transform rounded-full px-3 py-1 text-xs text-white opacity-0 transition-opacity duration-300"
         data-for={paymentId}
       >
         ¡Copiado!
       </div>
     </div>
 
-    <p className="text-center text-sm text-gray-500">
+    <p class="text-center text-sm text-gray-500">
       {instructions}
     </p>
   </div>

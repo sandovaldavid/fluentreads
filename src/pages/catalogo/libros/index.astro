@@ -130,42 +130,42 @@ const structuredData = {
 >
   <!-- Hero Banner -->
   <section
-    className="catalog-hero bg-primary relative overflow-hidden bg-cover bg-center py-12 text-white"
+    class="catalog-hero bg-primary relative overflow-hidden bg-cover bg-center py-12 text-white"
     style={`background-image: linear-gradient(to bottom, rgba(30, 58, 138, 0.8), rgba(30, 58, 138, 0.5)), url(${categoryHeroImage});`}
   >
-    <div className="from-primary-dark/80 to-primary/40 absolute inset-0 bg-gradient-to-r"></div>
-    <div className="relative z-10 container mx-auto px-8">
-      <div className="grid h-full grid-cols-1 gap-8 md:grid-cols-3">
+    <div class="from-primary-dark/80 to-primary/40 absolute inset-0 bg-gradient-to-r"></div>
+    <div class="relative z-10 container mx-auto px-8">
+      <div class="grid h-full grid-cols-1 gap-8 md:grid-cols-3">
         <!-- Text content -->
-        <div className="text-center md:col-span-2 md:text-left">
+        <div class="text-center md:col-span-2 md:text-left">
           <!-- Breadcrumbs -->
           <Breadcrumb items={breadcrumbItems} class="mb-6 text-white/90" />
           <div>
             <div
-              className="fade-in mb-4 inline-block rounded-lg bg-white/10 p-4 text-4xl shadow-lg backdrop-blur-sm"
+              class="fade-in mb-4 inline-block rounded-lg bg-white/10 p-4 text-4xl shadow-lg backdrop-blur-sm"
             >
               📚
             </div>
-            <h1 className="slide-in-left mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">
+            <h1 class="slide-in-left mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">
               Catálogo de Libros en Inglés
             </h1>
-            <p className="slide-in-left mb-6 max-w-2xl text-lg text-white/90 delay-100 md:text-xl">
+            <p class="slide-in-left mb-6 max-w-2xl text-lg text-white/90 delay-100 md:text-xl">
               Explora nuestra colección completa de libros en inglés para todos los niveles y
               formatos. Ofrecemos materiales educativos que te ayudarán a mejorar tu dominio del
               idioma.
             </p>
             <div
-              className="slide-in-left flex flex-wrap justify-center gap-4 delay-200 md:justify-start"
+              class="slide-in-left flex flex-wrap justify-center gap-4 delay-200 md:justify-start"
             >
               <a
                 href="#catalog-section"
-                className="bg-secondary hover:bg-secondary-dark text-primary-dark rounded-lg px-6 py-3 font-bold shadow-lg transition-all duration-300 hover:shadow-xl"
+                class="bg-secondary hover:bg-secondary-dark text-primary-dark rounded-lg px-6 py-3 font-bold shadow-lg transition-all duration-300 hover:shadow-xl"
               >
                 Ver Catálogo
               </a>
               <a
                 href="#contact-form"
-                className="rounded-lg bg-white/20 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/30"
+                class="rounded-lg bg-white/20 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/30"
               >
                 Consultar Disponibilidad
               </a>
@@ -175,15 +175,15 @@ const structuredData = {
 
         <!-- Decorative element -->
         <div
-          className="fade-in relative hidden items-center justify-center overflow-hidden rounded-lg border-4 border-white/20 shadow-2xl delay-300 md:flex"
+          class="fade-in relative hidden items-center justify-center overflow-hidden rounded-lg border-4 border-white/20 shadow-2xl delay-300 md:flex"
         >
           <div
-            className="from-primary/40 to-accent/30 flex aspect-[3/4] h-full w-full items-center justify-center bg-gradient-to-br backdrop-blur-sm"
+            class="from-primary/40 to-accent/30 flex aspect-[3/4] h-full w-full items-center justify-center bg-gradient-to-br backdrop-blur-sm"
           >
             <img
               src="/images/book-sample/book-sample-01.jpg"
               alt="Muestra de libro de inglés"
-              className="h-full w-full object-cover"
+              class="h-full w-full object-cover"
             />
           </div>
         </div>
@@ -192,21 +192,21 @@ const structuredData = {
 
     <!-- Decorative shapes -->
     <div
-      className="absolute right-0 -bottom-8 left-0 h-16 bg-white"
+      class="absolute right-0 -bottom-8 left-0 h-16 bg-white"
       style="clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);"
     >
     </div>
     <div
-      className="absolute right-0 -bottom-8 left-0 h-16 bg-white/20 backdrop-blur-sm"
+      class="absolute right-0 -bottom-8 left-0 h-16 bg-white/20 backdrop-blur-sm"
       style="clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);"
     >
     </div>
   </section>
 
   <!-- Main Catalog Section -->
-  <section className="catalog-section relative py-12" id="catalog-section">
-    <div className="catalog-pattern absolute inset-0 opacity-[0.03]"></div>
-    <div className="relative z-10 container mx-auto px-4">
+  <section class="catalog-section relative py-12" id="catalog-section">
+    <div class="catalog-pattern absolute inset-0 opacity-[0.03]"></div>
+    <div class="relative z-10 container mx-auto px-4">
       <!-- Main catalog container component -->
       <CatalogBookContainer
         books={safeBooks}
@@ -221,11 +221,11 @@ const structuredData = {
   </section>
 
   <!-- Related Categories Section -->
-  <section className="bg-neutral-light py-12">
-    <div className="container mx-auto px-4">
-      <div className="mb-10 text-center">
+  <section class="bg-neutral-light py-12">
+    <div class="container mx-auto px-4">
+      <div class="mb-10 text-center">
         <SectionTitle>Explora otras categorías</SectionTitle>
-        <p className="mx-auto max-w-3xl text-gray-600">
+        <p class="mx-auto max-w-3xl text-gray-600">
           Descubre nuestra selección completa de materiales educativos en inglés
         </p>
       </div>
@@ -237,21 +237,21 @@ const structuredData = {
   <PromoSection
     title="Ofertas y Promociones Exclusivas"
     subtitle="Ofertas Especiales"
-    className="from-primary/5 to-accent/5 bg-gradient-to-br py-16"
+    class="from-primary/5 to-accent/5 bg-gradient-to-br py-16"
     countdownDays={5}
     cardSize="large"
   />
 
   <!-- FAQ Section -->
   <FAQ
-    className="py-16"
+    class="py-16"
     dataset="catalog"
     title="Preguntas frecuentes sobre nuestros libros"
     description="Resolvemos tus dudas sobre nuestros materiales de inglés."
   />
 
   <!-- CTA Banner -->
-  <div className="container mx-auto mb-16 px-4">
+  <div class="container mx-auto mb-16 px-4">
     <CTABanner type="default" />
   </div>
 </Layout>

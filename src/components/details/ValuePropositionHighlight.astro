@@ -89,52 +89,48 @@ const colors = colorSchemeByType[productType];
 
 <!-- Value proposition highlight with improved UI -->
 <div
-  className={`${colors.bg} rounded-xl border p-4 sm:p-5 ${colors.border} mb-6 transform shadow-sm transition-all duration-300 hover:shadow-md`}
+  class={`${colors.bg} rounded-xl border p-4 sm:p-5 ${colors.border} mb-6 transform shadow-sm transition-all duration-300 hover:shadow-md`}
 >
-  <div className="mb-3 flex items-center">
+  <div class="mb-3 flex items-center">
     <SparklesIcon class="mr-2 h-5 w-5 text-amber-500" />
-    <h3 className={`text-lg font-bold ${colors.title}`}>
+    <h3 class={`text-lg font-bold ${colors.title}`}>
       {titleByType[productType]}
     </h3>
   </div>
 
-  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <div className="space-y-2">
-      <div className="flex items-center">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="space-y-2">
+      <div class="flex items-center">
         <CheckIcon class="mr-1.5 h-4 w-4 text-green-500" />
-        <p className="text-sm text-gray-700">
+        <p class="text-sm text-gray-700">
           {labelByType[productType]}
-          <span className={`font-bold ${colors.highlight}`}>{formattedTotalBooksValue}</span>
+          <span class={`font-bold ${colors.highlight}`}>{formattedTotalBooksValue}</span>
         </p>
       </div>
-      <div className="flex items-center">
+      <div class="flex items-center">
         <CheckIcon class="mr-1.5 h-4 w-4 text-green-500" />
-        <p className="text-sm text-gray-700">
+        <p class="text-sm text-gray-700">
           {productType === 'pack' ? 'Precio del pack:' : 'Precio con descuento:'}
-          <span className="font-bold text-green-700">
+          <span class="font-bold text-green-700">
             {hasDiscount ? formattedDiscountedPrice : formattedOriginalPrice}
           </span>
           {
             hasDiscount && (
-              <span className="ml-1 text-xs text-gray-500 line-through">
-                {formattedOriginalPrice}
-              </span>
+              <span class="ml-1 text-xs text-gray-500 line-through">{formattedOriginalPrice}</span>
             )
           }
         </p>
       </div>
     </div>
 
-    <div className="flex flex-col items-center">
-      <div
-        className={`${colors.savings} value-badge flex items-center rounded-lg px-4 py-2 font-bold`}
-      >
+    <div class="flex flex-col items-center">
+      <div class={`${colors.savings} value-badge flex items-center rounded-lg px-4 py-2 font-bold`}>
         <BadgeIcon class="mr-1.5 h-4 w-4" />
         {
           bonusValue > 0 ? (
             <span>
               Ahorras {formattedBonusValue}
-              <span className="text-xs whitespace-nowrap">({savingsPercentage}% menos)</span>
+              <span class="text-xs whitespace-nowrap">({savingsPercentage}% menos)</span>
             </span>
           ) : (
             <span>Oferta Especial</span>

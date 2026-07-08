@@ -21,7 +21,7 @@ const {
   type = 'button',
   class: className = '',
   newTab = true,
-  className: customClasses = '',
+  customClasses = '',
   ...rest
 } = Astro.props;
 
@@ -96,7 +96,7 @@ const linkProps = isLink
   {...rest}
 >
   <slot />
-  {newTab && isLink && <span className="sr-only">(opens in new tab)</span>}
+  {newTab && isLink && <span class="sr-only">(opens in new tab)</span>}
 </Element>
 
 <style>

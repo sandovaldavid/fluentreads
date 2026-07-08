@@ -7,7 +7,7 @@ interface Props {
   answer: string;
   expanded?: boolean;
   id?: string;
-  className?: string;
+  class?: string;
 }
 
 // Extract props with defaults
@@ -24,16 +24,16 @@ const {
 ---
 
 <div
-  className={`border-neutral hover:border-primary/30 question-card group overflow-hidden rounded-xl border bg-white shadow-sm transition-all duration-300 ${expanded ? 'expanded' : ''} ${className}`}
+  class={`border-neutral hover:border-primary/30 question-card group overflow-hidden rounded-xl border bg-white shadow-sm transition-all duration-300 ${expanded ? 'expanded' : ''} ${className}`}
 >
   <button
     id={`${id}-header`}
     aria-expanded={expanded ? 'true' : 'false'}
     aria-controls={`${id}-panel`}
-    className="focus:ring-primary/50 flex w-full items-start justify-between rounded-lg p-5 text-left focus:ring-2 focus:ring-offset-2 focus:outline-none sm:p-6"
+    class="focus:ring-primary/50 flex w-full items-start justify-between rounded-lg p-5 text-left focus:ring-2 focus:ring-offset-2 focus:outline-none sm:p-6"
   >
     <h3
-      className="text-primary-dark group-hover:text-primary pr-8 text-base font-bold transition-colors sm:text-lg"
+      class="text-primary-dark group-hover:text-primary pr-8 text-base font-bold transition-colors sm:text-lg"
     >
       {question}
     </h3>
@@ -48,9 +48,9 @@ const {
         aria-hidden="true"
       >
         <path
-          fillRule="evenodd"
+          fill-rule="evenodd"
           d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-          clipRule="evenodd"></path>
+          clip-rule="evenodd"></path>
       </svg>
     </div>
   </button>
@@ -59,11 +59,11 @@ const {
     id={`${id}-panel`}
     role="region"
     aria-labelledby={`${id}-header`}
-    className="answer-panel max-h-0 overflow-hidden transition-all duration-300"
+    class="answer-panel max-h-0 overflow-hidden transition-all duration-300"
     aria-hidden={expanded ? 'false' : 'true'}
   >
-    <div className="border-neutral border-t p-5 pt-0 sm:p-6 sm:pt-0">
-      <p className="text-sm text-gray-600 sm:text-base">
+    <div class="border-neutral border-t p-5 pt-0 sm:p-6 sm:pt-0">
+      <p class="text-sm text-gray-600 sm:text-base">
         {answer}
       </p>
     </div>

@@ -47,24 +47,21 @@ const benefits = [
   },
 ];
 
-const { className = '' } = Astro.props;
+const { class: className = '' } = Astro.props;
 ---
 
 <div class={className}>
   <!-- Background gradient effect -->
-  <div className="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-50">
-  </div>
+  <div class="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-50"></div>
 
   <div
-    className="relative h-full overflow-hidden rounded-xl bg-white p-4 shadow-lg sm:p-6 md:p-8 lg:transform lg:transition-all lg:duration-500 lg:hover:shadow-xl"
+    class="relative h-full overflow-hidden rounded-xl bg-white p-4 shadow-lg sm:p-6 md:p-8 lg:transform lg:transition-all lg:duration-500 lg:hover:shadow-xl"
   >
     <!-- Content wrapper -->
-    <div className="relative z-10">
-      <h3
-        className="text-primary-dark mb-5 flex items-center text-xl font-bold md:mb-7 md:text-2xl"
-      >
+    <div class="relative z-10">
+      <h3 class="text-primary-dark mb-5 flex items-center text-xl font-bold md:mb-7 md:text-2xl">
         <span
-          className="bg-primary mr-3 transform rounded-full p-2 text-white shadow-md transition-all duration-300 hover:scale-110"
+          class="bg-primary mr-3 transform rounded-full p-2 text-white shadow-md transition-all duration-300 hover:scale-110"
         >
           <CheckIcon class="h-5 w-5 sm:h-6 sm:w-6" />
         </span>
@@ -72,25 +69,23 @@ const { className = '' } = Astro.props;
       </h3>
 
       <!-- Benefits cards with improved grid -->
-      <div
-        className="benefits-grid grid h-full grid-cols-1 gap-3 sm:gap-4 md:gap-10 lg:grid-cols-2"
-      >
+      <div class="benefits-grid grid h-full grid-cols-1 gap-3 sm:gap-4 md:gap-10 lg:grid-cols-2">
         {
           benefits.map((benefit, index) => (
             <div
-              className={`benefit-item benefit-item-${index + 1} border-neutral lg:hover:border-primary-light group cursor-default rounded-lg border bg-white/80 p-3 sm:p-4 md:p-5 lg:transition-all lg:duration-300 lg:hover:bg-white`}
+              class={`benefit-item benefit-item-${index + 1} border-neutral lg:hover:border-primary-light group cursor-default rounded-lg border bg-white/80 p-3 sm:p-4 md:p-5 lg:transition-all lg:duration-300 lg:hover:bg-white`}
             >
-              <div className="flex items-start">
+              <div class="flex items-start">
                 <div
-                  className={`${benefit.class} mr-3 flex h-10 w-10 shrink-0 items-center justify-center shadow-sm sm:mr-4 sm:h-11 sm:w-11`}
+                  class={`${benefit.class} mr-3 flex h-10 w-10 shrink-0 items-center justify-center shadow-sm sm:mr-4 sm:h-11 sm:w-11`}
                 >
                   <benefit.icon class="h-6 w-6" />
                 </div>
                 <div>
-                  <h4 className="text-primary-dark mb-1 text-base leading-tight font-bold sm:mb-2 sm:text-lg">
+                  <h4 class="text-primary-dark mb-1 text-base leading-tight font-bold sm:mb-2 sm:text-lg">
                     {benefit.title}
                   </h4>
-                  <p className="text-sm text-gray-600 sm:text-base">{benefit.description}</p>
+                  <p class="text-sm text-gray-600 sm:text-base">{benefit.description}</p>
                 </div>
               </div>
             </div>

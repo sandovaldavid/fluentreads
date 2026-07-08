@@ -86,15 +86,15 @@ const contactForm = {
 
 <section
   id="contact-form"
-  className="form-section my-4 rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg md:my-8 md:p-8 lg:mx-6"
+  class="form-section my-4 rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg md:my-8 md:p-8 lg:mx-6"
 >
-  <div className="flex flex-col items-center gap-4 md:flex-row">
-    <div className="flex flex-1 flex-col space-y-3">
-      <div className="mb-4 flex items-center">
-        <span className="bg-primary mr-3 rounded-full p-2 text-white">
+  <div class="flex flex-col items-center gap-4 md:flex-row">
+    <div class="flex flex-1 flex-col space-y-3">
+      <div class="mb-4 flex items-center">
+        <span class="bg-primary mr-3 rounded-full p-2 text-white">
           <EmailIcon class="h-5 w-5" />
         </span>
-        <h3 className="text-primary-dark text-lg font-bold md:text-xl lg:text-2xl">
+        <h3 class="text-primary-dark text-lg font-bold md:text-xl lg:text-2xl">
           Envíanos un mensaje
         </h3>
       </div>
@@ -102,7 +102,7 @@ const contactForm = {
   </div>
 
   <!-- Success message container, initially hidden -->
-  <div id="form-response-container" className="transition-all duration-500">
+  <div id="form-response-container" class="transition-all duration-500">
     <SuccessMessage id="success-message" class="hidden" />
   </div>
 
@@ -110,14 +110,14 @@ const contactForm = {
   <div id="form-container">
     {
       contactForm.recaptcha.isDevelopment && (
-        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
-          <div className="flex">
-            <div className="flex-shrink-0">
+        <div class="mb-6 border-l-4 border-blue-400 bg-blue-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
               <WarningIcon class="h-5 w-5 text-blue-500" />
             </div>
-            <div className="ml-3">
-              <p className="text-sm text-blue-700 font-medium">Modo Desarrollo Local</p>
-              <p className="text-sm text-blue-700">
+            <div class="ml-3">
+              <p class="text-sm font-medium text-blue-700">Modo Desarrollo Local</p>
+              <p class="text-sm text-blue-700">
                 reCAPTCHA desactivado para evitar errores COEP en localhost
               </p>
             </div>
@@ -128,13 +128,13 @@ const contactForm = {
 
     {
       !contactForm.recaptcha.isDevelopment && contactForm.recaptcha.enabled === false && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-          <div className="flex">
-            <div className="flex-shrink-0">
+        <div class="mb-6 border-l-4 border-yellow-400 bg-yellow-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
               <WarningIcon class="h-5 w-5 text-yellow-400" />
             </div>
-            <div className="ml-3">
-              <p className="text-sm text-yellow-700">Modo desarrollo: reCAPTCHA desactivado</p>
+            <div class="ml-3">
+              <p class="text-sm text-yellow-700">Modo desarrollo: reCAPTCHA desactivado</p>
             </div>
           </div>
         </div>
@@ -143,14 +143,14 @@ const contactForm = {
 
     {
       !contactForm.isConfigured && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-          <div className="flex">
-            <div className="flex-shrink-0">
+        <div class="mb-6 border-l-4 border-red-500 bg-red-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
               <WarningIcon class="h-5 w-5 text-red-500" />
             </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700 font-medium">Formulario Desactivado</p>
-              <p className="text-sm text-red-700">
+            <div class="ml-3">
+              <p class="text-sm font-medium text-red-700">Formulario Desactivado</p>
+              <p class="text-sm text-red-700">
                 La clave del formulario (Pageclip Key) no está configurada. Por favor, configure la
                 variable de entorno PUBLIC_PAGECLIP_KEY.
               </p>
@@ -164,12 +164,12 @@ const contactForm = {
       id="contactForm"
       action={contactForm.action}
       method="post"
-      className="pageclip-form space-y-6"
+      class="pageclip-form space-y-6"
     >
       <!-- Form grid layout -->
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <!-- Name Field -->
-        <div className="form-group">
+        <div class="form-group">
           <label htmlFor="name" class="mb-1 block text-sm font-medium text-gray-700"
             >{contactForm.fields[0].label}
             <span class="text-accent" aria-hidden="true">*</span></label
@@ -184,15 +184,15 @@ const contactForm = {
               class="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
               placeholder={contactForm.fields[0].placeholder}
             />
-            <span className="form-validation-icon"></span>
+            <span class="form-validation-icon"></span>
           </div>
-          <span className="error-message hidden text-sm text-red-500">
+          <span class="error-message hidden text-sm text-red-500">
             {contactForm.fields[0].errorMessage}
           </span>
         </div>
 
         <!-- Email Field -->
-        <div className="form-group">
+        <div class="form-group">
           <label htmlFor="email" class="mb-1 block text-sm font-medium text-gray-700"
             >{contactForm.fields[1].label}
             <span class="text-accent" aria-hidden="true">*</span></label
@@ -207,16 +207,16 @@ const contactForm = {
               class="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
               placeholder={contactForm.fields[1].placeholder}
             />
-            <span className="form-validation-icon"></span>
+            <span class="form-validation-icon"></span>
           </div>
-          <span className="error-message hidden text-sm text-red-500">
+          <span class="error-message hidden text-sm text-red-500">
             {contactForm.fields[1].errorMessage}
           </span>
         </div>
       </div>
 
       <!-- Subject Field -->
-      <div className="form-group">
+      <div class="form-group">
         <label htmlFor="subject" class="mb-1 block text-sm font-medium text-gray-700"
           >{contactForm.fields[2].label}
           <span class="text-accent" aria-hidden="true">*</span></label
@@ -231,15 +231,15 @@ const contactForm = {
             class="form-input border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
             placeholder={contactForm.fields[2].placeholder}
           />
-          <span className="form-validation-icon"></span>
+          <span class="form-validation-icon"></span>
         </div>
-        <span className="error-message hidden text-sm text-red-500">
+        <span class="error-message hidden text-sm text-red-500">
           {contactForm.fields[2].errorMessage}
         </span>
       </div>
 
       <!-- Message Field -->
-      <div className="form-group">
+      <div class="form-group">
         <label htmlFor="body" class="mb-1 block text-sm font-medium text-gray-700"
           >{contactForm.fields[3].label}
           <span class="text-accent" aria-hidden="true">*</span></label
@@ -253,9 +253,9 @@ const contactForm = {
             aria-required="true"
             class="form-textarea border-neutral focus:ring-primary-light focus:border-primary w-full rounded-lg border px-4 py-2 placeholder-gray-400 transition duration-200 focus:ring-2"
             placeholder={contactForm.fields[3].placeholder}></textarea>
-          <span className="form-validation-icon"></span>
+          <span class="form-validation-icon"></span>
         </div>
-        <span className="error-message hidden text-sm text-red-500">
+        <span class="error-message hidden text-sm text-red-500">
           {contactForm.fields[3].errorMessage}
         </span>
       </div>
@@ -263,15 +263,15 @@ const contactForm = {
       <!-- Development Mode Anti-Spam Fallback -->
       {
         contactForm.recaptcha.isDevelopment && (
-          <div className="dev-spam-check p-3 border border-gray-300 rounded-lg bg-gray-50">
-            <label htmlFor="dev-human-check" className="flex items-center cursor-pointer">
+          <div class="dev-spam-check rounded-lg border border-gray-300 bg-gray-50 p-3">
+            <label htmlFor="dev-human-check" class="flex cursor-pointer items-center">
               <input
                 type="checkbox"
                 id="dev-human-check"
-                className="mr-2 h-5 w-5 text-primary focus:ring-primary border-gray-300 rounded"
+                class="text-primary focus:ring-primary mr-2 h-5 w-5 rounded border-gray-300"
                 required
               />
-              <span className="text-gray-700">
+              <span class="text-gray-700">
                 Confirmo que no soy un robot (verificación solo en desarrollo)
               </span>
             </label>
@@ -282,14 +282,14 @@ const contactForm = {
       <!-- Only load reCAPTCHA if not in development mode -->
       {
         !contactForm.recaptcha.isDevelopment && contactForm.recaptcha.enabled && (
-          <div className="recaptcha-container my-4 p-3 border border-gray-300 rounded-lg bg-gray-50">
-            <p className="mb-2 text-sm text-gray-600">Por favor completa el captcha:</p>
+          <div class="recaptcha-container my-4 rounded-lg border border-gray-300 bg-gray-50 p-3">
+            <p class="mb-2 text-sm text-gray-600">Por favor completa el captcha:</p>
             <div
               id="recaptcha-widget"
-              className="g-recaptcha"
+              class="g-recaptcha"
               data-sitekey={contactForm.recaptcha.siteKey}
             />
-            <div id="recaptcha-error" className="text-red-500 text-sm mt-2 hidden">
+            <div id="recaptcha-error" class="mt-2 hidden text-sm text-red-500">
               Error al cargar reCAPTCHA. Por favor recarga la página.
             </div>
           </div>
@@ -297,7 +297,7 @@ const contactForm = {
       }
 
       <!-- Submit Button with loading state -->
-      <div className="flex justify-end">
+      <div class="flex justify-end">
         <!-- Corregido: Estructura del botón para mostrar correctamente el texto -->
         <Button
           type="submit"
@@ -307,13 +307,13 @@ const contactForm = {
           class={`group pageclip-form__submit relative transform shadow-md transition-all duration-300 hover:shadow-lg active:scale-95 ${!contactForm.isConfigured ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
           disabled={!contactForm.isConfigured}
         >
-          <span className="submit-button-content flex items-center">
-            <span className="mr-2">Enviar mensaje</span>
+          <span class="submit-button-content flex items-center">
+            <span class="mr-2">Enviar mensaje</span>
             <ArrowRightIcon
               class="size-5 transition-transform duration-300 group-hover:translate-x-1"
             />
           </span>
-          <span className="submit-button-loading hidden items-center">
+          <span class="submit-button-loading hidden items-center">
             <LoadingIcon class="mr-2 h-5 w-5 animate-spin" />
             <span>Enviando...</span>
           </span>

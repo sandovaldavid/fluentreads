@@ -127,36 +127,36 @@ const jsonLd = {
 };
 ---
 
-<div className="product-detail-container bg-gray-50">
+<div class="product-detail-container bg-gray-50">
   <!-- JSON-LD Schema for SEO -->
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-  <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:py-8">
+  <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:py-8">
     <!-- Breadcrumbs -->
     <nav
-      className="mb-4 flex overflow-x-auto pb-1 text-xs text-gray-500 sm:text-sm"
+      class="mb-4 flex overflow-x-auto pb-1 text-xs text-gray-500 sm:text-sm"
       aria-label="Breadcrumb"
     >
-      <ol className="inline-flex items-center space-x-1 md:space-x-3">
-        <li className="inline-flex items-center">
-          <a href="/" className="hover:text-primary transition-colors">Inicio</a>
+      <ol class="inline-flex items-center space-x-1 md:space-x-3">
+        <li class="inline-flex items-center">
+          <a href="/" class="hover:text-primary transition-colors">Inicio</a>
         </li>
         <li>
-          <div className="flex items-center">
-            <span className="mx-1 md:mx-2">/</span>
-            <a href="/catalogo" className="hover:text-primary transition-colors">Catálogo</a>
+          <div class="flex items-center">
+            <span class="mx-1 md:mx-2">/</span>
+            <a href="/catalogo" class="hover:text-primary transition-colors">Catálogo</a>
           </div>
         </li>
         <li>
-          <div className="flex items-center">
-            <span className="mx-1 md:mx-2">/</span>
-            <a href="/catalogo/libros" className="hover:text-primary transition-colors">Libros</a>
+          <div class="flex items-center">
+            <span class="mx-1 md:mx-2">/</span>
+            <a href="/catalogo/libros" class="hover:text-primary transition-colors">Libros</a>
           </div>
         </li>
         <li aria-current="page">
-          <div className="flex items-center">
-            <span className="mx-1 md:mx-2">/</span>
-            <span className="max-w-[120px] truncate font-medium text-gray-600 sm:max-w-[200px]"
+          <div class="flex items-center">
+            <span class="mx-1 md:mx-2">/</span>
+            <span class="max-w-[120px] truncate font-medium text-gray-600 sm:max-w-[200px]"
               >{book.title}</span
             >
           </div>
@@ -164,20 +164,20 @@ const jsonLd = {
       </ol>
     </nav>
 
-    <div className="overflow-hidden rounded-xl bg-white shadow-sm">
+    <div class="overflow-hidden rounded-xl bg-white shadow-sm">
       <!-- Main product content grid - Reorganized for desktop -->
-      <div className="grid grid-cols-1 gap-0 md:grid-cols-2 lg:grid-cols-5">
+      <div class="grid grid-cols-1 gap-0 md:grid-cols-2 lg:grid-cols-5">
         <!-- UNIFIED PRODUCT TITLE FOR MOBILE - Shown only on small screens -->
-        <div className="bg-primary/5 col-span-full p-4 md:hidden">
-          <h1 className="text-primary-dark text-2xl font-bold">
+        <div class="bg-primary/5 col-span-full p-4 md:hidden">
+          <h1 class="text-primary-dark text-2xl font-bold">
             {book.title}
           </h1>
 
           <!-- Editorial & Level Tags - Mobile -->
-          <div className="mt-2 mb-3 flex flex-wrap gap-2">
+          <div class="mt-2 mb-3 flex flex-wrap gap-2">
             {
               editorialName && (
-                <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-gray-700">
+                <span class="rounded-full bg-blue-100 px-2 py-1 text-xs text-gray-700">
                   {editorialName}
                 </span>
               )
@@ -185,7 +185,7 @@ const jsonLd = {
 
             {
               levelDisplay && (
-                <span className={`rounded-full px-2 py-1 text-xs ${levelDisplay.color}`}>
+                <span class={`rounded-full px-2 py-1 text-xs ${levelDisplay.color}`}>
                   {levelDisplay.label}
                 </span>
               )
@@ -195,30 +195,28 @@ const jsonLd = {
           <!-- Rating - Mobile -->
           {
             book.rating && (
-              <div className="flex items-center">
+              <div class="flex items-center">
                 <ReviewStars score={book.rating.score} size="small" />
-                <span className="ml-2 text-sm text-gray-600">
-                  ({book.rating.reviewCount} reseñas)
-                </span>
+                <span class="ml-2 text-sm text-gray-600">({book.rating.reviewCount} reseñas)</span>
               </div>
             )
           }
         </div>
 
         <!-- LEFT COLUMN FOR DESKTOP: Product Info - (spans 3 cols on lg) -->
-        <div className="order-2 flex flex-col p-4 sm:p-6 md:order-1 lg:col-span-3">
+        <div class="order-2 flex flex-col p-4 sm:p-6 md:order-1 lg:col-span-3">
           <!-- DESKTOP HEADER -->
-          <div className="mb-6 hidden md:block">
-            <h1 className="text-primary-dark mb-3 text-3xl font-bold">
+          <div class="mb-6 hidden md:block">
+            <h1 class="text-primary-dark mb-3 text-3xl font-bold">
               {book.title}
             </h1>
 
-            <div className="mb-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+            <div class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-2">
               {/* Editorial */}
               {
                 editorialName && (
-                  <div className="flex items-center">
-                    <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-gray-700">
+                  <div class="flex items-center">
+                    <span class="rounded-full bg-blue-100 px-3 py-1 text-sm text-gray-700">
                       {editorialName}
                     </span>
                   </div>
@@ -229,7 +227,7 @@ const jsonLd = {
               {
                 levelDisplay && (
                   <span
-                    className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${levelDisplay.color}`}
+                    class={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${levelDisplay.color}`}
                   >
                     {levelDisplay.label}
                   </span>
@@ -239,23 +237,23 @@ const jsonLd = {
               {/* Rating */}
               {
                 book.rating && (
-                  <div className="flex items-center">
+                  <div class="flex items-center">
                     <ReviewStars score={book.rating.score} size="medium" />
-                    <span className="ml-2 text-sm text-gray-600">({book.rating.reviewCount})</span>
+                    <span class="ml-2 text-sm text-gray-600">({book.rating.reviewCount})</span>
                   </div>
                 )
               }
             </div>
 
             {/* Format Tags - Desktop */}
-            <div className="mb-4 hidden flex-wrap gap-2 md:flex">
+            <div class="mb-4 hidden flex-wrap gap-2 md:flex">
               {
                 formatTags &&
                   formatTags.map((tag) => (
                     <span
-                      className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${formatConfig[tag as keyof typeof formatConfig].color}`}
+                      class={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${formatConfig[tag as keyof typeof formatConfig].color}`}
                     >
-                      <span className="mr-1">
+                      <span class="mr-1">
                         {formatConfig[tag as keyof typeof formatConfig].icon}
                       </span>
                       {formatConfig[tag as keyof typeof formatConfig].label}
@@ -266,15 +264,15 @@ const jsonLd = {
           </div>
 
           <!-- Description -->
-          <div className="mb-6">
-            <h2 className="text-primary-dark mb-2 text-lg font-bold">Descripción</h2>
-            <div className="prose prose-sm sm:prose-base max-w-none text-gray-700">
+          <div class="mb-6">
+            <h2 class="text-primary-dark mb-2 text-lg font-bold">Descripción</h2>
+            <div class="prose prose-sm sm:prose-base max-w-none text-gray-700">
               <p>{book.description}</p>
             </div>
           </div>
 
           <!-- UNIFIED Price & Actions - Visible on all devices -->
-          <div className="mb-6">
+          <div class="mb-6">
             <!-- Use the ValueCard component with all pricing details -->
             <ValueCard
               originalPrice={originalPrice}
@@ -287,7 +285,7 @@ const jsonLd = {
             />
 
             <!-- Universal CTA Buttons -->
-            <div className="mb-4 flex gap-4">
+            <div class="mb-4 flex gap-4">
               <Button
                 variant="primary"
                 size="large"
@@ -298,7 +296,7 @@ const jsonLd = {
                 data-image={book.coverImage}
                 data-type="book"
               >
-                <span className="flex items-center justify-center">
+                <span class="flex items-center justify-center">
                   <CartIcon class="mr-2 h-5 w-5" />
                   Agregar al carrito
                 </span>
@@ -310,7 +308,7 @@ const jsonLd = {
                 href="/checkout"
                 class="group flex-1 transform shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
-                <span className="flex items-center justify-center">
+                <span class="flex items-center justify-center">
                   <WhatsAppIcon class="mr-2 h-5 w-5" />
                   Ver carrito
                 </span>
@@ -319,7 +317,7 @@ const jsonLd = {
           </div>
 
           <!-- Mobile: Social & Support footer -->
-          <div className="mt-2 border-t border-gray-100 pt-4 md:hidden">
+          <div class="mt-2 border-t border-gray-100 pt-4 md:hidden">
             <CustomerSupport class="mb-4" />
             <SocialShareButtons
               url={shareUrl}
@@ -329,24 +327,24 @@ const jsonLd = {
               productType="book"
               price={discountedPrice}
               currency="PEN"
-              className="flex w-full justify-center"
+              class="flex w-full justify-center"
             />
           </div>
         </div>
 
         <!-- RIGHT COLUMN FOR DESKTOP: Media and Details - (spans 2 cols on lg) -->
-        <div className="order-1 md:order-2 lg:col-span-2">
+        <div class="order-1 md:order-2 lg:col-span-2">
           <!-- Media Carousel Container -->
-          <div className="relative">
+          <div class="relative">
             {
               mediaItems.length > 0 ? (
                 <MediaCarousel mediaItems={mediaItems} title={book.title} height="auto" />
               ) : (
-                <div className="product-cover-container relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[4/3]">
+                <div class="product-cover-container relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[4/3]">
                   <img
                     src={book.coverImage}
                     alt={book.altText || `Portada de ${book.title}`}
-                    className="h-full w-full object-cover"
+                    class="h-full w-full object-cover"
                   />
                 </div>
               )
@@ -365,7 +363,7 @@ const jsonLd = {
 
             {
               book.featured && (
-                <div className="bg-secondary text-primary absolute top-4 left-4 rounded-full px-4 py-2 text-sm font-bold shadow-md">
+                <div class="bg-secondary text-primary absolute top-4 left-4 rounded-full px-4 py-2 text-sm font-bold shadow-md">
                   Recomendado
                 </div>
               )
@@ -373,15 +371,15 @@ const jsonLd = {
           </div>
 
           <!-- Format Tags - Mobile display under image -->
-          <div className="border-b p-4 md:hidden">
-            <div className="flex flex-wrap gap-2">
+          <div class="border-b p-4 md:hidden">
+            <div class="flex flex-wrap gap-2">
               {
                 formatTags &&
                   formatTags.map((tag) => (
                     <span
-                      className={`inline-flex items-center rounded-full border px-2 py-1 text-xs ${formatConfig[tag as keyof typeof formatConfig].color}`}
+                      class={`inline-flex items-center rounded-full border px-2 py-1 text-xs ${formatConfig[tag as keyof typeof formatConfig].color}`}
                     >
-                      <span className="mr-1">
+                      <span class="mr-1">
                         {formatConfig[tag as keyof typeof formatConfig].icon}
                       </span>
                       {formatConfig[tag as keyof typeof formatConfig].label}
@@ -392,23 +390,23 @@ const jsonLd = {
           </div>
 
           <!-- Desktop: Additional details section -->
-          <div className="hidden p-4 sm:p-6 md:block">
+          <div class="hidden p-4 sm:p-6 md:block">
             <!-- Included items -->
-            <div className="mb-6 rounded-xl border border-gray-100 bg-gray-50 p-4">
-              <h2 className="text-primary-dark mb-3 flex items-center text-lg font-bold">
-                <span className="bg-primary mr-2 flex-shrink-0 rounded-full p-1 text-white">
+            <div class="mb-6 rounded-xl border border-gray-100 bg-gray-50 p-4">
+              <h2 class="text-primary-dark mb-3 flex items-center text-lg font-bold">
+                <span class="bg-primary mr-2 flex-shrink-0 rounded-full p-1 text-white">
                   <CheckIcon class="h-4 w-4" />
                 </span>
                 Contenido incluido
               </h2>
 
-              <ul className="included-items-list grid grid-cols-1 space-y-2 gap-x-4 gap-y-2 pl-2">
+              <ul class="included-items-list grid grid-cols-1 space-y-2 gap-x-4 gap-y-2 pl-2">
                 {
                   book.includedItems &&
                     book.includedItems.map((item) => (
-                      <li className="flex items-start text-sm sm:text-base">
-                        <span className="mt-0.5 mr-2 flex-shrink-0 text-green-500">✓</span>
-                        <span className="text-gray-700">{item}</span>
+                      <li class="flex items-start text-sm sm:text-base">
+                        <span class="mt-0.5 mr-2 flex-shrink-0 text-green-500">✓</span>
+                        <span class="text-gray-700">{item}</span>
                       </li>
                     ))
                 }
@@ -416,15 +414,15 @@ const jsonLd = {
             </div>
 
             <!-- Important note -->
-            <div className="mb-6 rounded-lg border border-blue-100 bg-blue-50 p-4">
-              <p className="text-sm text-blue-800">
+            <div class="mb-6 rounded-lg border border-blue-100 bg-blue-50 p-4">
+              <p class="text-sm text-blue-800">
                 <strong>Importante:</strong> Al realizar tu compra, recibirás acceso inmediato a todos
                 los materiales a través de un enlace de descarga enviado a tu correo electrónico o WhatsApp.
               </p>
             </div>
 
             <!-- Desktop: Customer support and sharing -->
-            <div className="space-y-4">
+            <div class="space-y-4">
               <CustomerSupport class="w-full" />
               <SocialShareButtons
                 url={shareUrl}
@@ -434,31 +432,31 @@ const jsonLd = {
                 productType="book"
                 price={discountedPrice}
                 currency="PEN"
-                className="flex w-full justify-center"
+                class="flex w-full justify-center"
               />
             </div>
           </div>
         </div>
 
         <!-- Mobile: Included items -->
-        <div className="order-3 p-4 sm:px-6 md:hidden">
-          <div className="mb-6 rounded-xl border border-gray-100 bg-gray-50 p-4">
-            <h2 className="text-primary-dark mb-3 flex items-center text-lg font-bold">
-              <span className="bg-primary mr-2 flex-shrink-0 rounded-full p-1 text-white">
+        <div class="order-3 p-4 sm:px-6 md:hidden">
+          <div class="mb-6 rounded-xl border border-gray-100 bg-gray-50 p-4">
+            <h2 class="text-primary-dark mb-3 flex items-center text-lg font-bold">
+              <span class="bg-primary mr-2 flex-shrink-0 rounded-full p-1 text-white">
                 <CheckIcon class="h-4 w-4" />
               </span>
               Contenido incluido
             </h2>
 
             <ul
-              className="included-items-list grid grid-cols-1 space-y-2 gap-x-4 gap-y-2 pl-2 sm:grid-cols-2"
+              class="included-items-list grid grid-cols-1 space-y-2 gap-x-4 gap-y-2 pl-2 sm:grid-cols-2"
             >
               {
                 book.includedItems &&
                   book.includedItems.map((item) => (
-                    <li className="flex items-start text-sm sm:text-base">
-                      <span className="mt-0.5 mr-2 flex-shrink-0 text-green-500">✓</span>
-                      <span className="text-gray-700">{item}</span>
+                    <li class="flex items-start text-sm sm:text-base">
+                      <span class="mt-0.5 mr-2 flex-shrink-0 text-green-500">✓</span>
+                      <span class="text-gray-700">{item}</span>
                     </li>
                   ))
               }
@@ -466,8 +464,8 @@ const jsonLd = {
           </div>
 
           <!-- Mobile: Important note -->
-          <div className="mb-6 rounded-lg border border-blue-100 bg-blue-50 p-4">
-            <p className="text-sm text-blue-800">
+          <div class="mb-6 rounded-lg border border-blue-100 bg-blue-50 p-4">
+            <p class="text-sm text-blue-800">
               <strong>Importante:</strong> Al realizar tu compra, recibirás acceso inmediato a todos los
               materiales a través de un enlace de descarga enviado a tu correo electrónico o WhatsApp.
             </p>
@@ -479,19 +477,19 @@ const jsonLd = {
     <!-- Related products section with improved responsive grid -->
     {
       finalRecommendations.length > 0 && (
-        <div className="related-section mt-12">
+        <div class="related-section mt-12">
           <SectionTitle>Recomendaciones para ti</SectionTitle>
-          <p className="mx-auto mb-6 max-w-3xl text-center text-gray-600">
+          <p class="mx-auto mb-6 max-w-3xl text-center text-gray-600">
             Basado en tus intereses, estos productos podrían complementar tu experiencia de
             aprendizaje
           </p>
 
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {finalRecommendations.map((item) => (
               <ProductCard
                 product={item}
                 size="medium"
-                className="h-full"
+                class="h-full"
                 editorial={
                   item.editorialId && editorialData
                     ? editorialData.find((e) => e.id === item.editorialId)?.nombre
@@ -501,7 +499,7 @@ const jsonLd = {
             ))}
           </div>
 
-          <div className="mt-8 text-center">
+          <div class="mt-8 text-center">
             <Button
               variant="outline"
               size="medium"

@@ -16,7 +16,7 @@ interface Props {
   price?: number;
   currency?: string;
   size?: 'small' | 'medium' | 'large';
-  className?: string;
+  class?: string;
 }
 
 const {
@@ -28,7 +28,7 @@ const {
   price,
   currency = 'PEN',
   size = 'medium',
-  className = '',
+  class: className = '',
 } = Astro.props;
 
 // Prepare share URLs
@@ -78,7 +78,7 @@ const iconSize = {
       href={facebookUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`share-button facebook-share ${buttonSize} flex items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white`}
+      class={`share-button facebook-share ${buttonSize} flex items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white`}
       aria-label="Compartir en Facebook"
       title="Compartir en Facebook"
     >
@@ -90,7 +90,7 @@ const iconSize = {
       href={twitterUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`share-button twitter-share ${buttonSize} flex items-center justify-center rounded-full bg-sky-100 text-sky-500 transition-colors duration-200 hover:bg-sky-500 hover:text-white`}
+      class={`share-button twitter-share ${buttonSize} flex items-center justify-center rounded-full bg-sky-100 text-sky-500 transition-colors duration-200 hover:bg-sky-500 hover:text-white`}
       aria-label="Compartir en Twitter"
       title="Compartir en Twitter"
     >
@@ -102,7 +102,7 @@ const iconSize = {
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`share-button whatsapp-share ${buttonSize} flex items-center justify-center rounded-full bg-green-100 text-green-600 transition-colors duration-200 hover:bg-green-600 hover:text-white`}
+      class={`share-button whatsapp-share ${buttonSize} flex items-center justify-center rounded-full bg-green-100 text-green-600 transition-colors duration-200 hover:bg-green-600 hover:text-white`}
       aria-label="Compartir en WhatsApp"
       title="Compartir en WhatsApp"
     >
@@ -114,7 +114,7 @@ const iconSize = {
       href={linkedinUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`share-button linkedin-share ${buttonSize} flex items-center justify-center rounded-full bg-blue-100 text-blue-800 transition-colors duration-200 hover:bg-blue-800 hover:text-white`}
+      class={`share-button linkedin-share ${buttonSize} flex items-center justify-center rounded-full bg-blue-100 text-blue-800 transition-colors duration-200 hover:bg-blue-800 hover:text-white`}
       aria-label="Compartir en LinkedIn"
       title="Compartir en LinkedIn"
     >
@@ -124,7 +124,7 @@ const iconSize = {
     <!-- Email -->
     <a
       href={emailUrl}
-      className={`share-button email-share ${buttonSize} flex items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-600 hover:text-white`}
+      class={`share-button email-share ${buttonSize} flex items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-600 hover:text-white`}
       aria-label="Compartir por correo"
       title="Compartir por correo"
     >

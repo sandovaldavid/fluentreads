@@ -84,7 +84,7 @@ const gridClass = getGridClassFromColumns(gridCols);
 const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
 ---
 
-<div className="catalog-book-container">
+<div class="catalog-book-container">
   <!-- Filter UI using React component as a client-side island -->
   <Filter
     initialLevel={initialLevel}
@@ -92,7 +92,7 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
     initialSort={initialSort}
     productCount={filteredBooks.length}
     productType="book"
-    className="mb-8 shadow-lg"
+    class="mb-8 shadow-lg"
     client:visible
   />
 
@@ -100,7 +100,7 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
     <!-- Skeleton loading state -->
     {
       showSkeletonOnLoad && (
-        <div id="skeleton-loader" className="skeleton-container">
+        <div id="skeleton-loader" class="skeleton-container">
           <SkeletonCatalog count={gridCols * 2} />
         </div>
       )
@@ -109,13 +109,13 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
     <!-- Books Grid -->
     <div
       id="books-grid"
-      className={`grid ${gridClass} gap-4 sm:gap-6 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
+      class={`grid ${gridClass} gap-4 sm:gap-6 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
     >
       {
         filteredBooks.length > 0 ? (
           filteredBooks.map((book) => (
             <div
-              className="catalog-product-card"
+              class="catalog-product-card"
               data-level={book.level}
               data-formats={book.formatTags?.join(',')}
               data-price={book.price}
@@ -138,17 +138,15 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
             </div>
           ))
         ) : (
-          <div className="bg-neutral-light/50 col-span-full rounded-lg py-16 text-center">
-            <div className="mb-4 text-5xl">🔍</div>
-            <h3 className="text-primary-dark mb-2 text-xl font-semibold">
-              No se encontraron libros
-            </h3>
-            <p className="mb-6 text-gray-500">
+          <div class="bg-neutral-light/50 col-span-full rounded-lg py-16 text-center">
+            <div class="mb-4 text-5xl">🔍</div>
+            <h3 class="text-primary-dark mb-2 text-xl font-semibold">No se encontraron libros</h3>
+            <p class="mb-6 text-gray-500">
               Lo sentimos, no hay libros que coincidan con los filtros seleccionados.
             </p>
             <button
               id="reset-filters"
-              className="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 font-medium text-white transition-all duration-300"
+              class="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 font-medium text-white transition-all duration-300"
             >
               Reiniciar filtros
             </button>
@@ -160,9 +158,9 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
     <!-- Results Summary -->
     {
       filteredBooks.length > 0 && (
-        <div className="mt-6 rounded-lg bg-white p-4 text-center shadow-sm">
-          <p className="text-sm text-gray-600">
-            Mostrando <span className="font-semibold">{filteredBooks.length}</span>{' '}
+        <div class="mt-6 rounded-lg bg-white p-4 text-center shadow-sm">
+          <p class="text-sm text-gray-600">
+            Mostrando <span class="font-semibold">{filteredBooks.length}</span>{' '}
             {filteredBooks.length === 1 ? 'libro' : 'libros'}
             {initialLevel !== 'all' && ` de nivel ${initialLevel}`}
             {initialFormat !== 'all' && ` en formato ${initialFormat}`}
