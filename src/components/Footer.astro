@@ -1,4 +1,6 @@
 ---
+const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY || '';
+const actionUrl = `https://send.pageclip.co/${pageclipKey}/newsletter`;
 import SocialMediaContent from './SocialMediaContent.astro';
 import Button from './Button.astro';
 import '../styles/Footer.css';
@@ -35,19 +37,19 @@ const footerLinks = [
 ];
 ---
 
-<footer className="bg-primary px-4 pt-8 pb-6 text-white md:px-8 md:pt-12">
-  <div className="container mx-auto px-4">
+<footer class="bg-primary px-4 pt-8 pb-6 text-white md:px-8 md:pt-12">
+  <div class="container mx-auto px-4">
     <!-- Top Section with Logo, Newsletter and Social Media -->
-    <div className="mb-6 grid grid-cols-1 gap-6 md:mb-10 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
+    <div class="mb-6 grid grid-cols-1 gap-6 md:mb-10 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
       <!-- Logo and Description -->
-      <div className="flex flex-col">
-        <a href="/" className="text-secondary mb-3 text-2xl font-bold md:mb-4">FluentReads</a>
-        <p className="text-neutral-light mb-4 max-w-md text-sm md:mb-6 md:text-base">
+      <div class="flex flex-col">
+        <a href="/" class="text-secondary mb-3 text-2xl font-bold md:mb-4">FluentReads</a>
+        <p class="text-neutral-light mb-4 max-w-md text-sm md:mb-6 md:text-base">
           Tu fuente confiable de libros en inglés y materiales educativos para profesionales y
           estudiantes que buscan dominar el idioma inglés.
         </p>
         <!-- Social Media Icons -->
-        <div className="mt-2 md:mt-4">
+        <div class="mt-2 md:mt-4">
           <SocialMediaContent
             showFacebook={true}
             showInstagram={true}
@@ -64,17 +66,23 @@ const footerLinks = [
       </div>
 
       <!-- Newsletter Signup -->
-      <div className="mt-2 md:mt-0 lg:col-span-2">
-        <div className="bg-primary-dark rounded-lg p-4 shadow-inner md:p-8">
-          <h3 className="text-secondary mb-2 text-lg font-semibold md:mb-3 md:text-2xl">
+      <div class="mt-2 md:mt-0 lg:col-span-2">
+        <div class="bg-primary-dark rounded-lg p-4 shadow-inner md:p-8">
+          <h3 class="text-secondary mb-2 text-lg font-semibold md:mb-3 md:text-2xl">
             ¡Suscríbete a nuestro boletín!
           </h3>
-          <p className="text-neutral-light mb-4 text-sm md:mb-6 md:text-base">
+          <p class="text-neutral-light mb-4 text-sm md:mb-6 md:text-base">
             Recibe ofertas exclusivas, novedades editoriales y consejos para mejorar tu inglés.
           </p>
-          <form className="flex flex-col gap-3 sm:flex-row">
+          <form
+            id="footer-newsletter-form"
+            action={actionUrl}
+            method="POST"
+            class="flex flex-col gap-3 sm:flex-row"
+          >
             <input
               type="email"
+              name="email"
               placeholder="Tu correo electrónico"
               class="focus:ring-secondary bg-primary-light flex-grow rounded-full px-4 py-2 text-sm text-white focus:ring-2 focus:outline-none md:py-3 md:text-base"
               aria-label="Correo electrónico para boletín informativo"
@@ -89,10 +97,10 @@ const footerLinks = [
               Suscribirse
             </Button>
           </form>
-          <p className="text-neutral-light mt-2 text-xs md:mt-3">
+          <p class="text-neutral-light mt-2 text-xs md:mt-3">
             Al suscribirte, aceptas nuestra <a
               href="/politica-privacidad"
-              className="hover:text-secondary underline">política de privacidad</a
+              class="hover:text-secondary underline">política de privacidad</a
             >.
           </p>
         </div>
@@ -101,20 +109,20 @@ const footerLinks = [
 
     <!-- Middle Section with Links -->
     <div
-      className="border-primary-light grid grid-cols-2 gap-4 border-t border-b py-6 sm:grid-cols-2 md:grid-cols-3 md:gap-8 md:py-8"
+      class="border-primary-light grid grid-cols-2 gap-4 border-t border-b py-6 sm:grid-cols-2 md:grid-cols-3 md:gap-8 md:py-8"
     >
       {
         footerLinks.map((section) => (
-          <div className="mb-2 md:mb-0">
-            <h4 className="text-secondary mb-2 text-base font-semibold md:mb-4 md:text-lg">
+          <div class="mb-2 md:mb-0">
+            <h4 class="text-secondary mb-2 text-base font-semibold md:mb-4 md:text-lg">
               {section.title}
             </h4>
-            <ul className="space-y-1 md:space-y-2">
+            <ul class="space-y-1 md:space-y-2">
               {section.links.map((link) => (
                 <li>
                   <a
                     href={link.url}
-                    className="text-neutral-light hover:text-secondary inline-block py-1 text-sm transition-colors duration-200 md:text-base"
+                    class="text-neutral-light hover:text-secondary inline-block py-1 text-sm transition-colors duration-200 md:text-base"
                   >
                     {link.text}
                   </a>
@@ -127,8 +135,42 @@ const footerLinks = [
     </div>
 
     <!-- Bottom Section with Copyright -->
-    <div className="text-neutral-light mt-6 text-center text-xs md:mt-8 md:text-sm">
+    <div class="text-neutral-light mt-6 text-center text-xs md:mt-8 md:text-sm">
       <p>© {currentYear} FluentReads. Todos los derechos reservados.</p>
     </div>
   </div>
 </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('footer-newsletter-form') as HTMLFormElement | null;
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailInput = form.querySelector("input[name='email']") as HTMLInputElement | null;
+        if (!emailInput || !emailInput.value) return;
+
+        fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({ email: emailInput.value }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              alert('¡Gracias por suscribirte! Pronto recibirás nuestras novedades.');
+              form.reset();
+            } else {
+              throw new Error('Error en el servidor');
+            }
+          })
+          .catch((err) => {
+            console.error('Error newsletter signup:', err);
+            alert('Hubo un error al procesar tu suscripción. Por favor, inténtalo de nuevo.');
+          });
+      });
+    }
+  });
+</script>
