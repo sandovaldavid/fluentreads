@@ -9,19 +9,18 @@
     <script>
       // Register custom format 'json-array' for top-level JSON arrays
       window.CMS.registerFormat('json-array', 'json', {
-        fromFile: function(content) {
+        fromFile: function (content) {
           try {
             return { items: JSON.parse(content) };
           } catch (e) {
             return { items: [] };
           }
         },
-        toFile: function(data) {
+        toFile: function (data) {
           return JSON.stringify(data.items, null, 2);
-        }
+        },
       });
     </script>
   </head>
-  <body>
-  </body>
+  <body></body>
 </html>
