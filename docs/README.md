@@ -6,12 +6,12 @@ Indice de la auditoria tecnica completa del proyecto FluentReads (Astro 7 + Reac
 
 | Bloque | Documento                                    | Estado  | Sprint |
 | ------ | -------------------------------------------- | ------- | ------ |
-| B0     | Tooling de calidad + CI base                 | pending | S1     |
-| B1     | CI/CD: Vercel deploy + release-please        | pending | S1     |
-| B2     | Centralizacion de variables mudables         | pending | S2     |
-| B3     | Bugs criticos de logica y sintaxis           | pending | S2     |
-| B4     | Bugs de estilos                              | pending | S3     |
-| B5     | Accesibilidad                                | pending | S3     |
+| B0     | Tooling de calidad + CI base                 | done    | S1     |
+| B1     | CI/CD: Vercel deploy + release-please        | done    | S1     |
+| B2     | Centralizacion de variables mudables         | done    | S2     |
+| B3     | Bugs criticos de logica y sintaxis           | done    | S2     |
+| B4     | Bugs de estilos                              | done    | S3     |
+| B5     | Accesibilidad                                | done    | S3     |
 | B6     | Performance                                  | pending | S4     |
 | B7     | Seguridad                                    | pending | S4     |
 | B8     | Refactor arquitectonico: content collections | pending | S5-S6  |

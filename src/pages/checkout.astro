@@ -121,17 +121,20 @@ const whatsappNumber = siteConfig.whatsapp;
                                     <button 
                                         class="quantity-btn decrease bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded-l" 
                                         data-index="${index}"
+                                        aria-label="Disminuir cantidad"
                                     >-</button>
                                     <span class="quantity-display bg-gray-100 py-1 px-3">${item.quantity}</span>
                                     <button 
                                         class="quantity-btn increase bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded-r" 
                                         data-index="${index}"
+                                        aria-label="Aumentar cantidad"
                                     >+</button>
                                     <button 
                                         class="remove-item ml-4 text-red-500 hover:text-red-700" 
                                         data-index="${index}"
+                                        aria-label="Eliminar producto"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                         </svg>
                                     </button>

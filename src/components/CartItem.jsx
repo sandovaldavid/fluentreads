@@ -56,7 +56,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove, index }) => {
             <button
               className="rounded-l bg-gray-100 px-2 py-1 font-medium text-gray-700 hover:bg-gray-200"
               onClick={handleDecrease}
-              aria-label="Decrease quantity"
+              aria-label="Disminuir cantidad"
             >
               -
             </button>
@@ -66,7 +66,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove, index }) => {
             <button
               className="rounded-r bg-gray-100 px-2 py-1 font-medium text-gray-700 hover:bg-gray-200"
               onClick={handleIncrease}
-              aria-label="Increase quantity"
+              aria-label="Aumentar cantidad"
             >
               +
             </button>
@@ -74,13 +74,14 @@ const CartItem = ({ item, onUpdateQuantity, onRemove, index }) => {
             <button
               className="ml-4 text-red-500 hover:text-red-700"
               onClick={handleRemove}
-              aria-label="Remove item"
+              aria-label="Eliminar producto"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
+                aria-hidden="true"
               >
                 <path
                   fillRule="evenodd"

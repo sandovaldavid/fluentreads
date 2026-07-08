@@ -15,9 +15,9 @@ import CartIndicator from './CartIndicator.astro';
     className="container mx-auto flex flex-wrap items-center justify-between px-4 py-3 md:justify-center lg:justify-between"
   >
     <!-- Logo -->
-    <a href="/" className="flex items-center lg:pl-8">
-      <img src={logoImage} alt="FluentReads" className="size-12 rounded-full" />
-      <span className="font-lora ml-2 text-2xl font-bold md:text-3xl">{siteConfig.name}</span>
+    <a href="/" class="flex items-center lg:pl-8">
+      <img src={logoImage} alt="FluentReads" class="size-12 rounded-full" width="48" height="48" />
+      <span class="font-lora ml-2 text-2xl font-bold md:text-3xl">{siteConfig.name}</span>
     </a>
 
     <!-- Cart and Mobile Menu Button -->
@@ -45,7 +45,13 @@ import CartIndicator from './CartIndicator.astro';
       </a>
 
       <!-- Mobile menu button -->
-      <button id="mobile-menu-button" className="flex items-center px-3 py-2 md:hidden">
+      <button
+        id="mobile-menu-button"
+        class="flex items-center px-3 py-2 md:hidden"
+        aria-label="Abrir menú de navegación"
+        aria-expanded="false"
+        aria-controls="menu"
+      >
         <MobileIcon class="h-6 w-6" />
       </button>
     </div>
@@ -80,6 +86,8 @@ import CartIndicator from './CartIndicator.astro';
       menu?.classList.add('menu-open');
       menu?.classList.remove('max-h-0', 'opacity-0');
       menu?.classList.add('max-h-[500px]', 'opacity-100');
+      mobileMenuButton?.setAttribute('aria-expanded', 'true');
+      mobileMenuButton?.setAttribute('aria-label', 'Cerrar menú de navegación');
     };
 
     // Function to close the menu with animation
@@ -87,6 +95,8 @@ import CartIndicator from './CartIndicator.astro';
       menu?.classList.remove('menu-open');
       menu?.classList.remove('max-h-[500px]', 'opacity-100');
       menu?.classList.add('max-h-0', 'opacity-0');
+      mobileMenuButton?.setAttribute('aria-expanded', 'false');
+      mobileMenuButton?.setAttribute('aria-label', 'Abrir menú de navegación');
     };
 
     // Toggle menu function

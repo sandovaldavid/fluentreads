@@ -63,15 +63,16 @@ const iconSize = {
 }[size];
 ---
 
-<div className={`social-share-buttons inline-flex items-center ${className}`}>
-  <span className="mr-2 hidden text-xs whitespace-nowrap text-gray-600 sm:inline-block sm:text-sm">
-    <ShareIcon class="mr-1 inline-block h-4 w-4" />
+<div class={`social-share-buttons inline-flex items-center ${className}`}>
+  <span class="mr-2 hidden text-xs whitespace-nowrap text-gray-600 sm:inline-block sm:text-sm">
+    <ShareIcon class="mr-1 inline-block h-4 w-4" aria-hidden="true" />
     Compartir
   </span>
-  <span className="mr-2 text-xs whitespace-nowrap text-gray-600 sm:hidden sm:text-sm">
-    <ShareIcon class="inline-block h-4 w-4" />
+  <span class="mr-2 text-xs whitespace-nowrap text-gray-600 sm:hidden">
+    <ShareIcon class="inline-block h-4 w-4" aria-hidden="true" />
+    <span class="sr-only">Compartir</span>
   </span>
-  <div className="flex space-x-1.5">
+  <div class="flex space-x-1.5">
     <!-- Facebook -->
     <a
       href={facebookUrl}

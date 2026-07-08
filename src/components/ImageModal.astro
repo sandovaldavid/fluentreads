@@ -12,26 +12,30 @@ const { id = 'image-modal' } = Astro.props;
 
 <div
   id={id}
-  className="bg-opacity-90 media-modal fixed inset-0 z-50 hidden items-center justify-center bg-black"
+  class="bg-opacity-90 media-modal fixed inset-0 z-50 hidden items-center justify-center bg-black"
   role="dialog"
   aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="modal-title"
 >
+  <h2 id="modal-title" class="sr-only">Galería de imágenes</h2>
+
   <!-- Close button -->
-  <span
+  <button
     id="modal-close-btn"
-    className="absolute top-5 right-5 z-20 transform cursor-pointer border-0 text-white transition-transform hover:scale-110 hover:text-red-400"
-    aria-label="Cerrar"
+    class="absolute top-5 right-5 z-20 transform cursor-pointer rounded-full border-0 bg-transparent p-1 text-white transition-transform hover:scale-110 hover:text-red-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+    aria-label="Cerrar galería"
   >
     <CloseIcon class="h-8 w-8" />
-  </span>
+  </button>
 
   <!-- Navigation using CarouselButtons component -->
   <CarouselButtons ariaLabelPrev="Imagen anterior" ariaLabelNext="Siguiente imagen" />
 
   <!-- Main image container -->
-  <div className="relative flex h-full w-full items-center justify-center p-4">
+  <div class="relative flex h-full w-full items-center justify-center p-4">
     <!-- Loading spinner -->
-    <div id="modal-spinner" className="absolute inset-0 z-10 flex items-center justify-center">
+    <div id="modal-spinner" class="absolute inset-0 z-10 flex items-center justify-center">
       <SpinnerIcon class="h-12 w-12 animate-spin text-white" />
     </div>
 
@@ -40,7 +44,7 @@ const { id = 'image-modal' } = Astro.props;
       id="modal-image"
       src=""
       alt="Imagen ampliada"
-      className="modal-image z-5 max-h-[90vh] max-w-[90vw] object-contain"
+      class="modal-image z-5 max-h-[90vh] max-w-[90vw] object-contain"
     />
   </div>
 </div>

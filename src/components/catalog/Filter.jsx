@@ -517,7 +517,11 @@ const CatalogFilter = ({
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${showTypeFilter ? 'bg-primary' : 'bg-gray-300'}`}
                 role="switch"
                 aria-checked={showTypeFilter}
+                aria-label="Filtrar por tipo de recurso"
               >
+                <span className="sr-only">
+                  {showTypeFilter ? 'Filtro por tipo activado' : 'Filtro por tipo desactivado'}
+                </span>
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showTypeFilter ? 'translate-x-6' : 'translate-x-1'}`}
                 />

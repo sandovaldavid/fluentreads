@@ -1,5 +1,5 @@
 ---
-status: pending
+status: done
 block: B4
 priority: P1
 ---
