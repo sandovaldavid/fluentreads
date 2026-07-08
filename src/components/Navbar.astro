@@ -3,7 +3,6 @@ import SocialMediaContent from './SocialMediaContent.astro';
 import HomeIcon from './icons/Home.astro';
 import BookIcon from './icons/Book.astro';
 import TestimonialIcon from './icons/Testimonial.astro';
-import BlogIcon from './icons/Blog.astro';
 import ContactIcon from './icons/Contact.astro';
 import CreditCardIcon from './icons/CreditCard.astro';
 
@@ -14,7 +13,7 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
 
 <nav class="flex flex-col py-2 md:flex-row md:items-center md:justify-between">
   <!-- Navigation links -->
-  <div className="flex flex-col md:flex-row md:items-center lg:mr-4">
+  <div class="flex flex-col md:flex-row md:items-center lg:mr-4">
     <a
       href="/"
       class:list={[
@@ -78,9 +77,9 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
     >
   </div>
 
-  <div className="flex flex-col md:flex-row md:items-center md:space-x-3">
+  <div class="flex flex-col md:flex-row md:items-center md:space-x-3">
     <!-- Social Icons -->
-    <div className="mt-4 md:mt-0">
+    <div class="mt-4 md:mt-0">
       <SocialMediaContent
         showFacebook={true}
         showInstagram={true}
