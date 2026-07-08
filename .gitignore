@@ -1,8 +1,8 @@
 # build output
 dist/
 
-# generated types (keep types.d.ts for CI, ignore cache)
-.astro/cache/
+# generated types and internal Astro data
+.astro/
 
 # dependencies
 node_modules/
