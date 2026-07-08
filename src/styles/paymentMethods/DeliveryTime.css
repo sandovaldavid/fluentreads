@@ -263,7 +263,7 @@
   transform: scale(1.2);
 }
 
-@keyframes fadeIn {
+@keyframes testimonialFadeIn {
   from {
     opacity: 0;
     transform: translateX(20px);

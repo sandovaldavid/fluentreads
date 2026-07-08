@@ -109,18 +109,7 @@
 
 /* Form entrance animation */
 #contact-form {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  animation: slideUp 0.5s ease-in-out;
 }
 
 /* Loading overlay animation */
@@ -199,15 +188,6 @@
 
 .pageclip-form__submit .submit-button-content {
   animation: fadeIn 0.3s ease forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 @keyframes fadeOut {

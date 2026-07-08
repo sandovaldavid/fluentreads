@@ -32,7 +32,7 @@ const starSizeClass = sizeClasses[size];
 ---
 
 <div class={`flex items-center ${className || ''}`}>
-  <div className="flex items-center justify-between">
+  <div class="review-stars-container flex items-center justify-between">
     {/* Full stars */}
     {
       Array.from({ length: fullStarsCount }).map(() => (
@@ -82,7 +82,7 @@ const starSizeClass = sizeClasses[size];
 </div>
 
 <style>
-  div:hover svg {
+  .review-stars-container:hover :global(svg) {
     transform: scale(1.1);
   }
 </style>

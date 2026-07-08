@@ -12,19 +12,19 @@ const { tag: Tag = 'h2', class: className = '' } = Astro.props;
 >
   <slot />
   <span
-    className="bg-secondary absolute bottom-0 left-1/2 h-1 w-24 -translate-x-1/2 transform rounded-full"
+    class="section-title-underline bg-secondary absolute bottom-0 left-1/2 h-1 w-24 -translate-x-1/2 transform rounded-full"
   ></span>
 </Tag>
 
 <style>
   /* Optional animation for the underline */
-  span {
+  .section-title-underline {
     transition: width 0.3s ease-out;
   }
 
-  h1:hover span,
-  h2:hover span,
-  h3:hover span {
+  h1:hover .section-title-underline,
+  h2:hover .section-title-underline,
+  h3:hover .section-title-underline {
     width: 60%;
   }
 </style>

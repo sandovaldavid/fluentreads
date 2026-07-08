@@ -170,28 +170,19 @@
     transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.book-grid-item.hidden {
-  display: none;
-}
-
 /* Loading indicator styles */
 .loading-container {
   backdrop-filter: blur(2px);
-  transition: all 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
   opacity: 0;
   visibility: hidden;
-}
-
-.loading-container {
-  transition: opacity 0.3s ease;
 }
 
 #loading-indicator:not(.hidden) {
   opacity: 1;
   visibility: visible;
-}
-
-#loading-indicator:not(.hidden) {
   animation: fadeIn 0.2s ease forwards;
 }
 
@@ -251,83 +242,48 @@
 
 /* General animations */
 .fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeIn 0.8s ease forwards;
+  opacity: 1;
   transition:
     opacity 0.6s ease-out,
     transform 0.6s ease-out;
 }
 
-.fade-in.in-view {
+.js .fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.js .fade-in.in-view {
   opacity: 1;
   transform: translateY(0);
 }
 
-.fade-in:not(.in-view) {
+.js .fade-in:not(.in-view) {
   opacity: 0;
 }
 
 .slide-up {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUp 0.8s ease forwards;
+  opacity: 1;
   transition:
     opacity 0.6s ease-out,
     transform 0.6s ease-out;
 }
 
-.slide-up.in-view {
+.js .slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.8s ease forwards;
+}
+
+.js .slide-up.in-view {
   opacity: 1;
   transform: translateY(0);
 }
 
-.slide-up:not(.in-view) {
+.js .slide-up:not(.in-view) {
   opacity: 0;
   transform: translateY(20px);
-}
-
-/* Animation keyframes */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Pulse animation for special elements */
@@ -342,17 +298,6 @@
   }
   50% {
     opacity: 0.8;
-  }
-}
-
-/* Loading state animations */
-@keyframes pulse-bg {
-  0%,
-  100% {
-    background-opacity: 0.05;
-  }
-  50% {
-    background-opacity: 0.1;
   }
 }
 

@@ -1,5 +1,5 @@
 ---
-import CarruselButtons from './CarruselButtons.astro';
+import CarouselButtons from './CarouselButtons.astro';
 import SpinnerIcon from './icons/Spinner.astro';
 import CloseIcon from './icons/Close.astro';
 
@@ -25,8 +25,8 @@ const { id = 'image-modal' } = Astro.props;
     <CloseIcon class="h-8 w-8" />
   </span>
 
-  <!-- Navigation using CarruselButtons component -->
-  <CarruselButtons ariaLabelPrev="Imagen anterior" ariaLabelNext="Siguiente imagen" />
+  <!-- Navigation using CarouselButtons component -->
+  <CarouselButtons ariaLabelPrev="Imagen anterior" ariaLabelNext="Siguiente imagen" />
 
   <!-- Main image container -->
   <div className="relative flex h-full w-full items-center justify-center p-4">
@@ -91,7 +91,7 @@ const { id = 'image-modal' } = Astro.props;
       }, 300); // Match transition duration
     }
 
-    // Make sure the modal's CarruselButtons work directly
+    // Make sure the modal's CarouselButtons work directly
     const modalPrevBtn = document.querySelector('#image-modal .carousel-control.prev');
     const modalNextBtn = document.querySelector('#image-modal .carousel-control.next');
 

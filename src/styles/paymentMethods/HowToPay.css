@@ -29,14 +29,14 @@
 .payment-method-card {
   opacity: 0;
   transform: translateY(20px) scale(0.9);
-  animation: fadeInUp 0.5s ease forwards;
+  animation: fadeInUpScale 0.5s ease forwards;
 }
 
 .payment-method-card:hover .payment-icon {
   transform: scale(1.1);
 }
 
-@keyframes fadeInUp {
+@keyframes fadeInUpScale {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
