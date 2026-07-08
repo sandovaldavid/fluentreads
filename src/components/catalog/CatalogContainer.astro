@@ -57,7 +57,15 @@ if (initialFormat !== 'all') {
 
 // Filter by level if specified
 if (initialLevel !== 'all') {
-  filteredProducts = filteredProducts.filter((product) => product.level === initialLevel);
+  filteredProducts = filteredProducts.filter((product) => {
+    if (initialLevel === 'intermediate') {
+      return product.level === 'intermediate' || product.level === 'upper-intermediate';
+    }
+    if (initialLevel === 'advanced') {
+      return product.level === 'advanced' || product.level === 'proficient';
+    }
+    return product.level === initialLevel;
+  });
 }
 
 // Apply initial sorting
@@ -298,7 +306,12 @@ const gridClass = getGridClassFromColumns(gridCols);
         // Filter by level if specified (handle difficulty mapping for exams)
         if (level && level !== 'all') {
           filtered = filtered.filter((product) => {
-            // Handle both direct level match and mapped difficulty to level
+            if (level === 'intermediate') {
+              return product.level === 'intermediate' || product.level === 'upper-intermediate';
+            }
+            if (level === 'advanced') {
+              return product.level === 'advanced' || product.level === 'proficient';
+            }
             return product.level === level;
           });
         }
