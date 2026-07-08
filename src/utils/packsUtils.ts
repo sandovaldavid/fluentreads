@@ -114,7 +114,6 @@ export function getSafePacks(packsData: any[]): Pack[] {
     formatTags: (pack.formatTags || []) as FormatTag[],
     popularityTags: (pack.popularityTags || []) as PopularityTag[],
     featured: pack.featured || false,
-    stock: pack.stock || 0,
     images: pack.images || [],
     video: pack.video || '',
   }));

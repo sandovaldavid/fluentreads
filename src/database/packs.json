@@ -13,7 +13,6 @@
     "detailsLink": "/catalogo/packs/complete-english-pack",
     "buyLink": "/checkout/english-complete-pack",
     "includedItems": ["Audios adicionales", "Guía de estudio"],
-    "stock": 50,
     "level": "beginner",
     "rating": {
       "score": 4.8,
@@ -34,7 +33,6 @@
     "detailsLink": "/catalogo/packs/business-pro-pack",
     "buyLink": "/checkout/business-pro-pack",
     "includedItems": ["Casos de estudio", "Acceso a webinars"],
-    "stock": 40,
     "level": "intermediate",
     "rating": {
       "score": 4.7,
@@ -55,7 +53,6 @@
     "detailsLink": "/catalogo/packs/grammar-mastery-pack",
     "buyLink": "/checkout/grammar-mastery-pack",
     "includedItems": ["Ejercicios interactivos", "Simulaciones de examen"],
-    "stock": 30,
     "level": "intermediate",
     "rating": {
       "score": 4.6,
@@ -76,7 +73,6 @@
     "detailsLink": "/catalogo/packs/conversation-boost-pack",
     "buyLink": "/checkout/conversation-boost-pack",
     "includedItems": ["Audios de diálogos", "Acceso a prácticas en línea"],
-    "stock": 25,
     "level": "intermediate",
     "rating": {
       "score": 4.9,
@@ -97,7 +93,6 @@
     "detailsLink": "/catalogo/packs/ielts-preparation-pack",
     "buyLink": "/checkout/ielts-preparation-pack",
     "includedItems": ["Simulaciones de examen", "Consejos de expertos"],
-    "stock": 20,
     "level": "international-exam",
     "rating": {
       "score": 4.8,

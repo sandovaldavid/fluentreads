@@ -85,7 +85,6 @@ const safePacks: Pack[] = allPacks.map((pack) => ({
   popularityTags: pack.popularityTags || [],
   images: 'images' in pack ? (pack.images as string[]) : [],
   video: 'video' in pack ? (pack.video as string) : '',
-  stock: 'stock' in pack ? (pack.stock as number) : 10,
 }));
 
 // Define breadcrumb items
