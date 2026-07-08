@@ -1,13 +1,10 @@
 # robots.txt for FluentReads
 User-agent: *
 Allow: /
-Disallow: /admin/
 Disallow: /checkout/
-Disallow: /carrito/
-Disallow: /perfil/
 
 # Sitemap location
-Sitemap: https://fluentreads.devsolution.software/sitemap.xml
+Sitemap: https://fluentreads.sandovaldavid.com/sitemap-index.xml
 
 # Crawl delay to prevent server overload
 Crawl-delay: 10

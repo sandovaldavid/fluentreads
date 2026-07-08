@@ -12,8 +12,8 @@ const { network, href, class: className = '' } = Astro.props;
   href={href}
   target="_blank"
   aria-label={`Visit our ${network} page`}
-  className={`hover:text-secondary text-white transition-colors ${className}`}
-  rel="noreferrer"
+  class={`hover:text-secondary text-white transition-colors ${className}`}
+  rel="noopener noreferrer"
 >
   <slot />
 </a>

@@ -200,7 +200,18 @@ import { siteConfig } from '@config/site';
 
     // Update the countdown immediately and then every second
     updateCountdown();
-    setInterval(updateCountdown, 1000);
+    let countdownInterval = setInterval(updateCountdown, 1000);
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        clearInterval(countdownInterval);
+      } else {
+        clearInterval(countdownInterval);
+        updateCountdown();
+        countdownInterval = setInterval(updateCountdown, 1000);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
 
     // Add entrance animations
     const animateElements = document.querySelectorAll('.animate-on-scroll');
@@ -235,5 +246,13 @@ import { siteConfig } from '@config/site';
         star.classList.add('star-animated');
       }, index * 150);
     });
+
+    // Cleanup function for memory leaks
+    const cleanup = () => {
+      clearInterval(countdownInterval);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      observer.disconnect();
+    };
+    document.addEventListener('astro:before-swap', cleanup, { once: true });
   });
 </script>

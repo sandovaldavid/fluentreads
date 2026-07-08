@@ -91,7 +91,7 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
     productCount={filteredPacks.length}
     productType="pack"
     className="mb-8 shadow-lg"
-    client:load
+    client:visible
   />
 
   <div id="packs-container" data-is-loading={showSkeletonOnLoad.toString()}>

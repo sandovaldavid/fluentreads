@@ -119,8 +119,9 @@ const showEditorial = size !== 'small' && editorial;
     <img
       src={coverImage}
       alt={`Portada de ${title}`}
-      className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgHeights[size]}`}
+      class={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${imgHeights[size]}`}
       loading="lazy"
+      decoding="async"
     />
 
     {/* Discount Badge - Optimized for mobile */}

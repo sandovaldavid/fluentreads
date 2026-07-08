@@ -191,8 +191,9 @@ import '../../styles/paymentMethods/DeliveryTime.css';
 </section>
 
 <script>
-  // Animation on scroll
+  // Animation on scroll and Testimonial slider functionality unified
   document.addEventListener('DOMContentLoaded', () => {
+    // 1. Scroll animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -211,10 +212,8 @@ import '../../styles/paymentMethods/DeliveryTime.css';
     document.querySelectorAll('.animate-on-scroll').forEach((el) => {
       observer.observe(el);
     });
-  });
 
-  // Improved testimonial slider functionality
-  document.addEventListener('DOMContentLoaded', () => {
+    // 2. Slider
     const testimonials = document.querySelectorAll('.delivery-testimonial');
     const dots = document.querySelectorAll('.testimonial-dot');
 
@@ -225,46 +224,71 @@ import '../../styles/paymentMethods/DeliveryTime.css';
     dots[0].classList.add('active', 'opacity-100');
     dots[0].classList.remove('opacity-40');
 
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        // Remove active class from all testimonials and dots
-        testimonials.forEach((t) => t.classList.remove('active'));
-        dots.forEach((d) => {
-          d.classList.remove('active', 'opacity-100');
-          d.classList.add('opacity-40');
-        });
-
-        // Add active class to current testimonial and dot
-        testimonials[index].classList.add('active');
-        dot.classList.add('active', 'opacity-100');
-        dot.classList.remove('opacity-40');
-      });
-    });
-
-    // Auto-rotate testimonials every 5 seconds
     let currentIndex = 0;
-    const autoRotate = setInterval(() => {
-      currentIndex = (currentIndex + 1) % testimonials.length;
+    let autoRotateInterval: any = null;
 
-      // Remove active class from all testimonials and dots
+    const startAutoRotate = () => {
+      if (autoRotateInterval) clearInterval(autoRotateInterval);
+      autoRotateInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % testimonials.length;
+        updateSlider(currentIndex);
+      }, 5000);
+    };
+
+    const stopAutoRotate = () => {
+      if (autoRotateInterval) {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = null;
+      }
+    };
+
+    const updateSlider = (index: number) => {
+      currentIndex = index;
       testimonials.forEach((t) => t.classList.remove('active'));
       dots.forEach((d) => {
         d.classList.remove('active', 'opacity-100');
         d.classList.add('opacity-40');
       });
 
-      // Add active class to current testimonial and dot
       testimonials[currentIndex].classList.add('active');
       dots[currentIndex].classList.add('active', 'opacity-100');
       dots[currentIndex].classList.remove('opacity-40');
-    }, 5000);
+    };
 
-    // Pause auto-rotation on mouse interaction
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        stopAutoRotate();
+        updateSlider(index);
+        startAutoRotate();
+      });
+    });
+
+    // Auto-rotate testimonials
+    startAutoRotate();
+
+    // Pause on hover
     const slider = document.querySelector('.delivery-testimonial-slider');
     if (slider) {
-      slider.addEventListener('mouseenter', () => {
-        clearInterval(autoRotate);
-      });
+      slider.addEventListener('mouseenter', stopAutoRotate);
+      slider.addEventListener('mouseleave', startAutoRotate);
     }
+
+    // Pause when document is hidden
+    const handleVisibility = () => {
+      if (document.hidden) {
+        stopAutoRotate();
+      } else {
+        startAutoRotate();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // Cleanup function for memory leaks
+    const cleanup = () => {
+      stopAutoRotate();
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+    document.addEventListener('astro:before-swap', cleanup, { once: true });
   });
 </script>

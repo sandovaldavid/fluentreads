@@ -15,6 +15,7 @@ const whatsappNumber = siteConfig.whatsapp;
   title="Carrito de Compras | FluentReads"
   description="Revisa y confirma tu pedido de libros digitales en inglés con FluentReads."
 >
+  <div id="checkout-data" data-whatsapp={whatsappNumber} class="hidden"></div>
   <div className="mx-auto max-w-4xl px-4 py-12">
     <SectionTitle>Tu Carrito de Compras</SectionTitle>
 
@@ -67,19 +68,60 @@ const whatsappNumber = siteConfig.whatsapp;
   </div>
 </Layout>
 
-<script define:vars={{ whatsappNumber }}>
+<script>
+  import type { CartItem } from '@utils/cartManager';
+
   document.addEventListener('DOMContentLoaded', () => {
-    // Get DOM elements
-    const cartContainer = document.getElementById('cart-container');
-    const emptyCartMessage = document.getElementById('empty-cart-message');
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartTotalElement = document.getElementById('cart-total');
-    const whatsappCheckoutBtn = document.getElementById('whatsapp-checkout-btn');
-    const clearCartBtn = document.getElementById('clear-cart-btn');
+    const checkoutDataEl = document.getElementById('checkout-data');
+    const whatsappNumber = checkoutDataEl?.getAttribute('data-whatsapp') || '';
+
+    // Get DOM elements safely (non-null assertions after guard below)
+    const cartContainer = document.getElementById('cart-container')!;
+    const emptyCartMessage = document.getElementById('empty-cart-message')!;
+    const cartItemsContainer = document.getElementById('cart-items')!;
+    const cartTotalElement = document.getElementById('cart-total')!;
+    const whatsappCheckoutBtn = document.getElementById('whatsapp-checkout-btn')!;
+    const clearCartBtn = document.getElementById('clear-cart-btn')!;
+
+    if (
+      !cartContainer ||
+      !emptyCartMessage ||
+      !cartItemsContainer ||
+      !cartTotalElement ||
+      !whatsappCheckoutBtn ||
+      !clearCartBtn
+    ) {
+      console.error('Required DOM elements for cart not found');
+      return;
+    }
+
+    // Function to escape HTML to prevent XSS
+    function escapeHTML(str: string): string {
+      if (!str) return '';
+      return String(str).replace(
+        /[&<>'"]/g,
+        (tag) =>
+          ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;',
+          })[tag] || tag
+      );
+    }
 
     // Load cart data from localStorage
     function loadCart() {
-      const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+      let cart: CartItem[] = [];
+      try {
+        const storedCart = localStorage.getItem('shoppingCart');
+        if (storedCart) {
+          cart = JSON.parse(storedCart);
+        }
+      } catch (e) {
+        console.error('Error parsing cart from localStorage:', e);
+      }
 
       // Show/hide appropriate elements based on cart state
       if (cart.length === 0) {
@@ -89,59 +131,117 @@ const whatsappNumber = siteConfig.whatsapp;
         cartContainer.classList.remove('hidden');
         emptyCartMessage.classList.add('hidden');
 
-        // Clear previous items
-        cartItemsContainer.innerHTML = '';
+        // Clear previous items safely (Issue 2)
+        while (cartItemsContainer.firstChild) {
+          cartItemsContainer.removeChild(cartItemsContainer.firstChild);
+        }
 
         // Calculate total price
         let total = 0;
 
-        // Render cart items
-        cart.forEach((item, index) => {
+        // Render cart items using DOM APIs to prevent XSS
+        cart.forEach((item: CartItem, index: number) => {
           const itemTotal = item.price * item.quantity;
           total += itemTotal;
+
+          // Escape inputs (Issue 2)
+          const cleanTitle = escapeHTML(item.title);
+          const cleanImage = escapeHTML(item.image);
+          const cleanType = escapeHTML(item.type);
 
           // Create cart item element
           const cartItemEl = document.createElement('div');
           cartItemEl.className =
             'flex flex-col sm:flex-row items-center bg-white p-4 rounded-lg shadow-sm border border-gray-200';
-          cartItemEl.innerHTML = `
-                        <div class="flex-shrink-0 w-20 h-20 mb-3 sm:mb-0 sm:mr-4">
-                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover rounded">
-                        </div>
-                        <div class="flex-grow text-center sm:text-left">
-                            <h4 class="font-bold text-gray-800">${item.title}</h4>
-                            <div class="text-sm text-gray-500 mb-1">
-                                ${item.type === 'book' ? 'Libro' : item.type === 'exam' ? 'Examen' : 'Pack'}
-                            </div>
-                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-2">
-                                <div class="text-primary font-bold">
-                                    S/${item.price.toFixed(2)}
-                                </div>
-                                <div class="flex items-center justify-center sm:justify-end mt-2 sm:mt-0">
-                                    <button 
-                                        class="quantity-btn decrease bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded-l" 
-                                        data-index="${index}"
-                                        aria-label="Disminuir cantidad"
-                                    >-</button>
-                                    <span class="quantity-display bg-gray-100 py-1 px-3">${item.quantity}</span>
-                                    <button 
-                                        class="quantity-btn increase bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded-r" 
-                                        data-index="${index}"
-                                        aria-label="Aumentar cantidad"
-                                    >+</button>
-                                    <button 
-                                        class="remove-item ml-4 text-red-500 hover:text-red-700" 
-                                        data-index="${index}"
-                                        aria-label="Eliminar producto"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+
+          // Image container
+          const imgContainer = document.createElement('div');
+          imgContainer.className = 'flex-shrink-0 w-20 h-20 mb-3 sm:mb-0 sm:mr-4';
+          const img = document.createElement('img');
+          img.src = cleanImage;
+          img.alt = cleanTitle;
+          img.className = 'w-full h-full object-cover rounded';
+          imgContainer.appendChild(img);
+          cartItemEl.appendChild(imgContainer);
+
+          // Content container
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'flex-grow text-center sm:text-left';
+
+          const titleHeader = document.createElement('h4');
+          titleHeader.className = 'font-bold text-gray-800';
+          titleHeader.textContent = cleanTitle;
+          contentDiv.appendChild(titleHeader);
+
+          const typeDiv = document.createElement('div');
+          typeDiv.className = 'text-sm text-gray-500 mb-1';
+          typeDiv.textContent =
+            cleanType === 'book' ? 'Libro' : cleanType === 'exam' ? 'Examen' : 'Pack';
+          contentDiv.appendChild(typeDiv);
+
+          // Controls and price container
+          const controlsPriceDiv = document.createElement('div');
+          controlsPriceDiv.className =
+            'flex flex-col sm:flex-row sm:justify-between sm:items-center mt-2';
+
+          const priceDiv = document.createElement('div');
+          priceDiv.className = 'text-primary font-bold';
+          priceDiv.textContent = `S/${item.price.toFixed(2)}`;
+          controlsPriceDiv.appendChild(priceDiv);
+
+          const controlsDiv = document.createElement('div');
+          controlsDiv.className = 'flex items-center justify-center sm:justify-end mt-2 sm:mt-0';
+
+          // Decrease button
+          const decBtn = document.createElement('button');
+          decBtn.className =
+            'quantity-btn decrease bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded-l';
+          decBtn.setAttribute('data-index', String(index));
+          decBtn.setAttribute('aria-label', 'Disminuir cantidad');
+          decBtn.textContent = '-';
+          controlsDiv.appendChild(decBtn);
+
+          // Quantity display
+          const qtySpan = document.createElement('span');
+          qtySpan.className = 'quantity-display bg-gray-100 py-1 px-3';
+          qtySpan.textContent = String(item.quantity);
+          controlsDiv.appendChild(qtySpan);
+
+          // Increase button
+          const incBtn = document.createElement('button');
+          incBtn.className =
+            'quantity-btn increase bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded-r';
+          incBtn.setAttribute('data-index', String(index));
+          incBtn.setAttribute('aria-label', 'Aumentar cantidad');
+          incBtn.textContent = '+';
+          controlsDiv.appendChild(incBtn);
+
+          // Remove button
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'remove-item ml-4 text-red-500 hover:text-red-700';
+          removeBtn.setAttribute('data-index', String(index));
+          removeBtn.setAttribute('aria-label', 'Eliminar producto');
+
+          // SVG for remove button
+          const removeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          removeSvg.setAttribute('class', 'h-5 w-5');
+          removeSvg.setAttribute('viewBox', '0 0 20 20');
+          removeSvg.setAttribute('fill', 'currentColor');
+          removeSvg.setAttribute('aria-hidden', 'true');
+          const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          svgPath.setAttribute('fill-rule', 'evenodd');
+          svgPath.setAttribute(
+            'd',
+            'M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z'
+          );
+          svgPath.setAttribute('clip-rule', 'evenodd');
+          removeSvg.appendChild(svgPath);
+          removeBtn.appendChild(removeSvg);
+
+          controlsDiv.appendChild(removeBtn);
+          controlsPriceDiv.appendChild(controlsDiv);
+          contentDiv.appendChild(controlsPriceDiv);
+          cartItemEl.appendChild(contentDiv);
 
           // Add cart item to container
           cartItemsContainer.appendChild(cartItemEl);
@@ -153,20 +253,20 @@ const whatsappNumber = siteConfig.whatsapp;
     }
 
     // Handle quantity changes and item removal
-    cartItemsContainer.addEventListener('click', (e) => {
-      const target = e.target;
+    cartItemsContainer.addEventListener('click', (e: Event) => {
+      const target = e.target as HTMLElement;
 
       if (target.classList.contains('quantity-btn') || target.closest('.quantity-btn')) {
         const btn = target.classList.contains('quantity-btn')
           ? target
-          : target.closest('.quantity-btn');
+          : (target.closest('.quantity-btn') as HTMLElement);
         const indexAttr = btn.getAttribute('data-index');
         const index = parseInt(indexAttr || '', 10);
         if (isNaN(index)) return;
         const isIncrease = btn.classList.contains('increase');
 
         // Get current cart
-        const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+        const cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]') || [];
 
         if (isIncrease) {
           cart[index].quantity += 1;
@@ -184,13 +284,13 @@ const whatsappNumber = siteConfig.whatsapp;
       if (target.classList.contains('remove-item') || target.closest('.remove-item')) {
         const btn = target.classList.contains('remove-item')
           ? target
-          : target.closest('.remove-item');
+          : (target.closest('.remove-item') as HTMLElement);
         const indexAttr = btn.getAttribute('data-index');
         const index = parseInt(indexAttr || '', 10);
         if (isNaN(index)) return;
 
         // Get current cart
-        const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+        const cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]') || [];
 
         // Remove item
         cart.splice(index, 1);
@@ -213,17 +313,20 @@ const whatsappNumber = siteConfig.whatsapp;
 
     // WhatsApp checkout button
     whatsappCheckoutBtn.addEventListener('click', () => {
-      const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+      const cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]') || [];
 
       if (cart.length === 0) return;
 
       // Calculate total
-      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const total = cart.reduce(
+        (sum: number, item: CartItem) => sum + item.price * item.quantity,
+        0
+      );
 
       // Prepare WhatsApp message
       let message = `*Nuevo pedido desde FluentReads*\n\n*Productos:*\n`;
 
-      cart.forEach((item, index) => {
+      cart.forEach((item: CartItem, index: number) => {
         message += `${index + 1}. ${item.title} (${item.quantity}x) - S/${(item.price * item.quantity).toFixed(2)}\n`;
       });
 

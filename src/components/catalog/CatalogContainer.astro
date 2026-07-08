@@ -71,9 +71,6 @@ if (initialSort === 'price-low') {
   filteredProducts = filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 }
 
-// Pass all products as a JSON string to make them available for client-side filtering
-const allProductsJSON = JSON.stringify(products);
-
 // Maps a grid column count to responsive Tailwind classes
 const getGridClassFromColumns = (cols: number): string => {
   const gridClasses = {
@@ -92,7 +89,7 @@ const gridClass = getGridClassFromColumns(gridCols);
 <div className="catalog-container flex flex-col items-center">
   <!-- Filtro en React (Isla) con parámetros iniciales -->
   <Filter
-    client:load
+    client:visible
     initialLevel={initialLevel}
     initialFormat={initialFormat}
     initialSort={initialSort}
@@ -101,9 +98,6 @@ const gridClass = getGridClassFromColumns(gridCols);
     productType={initialResourceType !== 'any' ? initialResourceType : undefined}
     productCount={filteredProducts.length}
   />
-
-  <!-- Hidden input to store all products data for client-side manipulation -->
-  <input type="hidden" id="all-products-data" value={allProductsJSON} />
 
   <!-- Contenedor del grid con posición relativa para el loading indicator -->
   <div className="relative w-full">
@@ -172,16 +166,34 @@ const gridClass = getGridClassFromColumns(gridCols);
 </div>
 
 <script>
+  import { getSharedObserver } from '@utils/observer';
+
   // Client-side filtering without page reload
   document.addEventListener('DOMContentLoaded', () => {
-    // Get all products from the hidden input
-    const allProductsDataElement = document.getElementById('all-products-data');
-    if (!allProductsDataElement) {
-      console.error('All products data element not found');
-      return;
-    }
-    // Cast to HTMLInputElement to access the value property
-    const allProducts = JSON.parse((allProductsDataElement as HTMLInputElement).value);
+    // Read products data from DOM elements (reduces HTML size and avoids duplication)
+    const productGridItems = Array.from(document.querySelectorAll('.product-grid-item'));
+    const allProducts = productGridItems.map((item) => {
+      const id = item.getAttribute('data-product-id') || '';
+      const productType = item.getAttribute('data-type') || '';
+      const level = item.getAttribute('data-level') || '';
+      const formatTags = item.getAttribute('data-format')?.split(',') || [];
+      const featured = item.getAttribute('data-featured') === 'true';
+      const price = parseFloat(item.getAttribute('data-price') || '0');
+      const title = item.getAttribute('data-title') || '';
+      const bestseller = item.getAttribute('data-bestseller') === 'true';
+      const popularityTags = bestseller ? ['bestSeller'] : [];
+
+      return {
+        id,
+        productType,
+        level,
+        formatTags,
+        featured,
+        price,
+        title,
+        popularityTags,
+      };
+    });
 
     // Get DOM elements
     const productsGrid = document.getElementById('products-grid');
@@ -417,27 +429,11 @@ const gridClass = getGridClassFromColumns(gridCols);
     // Listen for filter changes from the Filter component
     window.addEventListener('filterChange', handleFilterChange as EventListener);
 
-    // Animation for product grid items
+    // Animation for product grid items using shared observer
     const observeElements = () => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-              // Add class for animation and staggered timing
-              setTimeout(
-                () => {
-                  entry.target.classList.add('in-view', `appear-${(index % 4) + 1}`);
-                },
-                100 * (index % 4)
-              );
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.1 }
-      );
+      const observer = getSharedObserver();
 
-      // Observe all product grid items
+      // Observe all visible product grid items
       document.querySelectorAll('.product-grid-item').forEach((item) => {
         if (!item.classList.contains('hidden')) {
           observer.observe(item);
@@ -463,19 +459,16 @@ const gridClass = getGridClassFromColumns(gridCols);
     transform: translateY(0);
   }
 
-  .appear-1 {
+  .product-grid-item:nth-child(4n + 1) {
     transition-delay: 0.05s;
   }
-
-  .appear-2 {
+  .product-grid-item:nth-child(4n + 2) {
     transition-delay: 0.1s;
   }
-
-  .appear-3 {
+  .product-grid-item:nth-child(4n + 3) {
     transition-delay: 0.15s;
   }
-
-  .appear-4 {
+  .product-grid-item:nth-child(4n + 4) {
     transition-delay: 0.2s;
   }
 

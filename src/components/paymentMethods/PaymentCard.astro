@@ -112,10 +112,36 @@ const paymentId = `payment-${title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`
         if (targetId) {
           const textElement = document.getElementById(targetId);
           if (textElement) {
-            // Create selection and copy text
+            // Create selection and copy text with robust fallback (Issue 10)
             const text = textElement.innerText;
-            navigator.clipboard
-              .writeText(text)
+            const copyText = (txt: string) => {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(txt);
+              }
+              // Fallback for non-secure HTTP or older browsers
+              return new Promise<void>((resolve, reject) => {
+                try {
+                  const textArea = document.createElement('textarea');
+                  textArea.value = txt;
+                  textArea.style.position = 'fixed';
+                  textArea.style.opacity = '0';
+                  document.body.appendChild(textArea);
+                  textArea.focus();
+                  textArea.select();
+                  const successful = document.execCommand('copy');
+                  document.body.removeChild(textArea);
+                  if (successful) {
+                    resolve();
+                  } else {
+                    reject(new Error('Fallback copy failed'));
+                  }
+                } catch (err) {
+                  reject(err);
+                }
+              });
+            };
+
+            copyText(text)
               .then(() => {
                 // Hide the button temporarily by adding opacity-0 (instead of inline styles that break hover states)
                 (button as HTMLElement).classList.add('opacity-0');
