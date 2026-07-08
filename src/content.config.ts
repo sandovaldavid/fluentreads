@@ -3,7 +3,7 @@
 // Docs: https://docs.astro.build/en/guides/content-collections/
 
 import { defineCollection } from 'astro:content';
-import { file } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 // Shared sub-schemas
@@ -79,7 +79,6 @@ const packs = defineCollection({
     detailsLink: z.string(),
     buyLink: z.string(),
     includedItems: z.array(z.string()).default([]),
-    stock: z.number().int().nonnegative().optional(),
   }),
 });
 
@@ -125,7 +124,6 @@ const exams = defineCollection({
     buyLink: z.string(),
     detailsLink: z.string(),
     includedItems: z.array(z.string()).default([]),
-    requirements: z.array(z.string()).optional().default([]),
   }),
 });
 
@@ -149,6 +147,7 @@ const testimonies = defineCollection({
     position: z.string(),
     avatarUrl: z.string().url(),
     rating: z.number().min(0).max(5),
+    date: z.string(),
   }),
 });
 
@@ -202,6 +201,15 @@ const paymentFaqs = defineCollection({
   schema: faqSchema,
 });
 
+// Legal collection
+const legal = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/legal' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
 // Offer Hero Banner collection
 const offerHeroBanner = defineCollection({
   loader: file('src/data/offer-hero-banner.json'),
@@ -225,4 +233,5 @@ export const collections = {
   catalogFaqs,
   paymentFaqs,
   offerHeroBanner,
+  legal,
 };

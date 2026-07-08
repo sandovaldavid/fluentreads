@@ -9,7 +9,10 @@ import siteInfo from '../../data/page-information.json';
 import { siteConfig } from '@config/site';
 
 // Import testimonies data
-import testimonies from '../../data/testimonies.json';
+import rawTestimonies from '../../data/testimonies.json';
+const testimonies = [...rawTestimonies].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
 
 // Calculate statistics
 const totalTestimonials = testimonies.length;
@@ -95,26 +98,22 @@ const breadcrumbData = {
   breadcrumbData={breadcrumbData}
 >
   <!-- Hero section with statistics -->
-  <section
-    className="from-primary/10 to-secondary/5 relative overflow-hidden bg-gradient-to-br py-12"
-  >
+  <section class="from-primary/10 to-secondary/5 relative overflow-hidden bg-gradient-to-br py-12">
     <!-- Decorative elements -->
-    <div
-      className="bg-primary/10 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl"
-    >
+    <div class="bg-primary/10 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl">
     </div>
     <div
-      className="bg-secondary/10 absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full blur-3xl"
+      class="bg-secondary/10 absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full blur-3xl"
     >
     </div>
 
-    <div className="container mx-auto px-4">
-      <div className="mx-auto max-w-4xl text-center">
-        <div className="flex flex-col items-center">
+    <div class="container mx-auto px-4">
+      <div class="mx-auto max-w-4xl text-center">
+        <div class="flex flex-col items-center">
           <div
-            className="bg-primary/10 text-primary animate-fadeIn mb-3 inline-block rounded-full px-4 py-1 font-medium"
+            class="bg-primary/10 text-primary animate-fadeIn mb-3 inline-block rounded-full px-4 py-1 font-medium"
           >
-            <span className="mr-1 text-yellow-400">★</span>
+            <span class="mr-1 text-yellow-400">★</span>
             {roundedRating}/5 basado en {totalTestimonials} opiniones
           </div>
 
@@ -123,40 +122,38 @@ const breadcrumbData = {
           </SectionTitle>
         </div>
 
-        <p className="animate-fadeIn mx-auto mb-8 max-w-3xl text-center text-gray-600">
+        <p class="animate-fadeIn mx-auto mb-8 max-w-3xl text-center text-gray-600">
           Descubre cómo nuestros materiales han transformado la experiencia de aprendizaje de miles
           de estudiantes y profesionales en todo el mundo.
         </p>
 
         <!-- Statistics cards -->
-        <div
-          className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
-        >
+        <div class="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
           <div
-            className="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            class="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
-            <div className="text-primary mb-1 text-3xl font-bold">
+            <div class="text-primary mb-1 text-3xl font-bold">
               {totalTestimonials}+
             </div>
-            <div className="text-sm text-gray-500">Testimonios</div>
+            <div class="text-sm text-gray-500">Testimonios</div>
           </div>
 
           <div
-            className="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            class="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
-            <div className="text-primary mb-1 text-3xl font-bold">
+            <div class="text-primary mb-1 text-3xl font-bold">
               {roundedRating}/5
             </div>
-            <div className="text-sm text-gray-500">Valoración media</div>
+            <div class="text-sm text-gray-500">Valoración media</div>
           </div>
 
           <div
-            className="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            class="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
-            <div className="text-primary mb-1 text-3xl font-bold">
+            <div class="text-primary mb-1 text-3xl font-bold">
               {satisfactionRate}
             </div>
-            <div className="text-sm text-gray-500">Satisfacción</div>
+            <div class="text-sm text-gray-500">Satisfacción</div>
           </div>
         </div>
       </div>
@@ -164,29 +161,29 @@ const breadcrumbData = {
   </section>
 
   <!-- Testimonials filter and grid section -->
-  <section className="bg-neutral-light py-12">
-    <div className="container mx-auto px-4">
+  <section class="bg-neutral-light py-12">
+    <div class="container mx-auto px-4">
       <!-- Filter controls (can be expanded with actual filtering functionality) -->
-      <div className="mb-8 flex flex-wrap items-center justify-between">
-        <h2 className="text-primary-dark text-2xl font-bold">Todos los testimonios</h2>
+      <div class="mb-8 flex flex-wrap items-center justify-between">
+        <h2 class="text-primary-dark text-2xl font-bold">Todos los testimonios</h2>
 
-        <div className="mt-4 flex items-center space-x-2 sm:mt-0">
-          <span className="text-sm text-gray-600">Filtrar por:</span>
+        <div class="mt-4 flex items-center space-x-2 sm:mt-0">
+          <span class="text-sm text-gray-600">Filtrar por:</span>
           <button
             id="filter-all"
-            className="filter-btn active bg-primary rounded-full px-3 py-1 text-sm text-white"
+            class="filter-btn active bg-primary rounded-full px-3 py-1 text-sm text-white"
           >
             Todos
           </button>
           <button
             id="filter-5star"
-            className="filter-btn rounded-full bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
+            class="filter-btn rounded-full bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
           >
             5 estrellas
           </button>
           <button
             id="filter-recent"
-            className="filter-btn rounded-full bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
+            class="filter-btn rounded-full bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
           >
             Recientes
           </button>
@@ -194,12 +191,13 @@ const breadcrumbData = {
       </div>
 
       <!-- Testimonials grid with improved spacing and layout -->
-      <div className="testimonials-grid grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div class="testimonials-grid grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {
           testimonies.map((testimony, index) => (
             <div
-              className={`testimony-item appear-${(index % 9) + 1}`}
+              class={`testimony-item appear-${(index % 9) + 1}`}
               data-rating={testimony.rating}
+              data-date={testimony.date}
             >
               <TestimoniesCard
                 quote={testimony.quote}
@@ -214,26 +212,24 @@ const breadcrumbData = {
       </div>
 
       <!-- No results message (hidden by default) -->
-      <div id="no-results" className="hidden py-16 text-center">
-        <div className="mb-3 text-xl font-semibold text-gray-600">
-          No se encontraron testimonios
-        </div>
-        <p className="mb-6 text-gray-500">Por favor, intenta con otro filtro.</p>
+      <div id="no-results" class="hidden py-16 text-center">
+        <div class="mb-3 text-xl font-semibold text-gray-600">No se encontraron testimonios</div>
+        <p class="mb-6 text-gray-500">Por favor, intenta con otro filtro.</p>
         <Button id="reset-filters" variant="primary" size="medium">Mostrar todos</Button>
       </div>
     </div>
   </section>
 
   <!-- Call to action section -->
-  <section className="bg-white py-16">
-    <div className="container mx-auto px-4">
-      <div className="mx-auto max-w-3xl text-center">
+  <section class="bg-white py-16">
+    <div class="container mx-auto px-4">
+      <div class="mx-auto max-w-3xl text-center">
         <SectionTitle>¿Listo para mejorar tu inglés?</SectionTitle>
-        <p className="mt-4 mb-8 text-gray-600">
+        <p class="mt-4 mb-8 text-gray-600">
           Únete a miles de estudiantes satisfechos y descubre nuestros materiales de alta calidad
           para mejorar tu nivel de inglés de forma efectiva.
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
           <Button
             variant="primary"
             size="large"
@@ -252,14 +248,14 @@ const breadcrumbData = {
 
   <!-- FAQ Section -->
   <FAQ
-    className="bg-neutral-light py-16"
+    class="bg-neutral-light py-16"
     dataset="general"
     title="Preguntas frecuentes sobre nuestros servicios"
     description="Resolvemos tus dudas sobre materiales, métodos de pago y entrega."
   />
 
   <!-- CTA Banner -->
-  <div className="container mx-auto mb-8 px-4 py-8">
+  <div class="container mx-auto mb-8 px-4 py-8">
     <CTABanner />
   </div>
 </Layout>
