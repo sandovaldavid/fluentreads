@@ -461,6 +461,54 @@
         }
       });
 
+      // React class para previsualizar Banner Hero de Ofertas
+      const OfferHeroBannerPreview = createClass({
+        render: function() {
+          const entry = this.props.entry;
+          const h = window.h;
+          const items = entry.getIn(['data', 'items']);
+
+          if (!items || items.size === 0) {
+            return h('div', { className: 'hero-banner-preview' },
+              h('div', { className: 'hero-preview-title-section' },
+                h('h2', { className: 'hero-preview-title' }, 'Banner Hero de Ofertas'),
+                h('p', { className: 'hero-preview-subtitle' }, 'Sin referencias a ofertas configuradas')
+              )
+            );
+          }
+
+          return h('div', { className: 'hero-banner-preview' },
+            h('div', { className: 'hero-preview-title-section' },
+              h('h2', { className: 'hero-preview-title' }, 'Banner Hero de Ofertas'),
+              h('p', { className: 'hero-preview-subtitle' }, 'Visualización de referencias activas del Carrusel')
+            ),
+            items.map((item, index) => {
+              const id = item.get('id');
+              const type = item.get('type') || 'book';
+              const expiration = item.get('expiration');
+              const customLink = item.get('customLink');
+
+              let typeLabel = 'Libro';
+              if (type === 'pack') typeLabel = 'Pack';
+              else if (type === 'exam') typeLabel = 'Examen';
+
+              return h('div', { key: index, className: 'hero-slide' },
+                h('div', { className: 'hero-slide-badge' }, typeLabel),
+                h('div', { className: 'hero-slide-image-placeholder' }, 'Portada'),
+                h('div', { className: 'hero-slide-info' },
+                  h('h3', { className: 'hero-slide-title' }, 'ID: ' + (id || 'sin-id')),
+                  h('p', { className: 'hero-slide-desc' }, 'Enlace: ' + (customLink || 'Por defecto del producto')),
+                  h('div', { className: 'hero-slide-footer' },
+                    h('button', { className: 'hero-slide-btn' }, 'Ver Detalles'),
+                    expiration ? h('span', { className: 'hero-slide-expiration' }, 'Expira: ' + expiration) : null
+                  )
+                )
+              );
+            }).toArray()
+          );
+        }
+      });
+
       CMS.registerPreviewTemplate("books", ProductPreview);
       CMS.registerPreviewTemplate("packs", ProductPreview);
       CMS.registerPreviewTemplate("exams", ProductPreview);
@@ -471,6 +519,7 @@
       CMS.registerPreviewTemplate("generalFaqs", FaqPreview);
       CMS.registerPreviewTemplate("catalogFaqs", FaqPreview);
       CMS.registerPreviewTemplate("paymentFaqs", FaqPreview);
+      CMS.registerPreviewTemplate("offerHeroBanner", OfferHeroBannerPreview);
 
       // Iniciar MutationObserver para la autogeneración de campos
       initAutoFieldsObserver();

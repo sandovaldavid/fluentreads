@@ -495,3 +495,121 @@ body {
   padding: 14px 18px;
   margin: 0;
 }
+
+/* Hero Banner Preview */
+.hero-banner-preview {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  border-radius: 16px;
+  color: white;
+  width: 100%;
+  max-width: 600px;
+  padding: 32px;
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero-preview-title-section {
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 16px;
+}
+
+.hero-preview-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: white;
+}
+
+.hero-preview-subtitle {
+  font-size: 0.95rem;
+  color: #fde047;
+  margin: 0;
+}
+
+.hero-slide {
+  background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  align-items: center;
+}
+
+.hero-slide-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #fde047;
+  color: #1e3a8a;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.hero-slide-image-placeholder {
+  width: 100px;
+  height: 140px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+}
+
+.hero-slide-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.hero-slide-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #facc15;
+}
+
+.hero-slide-desc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.hero-slide-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.hero-slide-btn {
+  background-color: #16a34a;
+  color: white;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hero-slide-expiration {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}

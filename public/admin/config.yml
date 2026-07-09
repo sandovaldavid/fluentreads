@@ -31,33 +31,48 @@ collections:
                 name: price
                 widget: number
                 value_type: float
+                min: 0.01
               - label: Editorial
                 name: editorialId
                 widget: select
                 options:
-                  - { label: 'Cambridge University Press', value: 'cambridge' }
-                  - { label: 'Oxford University Press', value: 'oxford' }
-                  - { label: 'Pearson Education', value: 'pearson' }
-                  - { label: 'Longman', value: 'longman' }
-                  - { label: 'Penguin Random House', value: 'penguin' }
-                  - { label: 'HarperCollins', value: 'harpercollins' }
-                  - { label: "Barron's Educational Series", value: 'barrons' }
-                  - { label: 'Kaplan Publishing', value: 'kaplan' }
-                  - { label: 'Macmillan Education', value: 'macmillan' }
-                  - { label: 'Cengage Learning', value: 'cengage' }
-                  - { label: 'Heinemann', value: 'heinemann' }
+                  - label: Cambridge University Press
+                    value: cambridge
+                  - label: Oxford University Press
+                    value: oxford
+                  - label: Pearson Education
+                    value: pearson
+                  - label: Longman
+                    value: longman
+                  - label: Penguin Random House
+                    value: penguin
+                  - label: HarperCollins
+                    value: harpercollins
+                  - label: Barron's Educational Series
+                    value: barrons
+                  - label: Kaplan Publishing
+                    value: kaplan
+                  - label: Macmillan Education
+                    value: macmillan
+                  - label: Cengage Learning
+                    value: cengage
+                  - label: Heinemann
+                    value: heinemann
               - label: Descuento (%)
                 name: discount
                 widget: number
                 value_type: int
                 default: 0
                 required: false
+                min: 0
+                max: 100
               - label: Días de Oferta
                 name: offerDays
                 widget: number
                 value_type: int
                 default: 7
                 required: false
+                min: 0
               - label: Imagen de Portada (URL)
                 name: coverImage
                 widget: string
@@ -82,10 +97,13 @@ collections:
                     name: score
                     widget: number
                     value_type: float
+                    min: 0
+                    max: 5
                   - label: Cantidad de Reseñas
                     name: reviewCount
                     widget: number
                     value_type: int
+                    min: 0
               - label: Nivel
                 name: level
                 widget: select
@@ -160,18 +178,22 @@ collections:
                 name: price
                 widget: number
                 value_type: float
+                min: 0.01
               - label: Descuento (%)
                 name: discount
                 widget: number
                 value_type: int
                 default: 0
                 required: false
+                min: 0
+                max: 100
               - label: Días de Oferta
                 name: offerDays
                 widget: number
                 value_type: int
                 default: 7
                 required: false
+                min: 0
               - label: Imagen de Portada (URL)
                 name: coverImage
                 widget: string
@@ -199,10 +221,13 @@ collections:
                     name: score
                     widget: number
                     value_type: float
+                    min: 0
+                    max: 5
                   - label: Cantidad de Reseñas
                     name: reviewCount
                     widget: number
                     value_type: int
+                    min: 0
               - label: Nivel
                 name: level
                 widget: select
@@ -277,12 +302,15 @@ collections:
                 name: price
                 widget: number
                 value_type: float
+                min: 0.01
               - label: Descuento (%)
                 name: discount
                 widget: number
                 value_type: int
                 default: 0
                 required: false
+                min: 0
+                max: 100
               - label: Imagen de Portada (URL)
                 name: coverImage
                 widget: string
@@ -333,10 +361,13 @@ collections:
                     name: score
                     widget: number
                     value_type: float
+                    min: 0
+                    max: 5
                   - label: Cantidad de Reseñas
                     name: reviewCount
                     widget: number
                     value_type: int
+                    min: 0
               - label: Tags de Formato
                 name: formatTags
                 widget: select
@@ -426,6 +457,8 @@ collections:
                 name: rating
                 widget: number
                 value_type: int
+                min: 1
+                max: 5
               - label: Fecha
                 name: date
                 widget: datetime
@@ -455,14 +488,18 @@ collections:
                 name: discount
                 widget: number
                 value_type: int
+                min: 0
+                max: 100
               - label: Precio Original (S/)
                 name: originalPrice
                 widget: number
                 value_type: float
+                min: 0.01
               - label: Precio de Venta (S/)
                 name: salePrice
                 widget: number
                 value_type: float
+                min: 0.01
               - label: Imagen
                 name: image
                 widget: string
@@ -612,3 +649,10 @@ collections:
       - label: Cuerpo
         name: body
         widget: markdown
+    i18n: true
+i18n:
+  structure: file_by_file
+  locales:
+    - es
+    - en
+  default_locale: es
