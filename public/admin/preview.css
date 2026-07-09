@@ -1,0 +1,497 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #18181b;
+  background-color: #f3f4f6;
+  margin: 0;
+  padding: 24px;
+}
+
+/* Grids y Layouts */
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+/* Tarjeta de Producto */
+.book-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 380px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.book-card.featured-card {
+  border: 2px solid #facc15;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.book-cover-container {
+  position: relative;
+  height: 208px;
+  width: 100%;
+  background-color: #f3f4f6;
+  overflow: hidden;
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.card-badge-left {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: #facc15;
+  color: #18181b;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+}
+
+.card-badge-right {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #1e3a8a;
+  color: #f8fafc;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.discount-badge-ribbon {
+  position: absolute;
+  top: 20px;
+  right: -42px;
+  transform: rotate(45deg);
+  background-color: #16a34a;
+  color: white;
+  font-weight: 700;
+  font-size: 0.75rem;
+  width: 150px;
+  text-align: center;
+  padding: 4px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 8px;
+}
+
+.book-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #18181b;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.book-description {
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.price-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.discounted-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #eab308;
+}
+
+.normal-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #eab308;
+}
+
+.original-price {
+  font-size: 0.875rem;
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.discount-tag {
+  background-color: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.included-content {
+  margin-top: 8px;
+  flex-grow: 1;
+}
+
+.included-content-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin: 0 0 8px 0;
+}
+
+.included-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.included-item {
+  font-size: 0.875rem;
+  color: #374151;
+  display: flex;
+  align-items: flex-start;
+}
+
+.included-item-check {
+  color: #16a34a;
+  margin-right: 6px;
+  font-weight: bold;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.btn-primary {
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  flex-grow: 1;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-outline {
+  background-color: white;
+  color: #1e3a8a;
+  border: 1px solid #1e3a8a;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+/* Tarjeta de Editorial */
+.editorial-card {
+  background: white;
+  border-radius: 12px;
+  border-left: 4px solid #1e3a8a;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  width: 100%;
+  max-width: 480px;
+  border-top: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.editorial-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 0 0 8px 0;
+}
+
+.editorial-desc {
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Tarjeta de Categoria */
+.category-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.category-icon-wrapper {
+  background-color: #eff6ff;
+  color: #1e3a8a;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.category-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #18181b;
+  margin: 0;
+}
+
+.category-desc {
+  font-size: 0.85rem;
+  color: #6b7280;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.category-btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* Tarjeta de Testimonio */
+.testimony-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  border: 1px solid #f3f4f6;
+  text-align: left;
+}
+
+.testimony-quote {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.testimony-quote::before {
+  content: '“';
+  font-size: 3rem;
+  color: #e5e7eb;
+  position: absolute;
+  top: -24px;
+  left: -12px;
+  z-index: -1;
+}
+
+.testimony-author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 14px;
+  z-index: 1;
+}
+
+.testimony-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  object-fit: cover;
+  background-color: #e5e7eb;
+}
+
+.testimony-author-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.testimony-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #18181b;
+}
+
+.testimony-position {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.testimony-rating {
+  color: #facc15;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+/* Tarjeta de Oferta */
+.offer-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.offer-image {
+  width: 120px;
+  object-fit: cover;
+  background-color: #f3f4f6;
+}
+
+.offer-details {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-grow: 1;
+}
+
+.offer-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 0;
+}
+
+.offer-desc {
+  font-size: 0.85rem;
+  color: #4b5563;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.offer-pricing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.offer-sale-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.offer-original-price {
+  font-size: 0.875rem;
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.offer-discount-tag {
+  background-color: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+/* FAQs */
+.faq-container {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.faq-item {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.faq-question {
+  background-color: #f9fafb;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1e3a8a;
+  padding: 14px 18px;
+  margin: 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.faq-answer {
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.5;
+  padding: 14px 18px;
+  margin: 0;
+}
