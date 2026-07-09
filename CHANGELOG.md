@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.3.2...fluentreads-v0.3.3) (2026-07-09)
+
+
+### Bug Fixes
+
+* **ci:** stop tracking .astro folder ([#37](https://github.com/sandovaldavid/fluentreads/issues/37)) ([1216617](https://github.com/sandovaldavid/fluentreads/commit/121661708750847f63c9b2d8f86a279fd861b4bf))
+
 ## [0.3.2](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.3.1...fluentreads-v0.3.2) (2026-07-08)
 
 
