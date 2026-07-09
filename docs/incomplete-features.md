@@ -151,14 +151,15 @@ Lista de features a medio hacer, rutas rotas y placeholders, con referencias `ar
 **Estado**: ~~Usar GitHub Gist para editar JSON sin deploy~~ **DESCARTADO**.
 **Razon**: El sitio es 100% estatico. Editar el Gist no actualiza el sitio en produccion sin un nuevo build + deploy. Sin validacion de schema. Rate limits de la API (5000/hr auth). Requeriria un webhook manual o Action para triggerear rebuild.
 
-### 20. Decap CMS planificado (Sprint 7)
+### 20. Decap CMS (Sprint 7)
 
-**Estado**: Planificado para Sprint 7 (bloque B9).
+**Estado**: Completado (`done`).
 **Solucion**:
 
-- Instalar `decap-cms-app` en `public/admin/`.
-- Configurar `public/admin/config.yml` con collections para books, packs, exams, testimonies, offers (post-B8 collections).
-- Auth via GitHub OAuth (proxy o `github-auth` provider).
-- Edicion via UI en `/admin` → commit al repo → Vercel rebuild automatico via Git integration.
-- Mantiene content collections + validacion Zod.
-- Documentar en AGENTS.md que la edicion de datos se hace via `/admin` (no via Gist).
+- Instalado y configurado `decap-cms-app` en [public/admin/index.html](file:///home/sandovaldavid/workspaces/me/projects/fluentreads/public/admin/index.html) y [public/admin/config.yml](file:///home/sandovaldavid/workspaces/me/projects/fluentreads/public/admin/config.yml).
+- Implementado proxy de desarrollo local en puerto `8081` (`decap-server`).
+- Creadas **previsualizaciones personalizadas en tiempo real de alta fidelidad** en React + CSS personalizado [public/admin/preview.css](file:///home/sandovaldavid/workspaces/me/projects/fluentreads/public/admin/preview.css) para todas las colecciones (Libros, Packs, Exámenes, Editoriales, Categorías, Testimonios, Ofertas Especiales, FAQs y Banner Hero de Ofertas).
+- Añadido motor de **autogeneración de metadatos** (IDs, detalles y enlaces de compra automáticos al escribir el título de un ítem) con sincronización de estado en React.
+- Configurado widget `select` estático para la asignación de editoriales de forma consistente y robusta.
+- Implementadas **validaciones de rangos numéricos** (`min`/`max`) en todas las colecciones para puntajes, precios, descuentos y contadores.
+- Activado soporte inicial de **internacionalización (i18n)** para inglés y español en las páginas legales de tipo Markdown.
