@@ -40,3 +40,5 @@ coverage/
 
 # one-off local scratch scripts (not project tooling)
 scratch/
+
+.playwright-mcp/
