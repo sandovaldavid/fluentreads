@@ -1,98 +1,169 @@
 # FluentReads
 
-FluentReads is a 100% static, fast e-commerce platform for digital books, study packs, and international English exam material in Peru. The store uses the Peruvian Sol (PEN) currency and is fully localized with a Spanish user interface.
+FluentReads is a high-performance, 100% static e-commerce platform designed for digital books, study packs, and international English exam preparation materials in Peru. Built for low-volume, high-speed catalog navigation, it uses the Peruvian Sol (PEN) currency and features a fully localized Spanish user interface.
 
-## Core Business Model
+> [!IMPORTANT]
+> This platform is entirely static and serverless. It operates without dynamic database engines, user authentication, or online payment gateways (like Stripe or PayPal). Checkout is processed via WhatsApp, and payments are managed through direct bank transfers.
 
-Designed for a low-volume, high-speed static catalog experience. It operates without dynamic database queries or online payment processors (such as Stripe or PayPal) to ensure maximum speed and performance.
+## Key Features
 
-- **Cart System**: Client-side cart unifications using `CartManager.ts`. It dispatches custom `cartUpdated` events to dynamically trigger reactive header updates.
-- **Offline Support**: Offline capability via a custom Service Worker (`public/sw.js`) that caches key routes and static assets (stale-while-revalidate and network-first-with-offline-fallback caching strategy).
-- **Checkout**: Order summary is sent to the seller directly via WhatsApp, which facilitates payment via bank transfers.
+- **Dynamic Static Catalog**: Products are defined as JSON content collections and baked directly into HTML at build time, yielding near-instant page loads.
+- **Client-Side Cart**: Managed entirely via `CartManager.ts`, synchronizing state in `localStorage` and dispatching custom reactive events.
+- **WhatsApp Checkout**: Generates checkout summaries and transfers order details directly to the seller via WhatsApp.
+- **Decap CMS Support**: Administrators can manage and edit the catalog using a web UI at `/admin`. Changes are saved back to GitHub, triggering an automatic Vercel build.
+- **Service Worker Integration**: Integrates a custom service worker (`public/sw.js`) supporting stale-while-revalidate and offline-first cache strategies for resources.
 
-## Technical Stack
+## Architecture and Structure
 
-- **Framework**: Astro 7.0.6
-- **UI Islands**: `@astrojs/react` 6.0.1 + React 19 (only for interactive elements like cart and filter)
-- **Styling**: Tailwind CSS v4 (via `@tailwindcss/vite`)
-- **Package Manager**: Bun 1.3.14
-- **Language**: TypeScript (strict)
-
-## Content Collections & Schemas
-
-The project implements Astro Content Collections (using `file()` and `glob()` loaders) validated via strict Zod schemas defined in `src/content.config.ts`. The 12 collections are:
-
-1. **`books`**: Single-file JSON collection (`src/data/books.json`) representing individual digital books. Defines details like ID, title, description, price, discount, cover image, rating, level, format, popularity tags, and included items.
-2. **`packs`**: Single-file JSON collection (`src/data/packs.json`) combining multiple book IDs to sell study packs with custom discounts.
-3. **`exams`**: Single-file JSON collection (`src/data/exams.json`) representing international English exams (e.g., IELTS, TOEFL, Cambridge, SAT, PTE, FCE, CPE, GRE) with difficulty levels and durations.
-4. **`editorial`**: Single-file JSON collection (`src/data/editorial.json`) storing publishing house names and descriptions.
-5. **`testimonies`**: Single-file JSON collection (`src/data/testimonies.json`) storing customer feedback (quotation, author, position, avatar URL, rating, date).
-6. **`offers`**: Single-file JSON collection (`src/data/offers.json`) managing special visual promotion banners.
-7. **`categories`**: Single-file JSON collection (`src/data/categories.json`) outlining catalog categories and their respective icons.
-8. **`generalFaqs`**: Single-file JSON collection (`src/data/general-faqs.json`) storing general site FAQs.
-9. **`catalogFaqs`**: Single-file JSON collection (`src/data/catalog-faqs.json`) storing product catalog-specific FAQs.
-10. **`paymentFaqs`**: Single-file JSON collection (`src/data/payment-faqs.json`) storing bank transfer and checkout FAQs.
-11. **`offerHeroBanner`**: Single-file JSON collection (`src/data/offer-hero-banner.json`) configuring active hero countdown banners.
-12. **`legal`**: Markdown file collection (`src/content/legal/*.md`) using glob pattern loader to render legal pages dynamically.
-
-## Decap CMS
-
-Decap CMS is configured at `/admin` (via `public/admin/index.html` and `public/admin/config.yml`) to allow site administrators to natively edit JSON database files directly in GitHub.
-
-- **Custom JSON Array Format**: Since Astro single-file JSON databases are top-level arrays and Decap CMS expects top-level objects, we register a custom `json-array` format in `public/admin/index.html`:
-  ```javascript
-  window.CMS.registerFormat('json-array', 'json', {
-    fromFile: (content) => ({ items: JSON.parse(content) }),
-    toFile: (data) => JSON.stringify(data.items, null, 2),
-  });
-  ```
-- **Web UI Editing**: Modifying data via `/admin` commits changes directly to GitHub, which triggers a Vercel rebuild and deployment automatically.
-
-## Environment Variables
-
-| Variable              | Description                                                                                               |
-| :-------------------- | :-------------------------------------------------------------------------------------------------------- |
-| `PUBLIC_PAGECLIP_KEY` | Public key used for secure, serverless submissions from the contact form and newsletter forms.            |
-| `PUBLIC_SITE_URL`     | The canonical site URL (e.g. `https://fluentreads.sandovaldavid.com`), used for absolute canonical links. |
-
-## Project Structure
+The codebase is organized as follows:
 
 ```text
 /
-├── public/                 # Static assets (favicons, manifests, etc.)
-│   └── admin/              # Decap CMS configurations (index.html, config.yml)
+├── public/                 # Static assets (favicons, manifests, decals)
+│   └── admin/              # Decap CMS configuration (index.html, config.yml)
 ├── src/
 │   ├── assets/             # Processed assets (optimized images)
 │   ├── components/         # Astro and React UI components
-│   ├── config/             # Site configuration (site.ts)
-│   ├── data/               # Astro content collections JSON databases
-│   ├── content/            # Astro glob collections (legal pages)
-│   ├── layouts/            # Layout components (Layout.astro, SEO, meta tags)
+│   ├── config/             # Centralized site configurations
+│   ├── data/               # Content collection data files (JSON)
+│   ├── content/            # Glob-based collections (Markdown legal files)
+│   ├── layouts/            # Page layouts and global SEO metadata
 │   ├── pages/              # File-based routing pages
-│   ├── scripts/            # Client-side scripts
-│   ├── styles/             # Stylesheets (global.css using Tailwind CSS v4)
-│   ├── types/              # Strict TypeScript definitions
-│   └── utils/              # Client-side and server-side utilities (CartManager)
-├── docs/                   # Sprints, roadmaps, and technical debt documentation
-├── tsconfig.json           # TS configuration with import aliases
-└── package.json            # NPM scripts and project dependencies
+│   ├── scripts/            # Client-side scripts and interaction logic
+│   ├── styles/             # Global styling (Tailwind CSS v4)
+│   ├── types/              # Strict TypeScript type declarations
+│   └── utils/              # Helper utilities (CartManager, filtering)
+├── docs/                   # Roadmaps, technical audits, and sprint documentation
+└── package.json            # Scripts, dependencies, and configuration
 ```
 
-## Commands
+## Tech Stack
 
-All commands are run using the Bun package manager:
+The application leverages the following modern frontend technologies:
 
-- `bun run dev`: Starts the local development server at `localhost:4321`.
-- `bun run build`: Runs checks and builds the production-ready static site to `dist/`.
-- `bun run build:force`: Forces a production build without running validation checks.
-- `bun run preview`: Previews the built production site locally.
-- `bun run check` (or `bun run typecheck`): Runs Astro checks and TypeScript validation.
-- `bun run lint`: Runs ESLint check across all files.
-- `bun run lint:fix`: Runs ESLint check and fixes fixable code style violations automatically.
-- `bun run format`: Runs Prettier format writing changes to files.
-- `bun run format:check`: Verifies the formatting is compliant with Prettier.
+| Dependency       | Version | Role / Context                                        |
+| :--------------- | :------ | :---------------------------------------------------- |
+| **Astro**        | 7.0.6   | Core static site generator framework                  |
+| **React**        | 19.2.7  | Interactive UI islands (filters, cart actions)        |
+| **Tailwind CSS** | 4.3.2   | Modern utility-first styling with `@tailwindcss/vite` |
+| **Bun**          | 1.3.14  | JavaScript runtime, package manager, and test runner  |
+| **TypeScript**   | 6.0.3   | Strict type validation                                |
 
-## Releases & Branching
+> [!NOTE]
+> This repository requires Bun 1.3.14 or later. Standard npm, yarn, or pnpm commands should not be used.
 
-- **Conventional Commits**: All commit messages must follow the Conventional Commits rules (e.g., `feat(catalog): add pagination` or `fix(details): handle null difficulty`). No emojis are allowed in commits.
-- **Vercel CD Integration**: Any merge or push to the `develop` branch creates a preview deployment. Any merge or push to the `main` branch deploys to production and triggers a new release via `release-please` (which parses commits to generate the changelog and increment semantic version tags automatically).
+## Getting Started
+
+### Prerequisites
+
+Make sure you have installed:
+
+- Node.js >= 22.0.0
+- Bun >= 1.3.14
+
+### Installation
+
+Clone the repository and install the development dependencies:
+
+```bash
+bun install
+```
+
+### Development Server
+
+Start the local server at `http://localhost:4321`:
+
+```bash
+bun run dev
+```
+
+### Build for Production
+
+Validate files and build the production bundle to the `dist/` directory:
+
+```bash
+bun run build
+```
+
+To bypass linting and TypeScript checks (for emergencies only), run:
+
+```bash
+bun run build:force
+```
+
+### Preview Production Build
+
+Launch a local server to preview the built static output:
+
+```bash
+bun run preview
+```
+
+## Available Scripts
+
+The following helper scripts are configured in `package.json`:
+
+| Script         | Command                        | Purpose                                          |
+| :------------- | :----------------------------- | :----------------------------------------------- |
+| `dev`          | `astro dev`                    | Run the local dev server                         |
+| `build`        | `bun run check && astro build` | Verify and bundle static files                   |
+| `build:force`  | `astro build`                  | Build without verification checks                |
+| `preview`      | `astro preview`                | Serve the production build locally               |
+| `check`        | `astro check`                  | Run Astro validation and TypeScript verification |
+| `typecheck`    | `bun run check`                | Run type checking across the project             |
+| `lint`         | `eslint .`                     | Verify codebase styles with ESLint               |
+| `lint:fix`     | `eslint . --fix`               | Automatically fix linting violations             |
+| `format`       | `prettier --write .`           | Format files according to Prettier settings      |
+| `format:check` | `prettier --check .`           | Check files formatting without writing           |
+
+## Content Collections
+
+This project leverages Astro Content Collections validated with strict Zod schemas inside `src/content.config.ts`. The catalog comprises 12 distinct collections:
+
+1. **books**: Single-file JSON representing individual digital books.
+2. **packs**: Single-file JSON combining multiple books into discounted study bundles.
+3. **exams**: Single-file JSON detailing international English exam types.
+4. **editorial**: Single-file JSON containing publisher descriptions.
+5. **testimonies**: Single-file JSON representing customer reviews.
+6. **offers**: Single-file JSON listing active banner promotions.
+7. **categories**: Single-file JSON defining product categories and navigation icons.
+8. **generalFaqs**: Single-file JSON for general FAQs.
+9. **catalogFaqs**: Single-file JSON for catalog FAQs.
+10. **paymentFaqs**: Single-file JSON for billing FAQs.
+11. **offerHeroBanner**: Single-file JSON for countdown banner configurations.
+12. **legal**: Markdown-based collection representing legal guidelines.
+
+## Decap CMS Configuration
+
+Decap CMS is embedded at `/admin` (configured via `public/admin/index.html` and `public/admin/config.yml`).
+
+Because Astro single-file collections are structured as JSON arrays and Decap CMS defaults to object files, we register a custom `json-array` serialization format inside the CMS:
+
+```javascript
+window.CMS.registerFormat('json-array', 'json', {
+  fromFile: (content) => ({ items: JSON.parse(content) }),
+  toFile: (data) => JSON.stringify(data.items, null, 2),
+});
+```
+
+Modifying content in the `/admin` portal commits files directly to GitHub, triggering a rebuild on Vercel automatically.
+
+## Environment Variables
+
+Configure the following variables in a local `.env` file for development:
+
+| Name                  | Scope  | Description                                          |
+| :-------------------- | :----- | :--------------------------------------------------- |
+| `PUBLIC_PAGECLIP_KEY` | Public | Key for serverless form processing via Pageclip      |
+| `PUBLIC_SITE_URL`     | Public | Canonical URL of the site, used for absolute routing |
+
+## Git Workflow & Releases
+
+We enforce conventional commit messages. All pull requests and commits must follow standard prefixes:
+
+```text
+type(scope): description in imperative
+```
+
+- **Branching Policy**: Merges to the `develop` branch generate Vercel preview environments. Merges to `main` update the production site and trigger `release-please` to auto-bump version numbers and generate changelogs.
+- **Git Hooks**: Pre-commit hooks run ESLint and Prettier check formatting before code is allowed to commit.
