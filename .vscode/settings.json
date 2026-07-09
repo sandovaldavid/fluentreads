@@ -54,13 +54,20 @@
   "files.exclude": {
     "**/.astro/cache": true,
     "**/dist": true,
-    "**/node_modules": false
+    "**/node_modules": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.astro/**": true,
+    "**/coverage/**": true
   },
   "search.exclude": {
     "**/bun.lock": true,
     "**/.astro": true,
     "**/dist": true,
-    "**/node_modules": true
+    "**/node_modules": true,
+    "**/coverage": true
   },
   "git.branchProtection": ["main", "develop"],
   "git.branchProtectionPrompt": "alwaysCommitToNewBranch",

@@ -9,18 +9,7 @@ import prettier from 'eslint-config-prettier';
 
 export default [
   {
-    ignores: [
-      'dist/',
-      '.astro/',
-      'node_modules/',
-      'public/',
-      '*.config.mjs',
-      '*.config.cjs',
-      // Dead code - will be deleted in B3
-      'src/components/ProductDetailDesktop.astro',
-      'src/components/Cart.jsx',
-      'src/components/CartItem.jsx',
-    ],
+    ignores: ['dist/', '.astro/', 'node_modules/', 'public/', '*.config.mjs', '*.config.cjs'],
   },
   {
     ...js.configs.recommended,

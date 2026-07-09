@@ -13,7 +13,6 @@
       "@styles/*": ["./src/styles/*"],
       "@utils/*": ["./src/utils/*"],
       "@types/*": ["./src/types/*"],
-      "@database/*": ["./src/database/*"],
       "@assets/*": ["./src/assets/*"],
       "@config/*": ["./src/config/*"],
       "@scripts/*": ["./src/scripts/*"]
