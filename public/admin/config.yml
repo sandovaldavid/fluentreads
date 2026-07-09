@@ -651,7 +651,7 @@ collections:
         widget: markdown
     i18n: true
 i18n:
-  structure: file_by_file
+  structure: multiple_files
   locales:
     - es
     - en
