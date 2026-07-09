@@ -37,3 +37,6 @@ coverage/
 # personal AI/MCP configs (do not commit)
 .mcp.json
 .claude/
+
+# one-off local scratch scripts (not project tooling)
+scratch/
