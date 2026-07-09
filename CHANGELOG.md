@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.3.3...fluentreads-v0.4.0) (2026-07-09)
+
+
+### Features
+
+* **catalog:** configure numeric validations and offer hero banner preview ([#40](https://github.com/sandovaldavid/fluentreads/issues/40)) ([a42dd32](https://github.com/sandovaldavid/fluentreads/commit/a42dd32958eeceff7735826cf641ace058f198bf))
+
+
+### Bug Fixes
+
+* **components:** resolve astro check errors and hints ([#42](https://github.com/sandovaldavid/fluentreads/issues/42)) ([838b589](https://github.com/sandovaldavid/fluentreads/commit/838b589287ed109dd0076c6d17c8b82da8459be3))
+
 ## [0.3.3](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.3.2...fluentreads-v0.3.3) (2026-07-09)
 
 
