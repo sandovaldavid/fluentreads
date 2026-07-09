@@ -3,24 +3,323 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
     <title>Content Manager</title>
-    <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <!-- Indicar la ruta absoluta al archivo config.yml para evitar errores 404 al acceder sin barra diagonal final -->
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <script>
-      // Register custom format 'json-array' for top-level JSON arrays
-      window.CMS.registerFormat('json-array', 'json', {
-        fromFile: function (content) {
-          try {
-            return { items: JSON.parse(content) };
-          } catch (e) {
-            return { items: [] };
-          }
-        },
-        toFile: function (data) {
-          return JSON.stringify(data.items, null, 2);
-        },
-      });
+      // Desactivar la autoinicialización automática de Decap CMS
+      window.CMS_MANUAL_INIT = true;
     </script>
   </head>
-  <body></body>
+  <body>
+    <!-- Script Interceptor de Red (Fetch) para aplanar y estructurar arrays JSON transparentemente -->
+    <script>
+      (function() {
+        const originalFetch = window.fetch;
+
+        window.fetch = async function (resource, options) {
+          let url = typeof resource === 'string' ? resource : resource.url;
+          let isLocalProxy = url.includes('/api/v1') || url.includes(':8081');
+          let isGithubAPI = url.includes('api.github.com/repos/') && url.includes('/contents/src/data/') && url.endsWith('.json');
+
+          // 1. Interceptar peticiones de escritura locales al proxy de decap-server
+          if (isLocalProxy && options && options.body) {
+            try {
+              const bodyObj = JSON.parse(options.body);
+              
+              if (bodyObj.action === 'persistEntry' && bodyObj.params && Array.isArray(bodyObj.params.dataFiles)) {
+                let modified = false;
+                bodyObj.params.dataFiles.forEach(file => {
+                  if (file.path && file.path.endsWith('.json') && file.raw) {
+                    try {
+                      const rawData = JSON.parse(file.raw);
+                      if (rawData && Array.isArray(rawData.items)) {
+                        console.log("[Fetch Interceptor] Escritura local detectada para archivo:", file.path);
+                        file.raw = JSON.stringify(rawData.items, null, 2);
+                        modified = true;
+                      }
+                    } catch (e) {
+                      console.error("[Fetch Interceptor] Error parseando rawData local:", e);
+                    }
+                  }
+                });
+                if (modified) {
+                  options.body = JSON.stringify(bodyObj);
+                }
+              }
+            } catch (e) {
+              console.error("[Fetch Interceptor] Error en request local:", e);
+            }
+          }
+
+          // 2. Interceptar peticiones de escritura a la API de GitHub (Producción)
+          if (isGithubAPI && options && options.method === 'PUT' && options.body) {
+            try {
+              const bodyObj = JSON.parse(options.body);
+              if (bodyObj.content) {
+                const decodedContent = decodeURIComponent(escape(atob(bodyObj.content.replace(/\s/g, ''))));
+                const rawData = JSON.parse(decodedContent);
+                if (rawData && Array.isArray(rawData.items)) {
+                  console.log("[Fetch Interceptor] Escritura GitHub detectada para:", url);
+                  const cleanArrayStr = JSON.stringify(rawData.items, null, 2);
+                  const base64Str = btoa(unescape(encodeURIComponent(cleanArrayStr)));
+                  bodyObj.content = base64Str;
+                  options.body = JSON.stringify(bodyObj);
+                }
+              }
+            } catch (e) {
+              console.error("[Fetch Interceptor] Error en request GitHub:", e);
+            }
+          }
+
+          // Realizar la llamada de red original
+          const response = await originalFetch(resource, options);
+
+          // 3. Interceptar respuestas de lectura del proxy local (getEntry)
+          if (isLocalProxy && options && options.body) {
+            try {
+              const bodyObj = JSON.parse(options.body);
+              if (bodyObj.action === 'getEntry' && bodyObj.params && bodyObj.params.path.endsWith('.json')) {
+                const cloneRes = response.clone();
+                const resData = await cloneRes.json();
+                if (resData && resData.data) {
+                  const parsedData = JSON.parse(resData.data);
+                  if (Array.isArray(parsedData)) {
+                    console.log("[Fetch Interceptor] Lectura local detectada para:", bodyObj.params.path);
+                    resData.data = JSON.stringify({ items: parsedData });
+                    return new Response(JSON.stringify(resData), {
+                      status: response.status,
+                      statusText: response.statusText,
+                      headers: response.headers
+                    });
+                  }
+                }
+              }
+            } catch (e) {
+              console.error("[Fetch Interceptor] Error en response local:", e);
+            }
+          }
+
+          // 4. Interceptar respuestas de lectura de GitHub API (GET contents)
+          if (isGithubAPI && (!options || options.method === 'GET' || !options.method)) {
+            try {
+              const cloneRes = response.clone();
+              const resData = await cloneRes.json();
+              if (resData && resData.content) {
+                const decodedContent = decodeURIComponent(escape(atob(resData.content.replace(/\s/g, ''))));
+                const parsedData = JSON.parse(decodedContent);
+                if (Array.isArray(parsedData)) {
+                  console.log("[Fetch Interceptor] Lectura GitHub detectada para:", url);
+                  const wrappedDataStr = JSON.stringify({ items: parsedData });
+                  const base64Str = btoa(unescape(encodeURIComponent(wrappedDataStr)));
+                  resData.content = base64Str;
+                  return new Response(JSON.stringify(resData), {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: response.headers
+                  });
+                }
+              }
+            } catch (e) {
+              console.error("[Fetch Interceptor] Error en response GitHub:", e);
+            }
+          }
+
+          return response;
+        };
+      })();
+    </script>
+
+    <!-- script de lógica de autogeneración de campos (slug, detailsLink, buyLink) -->
+    <script>
+      // Helper para hacer slugify
+      function slugify(text) {
+        return text
+          .toString()
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '') // Quitar acentos
+          .replace(/\s+/g, '-')           // Reemplazar espacios por guiones
+          .replace(/[^\w\-]+/g, '')       // Quitar caracteres no válidos
+          .replace(/\-\-+/g, '-')         // Quitar guiones duplicados
+          .replace(/^-+/, '')             // Quitar guiones del inicio
+          .replace(/-+$/, '');            // Quitar guiones del final
+      }
+
+      // Helper para actualizar inputs en React de forma segura
+      function setReactInputValue(input, value) {
+        if (!input) return;
+        const lastValue = input.value;
+        input.value = value;
+        const tracker = input._valueTracker;
+        if (tracker) {
+          tracker.setValue(lastValue);
+        }
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      // Inicializar el observador para autocompletar campos
+      function initAutoFieldsObserver() {
+        const observer = new MutationObserver(() => {
+          // Detectar en qué colección estamos por el hash
+          const hash = window.location.hash;
+          let category = '';
+          if (hash.includes('/collections/books')) category = 'libros';
+          else if (hash.includes('/collections/packs')) category = 'packs';
+          else if (hash.includes('/collections/exams')) category = 'examenes-internacionales';
+          
+          if (!category) return;
+
+          // Buscar todos los bloques de items del widget list del CMS
+          const listItems = document.querySelectorAll('div[class*="ListItem-listControlItem"]');
+          listItems.forEach(item => {
+            // Buscar los inputs dentro de este list item
+            const titleInput = item.querySelector('input[id^="title-field-"]');
+            const idInput = item.querySelector('input[id^="id-field-"]');
+            const detailsLinkInput = item.querySelector('input[id^="detailsLink-field-"]');
+            const buyLinkInput = item.querySelector('input[id^="buyLink-field-"]');
+
+            if (titleInput) {
+              // Si no tiene el listener asignado, se lo asignamos
+              if (!titleInput.dataset.autoFieldsBound) {
+                titleInput.dataset.autoFieldsBound = 'true';
+                
+                titleInput.addEventListener('input', () => {
+                  const titleVal = titleInput.value;
+                  const slug = slugify(titleVal);
+
+                  // Si el ID está vacío o tiene el mismo valor anterior al cambio, lo autogeneramos
+                  if (idInput && (!idInput.value || idInput.value === slugify(titleInput.defaultValue || ''))) {
+                    setReactInputValue(idInput, slug);
+                  }
+                  
+                  // Generar enlaces si existen los inputs y están vacíos o tienen valores por defecto
+                  if (slug) {
+                    if (detailsLinkInput && (!detailsLinkInput.value || detailsLinkInput.value.includes('/catalogo/'))) {
+                      setReactInputValue(detailsLinkInput, `/catalogo/${category}/${slug}`);
+                    }
+                    if (buyLinkInput && (!buyLinkInput.value || buyLinkInput.value.includes('/checkout/'))) {
+                      setReactInputValue(buyLinkInput, `/checkout/${slug}`);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+    </script>
+
+    <!-- Incluye el script de Decap CMS de forma nativa desde unpkg -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <!-- Integración con Cloudinary Media Library -->
+    <script src="https://unpkg.com/decap-cms-media-library-cloudinary@^1.3.0/dist/decap-cms-media-library-cloudinary.js"></script>
+    <script>
+      // Detectar si estamos en desarrollo local
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const initOptions = {};
+
+      if (isLocal) {
+        console.log("[CMS Init] Detectado entorno local. Configurando backend de proxy local...");
+        initOptions.config = {
+          backend: {
+            name: 'proxy',
+            proxy_url: 'http://localhost:8081/api/v1'
+          },
+          local_backend: true
+        };
+      } else {
+        console.log("[CMS Init] Detectado entorno de producción. Usando backend de GitHub configurado en config.yml.");
+      }
+
+      // Inicializar manualmente el CMS con las opciones dinámicas
+      CMS.init(initOptions);
+
+      // Registrar estilos y plantillas de previsualización
+      CMS.registerPreviewStyle("/admin/preview.css");
+
+      // React class para previsualizar productos (Libros, Packs, Exámenes)
+      const ProductPreview = createClass({
+        render: function() {
+          const entry = this.props.entry;
+          const h = window.h;
+
+          // Obtener los items de la lista de la colección (libros, packs, exams, etc.)
+          const items = entry.getIn(['data', 'items']);
+
+          if (!items || items.size === 0) {
+            return h('div', { className: 'preview-container' },
+              h('div', { className: 'book-card' },
+                h('div', { className: 'book-details' },
+                  h('h2', { className: 'book-title' }, 'No hay productos ingresados')
+                )
+              )
+            );
+          }
+
+          // Mapear cada elemento de la lista para renderizar su tarjeta correspondiente
+          return h('div', { 
+            style: { 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: '24px', 
+              alignItems: 'center',
+              width: '100%',
+              paddingBottom: '40px'
+            } 
+          },
+            items.map((item, index) => {
+              const title = item.get('title');
+              const id = item.get('id');
+              const price = item.get('price');
+              const description = item.get('description');
+              const coverImage = item.get('coverImage');
+              const discount = item.get('discount');
+              const level = item.get('level');
+              const featured = item.get('featured');
+              const includedItems = item.get('includedItems');
+
+              // Calcular precio final con descuento si aplica
+              let finalPrice = price;
+              if (price && discount) {
+                finalPrice = (price * (1 - discount / 100)).toFixed(2);
+              }
+
+              return h('div', { key: index, className: 'book-card' },
+                coverImage ? h('img', { src: coverImage, className: 'book-cover', alt: title }) : h('div', { className: 'book-cover-placeholder' }, 'Sin portada cargada'),
+                h('div', { className: 'book-details' },
+                  h('div', { className: 'badge-row' },
+                    level ? h('span', { className: 'badge level-badge' }, level) : null,
+                    featured ? h('span', { className: 'badge featured-badge' }, 'Destacado') : null
+                  ),
+                  h('h2', { className: 'book-title' }, title || 'Sin título ingresado'),
+                  h('p', { className: 'book-id' }, 'ID: ' + (id || 'sin-id')),
+                  h('p', { className: 'book-description' }, description || 'Sin descripción ingresada...'),
+                  h('div', { className: 'price-section' },
+                    discount ? h('span', { className: 'original-price' }, 'S/ ' + price) : null,
+                    h('span', { className: 'final-price' }, 'S/ ' + (finalPrice || '0.00'))
+                  ),
+                  includedItems && includedItems.size > 0 ? h('div', { className: 'included-section' },
+                    h('h4', null, 'Elementos incluidos:'),
+                    h('ul', null, includedItems.map((incItem, idx) => h('li', { key: idx }, typeof incItem === 'string' ? incItem : incItem.get('item'))))
+                  ) : null
+                )
+              );
+            }).toArray()
+          );
+        }
+      });
+
+      CMS.registerPreviewTemplate("books", ProductPreview);
+      CMS.registerPreviewTemplate("packs", ProductPreview);
+      CMS.registerPreviewTemplate("exams", ProductPreview);
+
+      // Iniciar MutationObserver para la autogeneración de campos
+      initAutoFieldsObserver();
+    </script>
+  </body>
 </html>

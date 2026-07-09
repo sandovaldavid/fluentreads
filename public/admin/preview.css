@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: #1e293b;
+  background-color: #f8fafc;
+  margin: 0;
+  padding: 24px;
+}
+
+.preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.book-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -2px rgba(0, 0, 0, 0.02),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.book-cover {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  background-color: #f1f5f9;
+}
+
+.book-cover-placeholder {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e2e8f0;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.book-details {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.badge-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+}
+
+.level-badge {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.featured-badge {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.book-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.book-id {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-family: monospace;
+  margin: 0;
+  background-color: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  align-self: flex-start;
+}
+
+.book-description {
+  font-size: 0.95rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+.price-section {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.final-price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.original-price {
+  font-size: 1.1rem;
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.included-section {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.included-section h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+  margin: 0 0 8px 0;
+}
+
+.included-section ul {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.included-section li {
+  font-size: 0.9rem;
+  color: #475569;
+}
