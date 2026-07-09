@@ -34,8 +34,6 @@ const {
 // Prepare share URLs
 const encodedUrl = encodeURIComponent(url);
 const encodedTitle = encodeURIComponent(title);
-const encodedDescription = encodeURIComponent(description);
-const encodedImage = encodeURIComponent(image);
 
 // Create share messages with pricing if available
 const priceText = price ? `${currency === 'PEN' ? 'S/' : currency}${price.toFixed(2)}` : '';
@@ -63,7 +61,11 @@ const iconSize = {
 }[size];
 ---
 
-<div class={`social-share-buttons inline-flex items-center ${className}`}>
+<div
+  class={`social-share-buttons inline-flex items-center ${className}`}
+  data-product-type={productType}
+  data-share-image={image}
+>
   <span class="mr-2 hidden text-xs whitespace-nowrap text-gray-600 sm:inline-block sm:text-sm">
     <ShareIcon class="mr-1 inline-block h-4 w-4" aria-hidden="true" />
     Compartir
@@ -138,7 +140,7 @@ const iconSize = {
   document.addEventListener('DOMContentLoaded', () => {
     const shareButtons = document.querySelectorAll('.share-button');
     shareButtons.forEach((button) => {
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', () => {
         // Get the network from the class
         const classList = button.classList;
         let network = '';

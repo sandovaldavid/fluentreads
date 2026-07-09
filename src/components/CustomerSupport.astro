@@ -57,7 +57,7 @@ const { class: className = '' } = Astro.props;
     const supportLinks = document.querySelectorAll('.customer-support-widget a');
 
     supportLinks.forEach((link) => {
-      link.addEventListener('click', (e) => {
+      link.addEventListener('click', () => {
         // TODO: add analytics tracking here
         console.log(`Support option clicked: ${(link as HTMLAnchorElement).href}`);
       });

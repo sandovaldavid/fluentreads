@@ -19,7 +19,7 @@ const {
     .replace(/[^a-zA-Z0-9]/g, '-')
     .toLowerCase()
     .substring(0, 30)}`,
-  className = '',
+  class: className = '',
 } = Astro.props;
 ---
 
@@ -70,7 +70,7 @@ const {
   </div>
 </div>
 
-<script define:vars={{ id, expanded }}>
+<script define:vars={{ id, expanded }} is:inline>
   // Execute this script when component is included
   document.addEventListener('DOMContentLoaded', () => {
     const questionCard = document.getElementById(`${id}-header`)?.closest('.question-card');

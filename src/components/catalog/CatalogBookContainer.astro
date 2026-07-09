@@ -3,7 +3,6 @@ import ProductCard from '../ProductCard.astro';
 import Filter from './Filter.jsx';
 import SkeletonCatalog from '../SkeletonCatalog.astro';
 import type { Book } from '../../types/book';
-import { PopularityTag } from '../../types/book';
 
 interface Props {
   books: Book[];
@@ -92,7 +91,7 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
     initialSort={initialSort}
     productCount={filteredBooks.length}
     productType="book"
-    class="mb-8 shadow-lg"
+    className="mb-8 shadow-lg"
     client:visible
   />
 

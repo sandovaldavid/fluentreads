@@ -15,7 +15,7 @@ const { count = 6 } = Astro.props;
   {
     Array(count)
       .fill(0)
-      .map((_, i) => (
+      .map((_) => (
         <div class="skeleton-card flex h-full w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-md">
           {/* Skeleton para imagen de portada */}
           <div class="animate-pulse-subtle h-52 bg-gray-200">

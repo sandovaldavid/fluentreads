@@ -1,7 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import PackDetails from '../../../components/details/PackDetails.astro';
-import Breadcrumb from '../../../components/Breadcrumb.astro';
 import packsData from '../../../data/packs.json';
 import siteInfo from '../../../data/page-information.json';
 import { siteConfig } from '@config/site';
@@ -20,7 +19,7 @@ interface Props {
   pack: Pack;
 }
 
-const { pack } = Astro.props;
+const { pack }: Props = Astro.props;
 
 // Find related packs if any (based on formatTags or level)
 const packsArray = Array.isArray(packsData) ? packsData : [packsData];
@@ -43,14 +42,12 @@ const relatedPacks = packsArray
 
 // Calculate discounted price if there's a discount
 const hasDiscount = pack.discount !== undefined && pack.discount > 0;
-const originalPrice = pack.price;
 const discountedPrice = hasDiscount ? pack.price * (1 - (pack.discount || 0) / 100) : pack.price;
 
 // SEO metadata
 const packLevel = pack.level
   ? levelConfig[pack.level as keyof typeof levelConfig]?.label || pack.level
   : '';
-const formatTags = pack.formatTags?.join(', ') || '';
 
 // Improved title with keywords
 const title = `${pack.title} | Pack de libros en inglés ${packLevel ? `- ${packLevel}` : ''}`;
@@ -130,14 +127,6 @@ const breadcrumbJsonLd = {
     },
   ],
 };
-
-// Breadcrumb navigation items
-const breadcrumbItems = [
-  { label: 'Inicio', url: '/' },
-  { label: 'Catálogo', url: '/catalogo' },
-  { label: 'Packs', url: '/catalogo/packs' },
-  { label: pack.title, url: `/catalogo/packs/${pack.id}`, active: true },
-];
 ---
 
 <Layout

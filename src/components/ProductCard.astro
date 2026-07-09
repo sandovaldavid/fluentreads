@@ -24,7 +24,6 @@ const {
 
 // Extract values from the product object
 const {
-  id,
   title,
   price,
   discount = 0,
@@ -104,8 +103,6 @@ const visibleFormatTags = prioritizedFormatTags.slice(0, formatTagsLimit[size].s
 const visiblePopularityTags = typedPopularityTags.slice(0, popularityTagsLimit[size].sm);
 
 const isBestseller = typedPopularityTags.includes('bestSeller' as PopularityTag);
-const showBestsellerTag =
-  isBestseller && !visiblePopularityTags.includes('bestSeller' as PopularityTag);
 
 // Determine if we should show editorial based on size
 const showEditorial = size !== 'small' && editorial;
