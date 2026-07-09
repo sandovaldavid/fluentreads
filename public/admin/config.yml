@@ -31,9 +31,21 @@ collections:
                 name: price
                 widget: number
                 value_type: float
-              - label: ID Editorial
+              - label: Editorial
                 name: editorialId
-                widget: string
+                widget: select
+                options:
+                  - { label: 'Cambridge University Press', value: 'cambridge' }
+                  - { label: 'Oxford University Press', value: 'oxford' }
+                  - { label: 'Pearson Education', value: 'pearson' }
+                  - { label: 'Longman', value: 'longman' }
+                  - { label: 'Penguin Random House', value: 'penguin' }
+                  - { label: 'HarperCollins', value: 'harpercollins' }
+                  - { label: "Barron's Educational Series", value: 'barrons' }
+                  - { label: 'Kaplan Publishing', value: 'kaplan' }
+                  - { label: 'Macmillan Education', value: 'macmillan' }
+                  - { label: 'Cengage Learning', value: 'cengage' }
+                  - { label: 'Heinemann', value: 'heinemann' }
               - label: Descuento (%)
                 name: discount
                 widget: number

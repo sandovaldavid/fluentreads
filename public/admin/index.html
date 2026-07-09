@@ -254,31 +254,22 @@
           if (!items || items.size === 0) {
             return h('div', { className: 'preview-container' },
               h('div', { className: 'book-card' },
-                h('div', { className: 'book-details' },
-                  h('h2', { className: 'book-title' }, 'No hay productos ingresados')
+                h('div', { className: 'card-content' },
+                  h('h3', { className: 'book-title' }, 'No hay productos ingresados')
                 )
               )
             );
           }
 
           // Mapear cada elemento de la lista para renderizar su tarjeta correspondiente
-          return h('div', { 
-            style: { 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '24px', 
-              alignItems: 'center',
-              width: '100%',
-              paddingBottom: '40px'
-            } 
-          },
+          return h('div', { className: 'preview-container' },
             items.map((item, index) => {
               const title = item.get('title');
               const id = item.get('id');
-              const price = item.get('price');
+              const price = item.get('price') || 0;
               const description = item.get('description');
               const coverImage = item.get('coverImage');
-              const discount = item.get('discount');
+              const discount = item.get('discount') || 0;
               const level = item.get('level');
               const featured = item.get('featured');
               const includedItems = item.get('includedItems');
@@ -286,27 +277,42 @@
               // Calcular precio final con descuento si aplica
               let finalPrice = price;
               if (price && discount) {
-                finalPrice = (price * (1 - discount / 100)).toFixed(2);
+                finalPrice = price * (1 - discount / 100);
               }
 
-              return h('div', { key: index, className: 'book-card' },
-                coverImage ? h('img', { src: coverImage, className: 'book-cover', alt: title }) : h('div', { className: 'book-cover-placeholder' }, 'Sin portada cargada'),
-                h('div', { className: 'book-details' },
-                  h('div', { className: 'badge-row' },
-                    level ? h('span', { className: 'badge level-badge' }, level) : null,
-                    featured ? h('span', { className: 'badge featured-badge' }, 'Destacado') : null
-                  ),
-                  h('h2', { className: 'book-title' }, title || 'Sin título ingresado'),
-                  h('p', { className: 'book-id' }, 'ID: ' + (id || 'sin-id')),
+              const formattedPrice = `S/${price.toFixed(2)}`;
+              const formattedFinalPrice = `S/${finalPrice.toFixed(2)}`;
+
+              return h('div', { key: index, className: 'book-card' + (featured ? ' featured-card' : '') },
+                h('div', { className: 'book-cover-container' },
+                  coverImage ? h('img', { src: coverImage, className: 'book-cover', alt: title }) : h('div', { className: 'book-cover-placeholder' }, 'Portada de producto'),
+                  featured ? h('div', { className: 'card-badge-left' }, 'Recomendado') : null,
+                  level ? h('div', { className: 'card-badge-right' }, level) : null,
+                  discount > 0 ? h('div', { className: 'discount-badge-ribbon' }, discount + '% OFF') : null
+                ),
+                h('div', { className: 'card-content' },
+                  h('h3', { className: 'book-title' }, title || 'Sin título ingresado'),
                   h('p', { className: 'book-description' }, description || 'Sin descripción ingresada...'),
-                  h('div', { className: 'price-section' },
-                    discount ? h('span', { className: 'original-price' }, 'S/ ' + price) : null,
-                    h('span', { className: 'final-price' }, 'S/ ' + (finalPrice || '0.00'))
+                  h('div', { className: 'price-display' },
+                    h('span', { className: 'discounted-price' }, formattedFinalPrice),
+                    discount > 0 ? h('span', { className: 'original-price' }, formattedPrice) : null,
+                    discount > 0 ? h('span', { className: 'discount-tag' }, discount + '% OFF') : null
                   ),
-                  includedItems && includedItems.size > 0 ? h('div', { className: 'included-section' },
-                    h('h4', null, 'Elementos incluidos:'),
-                    h('ul', null, includedItems.map((incItem, idx) => h('li', { key: idx }, typeof incItem === 'string' ? incItem : incItem.get('item'))))
-                  ) : null
+                  includedItems && includedItems.size > 0 ? h('div', { className: 'included-content' },
+                    h('p', { className: 'included-content-title' }, 'Incluye:'),
+                    h('ul', { className: 'included-list' }, includedItems.map((incItem, idx) => {
+                      const text = typeof incItem === 'string' ? incItem : incItem.get('item');
+                      return h('li', { key: idx, className: 'included-item' }, 
+                        h('span', { className: 'included-item-check' }, '✓'),
+                        ' ',
+                        text
+                      );
+                    }))
+                  ) : null,
+                  h('div', { className: 'action-buttons' },
+                    h('button', { className: 'btn-primary' }, 'Comprar'),
+                    h('button', { className: 'btn-outline' }, 'Ver Detalles')
+                  )
                 )
               );
             }).toArray()
@@ -314,9 +320,157 @@
         }
       });
 
+      // React class para previsualizar editoriales
+      const EditorialPreview = createClass({
+        render: function() {
+          const entry = this.props.entry;
+          const h = window.h;
+          const items = entry.getIn(['data', 'items']);
+
+          if (!items || items.size === 0) return h('div', null, 'No hay editoriales registradas');
+
+          return h('div', { className: 'preview-container' },
+            items.map((item, index) => {
+              const name = item.get('name');
+              const description = item.get('description');
+              return h('div', { key: index, className: 'editorial-card' },
+                h('h3', { className: 'editorial-title' }, name || 'Sin nombre'),
+                h('p', { className: 'editorial-desc' }, description || 'Sin descripción')
+              );
+            }).toArray()
+          );
+        }
+      });
+
+      // React class para previsualizar categorías
+      const CategoryPreview = createClass({
+        render: function() {
+          const entry = this.props.entry;
+          const h = window.h;
+          const items = entry.getIn(['data', 'items']);
+
+          if (!items || items.size === 0) return h('div', null, 'No hay categorías registradas');
+
+          return h('div', { className: 'preview-container' },
+            items.map((item, index) => {
+              const name = item.get('name');
+              const description = item.get('description');
+              const icon = item.get('icon');
+              return h('div', { key: index, className: 'category-card' },
+                h('div', { className: 'category-icon-wrapper' }, icon ? icon.charAt(0) : '★'),
+                h('h3', { className: 'category-title' }, name || 'Sin nombre'),
+                h('p', { className: 'category-desc' }, description || 'Sin descripción'),
+                h('span', { className: 'category-btn' }, 'Ver Colección')
+              );
+            }).toArray()
+          );
+        }
+      });
+
+      // React class para previsualizar testimonios
+      const TestimonyPreview = createClass({
+        render: function() {
+          const entry = this.props.entry;
+          const h = window.h;
+          const items = entry.getIn(['data', 'items']);
+
+          if (!items || items.size === 0) return h('div', null, 'No hay testimonios registrados');
+
+          return h('div', { className: 'preview-container' },
+            items.map((item, index) => {
+              const quote = item.get('quote');
+              const author = item.get('author');
+              const position = item.get('position');
+              const avatarUrl = item.get('avatarUrl');
+              const rating = item.get('rating') || 5;
+
+              const stars = '★'.repeat(rating) + '☆'.repeat(Math.max(0, 5 - rating));
+
+              return h('div', { key: index, className: 'testimony-card' },
+                h('p', { className: 'testimony-quote' }, quote || 'Sin testimonio...'),
+                h('div', { className: 'testimony-author-info' },
+                  avatarUrl ? h('img', { src: avatarUrl, className: 'testimony-avatar', alt: author }) : h('div', { className: 'testimony-avatar', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#e5e7eb', color: '#6b7280' } }, '👤'),
+                  h('div', { className: 'testimony-author-text' },
+                    h('span', { className: 'testimony-name' }, author || 'Anónimo'),
+                    h('span', { className: 'testimony-position' }, position || 'Estudiante'),
+                    h('span', { className: 'testimony-rating' }, stars)
+                  )
+                )
+              );
+            }).toArray()
+          );
+        }
+      });
+
+      // React class para previsualizar ofertas
+      const OfferPreview = createClass({
+        render: function() {
+          const entry = this.props.entry;
+          const h = window.h;
+          const items = entry.getIn(['data', 'items']);
+
+          if (!items || items.size === 0) return h('div', null, 'No hay ofertas registradas');
+
+          return h('div', { className: 'preview-container' },
+            items.map((item, index) => {
+              const title = item.get('title');
+              const description = item.get('description');
+              const image = item.get('image');
+              const originalPrice = item.get('originalPrice') || 0;
+              const salePrice = item.get('salePrice') || 0;
+              const discount = item.get('discount');
+
+              return h('div', { key: index, className: 'offer-card' },
+                image ? h('img', { src: image, className: 'offer-image', alt: title }) : h('div', { className: 'offer-image', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6', color: '#9ca3af' } }, 'Oferta'),
+                h('div', { className: 'offer-details' },
+                  h('h3', { className: 'offer-title' }, title || 'Oferta especial'),
+                  h('p', { className: 'offer-desc' }, description || 'Descripción de la oferta...'),
+                  h('div', { className: 'offer-pricing' },
+                    h('span', { className: 'offer-sale-price' }, 'S/ ' + salePrice.toFixed(2)),
+                    originalPrice ? h('span', { className: 'offer-original-price' }, 'S/ ' + originalPrice.toFixed(2)) : null,
+                    discount ? h('span', { className: 'offer-discount-tag' }, discount + '% OFF') : null
+                  )
+                )
+              );
+            }).toArray()
+          );
+        }
+      });
+
+      // React class para previsualizar FAQs
+      const FaqPreview = createClass({
+        render: function() {
+          const entry = this.props.entry;
+          const h = window.h;
+          const items = entry.getIn(['data', 'items']);
+
+          if (!items || items.size === 0) return h('div', null, 'No hay preguntas ingresadas');
+
+          return h('div', { className: 'preview-container' },
+            h('div', { className: 'faq-container' },
+              items.map((item, index) => {
+                const question = item.get('question');
+                const answer = item.get('answer');
+                return h('div', { key: index, className: 'faq-item' },
+                  h('h4', { className: 'faq-question' }, (index + 1) + '. ' + (question || 'Pregunta sin definir')),
+                  h('p', { className: 'faq-answer' }, answer || 'Sin respuesta redactada...')
+                );
+              }).toArray()
+            )
+          );
+        }
+      });
+
       CMS.registerPreviewTemplate("books", ProductPreview);
       CMS.registerPreviewTemplate("packs", ProductPreview);
       CMS.registerPreviewTemplate("exams", ProductPreview);
+      CMS.registerPreviewTemplate("editorial", EditorialPreview);
+      CMS.registerPreviewTemplate("categories", CategoryPreview);
+      CMS.registerPreviewTemplate("testimonies", TestimonyPreview);
+      CMS.registerPreviewTemplate("offers", OfferPreview);
+      CMS.registerPreviewTemplate("generalFaqs", FaqPreview);
+      CMS.registerPreviewTemplate("catalogFaqs", FaqPreview);
+      CMS.registerPreviewTemplate("paymentFaqs", FaqPreview);
 
       // Iniciar MutationObserver para la autogeneración de campos
       initAutoFieldsObserver();
