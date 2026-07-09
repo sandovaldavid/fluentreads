@@ -36,4 +36,10 @@ coverage/
 
 # personal AI/MCP configs (do not commit)
 .mcp.json
-.claude/
+.claude/settings.local.json
+.claude/*.local.json
+
+# one-off local scratch scripts (not project tooling)
+scratch/
+
+.playwright-mcp/

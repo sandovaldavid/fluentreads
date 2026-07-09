@@ -63,7 +63,8 @@ El sitio es **100% estático** (sin adapter SSR). Los datos de productos viven c
 │   ├── assets/             # Imágenes procesadas por Vite/Astro
 │   ├── components/         # Componentes Astro + React islands
 │   ├── config/             # Configuración centralizada (site.ts) [TODO B2]
-│   ├── database/           # JSON "base de datos" (books, packs, exams, testimonies, etc.)
+│   ├── content.config.ts   # Schemas Zod de las astro:content collections
+│   ├── data/                # JSON consumido via getCollection() (books, packs, exams, etc.)
 │   ├── layouts/            # Layout.astro (SEO, meta tags, JSON-LD)
 │   ├── pages/              # Rutas file-based (index, catalogo, contacto, etc.)
 │   ├── scripts/            # Scripts client-side (HeroBanner.ts, mediaCarousel.ts)
@@ -125,7 +126,7 @@ feat(catalog): add feature.           # punto final
 - **Sin `any` sin justificación**: regla `@typescript-eslint/no-explicit-any: warn`.
 - **Sin `innerHTML` con datos dinámicos**: regla `no-restricted-syntax` (XSS).
 - **Sin `target="_blank"` sin `rel="noopener noreferrer"`**: regla `react/jsx-no-target-blank`.
-- **Imports via aliases**: `@components/*`, `@layouts/*`, `@styles/*`, `@utils/*`, `@types/*`, `@database/*`, `@assets/*`, `@config/*`, `@scripts/*` (configurado en `tsconfig.json`).
+- **Imports via aliases**: `@components/*`, `@layouts/*`, `@styles/*`, `@utils/*`, `@types/*`, `@assets/*`, `@config/*`, `@scripts/*` (configurado en `tsconfig.json`).
 - **Componentes Astro**: siempre definir `interface Props` tipada, nunca usar `Astro.props` sin tipo.
 - **React islands**: `client:visible` por defecto (no `client:load` salvo críticos above-the-fold).
 - **Estilos**: scoped en componentes (`<style>`) o archivos en `src/styles/`. Sin `:global()` innecesario.
@@ -213,13 +214,9 @@ bun run lint && bun run check && bun run build
 
 ## 8. Enfoque de base de datos
 
-### Actual (pre-B8)
+### Actual (post-B8)
 
-JSON en `src/database/` (13 archivos: books, packs, exams, testimonies, offers, editorial, categories, faqs, pageInformation, etc.). Importados directamente sin schema validation.
-
-### Migración planificada (B8 - Sprint 5-6)
-
-`astro:content` collections con `file()` loader y schemas Zod. Mover JSON a `src/data/`. Validación en build time de todos los valores (enums, tipos, campos requeridos).
+`astro:content` collections definidas en `src/content.config.ts`, con loader `file()` y schemas Zod para cada colección (books, packs, exams, testimonies, offers, editorial, categories, faqs, pageInformation, etc.). Los datos viven como JSON en `src/data/` y se consumen via `getCollection('nombre')` — **nunca** imports directos de JSON. Los schemas Zod validan en build time (enums, tipos, campos requeridos).
 
 ### Edición sin código (Sprint 7)
 
@@ -240,9 +237,9 @@ JSON en `src/database/` (13 archivos: books, packs, exams, testimonies, offers, 
 - **No introducir pasarelas de pago** (Stripe, PayPal, etc.) — el negocio usa transferencia bancaria.
 - **No implementar autenticación de usuarios** — no aplica al modelo.
 - **No añadir adapter SSR** sin discusión explícita — rompe el modelo "estático + rápido".
-- **No editar JSON de `src/database/`** sin validar schema (post-B8 con Zod).
+- **No editar JSON de `src/data/`** sin validar contra el schema Zod en `src/content.config.ts`.
 - **No usar Google Fonts via `<link>`** — self-hostear con `@fontsource/*`.
-- **No commitear `.mcp.json` ni `.claude/`** — están en `.gitignore` (configs personales).
+- **No commitear `.mcp.json` ni `.claude/settings.local.json`** — están en `.gitignore` (configs personales).
 - **No usar `npm` ni `yarn`** — el proyecto usa `bun`.
 - **No usar `client:load`** en React islands below-the-fold — usar `client:visible`.
 - **No añadir `target="_blank"`** sin `rel="noopener noreferrer"`.

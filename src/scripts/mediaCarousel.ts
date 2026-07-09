@@ -15,13 +15,6 @@ export class MediaCarouselManager {
   private touchStartX: number = 0;
   private touchEndX: number = 0;
   private mediaImages: NodeListOf<Element>;
-  private liteYoutubeElements: NodeListOf<any>;
-  private imageModal: HTMLElement | null;
-  private modalImage: HTMLImageElement | null;
-  private modalSpinner: HTMLElement | null;
-  private modalPrevBtn: HTMLElement | null;
-  private modalNextBtn: HTMLElement | null;
-  private modalCloseBtn: HTMLElement | null;
   private imageUrls: string[] = [];
   private currentModalImageIndex: number = 0;
   private lastFocusedElement: HTMLElement | null = null;
@@ -59,15 +52,6 @@ export class MediaCarouselManager {
     this.nextButton = document.querySelector('.carousel-control.next');
     this.thumbnails = document.querySelectorAll('.thumbnail-item');
     this.mediaImages = document.querySelectorAll('.media-image-container');
-    this.liteYoutubeElements = document.querySelectorAll('lite-youtube');
-
-    // Initialize modal elements
-    this.imageModal = document.getElementById('image-modal');
-    this.modalImage = document.getElementById('modal-image') as HTMLImageElement;
-    this.modalSpinner = document.getElementById('modal-spinner');
-    this.modalPrevBtn = document.getElementById('modal-prev-btn');
-    this.modalNextBtn = document.getElementById('modal-next-btn');
-    this.modalCloseBtn = document.getElementById('modal-close-btn');
 
     // Setup event handlers
     this.setupEventListeners();

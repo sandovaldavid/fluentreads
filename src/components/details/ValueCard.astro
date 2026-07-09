@@ -109,22 +109,6 @@ const colorScheme = {
 // Organize payment methods for display
 const bankAccounts = PageInformation.paymentMethods.bankAccounts || [];
 const digitalWallets = PageInformation.paymentMethods.digitalWallets || {};
-
-// Map bank IDs to their components
-const bankIconComponents = {
-  BCP: BCPIcon,
-  BBVA: BBVAIcon,
-  Scotiabank: ScotiabankIcon,
-  // Add other banks as they become available
-};
-
-// Map digital wallet IDs to their components
-const walletIconComponents = {
-  yape: YapeIcon,
-  plin: PlinIcon,
-  paypal: PayPal_v2Icon,
-  // Add other wallets as they become available
-};
 ---
 
 <!-- Enhanced value card with better visual hierarchy and persuasive elements -->
@@ -271,7 +255,7 @@ const walletIconComponents = {
         <div class="flex flex-wrap gap-2">
           {/* Digital Wallets */}
           {
-            Object.entries(digitalWallets).map(([key, value]) => (
+            Object.entries(digitalWallets).map(([key]) => (
               <span class="flex items-center rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 shadow-sm">
                 {key === 'yape' && <img src={YapeIcon.src} alt="Yape" class="h-4 w-4" />}
                 {key === 'plin' && <img src={PlinIcon.src} alt="Plin" class="h-4 w-4" />}

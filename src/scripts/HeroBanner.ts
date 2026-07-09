@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Optional: Log offer views (can be connected to analytics)
   function logOfferView(offerInfo: OfferInfo) {
     // Here you could implement actual analytics tracking
+    void offerInfo;
   }
 
   // Handle window resize to adjust carousel

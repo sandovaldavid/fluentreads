@@ -170,7 +170,7 @@ const contactForm = {
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <!-- Name Field -->
         <div class="form-group">
-          <label htmlFor="name" class="mb-1 block text-sm font-medium text-gray-700"
+          <label for="name" class="mb-1 block text-sm font-medium text-gray-700"
             >{contactForm.fields[0].label}
             <span class="text-accent" aria-hidden="true">*</span></label
           >
@@ -193,7 +193,7 @@ const contactForm = {
 
         <!-- Email Field -->
         <div class="form-group">
-          <label htmlFor="email" class="mb-1 block text-sm font-medium text-gray-700"
+          <label for="email" class="mb-1 block text-sm font-medium text-gray-700"
             >{contactForm.fields[1].label}
             <span class="text-accent" aria-hidden="true">*</span></label
           >
@@ -217,7 +217,7 @@ const contactForm = {
 
       <!-- Subject Field -->
       <div class="form-group">
-        <label htmlFor="subject" class="mb-1 block text-sm font-medium text-gray-700"
+        <label for="subject" class="mb-1 block text-sm font-medium text-gray-700"
           >{contactForm.fields[2].label}
           <span class="text-accent" aria-hidden="true">*</span></label
         >
@@ -240,7 +240,7 @@ const contactForm = {
 
       <!-- Message Field -->
       <div class="form-group">
-        <label htmlFor="body" class="mb-1 block text-sm font-medium text-gray-700"
+        <label for="body" class="mb-1 block text-sm font-medium text-gray-700"
           >{contactForm.fields[3].label}
           <span class="text-accent" aria-hidden="true">*</span></label
         >
@@ -264,7 +264,7 @@ const contactForm = {
       {
         contactForm.recaptcha.isDevelopment && (
           <div class="dev-spam-check rounded-lg border border-gray-300 bg-gray-50 p-3">
-            <label htmlFor="dev-human-check" class="flex cursor-pointer items-center">
+            <label for="dev-human-check" class="flex cursor-pointer items-center">
               <input
                 type="checkbox"
                 id="dev-human-check"
@@ -374,7 +374,7 @@ const contactForm = {
   }
 </script>
 
-<script define:vars={{ contactForm }}>
+<script define:vars={{ contactForm }} is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     // Debug logging for client-side
     console.log('Form initialized, reCAPTCHA enabled:', contactForm.recaptcha.enabled);
@@ -391,6 +391,12 @@ const contactForm = {
     const submitButtonContent = submitButton.querySelector('.submit-button-content');
     const submitButtonLoading = submitButton.querySelector('.submit-button-loading');
     const formGroups = document.querySelectorAll('.form-group');
+
+    // Track the submit event ourselves instead of relying on the deprecated global `event`
+    let currentSubmitEvent = null;
+    form.addEventListener('submit', (e) => {
+      currentSubmitEvent = e;
+    });
 
     // Hide default Pageclip thank you page
     // Esto asegura que el mensaje predeterminado de Pageclip se elimine del DOM
@@ -519,14 +525,14 @@ const contactForm = {
 
           return validateForm();
         },
-        onResponse: function (error, response) {
+        onResponse: function (error) {
           // Ocultar mensajes de Pageclip predeterminados inmediatamente
           hideDefaultPageclipMessage();
 
           if (!error) {
             // Evitar redireccionamiento y mostrar nuestro mensaje personalizado
-            if (event && event.preventDefault) {
-              event.preventDefault();
+            if (currentSubmitEvent && currentSubmitEvent.preventDefault) {
+              currentSubmitEvent.preventDefault();
             }
 
             // Hide form and show success message with smooth animation

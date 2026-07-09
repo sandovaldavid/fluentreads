@@ -128,6 +128,7 @@ const paymentId = `payment-${title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`
                   document.body.appendChild(textArea);
                   textArea.focus();
                   textArea.select();
+                  // execCommand is deprecated but kept as an intentional fallback for browsers/contexts without the Clipboard API (docs/security.md)
                   const successful = document.execCommand('copy');
                   document.body.removeChild(textArea);
                   if (successful) {

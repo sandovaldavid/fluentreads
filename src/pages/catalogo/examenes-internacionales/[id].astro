@@ -23,7 +23,7 @@ interface Props {
   exam: Exam;
 }
 
-const { exam } = Astro.props;
+const { exam }: Props = Astro.props;
 
 // Get related exams and other products that might be related
 const productsData = getProductsByType('exam', 8);
@@ -40,14 +40,12 @@ const relatedProducts: Product[] = productsData
 
 // Calculate discounted price if there's a discount
 const hasDiscount = exam.discount !== undefined && exam.discount > 0;
-const originalPrice = exam.price;
 const discountedPrice = hasDiscount ? exam.price * (1 - (exam.discount || 0) / 100) : exam.price;
 
 // SEO metadata
 const examLevel = exam.difficulty
   ? difficultyConfig[exam.difficulty as keyof typeof difficultyConfig]?.label || exam.difficulty
   : '';
-const formatTags = exam.formatTags?.join(', ') || '';
 
 // Improved title with keywords
 const title = `${exam.title} | Examen de Inglés ${examLevel ? `- ${examLevel}` : ''}`;

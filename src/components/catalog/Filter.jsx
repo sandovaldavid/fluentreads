@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // Create BookLevel and FormatTag as standard JavaScript objects instead of TypeScript enums
 const BookLevel = {
@@ -17,14 +17,6 @@ const FormatTag = {
   VIDEO: 'video',
   SOFTWARE: 'software',
   EXAMS: 'exams',
-};
-
-// Resource types for new filter
-const ResourceType = {
-  ANY: 'any',
-  BOOK: 'book',
-  PACK: 'pack',
-  EXAM: 'exam',
 };
 
 // Icons need to be converted to React components or imported from a library
@@ -277,15 +269,6 @@ const CatalogFilter = ({
     resourceType: 'Tipo',
   };
 
-  // Default values that don't count as active filters
-  const defaultValues = {
-    level: 'all',
-    format: 'all',
-    sort: 'featured',
-    search: '',
-    resourceType: 'any',
-  };
-
   // Calculate active filter count for badge - including resourceType when enabled
   const activeFilterCount = [
     level !== 'all' ? 1 : 0,
@@ -477,6 +460,7 @@ const CatalogFilter = ({
   return (
     <div
       id="catalog-filters"
+      data-product-type={productType}
       className={`filter-container mb-8 min-w-full rounded-xl bg-white p-4 shadow-md md:min-w-[600px] md:p-6 ${className}`}
     >
       <form id="filter-form" className="filter-form" onSubmit={handleSearchSubmit}>

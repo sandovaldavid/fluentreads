@@ -20,7 +20,7 @@ interface Props {
   book: Book;
 }
 
-const { book } = Astro.props;
+const { book }: Props = Astro.props;
 
 // Get related books (same level or format)
 const relatedBooks = booksData
@@ -39,14 +39,12 @@ const relatedProducts: Product[] = relatedBooks.map((book) => bookToProduct(book
 
 // Calculate discounted price if there's a discount
 const hasDiscount = book.discount !== undefined && book.discount > 0;
-const originalPrice = book.price;
 const discountedPrice = hasDiscount ? book.price * (1 - (book.discount || 0) / 100) : book.price;
 
 // SEO metadata
 const bookLevel = book.level
   ? levelConfig[book.level as keyof typeof levelConfig]?.label || book.level
   : '';
-const formatTags = book.formatTags?.join(', ') || '';
 
 // Improved title with keywords
 const title = `${book.title} | Libro en inglés ${bookLevel ? `- ${bookLevel}` : ''}`;
