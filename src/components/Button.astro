@@ -20,7 +20,7 @@ const {
   disabled = false,
   type = 'button',
   class: className = '',
-  newTab = true,
+  newTab = false,
   customClasses = '',
   ...rest
 } = Astro.props;
@@ -82,7 +82,7 @@ const linkProps = isLink
       target: newTab ? '_blank' : undefined,
       rel: newTab ? 'noopener noreferrer' : undefined,
       'aria-label': newTab
-        ? `${rest['aria-label'] || ''} (opens in new tab)`.trim()
+        ? `${rest['aria-label'] || ''} (se abre en una nueva pestaña)`.trim()
         : rest['aria-label'],
     }
   : { type };
@@ -96,7 +96,7 @@ const linkProps = isLink
   {...rest}
 >
   <slot />
-  {newTab && isLink && <span class="sr-only">(opens in new tab)</span>}
+  {newTab && isLink && <span class="sr-only">(se abre en una nueva pestaña)</span>}
 </Element>
 
 <style>

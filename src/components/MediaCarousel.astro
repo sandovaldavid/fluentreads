@@ -21,8 +21,13 @@ interface Props {
 
 const { mediaItems, title, height = '500px' } = Astro.props;
 
+// Skip invalid videos so no broken YouTube thumbnails or players are rendered.
+const validMediaItems = mediaItems.filter(
+  (item) => item.type === 'image' || extractYoutubeId(item.url) !== ''
+);
+
 // Create thumbnails array with proper types
-const thumbnails = mediaItems.map((item, index) => {
+const thumbnails = validMediaItems.map((item, index) => {
   if (item.type === 'video') {
     const videoId = extractYoutubeId(item.url);
     return {
@@ -50,7 +55,7 @@ const thumbnails = mediaItems.map((item, index) => {
   <!-- Main display area for current media -->
   <div class="carousel-track h-full w-full transition-transform duration-500">
     {
-      mediaItems.map((item, index) => (
+      validMediaItems.map((item, index) => (
         <div
           class={`carousel-slide absolute inset-0 aspect-video ${index === 0 ? 'active' : ''}`}
           data-index={index}
@@ -80,7 +85,7 @@ const thumbnails = mediaItems.map((item, index) => {
                 videoId={extractYoutubeId(item.url)}
                 title={item.title || `${title} - Video`}
                 playlabel={`Play: ${item.title || `${title} - Video`}`}
-                style="background-image: url('https://img.youtube.com/vi/${extractYoutubeId(item.url)}/maxresdefault.jpg');"
+                style={`background-image: url('https://img.youtube.com/vi/${extractYoutubeId(item.url)}/maxresdefault.jpg');`}
                 params="autoplay=1&rel=0"
               />
             </div>
