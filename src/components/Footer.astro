@@ -38,12 +38,16 @@ const footerLinks = [
 ---
 
 <footer class="bg-primary px-4 pt-8 pb-6 text-white md:px-8 md:pt-12">
-  <div class="container mx-auto px-4">
+  <div class="container mx-auto min-w-0 px-4">
     <!-- Top Section with Logo, Newsletter and Social Media -->
     <div class="mb-6 grid grid-cols-1 gap-6 md:mb-10 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
       <!-- Logo and Description -->
       <div class="flex flex-col">
-        <a href="/" class="text-secondary mb-3 text-2xl font-bold md:mb-4">FluentReads</a>
+        <a
+          href="/"
+          class="text-secondary mb-3 inline-flex min-h-11 items-center text-2xl font-bold md:mb-4"
+          >FluentReads</a
+        >
         <p class="text-neutral-light mb-4 max-w-md text-sm md:mb-6 md:text-base">
           Tu fuente confiable de libros en inglés y materiales educativos para profesionales y
           estudiantes que buscan dominar el idioma inglés.
@@ -60,7 +64,7 @@ const footerLinks = [
             twitterUrl={siteConfig.social.twitter}
             whatsAppUrl={siteConfig.whatsappUrl}
             class="flex justify-center space-x-4 sm:justify-start"
-            iconSize="h-6 w-6"
+            iconSize="h-[24px] w-[24px]"
           />
         </div>
       </div>
@@ -84,7 +88,7 @@ const footerLinks = [
               type="email"
               name="email"
               placeholder="Tu correo electrónico"
-              class="focus:ring-secondary bg-primary-light flex-grow rounded-full px-4 py-2 text-sm text-white focus:ring-2 focus:outline-none md:py-3 md:text-base"
+              class="focus:ring-secondary bg-primary-light min-h-11 min-w-0 flex-grow rounded-full px-4 py-2 text-sm text-white focus:ring-2 focus:outline-none md:py-3 md:text-base"
               aria-label="Correo electrónico para boletín informativo"
               required
             />
@@ -100,7 +104,8 @@ const footerLinks = [
           <p class="text-neutral-light mt-2 text-xs md:mt-3">
             Al suscribirte, aceptas nuestra <a
               href="/politica-privacidad"
-              class="hover:text-secondary underline">política de privacidad</a
+              class="hover:text-secondary inline-flex min-h-11 items-center underline"
+              >política de privacidad</a
             >.
           </p>
         </div>
@@ -109,11 +114,11 @@ const footerLinks = [
 
     <!-- Middle Section with Links -->
     <div
-      class="border-primary-light grid grid-cols-2 gap-4 border-t border-b py-6 sm:grid-cols-2 md:grid-cols-3 md:gap-8 md:py-8"
+      class="border-primary-light grid min-w-0 grid-cols-1 gap-4 border-t border-b py-6 sm:grid-cols-2 md:grid-cols-3 md:gap-8 md:py-8"
     >
       {
         footerLinks.map((section) => (
-          <div class="mb-2 md:mb-0">
+          <div class="mb-2 min-w-0 md:mb-0">
             <h4 class="text-secondary mb-2 text-base font-semibold md:mb-4 md:text-lg">
               {section.title}
             </h4>
@@ -122,7 +127,7 @@ const footerLinks = [
                 <li>
                   <a
                     href={link.url}
-                    class="text-neutral-light hover:text-secondary inline-block py-1 text-sm transition-colors duration-200 md:text-base"
+                    class="text-neutral-light hover:text-secondary inline-flex min-h-11 max-w-full min-w-11 items-center text-sm [overflow-wrap:anywhere] break-words transition-colors duration-200 md:text-base"
                   >
                     {link.text}
                   </a>

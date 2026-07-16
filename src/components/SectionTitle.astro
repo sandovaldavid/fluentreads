@@ -8,7 +8,7 @@ const { tag: Tag = 'h2', class: className = '' } = Astro.props;
 ---
 
 <Tag
-  class={`text-3xl md:text-4xl font-bold text-primary-dark relative pb-3 inline-block ${className}`}
+  class={`text-primary-dark relative inline-block pb-3 text-3xl font-bold md:text-4xl ${className}`}
 >
   <slot />
   <span

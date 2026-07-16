@@ -92,11 +92,11 @@ const { class: className = '' } = Astro.props;
         variant="primary"
         size="large"
         href="/paymentMethods"
-        class="pulse-animation transform shadow-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-xl"
+        class="pulse-animation max-w-full transform shadow-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-xl"
       >
-        <span class="flex items-center">
+        <span class="flex min-w-0 flex-wrap items-center justify-center">
           <span>Métodos de Pago</span>
-          <ArrowRightIcon class="ml-2 h-6 w-6" />
+          <ArrowRightIcon class="ml-2 h-[24px] w-[24px] shrink-0" />
         </span>
       </Button>
     </div>

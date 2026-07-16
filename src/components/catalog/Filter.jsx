@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 // Create BookLevel and FormatTag as standard JavaScript objects instead of TypeScript enums
 const BookLevel = {
@@ -119,6 +119,12 @@ const CatalogFilter = ({
   productCount = 0,
   className = '',
 }) => {
+  const idPrefix = useId();
+  const mobileLevelId = `${idPrefix}-mobile-level`;
+  const mobileFormatId = `${idPrefix}-mobile-format`;
+  const mobileResourceTypeId = `${idPrefix}-mobile-resource-type`;
+  const mobileSortId = `${idPrefix}-mobile-sort`;
+
   // State for filters
   const [level, setLevel] = useState(initialLevel);
   const [format, setFormat] = useState(initialFormat);
@@ -478,7 +484,7 @@ const CatalogFilter = ({
               onChange={handleSearchChange}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
-              className="w-full rounded-lg border border-gray-200 bg-gray-50 py-3 pr-10 pl-10 text-sm transition-all duration-300 hover:bg-white focus:outline-none"
+              className="min-h-11 w-full rounded-lg border border-gray-200 bg-gray-50 py-3 pr-24 pl-10 text-sm transition-all duration-300 hover:bg-white focus:outline-none"
               aria-label="Buscar"
             />
             <div className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
@@ -487,7 +493,7 @@ const CatalogFilter = ({
             {searchTerm && (
               <button
                 type="button"
-                className="absolute top-1/2 right-12 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
+                className="absolute inset-y-0 right-11 flex w-11 items-center justify-center text-gray-500 transition-colors hover:text-gray-700"
                 onClick={clearSearch}
                 aria-label="Limpiar búsqueda"
               >
@@ -496,7 +502,7 @@ const CatalogFilter = ({
             )}
             <button
               type="submit"
-              className="bg-primary hover:bg-primary-dark absolute top-1/2 right-3 -translate-y-1/2 rounded-md p-1 text-white transition-colors"
+              className="bg-primary hover:bg-primary-dark absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg text-white transition-colors"
               aria-label="Buscar"
             >
               <ArrowRightIcon />
@@ -524,7 +530,7 @@ const CatalogFilter = ({
               <button
                 type="button"
                 onClick={toggleTypeFilter}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${showTypeFilter ? 'bg-primary' : 'bg-gray-300'}`}
+                className="focus:ring-primary inline-flex size-11 items-center justify-center rounded-full focus:ring-2 focus:outline-none"
                 role="switch"
                 aria-checked={showTypeFilter}
                 aria-label="Filtrar por tipo de recurso"
@@ -533,8 +539,13 @@ const CatalogFilter = ({
                   {showTypeFilter ? 'Filtro por tipo activado' : 'Filtro por tipo desactivado'}
                 </span>
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showTypeFilter ? 'translate-x-6' : 'translate-x-1'}`}
-                />
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showTypeFilter ? 'bg-primary' : 'bg-gray-300'}`}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showTypeFilter ? 'translate-x-6' : 'translate-x-1'}`}
+                  />
+                </span>
               </button>
             </div>
           </div>
@@ -547,6 +558,7 @@ const CatalogFilter = ({
             type="button"
             className="bg-neutral-light text-primary-dark filter-toggle relative flex w-full items-center justify-between rounded-lg px-4 py-3 font-medium md:hidden"
             aria-expanded={mobileFiltersVisible ? 'true' : 'false'}
+            aria-controls="mobile-filters"
             onClick={toggleMobileFilters}
           >
             <span className="flex items-center">
@@ -574,13 +586,16 @@ const CatalogFilter = ({
               className="animate-fade-in w-full space-y-4 rounded-lg bg-white p-4 shadow-inner md:hidden"
             >
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Nivel</label>
+                <label htmlFor={mobileLevelId} className="block text-sm font-medium text-gray-700">
+                  Nivel
+                </label>
                 <div className="relative">
                   <select
+                    id={mobileLevelId}
                     name="level"
                     value={level}
                     onChange={(e) => handleFilterChange('level', e.target.value)}
-                    className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
+                    className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select min-h-11 w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
                   >
                     {levelOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -595,13 +610,16 @@ const CatalogFilter = ({
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Formato</label>
+                <label htmlFor={mobileFormatId} className="block text-sm font-medium text-gray-700">
+                  Formato
+                </label>
                 <div className="relative">
                   <select
+                    id={mobileFormatId}
                     name="format"
                     value={format}
                     onChange={(e) => handleFilterChange('format', e.target.value)}
-                    className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
+                    className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select min-h-11 w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
                   >
                     {formatOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -618,15 +636,19 @@ const CatalogFilter = ({
               {/* Resource type filter in mobile - only shown when enabled */}
               {showTypeFilter && (
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor={mobileResourceTypeId}
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Tipo de producto
                   </label>
                   <div className="relative">
                     <select
+                      id={mobileResourceTypeId}
                       name="resourceType"
                       value={resourceType}
                       onChange={(e) => handleFilterChange('resourceType', e.target.value)}
-                      className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
+                      className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select min-h-11 w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
                     >
                       {resourceTypeOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -642,13 +664,16 @@ const CatalogFilter = ({
               )}
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Ordenar por</label>
+                <label htmlFor={mobileSortId} className="block text-sm font-medium text-gray-700">
+                  Ordenar por
+                </label>
                 <div className="relative">
                   <select
+                    id={mobileSortId}
                     name="sort"
                     value={sort}
                     onChange={(e) => handleFilterChange('sort', e.target.value)}
-                    className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
+                    className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select min-h-11 w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
                   >
                     {sortOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -665,7 +690,7 @@ const CatalogFilter = ({
               <button
                 type="button"
                 onClick={() => applyFilters()}
-                className="bg-primary hover:bg-primary-dark apply-filters-btn flex w-full items-center justify-center rounded-lg px-4 py-2.5 font-medium text-white transition-colors duration-300"
+                className="bg-primary hover:bg-primary-dark apply-filters-btn flex min-h-11 w-full items-center justify-center rounded-lg px-4 py-2.5 font-medium text-white transition-colors duration-300"
               >
                 <span>Aplicar filtros</span>
                 <span className="ml-2">
@@ -676,7 +701,7 @@ const CatalogFilter = ({
               <button
                 type="button"
                 onClick={clearFilters}
-                className="bg-neutral hover:bg-neutral-dark clear-filters-btn mt-2 flex w-full items-center justify-center rounded-lg px-4 py-2 font-medium text-gray-700 transition-colors duration-300"
+                className="bg-neutral hover:bg-neutral-dark clear-filters-btn mt-2 flex min-h-11 w-full items-center justify-center rounded-lg px-4 py-2 font-medium text-gray-700 transition-colors duration-300"
               >
                 Limpiar filtros
               </button>
@@ -694,7 +719,7 @@ const CatalogFilter = ({
                   name="level"
                   value={level}
                   onChange={(e) => handleFilterChange('level', e.target.value)}
-                  className="bg-neutral-light text-primary-dark focus:ring-primary filter-select appearance-none rounded-lg px-4 py-2.5 pr-8 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
+                  className="bg-neutral-light text-primary-dark focus:ring-primary filter-select min-h-11 appearance-none rounded-lg px-4 py-2.5 pr-8 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
                   aria-label="Filtrar por nivel"
                 >
                   {levelOptions.map((option) => (
@@ -714,7 +739,7 @@ const CatalogFilter = ({
                 name="format"
                 value={format}
                 onChange={(e) => handleFilterChange('format', e.target.value)}
-                className="bg-neutral-light text-primary-dark focus:ring-primary filter-select appearance-none rounded-lg px-4 py-2.5 pr-8 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
+                className="bg-neutral-light text-primary-dark focus:ring-primary filter-select min-h-11 appearance-none rounded-lg px-4 py-2.5 pr-8 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
                 aria-label="Filtrar por formato"
               >
                 {formatOptions.map((option) => (
@@ -735,7 +760,7 @@ const CatalogFilter = ({
                   name="resourceType"
                   value={resourceType}
                   onChange={(e) => handleFilterChange('resourceType', e.target.value)}
-                  className="bg-neutral-light text-primary-dark focus:ring-primary filter-select appearance-none rounded-lg px-4 py-2.5 pr-8 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
+                  className="bg-neutral-light text-primary-dark focus:ring-primary filter-select min-h-11 appearance-none rounded-lg px-4 py-2.5 pr-8 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
                   aria-label="Filtrar por tipo de producto"
                 >
                   {resourceTypeOptions.map((option) => (
@@ -758,7 +783,8 @@ const CatalogFilter = ({
                 name="sort"
                 value={sort}
                 onChange={(e) => handleFilterChange('sort', e.target.value)}
-                className="bg-neutral-light text-primary-dark focus:ring-primary filter-select sort-select appearance-none rounded-lg py-2.5 pr-8 pl-9 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
+                className="bg-neutral-light text-primary-dark focus:ring-primary filter-select sort-select min-h-11 appearance-none rounded-lg py-2.5 pr-8 pl-9 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
+                aria-label="Ordenar productos"
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -776,7 +802,7 @@ const CatalogFilter = ({
             <button
               type="button"
               onClick={() => applyFilters()}
-              className="bg-primary hover:bg-primary-dark apply-filters-btn flex min-w-[100px] items-center justify-center rounded-lg px-4 py-2.5 text-white shadow-md transition-colors duration-300 hover:shadow-lg"
+              className="bg-primary hover:bg-primary-dark apply-filters-btn flex min-h-11 min-w-[100px] items-center justify-center rounded-lg px-4 py-2.5 text-white shadow-md transition-colors duration-300 hover:shadow-lg"
             >
               Aplicar
             </button>
@@ -785,7 +811,7 @@ const CatalogFilter = ({
               <button
                 type="button"
                 onClick={clearFilters}
-                className="flex items-center justify-center rounded-lg bg-gray-100 px-4 py-2.5 text-gray-700 transition-colors duration-300 hover:bg-gray-200"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-gray-100 px-4 py-2.5 text-gray-700 transition-colors duration-300 hover:bg-gray-200"
                 aria-label="Limpiar todos los filtros"
               >
                 <ClearIcon />
@@ -796,18 +822,18 @@ const CatalogFilter = ({
 
         {/* Active filter tags */}
         {activeTags.length > 0 && (
-          <div className="active-filters mt-4 flex flex-wrap gap-2 px-8" aria-live="polite">
+          <div className="active-filters mt-4 flex flex-wrap gap-2 px-4 md:px-8" aria-live="polite">
             {activeTags.map((tag) => (
               <div
                 key={`${tag.name}-${tag.value}`}
-                className="bg-primary-light/20 text-primary-dark filter-tag group hover:bg-primary-light/30 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors"
+                className="bg-primary-light/20 text-primary-dark filter-tag group hover:bg-primary-light/30 inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full py-1.5 pr-0 pl-3 text-sm transition-colors"
               >
                 <span className="text-primary-dark/70 text-xs">{tag.displayName}:</span>
-                <span className="font-medium">{tag.label}</span>
+                <span className="min-w-0 font-medium break-all">{tag.label}</span>
                 <button
                   type="button"
                   onClick={() => removeFilterTag(tag.name)}
-                  className="focus:ring-primary ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full group-hover:bg-white/80 focus:ring-2 focus:outline-none"
+                  className="focus:ring-primary ml-1 inline-flex size-11 shrink-0 items-center justify-center rounded-full group-hover:bg-white/80 focus:ring-2 focus:outline-none"
                   aria-label={`Eliminar filtro ${tag.displayName}: ${tag.label}`}
                 >
                   <svg

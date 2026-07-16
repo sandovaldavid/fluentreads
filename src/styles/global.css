@@ -47,7 +47,7 @@ nav a {
 }
 
 /* Only show underline animation on desktop */
-@media (min-width: 768px) {
+@media (min-width: 1280px) {
   nav a::after {
     content: '';
     position: absolute;
@@ -75,7 +75,7 @@ nav a {
 }
 
 /* Mobile specific styles */
-@media (max-width: 768px) {
+@media (max-width: 1279px) {
   .mobile-menu {
     transform: translateY(-10px);
     transition:
