@@ -1,44 +1,42 @@
 ---
 interface Props {
-	className?: string;
+  class?: string;
 }
 
-const { className = '' } = Astro.props;
+const { class: className = '' } = Astro.props;
 ---
 
 <span
-	class={`cart-indicator hidden inline-flex items-center justify-center 
-    bg-accent text-white text-xs font-bold rounded-full h-5 w-5 ${className}`}>
-	0
+  class={`cart-indicator bg-accent hidden inline-flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white ${className}`}
+>
+  0
 </span>
 
 <script>
-	import { CartManager } from '../utils/cartManager';
+  import { CartManager } from '../utils/cartManager';
 
-	document.addEventListener('DOMContentLoaded', () => {
-		// Update all cart indicators
-		function updateCartIndicators() {
-			const totalItems = CartManager.getItemCount();
+  document.addEventListener('DOMContentLoaded', () => {
+    // Update all cart indicators
+    function updateCartIndicators() {
+      const totalItems = CartManager.getItemCount();
 
-			document
-				.querySelectorAll('.cart-indicator')
-				.forEach((indicator) => {
-					indicator.textContent = totalItems.toString();
+      document.querySelectorAll('.cart-indicator').forEach((indicator) => {
+        indicator.textContent = totalItems.toString();
 
-					if (totalItems > 0) {
-						indicator.classList.remove('hidden');
-					} else {
-						indicator.classList.add('hidden');
-					}
-				});
-		}
+        if (totalItems > 0) {
+          indicator.classList.remove('hidden');
+        } else {
+          indicator.classList.add('hidden');
+        }
+      });
+    }
 
-		// Do initial update
-		updateCartIndicators();
+    // Do initial update
+    updateCartIndicators();
 
-		// Set up event listener for cart changes
-		window.addEventListener('cartUpdated', () => {
-			updateCartIndicators();
-		});
-	});
+    // Set up event listener for cart changes
+    window.addEventListener('cartUpdated', () => {
+      updateCartIndicators();
+    });
+  });
 </script>

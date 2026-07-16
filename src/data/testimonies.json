@@ -1,0 +1,56 @@
+[
+  {
+    "id": "maria-rodriguez",
+    "quote": "Estos libros transformaron mi carrera. Pude mejorar mi inglés de negocios y conseguir un ascenso en menos de 6 meses.",
+    "author": "María Rodríguez",
+    "position": "Ejecutiva de Marketing",
+    "avatarUrl": "https://i.pravatar.cc/200?img=25",
+    "rating": 5,
+    "date": "2026-06-15"
+  },
+  {
+    "id": "carlos-mendoza",
+    "quote": "Lo que más me gustó fue poder acceder a todo el material inmediatamente después del pago. La calidad de los PDFs y audios es excelente.",
+    "author": "Carlos Mendoza",
+    "position": "Ingeniero de Software",
+    "avatarUrl": "https://i.pravatar.cc/200?img=11",
+    "rating": 5,
+    "date": "2026-06-01"
+  },
+  {
+    "id": "lucia-fernandez",
+    "quote": "He probado muchos cursos de inglés, pero estos materiales son los más completos y prácticos. Definitivamente valen cada centavo.",
+    "author": "Lucía Fernández",
+    "position": "Contadora Pública",
+    "avatarUrl": "https://i.pravatar.cc/200?img=29",
+    "rating": 4.5,
+    "date": "2025-12-01"
+  },
+  {
+    "id": "roberto-guzman",
+    "quote": "Mi vocabulario técnico mejoró significativamente después de estudiar con estos libros. Ahora puedo participar con confianza en reuniones internacionales.",
+    "author": "Roberto Guzmán",
+    "position": "Director de Operaciones",
+    "avatarUrl": "https://i.pravatar.cc/200?img=15",
+    "rating": 5,
+    "date": "2025-10-10"
+  },
+  {
+    "id": "ana-martinez",
+    "quote": "La combinación de libros, audios y ejercicios prácticos hace que el aprendizaje sea muy efectivo. Lo recomiendo completamente.",
+    "author": "Ana Martínez",
+    "position": "Especialista en Recursos Humanos",
+    "avatarUrl": "https://i.pravatar.cc/200?img=23",
+    "rating": 4.5,
+    "date": "2026-06-10"
+  },
+  {
+    "id": "diego-sanchez",
+    "quote": "El soporte por WhatsApp es increíble. Siempre responden rápido y son muy amables. Me ayudaron a elegir el material perfecto para mis necesidades.",
+    "author": "Diego Sánchez",
+    "position": "Gerente de Proyectos",
+    "avatarUrl": "https://i.pravatar.cc/200?img=4",
+    "rating": 5,
+    "date": "2025-05-01"
+  }
+]

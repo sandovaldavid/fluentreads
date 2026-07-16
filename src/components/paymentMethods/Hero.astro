@@ -9,87 +9,92 @@ import '../../styles/paymentMethods/Hero.css';
 
 // Import payment method icons
 const paymentIcons = [
-	{ Icon: BcpIcon, alt: 'BCP' },
-	{ Icon: BbvaIcon, alt: 'BBVA' },
-	{ Icon: PayPalIcon, alt: 'PayPal' },
+  { Icon: BcpIcon, alt: 'BCP' },
+  { Icon: BbvaIcon, alt: 'BBVA' },
+  { Icon: PayPalIcon, alt: 'PayPal' },
 ];
 ---
 
 <section
-	class='bg-gradient-to-br from-primary to-primary-dark text-white py-16 md:py-24 relative overflow-hidden'>
-	<!-- Decorative elements -->
-	<div class='absolute top-0 left-0 w-full h-full overflow-hidden opacity-10'>
-		<div class='payment-circle payment-circle-1'></div>
-		<div class='payment-circle payment-circle-2'></div>
-		<div class='payment-circle payment-circle-3'></div>
-	</div>
+  class="from-primary to-primary-dark relative overflow-hidden bg-gradient-to-br py-16 text-white md:py-24"
+>
+  <!-- Decorative elements -->
+  <div class="absolute top-0 left-0 h-full w-full overflow-hidden opacity-10">
+    <div class="payment-circle payment-circle-1"></div>
+    <div class="payment-circle payment-circle-2"></div>
+    <div class="payment-circle payment-circle-3"></div>
+  </div>
 
-	<div class='container mx-auto px-4 relative z-10'>
-		<div class='max-w-4xl mx-auto text-center'>
-			<div class='mb-6 inline-block animate-bounce-subtle'>
-				<span
-					class='inline-flex items-center justify-center bg-secondary text-primary-dark p-3 rounded-full shadow-lg'>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						class='h-8 w-8'
-						fill='none'
-						viewBox='0 0 24 24'
-						stroke='currentColor'>
-						<path
-							stroke-linecap='round'
-							stroke-linejoin='round'
-							stroke-width='2'
-							d='M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z'
-						></path>
-					</svg>
-				</span>
-			</div>
+  <div class="relative z-10 container mx-auto px-4">
+    <div class="mx-auto max-w-4xl text-center">
+      <div class="animate-bounce-subtle mb-6 inline-block">
+        <span
+          class="bg-secondary text-primary-dark inline-flex items-center justify-center rounded-full p-3 shadow-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+            ></path>
+          </svg>
+        </span>
+      </div>
 
-			<h1
-				class='text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-gradient'>
-				¿Cómo puedes pagar?
-			</h1>
+      <h1 class="text-gradient mb-6 text-3xl font-bold md:text-4xl lg:text-5xl">
+        ¿Cómo puedes pagar?
+      </h1>
 
-			<p class='text-lg md:text-xl opacity-90 mb-8 max-w-3xl mx-auto'>
-				En <span class='text-secondary font-semibold'>FluentReads</span>
-				te ofrecemos diferentes métodos de pago para facilitar tu compra.
-				Elige el que mejor se adapte a tus necesidades.
-			</p>
+      <p class="mx-auto mb-8 max-w-3xl text-lg opacity-90 md:text-xl">
+        En <span class="text-secondary font-semibold">FluentReads</span>
+        te ofrecemos diferentes métodos de pago para facilitar tu compra. Elige el que mejor se adapte
+        a tus necesidades.
+      </p>
 
-			<!-- Payment method icons preview -->
-			<div
-				class='flex justify-center items-center gap-4 mb-8 payment-icons-container'>
-				{
-					paymentIcons.map((item, index) => (
-						<div
-							class='bg-white/40 p-3 rounded-full backdrop-blur-sm hover:bg-white/60 transition-all duration-300 transform hover:scale-110'
-							style={`animation-delay: ${index * 0.1}s`}>
-							<item.Icon class='w-10 h-10 text-white' />
-						</div>
-					))
-				}
-				<div
-					class='flex items-center justify-center w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all'>
-					<span class='text-white font-bold'>+</span>
-				</div>
-			</div>
+      <!-- Payment method icons preview -->
+      <div class="payment-icons-container mb-8 flex items-center justify-center gap-4">
+        {
+          paymentIcons.map((item, index) => (
+            <div
+              class="transform rounded-full bg-white/40 p-3 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white/60"
+              style={`animation-delay: ${index * 0.1}s`}
+            >
+              <item.Icon class="h-10 w-10 text-white" />
+            </div>
+          ))
+        }
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-all hover:bg-white/20"
+        >
+          <span class="font-bold text-white">+</span>
+        </div>
+      </div>
 
-			<Button
-				variant='secondary'
-				size='large'
-				href='#payment-methods'
-				newTab={false}
-				class='shadow-lg hover:shadow-xl transform transition hover:scale-105 mb-12 lg:mb-16'>
-				Ver métodos de pago
-				<ArrowBottomIcon Class='h-5 w-5 ml-2' />
-			</Button>
-		</div>
-	</div>
+      <Button
+        variant="secondary"
+        size="large"
+        href="#payment-methods"
+        newTab={false}
+        class="mb-12 transform shadow-lg transition hover:scale-105 hover:shadow-xl lg:mb-16"
+      >
+        Ver métodos de pago
+        <ArrowBottomIcon class="ml-2 h-5 w-5" />
+      </Button>
+    </div>
+  </div>
 
-	<!-- Subtle wave pattern at bottom -->
-	<div
-		class='absolute bottom-0 left-0 w-full overflow-hidden leading-none'
-		style='transform: rotate(180deg)'>
-		<Wave class='relative block w-full h-[60px]' />
-	</div>
+  <!-- Subtle wave pattern at bottom -->
+  <div
+    class="absolute bottom-0 left-0 w-full overflow-hidden leading-none"
+    style="transform: rotate(180deg)"
+  >
+    <Wave class="relative block h-[60px] w-full" />
+  </div>
 </section>

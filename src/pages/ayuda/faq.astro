@@ -4,19 +4,19 @@ import FAQ from '../../components/FAQ.astro';
 
 const pageTitle = 'Preguntas Frecuentes | FluentReads';
 const pageDescription =
-	'Encuentra respuestas a las preguntas más comunes sobre nuestros materiales, entregas y políticas.';
+  'Encuentra respuestas a las preguntas más comunes sobre nuestros materiales, entregas y políticas.';
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-	<div class='pt-16 bg-neutral-light pb-20'>
-		<div class='flex flex-col justify-around'>
-			<!-- FAQ Section -->
-			<FAQ
-				dataset="general"
-				title='Preguntas Frecuentes'
-				description='Información sobre nuestros servicios y materiales'
-				expanded={0}
-			/>
-		</div>
-	</div>
+  <div class="bg-neutral-light pt-16 pb-20">
+    <div class="flex flex-col justify-around">
+      <!-- FAQ Section -->
+      <FAQ
+        dataset="general"
+        title="Preguntas Frecuentes"
+        description="Información sobre nuestros servicios y materiales"
+        expanded={0}
+      />
+    </div>
+  </div>
 </Layout>

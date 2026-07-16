@@ -12,27 +12,26 @@ import CheckIcon from '../icons/Check.astro';
 import ArrowRightIcon from '../icons/ArrowRight.astro';
 import BookIcon from '../icons/Book.astro';
 import CustomerSupport from '../CustomerSupport.astro';
-import { extractYoutubeId } from '../../utils/videoEmbeds';
 import { levelConfig, formatConfig } from '../../utils/bookTags';
 import { generateRecommendations } from '../../utils/RelatedProducts';
 import '../../styles/ProductDetail.css';
-import editorialData from '../../database/editorial.json';
-import booksData from '../../database/books.json';
+import editorialData from '../../data/editorial.json';
+import booksData from '../../data/books.json';
 import ProductCard from '../ProductCard.astro';
 import DiscountBadge from '../DiscountBadge.astro';
 import type { Product } from '../../types/product';
 
 // Define proper interface for MediaItem
 interface MediaItem {
-	type: 'image' | 'video';
-	url: string;
-	title?: string;
-	thumbnail?: string;
+  type: 'image' | 'video';
+  url: string;
+  title?: string;
+  thumbnail?: string;
 }
 
 interface Props {
-	pack: Pack;
-	relatedProducts?: Product[];
+  pack: Pack;
+  relatedProducts?: Product[];
 }
 
 const { pack, relatedProducts = [] } = Astro.props;
@@ -40,70 +39,59 @@ const { pack, relatedProducts = [] } = Astro.props;
 // Prepare formatted price display
 const hasDiscount = pack.discount && pack.discount > 0;
 const originalPrice = pack.price;
-const discountedPrice = hasDiscount
-	? pack.price * (1 - (pack.discount || 0) / 100)
-	: pack.price;
+const discountedPrice = hasDiscount ? pack.price * (1 - (pack.discount || 0) / 100) : pack.price;
 const savingsAmount = hasDiscount ? originalPrice - discountedPrice : 0;
 const retailValue = pack.price * 1.3;
 const hasRetailValue = retailValue > pack.price;
-
-// Extract YouTube video ID if present
-let youtubeVideoId = '';
-if (pack.video) {
-	youtubeVideoId = extractYoutubeId(pack.video);
-}
 
 // Prepare media items for carousel
 const mediaItems: MediaItem[] = [];
 
 // Add up to 3 images if available
 if (pack.images && Array.isArray(pack.images)) {
-	pack.images.forEach((img) => {
-		mediaItems.push({
-			type: 'image',
-			url: img,
-			title: `${pack.title} - Imagen`,
-		});
-	});
+  pack.images.forEach((img) => {
+    mediaItems.push({
+      type: 'image',
+      url: img,
+      title: `${pack.title} - Imagen`,
+    });
+  });
 }
 
 // Add the cover image if it's not already included
-if (
-	pack.coverImage &&
-	(!pack.images || !pack.images.includes(pack.coverImage))
-) {
-	mediaItems.unshift({
-		type: 'image',
-		url: pack.coverImage,
-		title: `${pack.title} - Portada`,
-	});
+if (pack.coverImage && (!pack.images || !pack.images.includes(pack.coverImage))) {
+  mediaItems.unshift({
+    type: 'image',
+    url: pack.coverImage,
+    title: `${pack.title} - Portada`,
+  });
 }
 
 // Add video if available
 if (pack.video) {
-	mediaItems.push({
-		type: 'video',
-		url: pack.video,
-		title: `${pack.title} - Video`,
-	});
+  mediaItems.push({
+    type: 'video',
+    url: pack.video,
+    title: `${pack.title} - Video`,
+  });
 }
 
 // Get level display and format tags
 const levelDisplay =
-	pack.level && levelConfig[pack.level as keyof typeof levelConfig]
-		? levelConfig[pack.level as keyof typeof levelConfig]
-		: null;
+  pack.level && levelConfig[pack.level as keyof typeof levelConfig]
+    ? levelConfig[pack.level as keyof typeof levelConfig]
+    : null;
 const formatTags = pack.formatTags || [];
 
 // Find books included in this pack
 const includedBooks = pack.booksIds
-	? booksData
-			.filter((book) => pack.booksIds?.includes(book.id))
-			.map((book) => ({
-				...book,
-				productType: 'book',
-			}))
-	: [];
+  ? booksData
+      .filter((book) => pack.booksIds?.includes(book.id))
+      .map((book) => ({
+        ...book,
+        productType: 'book',
+      }))
+  : [];
 
 // Get recommendations
 const finalRecommendations = generateRecommendations(pack, relatedProducts, 4);
@@ -113,650 +101,565 @@ const currentUrl = Astro.url.href;
 const shareUrl = currentUrl;
 const shareTitle = pack.title;
 const shareDescription =
-	pack.description.substring(0, 100) +
-	(pack.description.length > 100 ? '...' : '');
+  pack.description.substring(0, 100) + (pack.description.length > 100 ? '...' : '');
 const shareImage = pack.coverImage;
 
 // SEO JSON-LD
 const jsonLd = {
-	'@context': 'https://schema.org',
-	'@type': 'Product',
-	name: pack.title,
-	description: pack.description,
-	image: pack.coverImage,
-	offers: {
-		'@type': 'Offer',
-		price: discountedPrice,
-		priceCurrency: 'PEN',
-		availability: 'https://schema.org/InStock',
-	},
-	aggregateRating: pack.rating
-		? {
-				'@type': 'AggregateRating',
-				ratingValue: pack.rating.score,
-				reviewCount: pack.rating.reviewCount,
-			}
-		: undefined,
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: pack.title,
+  description: pack.description,
+  image: pack.coverImage,
+  offers: {
+    '@type': 'Offer',
+    price: discountedPrice,
+    priceCurrency: 'PEN',
+    availability: 'https://schema.org/InStock',
+  },
+  aggregateRating: pack.rating
+    ? {
+        '@type': 'AggregateRating',
+        ratingValue: pack.rating.score,
+        reviewCount: pack.rating.reviewCount,
+      }
+    : undefined,
 };
 ---
 
-<div class='product-detail-container bg-gray-50'>
-	<!-- JSON-LD Schema for SEO -->
-	<script type='application/ld+json' set:html={JSON.stringify(jsonLd)} />
+<div class="product-detail-container bg-gray-50">
+  <!-- JSON-LD Schema for SEO -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 
-	<div class='max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8'>
-		<!-- Breadcrumbs -->
-		<nav
-			class='flex text-xs sm:text-sm text-gray-500 mb-4 overflow-x-auto pb-1'
-			aria-label='Breadcrumb'>
-			<ol
-				class='inline-flex items-center space-x-1 md:space-x-3 w-full overflow-hidden'>
-				<li class='inline-flex items-center'>
-					<a href='/' class='hover:text-primary transition-colors'
-						>Inicio</a
-					>
-				</li>
-				<li>
-					<div class='flex items-center'>
-						<span class='mx-1 md:mx-2'>/</span>
-						<a
-							href='/catalogo'
-							class='hover:text-primary transition-colors'
-							>Catálogo</a
-						>
-					</div>
-				</li>
-				<li>
-					<div class='flex items-center'>
-						<span class='mx-1 md:mx-2'>/</span>
-						<a
-							href='/catalogo/packs'
-							class='hover:text-primary transition-colors'
-							>Packs</a
-						>
-					</div>
-				</li>
-				<li aria-current='page'>
-					<div class='flex items-center'>
-						<span class='mx-1 md:mx-2'>/</span>
-						<span
-							class='text-gray-600 font-medium truncate max-w-max'
-							>{pack.title}</span
-						>
-					</div>
-				</li>
-			</ol>
-		</nav>
+  <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:py-8">
+    <!-- Breadcrumbs -->
+    <nav
+      class="mb-4 flex overflow-x-auto pb-1 text-xs text-gray-500 sm:text-sm"
+      aria-label="Breadcrumb"
+    >
+      <ol class="inline-flex w-full items-center space-x-1 overflow-hidden md:space-x-3">
+        <li class="inline-flex items-center">
+          <a href="/" class="hover:text-primary transition-colors">Inicio</a>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <span class="mx-1 md:mx-2">/</span>
+            <a href="/catalogo" class="hover:text-primary transition-colors">Catálogo</a>
+          </div>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <span class="mx-1 md:mx-2">/</span>
+            <a href="/catalogo/packs" class="hover:text-primary transition-colors">Packs</a>
+          </div>
+        </li>
+        <li aria-current="page">
+          <div class="flex items-center">
+            <span class="mx-1 md:mx-2">/</span>
+            <span class="max-w-max truncate font-medium text-gray-600">{pack.title}</span>
+          </div>
+        </li>
+      </ol>
+    </nav>
 
-		<div class='bg-white rounded-xl shadow-sm overflow-hidden'>
-			<!-- Main product content grid - Reorganized for desktop -->
-			<div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-0'>
-				<!-- UNIFIED PRODUCT TITLE FOR MOBILE - Shown only on small screens -->
-				<div class='p-4 bg-primary/5 md:hidden col-span-full'>
-					<h1 class='text-2xl font-bold text-primary-dark'>
-						{pack.title}
-					</h1>
+    <div class="overflow-hidden rounded-xl bg-white shadow-sm">
+      <!-- Main product content grid - Reorganized for desktop -->
+      <div class="grid grid-cols-1 gap-0 md:grid-cols-2 lg:grid-cols-5">
+        <!-- UNIFIED PRODUCT TITLE FOR MOBILE - Shown only on small screens -->
+        <div class="bg-primary/5 col-span-full p-4 md:hidden">
+          <h1 class="text-primary-dark text-2xl font-bold">
+            {pack.title}
+          </h1>
 
-					<!-- Editorial & Level Tags - Mobile -->
-					<div class='flex flex-wrap gap-2 mt-2 mb-3'>
-						{
-							levelDisplay && (
-								<span
-									class={`text-xs px-2 py-1 rounded-full ${levelDisplay.color}`}>
-									{levelDisplay.label}
-								</span>
-							)
-						}
-					</div>
+          <!-- Editorial & Level Tags - Mobile -->
+          <div class="mt-2 mb-3 flex flex-wrap gap-2">
+            {
+              levelDisplay && (
+                <span class={`rounded-full px-2 py-1 text-xs ${levelDisplay.color}`}>
+                  {levelDisplay.label}
+                </span>
+              )
+            }
+          </div>
 
-					<!-- Rating - Mobile -->
-					{
-						pack.rating && (
-							<div class='flex items-center'>
-								<ReviewStars
-									score={pack.rating.score}
-									size='small'
-								/>
-								<span class='ml-2 text-sm text-gray-600'>
-									({pack.rating.reviewCount} reseñas)
-								</span>
-							</div>
-						)
-					}
-				</div>
+          <!-- Rating - Mobile -->
+          {
+            pack.rating && (
+              <div class="flex items-center">
+                <ReviewStars score={pack.rating.score} size="small" />
+                <span class="ml-2 text-sm text-gray-600">({pack.rating.reviewCount} reseñas)</span>
+              </div>
+            )
+          }
+        </div>
 
-				<!-- LEFT COLUMN FOR DESKTOP: Product Info - (spans 3 cols on lg) -->
-				<div
-					class='lg:col-span-3 order-2 md:order-1 p-4 sm:p-6 flex flex-col'>
-					<!-- DESKTOP HEADER -->
-					<div class='hidden md:block mb-6'>
-						<h1 class='text-3xl font-bold text-primary-dark mb-3'>
-							{pack.title}
-						</h1>
+        <!-- LEFT COLUMN FOR DESKTOP: Product Info - (spans 3 cols on lg) -->
+        <div class="order-2 flex flex-col p-4 sm:p-6 md:order-1 lg:col-span-3">
+          <!-- DESKTOP HEADER -->
+          <div class="mb-6 hidden md:block">
+            <h1 class="text-primary-dark mb-3 text-3xl font-bold">
+              {pack.title}
+            </h1>
 
-						<div
-							class='flex flex-wrap items-center gap-x-6 gap-y-2 mb-4'>
-							{/* Level */}
-							{
-								levelDisplay && (
-									<span
-										class={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${levelDisplay.color}`}>
-										{levelDisplay.label}
-									</span>
-								)
-							}
+            <div class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+              {/* Level */}
+              {
+                levelDisplay && (
+                  <span
+                    class={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${levelDisplay.color}`}
+                  >
+                    {levelDisplay.label}
+                  </span>
+                )
+              }
 
-							{/* Rating */}
-							{
-								pack.rating && (
-									<div class='flex items-center'>
-										<ReviewStars
-											score={pack.rating.score}
-											size='medium'
-										/>
-										<span class='ml-2 text-sm text-gray-600'>
-											({pack.rating.reviewCount})
-										</span>
-									</div>
-								)
-							}
-						</div>
+              {/* Rating */}
+              {
+                pack.rating && (
+                  <div class="flex items-center">
+                    <ReviewStars score={pack.rating.score} size="medium" />
+                    <span class="ml-2 text-sm text-gray-600">({pack.rating.reviewCount})</span>
+                  </div>
+                )
+              }
+            </div>
 
-						{/* Format Tags - Desktop */}
-						<div class='hidden md:flex flex-wrap gap-2 mb-4'>
-							{
-								formatTags &&
-									formatTags.map((tag) => (
-										<span
-											class={`inline-flex items-center px-3 py-1 rounded-full border text-sm font-medium ${formatConfig[tag as keyof typeof formatConfig].color}`}>
-											<span class='mr-1'>
-												{
-													formatConfig[
-														tag as keyof typeof formatConfig
-													].icon
-												}
-											</span>
-											{
-												formatConfig[
-													tag as keyof typeof formatConfig
-												].label
-											}
-										</span>
-									))
-							}
-						</div>
-					</div>
+            {/* Format Tags - Desktop */}
+            <div class="mb-4 hidden flex-wrap gap-2 md:flex">
+              {
+                formatTags &&
+                  formatTags.map((tag) => (
+                    <span
+                      class={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${formatConfig[tag as keyof typeof formatConfig].color}`}
+                    >
+                      <span class="mr-1">
+                        {formatConfig[tag as keyof typeof formatConfig].icon}
+                      </span>
+                      {formatConfig[tag as keyof typeof formatConfig].label}
+                    </span>
+                  ))
+              }
+            </div>
+          </div>
 
-					<!-- Description -->
-					<div class='mb-6'>
-						<h2 class='text-lg font-bold text-primary-dark mb-2'>
-							Descripción
-						</h2>
-						<div
-							class='prose prose-sm sm:prose-base max-w-none text-gray-700'>
-							<p>{pack.description}</p>
-						</div>
-					</div>
+          <!-- Description -->
+          <div class="mb-6">
+            <h2 class="text-primary-dark mb-2 text-lg font-bold">Descripción</h2>
+            <div class="prose prose-sm sm:prose-base max-w-none text-gray-700">
+              <p>{pack.description}</p>
+            </div>
+          </div>
 
-					<!-- UNIFIED Price & Actions - Visible on all devices -->
-					<div class='mb-6'>
-						<!-- Use the ValueCard component with all pricing details -->
-						<ValueCard
-							originalPrice={originalPrice}
-							discountedPrice={hasDiscount
-								? discountedPrice
-								: undefined}
-							discount={pack.discount}
-							savingsAmount={hasDiscount
-								? savingsAmount
-								: undefined}
-							productType='pack'
-							offerDays={2}
-							totalBooksValue={hasRetailValue
-								? retailValue
-								: undefined}
-						/>
+          <!-- UNIFIED Price & Actions - Visible on all devices -->
+          <div class="mb-6">
+            <!-- Use the ValueCard component with all pricing details -->
+            <ValueCard
+              originalPrice={originalPrice}
+              discountedPrice={hasDiscount ? discountedPrice : undefined}
+              discount={pack.discount}
+              savingsAmount={hasDiscount ? savingsAmount : undefined}
+              productType="pack"
+              offerDays={2}
+              totalBooksValue={hasRetailValue ? retailValue : undefined}
+            />
 
-						<!-- Universal CTA Buttons -->
-						<div class='flex gap-4 mb-4'>
-							<Button
-								variant='primary'
-								size='large'
-								class='add-to-cart-btn flex-1 shadow-md hover:shadow-lg transform transition-all duration-300 hover:-translate-y-1 group cursor-pointer'
-								data-id={pack.id}
-								data-title={pack.title}
-								data-price={discountedPrice}
-								data-image={pack.coverImage}
-								data-type='pack'>
-								<span class='flex items-center justify-center'>
-									<CartIcon class='w-5 h-5 mr-2' />
-									Agregar al carrito
-								</span>
-							</Button>
+            <!-- Universal CTA Buttons -->
+            <div class="mb-4 flex gap-4">
+              <Button
+                variant="primary"
+                size="large"
+                class="add-to-cart-btn group flex-1 transform cursor-pointer shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                data-id={pack.id}
+                data-title={pack.title}
+                data-price={discountedPrice}
+                data-image={pack.coverImage}
+                data-type="pack"
+              >
+                <span class="flex items-center justify-center">
+                  <CartIcon class="mr-2 h-5 w-5" />
+                  Agregar al carrito
+                </span>
+              </Button>
 
-							<Button
-								variant='accent'
-								size='large'
-								href='/checkout'
-								class='flex-1 shadow-md hover:shadow-lg transform transition-all duration-300 hover:-translate-y-1 group'>
-								<span class='flex items-center justify-center'>
-									<WhatsAppIcon class='w-5 h-5 mr-2' />
-									Ver carrito
-								</span>
-							</Button>
-						</div>
-					</div>
+              <Button
+                variant="accent"
+                size="large"
+                href="/checkout"
+                class="group flex-1 transform shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                <span class="flex items-center justify-center">
+                  <WhatsAppIcon class="mr-2 h-5 w-5" />
+                  Ver carrito
+                </span>
+              </Button>
+            </div>
+          </div>
 
-					<!-- Mobile: Social & Support footer -->
-					<div class='md:hidden border-t border-gray-100 pt-4 mt-2'>
-						<CustomerSupport class='mb-4' />
-						<SocialShareButtons
-							url={shareUrl}
-							title={shareTitle}
-							description={shareDescription}
-							image={shareImage}
-							productType='pack'
-							price={discountedPrice}
-							currency='PEN'
-							className='w-full flex justify-center'
-						/>
-					</div>
-				</div>
+          <!-- Mobile: Social & Support footer -->
+          <div class="mt-2 border-t border-gray-100 pt-4 md:hidden">
+            <CustomerSupport class="mb-4" />
+            <SocialShareButtons
+              url={shareUrl}
+              title={shareTitle}
+              description={shareDescription}
+              image={shareImage}
+              productType="pack"
+              price={discountedPrice}
+              currency="PEN"
+              class="flex w-full justify-center"
+            />
+          </div>
+        </div>
 
-				<!-- RIGHT COLUMN FOR DESKTOP: Media and Details - (spans 2 cols on lg) -->
-				<div class='lg:col-span-2 order-1 md:order-2'>
-					<!-- Media Carousel Container -->
-					<div class='relative'>
-						{
-							mediaItems.length > 0 ? (
-								<MediaCarousel
-									mediaItems={mediaItems}
-									title={pack.title}
-									height='auto'
-								/>
-							) : (
-								<div class='relative product-cover-container aspect-[4/3] sm:aspect-[3/2] lg:aspect-[4/3]'>
-									<img
-										src={pack.coverImage}
-										alt={
-											pack.altText ||
-											`Portada de ${pack.title}`
-										}
-										class='w-full h-full object-cover'
-									/>
-								</div>
-							)
-						}
+        <!-- RIGHT COLUMN FOR DESKTOP: Media and Details - (spans 2 cols on lg) -->
+        <div class="order-1 md:order-2 lg:col-span-2">
+          <!-- Media Carousel Container -->
+          <div class="relative">
+            {
+              mediaItems.length > 0 ? (
+                <MediaCarousel mediaItems={mediaItems} title={pack.title} height="auto" />
+              ) : (
+                <div class="product-cover-container relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[4/3]">
+                  <img
+                    src={pack.coverImage}
+                    alt={pack.altText || `Portada de ${pack.title}`}
+                    class="h-full w-full object-cover"
+                  />
+                </div>
+              )
+            }
 
-						{
-							hasDiscount && pack.discount && (
-								<DiscountBadge
-									discount={`${pack.discount}% OFF`}
-									position='absolute top-2 right-2 z-10'
-									size='medium'
-									animate={true}
-								/>
-							)
-						}
+            {
+              hasDiscount && pack.discount && (
+                <DiscountBadge
+                  discount={`${pack.discount}% OFF`}
+                  position="absolute top-2 right-2 z-10"
+                  size="medium"
+                  animate={true}
+                />
+              )
+            }
 
-						{
-							pack.featured && (
-								<div class='absolute top-4 left-4 bg-secondary text-primary font-bold py-2 px-4 rounded-full shadow-md text-sm'>
-									Recomendado
-								</div>
-							)
-						}
-					</div>
+            {
+              pack.featured && (
+                <div class="bg-secondary text-primary absolute top-4 left-4 rounded-full px-4 py-2 text-sm font-bold shadow-md">
+                  Recomendado
+                </div>
+              )
+            }
+          </div>
 
-					<!-- Format Tags - Mobile display under image -->
-					<div class='p-4 border-b md:hidden'>
-						<div class='flex flex-wrap gap-2'>
-							{
-								formatTags &&
-									formatTags.map((tag) => (
-										<span
-											class={`inline-flex items-center px-2 py-1 rounded-full border text-xs ${formatConfig[tag as keyof typeof formatConfig].color}`}>
-											<span class='mr-1'>
-												{
-													formatConfig[
-														tag as keyof typeof formatConfig
-													].icon
-												}
-											</span>
-											{
-												formatConfig[
-													tag as keyof typeof formatConfig
-												].label
-											}
-										</span>
-									))
-							}
-						</div>
-					</div>
+          <!-- Format Tags - Mobile display under image -->
+          <div class="border-b p-4 md:hidden">
+            <div class="flex flex-wrap gap-2">
+              {
+                formatTags &&
+                  formatTags.map((tag) => (
+                    <span
+                      class={`inline-flex items-center rounded-full border px-2 py-1 text-xs ${formatConfig[tag as keyof typeof formatConfig].color}`}
+                    >
+                      <span class="mr-1">
+                        {formatConfig[tag as keyof typeof formatConfig].icon}
+                      </span>
+                      {formatConfig[tag as keyof typeof formatConfig].label}
+                    </span>
+                  ))
+              }
+            </div>
+          </div>
 
-					<!-- Desktop: Additional details section -->
-					<div class='hidden md:block p-4 sm:p-6'>
-						<!-- Included items -->
-						<div
-							class='border border-gray-100 rounded-xl bg-gray-50 p-4 mb-6'>
-							<h2
-								class='text-lg font-bold text-primary-dark mb-3 flex items-center'>
-								<span
-									class='bg-primary text-white p-1 rounded-full mr-2 flex-shrink-0'>
-									<CheckIcon class='w-4 h-4' />
-								</span>
-								Contenido incluido
-							</h2>
+          <!-- Desktop: Additional details section -->
+          <div class="hidden p-4 sm:p-6 md:block">
+            <!-- Included items -->
+            <div class="mb-6 rounded-xl border border-gray-100 bg-gray-50 p-4">
+              <h2 class="text-primary-dark mb-3 flex items-center text-lg font-bold">
+                <span class="bg-primary mr-2 flex-shrink-0 rounded-full p-1 text-white">
+                  <CheckIcon class="h-4 w-4" />
+                </span>
+                Contenido incluido
+              </h2>
 
-							<ul
-								class='space-y-2 included-items-list pl-2 grid grid-cols-1 gap-x-4 gap-y-2'>
-								{
-									pack.includedItems &&
-										pack.includedItems.map((item) => (
-											<li class='flex items-start text-sm sm:text-base'>
-												<span class='text-green-500 mr-2 mt-0.5 flex-shrink-0'>
-													✓
-												</span>
-												<span class='text-gray-700'>
-													{item}
-												</span>
-											</li>
-										))
-								}
-							</ul>
-						</div>
+              <ul class="included-items-list grid grid-cols-1 space-y-2 gap-x-4 gap-y-2 pl-2">
+                {
+                  pack.includedItems &&
+                    pack.includedItems.map((item) => (
+                      <li class="flex items-start text-sm sm:text-base">
+                        <span class="mt-0.5 mr-2 flex-shrink-0 text-green-500">✓</span>
+                        <span class="text-gray-700">{item}</span>
+                      </li>
+                    ))
+                }
+              </ul>
+            </div>
 
-						<!-- Important note -->
-						<div
-							class='bg-blue-50 rounded-lg p-4 border border-blue-100 mb-6'>
-							<p class='text-blue-800 text-sm'>
-								<strong>Importante:</strong> Al realizar tu compra,
-								recibirás acceso inmediato a todos los materiales
-								a través de un enlace de descarga enviado a tu correo
-								electrónico o WhatsApp.
-							</p>
-						</div>
+            <!-- Important note -->
+            <div class="mb-6 rounded-lg border border-blue-100 bg-blue-50 p-4">
+              <p class="text-sm text-blue-800">
+                <strong>Importante:</strong> Al realizar tu compra, recibirás acceso inmediato a todos
+                los materiales a través de un enlace de descarga enviado a tu correo electrónico o WhatsApp.
+              </p>
+            </div>
 
-						<!-- Desktop: Customer support and sharing -->
-						<div class='space-y-4'>
-							<CustomerSupport class='w-full' />
-							<SocialShareButtons
-								url={shareUrl}
-								title={shareTitle}
-								description={shareDescription}
-								image={shareImage}
-								productType='pack'
-								price={discountedPrice}
-								currency='PEN'
-								className='w-full flex justify-center'
-							/>
-						</div>
-					</div>
-				</div>
+            <!-- Desktop: Customer support and sharing -->
+            <div class="space-y-4">
+              <CustomerSupport class="w-full" />
+              <SocialShareButtons
+                url={shareUrl}
+                title={shareTitle}
+                description={shareDescription}
+                image={shareImage}
+                productType="pack"
+                price={discountedPrice}
+                currency="PEN"
+                class="flex w-full justify-center"
+              />
+            </div>
+          </div>
+        </div>
 
-				<!-- Mobile: Included items -->
-				<div class='md:hidden order-3 p-4 sm:px-6'>
-					<div
-						class='border border-gray-100 rounded-xl bg-gray-50 p-4 mb-6'>
-						<h2
-							class='text-lg font-bold text-primary-dark mb-3 flex items-center'>
-							<span
-								class='bg-primary text-white p-1 rounded-full mr-2 flex-shrink-0'>
-								<CheckIcon class='w-4 h-4' />
-							</span>
-							Contenido incluido
-						</h2>
+        <!-- Mobile: Included items -->
+        <div class="order-3 p-4 sm:px-6 md:hidden">
+          <div class="mb-6 rounded-xl border border-gray-100 bg-gray-50 p-4">
+            <h2 class="text-primary-dark mb-3 flex items-center text-lg font-bold">
+              <span class="bg-primary mr-2 flex-shrink-0 rounded-full p-1 text-white">
+                <CheckIcon class="h-4 w-4" />
+              </span>
+              Contenido incluido
+            </h2>
 
-						<ul
-							class='space-y-2 included-items-list pl-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2'>
-							{
-								pack.includedItems &&
-									pack.includedItems.map((item) => (
-										<li class='flex items-start text-sm sm:text-base'>
-											<span class='text-green-500 mr-2 mt-0.5 flex-shrink-0'>
-												✓
-											</span>
-											<span class='text-gray-700'>
-												{item}
-											</span>
-										</li>
-									))
-							}
-						</ul>
-					</div>
+            <ul
+              class="included-items-list grid grid-cols-1 space-y-2 gap-x-4 gap-y-2 pl-2 sm:grid-cols-2"
+            >
+              {
+                pack.includedItems &&
+                  pack.includedItems.map((item) => (
+                    <li class="flex items-start text-sm sm:text-base">
+                      <span class="mt-0.5 mr-2 flex-shrink-0 text-green-500">✓</span>
+                      <span class="text-gray-700">{item}</span>
+                    </li>
+                  ))
+              }
+            </ul>
+          </div>
 
-					<!-- Mobile: Important note -->
-					<div
-						class='bg-blue-50 rounded-lg p-4 border border-blue-100 mb-6'>
-						<p class='text-blue-800 text-sm'>
-							<strong>Importante:</strong> Al realizar tu compra, recibirás
-							acceso inmediato a todos los materiales a través de un
-							enlace de descarga enviado a tu correo electrónico o
-							WhatsApp.
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
+          <!-- Mobile: Important note -->
+          <div class="mb-6 rounded-lg border border-blue-100 bg-blue-50 p-4">
+            <p class="text-sm text-blue-800">
+              <strong>Importante:</strong> Al realizar tu compra, recibirás acceso inmediato a todos los
+              materiales a través de un enlace de descarga enviado a tu correo electrónico o WhatsApp.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<!-- Books Included in Pack Section -->
-		{
-			includedBooks.length > 0 && (
-				<div class='mt-12'>
-					<SectionTitle>
-						<span class='flex items-center justify-center'>
-							<BookIcon class='w-6 h-6 mr-2' />
-							Libros Incluidos en Este Pack
-						</span>
-					</SectionTitle>
-					<p class='text-gray-600 mb-8 max-w-3xl text-center mx-auto'>
-						Este pack incluye {includedBooks.length}{' '}
-						{includedBooks.length === 1 ? 'libro' : 'libros'}
-						especialmente seleccionados para completar tu
-						experiencia de aprendizaje
-					</p>
+    <!-- Books Included in Pack Section -->
+    {
+      includedBooks.length > 0 && (
+        <div class="mt-12">
+          <SectionTitle>
+            <span class="flex items-center justify-center">
+              <BookIcon class="mr-2 h-6 w-6" />
+              Libros Incluidos en Este Pack
+            </span>
+          </SectionTitle>
+          <p class="mx-auto mb-8 max-w-3xl text-center text-gray-600">
+            Este pack incluye {includedBooks.length}{' '}
+            {includedBooks.length === 1 ? 'libro' : 'libros'}
+            especialmente seleccionados para completar tu experiencia de aprendizaje
+          </p>
 
-					<div class='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 included-books-grid'>
-						{includedBooks.map((book) => (
-							<ProductCard
-								product={{
-									...book,
-									productType: 'book',
-								}}
-								size='medium'
-								className='h-full'
-								editorial={
-									book.editorialId
-										? editorialData.find(
-												(e) => e.id === book.editorialId
-											)?.nombre
-										: undefined
-								}
-							/>
-						))}
-					</div>
-				</div>
-			)
-		}
+          <div class="included-books-grid grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {includedBooks.map((book) => (
+              <ProductCard
+                product={{
+                  ...book,
+                  productType: 'book',
+                }}
+                size="medium"
+                class="h-full"
+                editorial={
+                  book.editorialId
+                    ? editorialData.find((e) => e.id === book.editorialId)?.name
+                    : undefined
+                }
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
 
-		<!-- Related products section with improved responsive grid -->
-		{
-			finalRecommendations.length > 0 && (
-				<div class='mt-12 related-section'>
-					<SectionTitle>Recomendaciones para ti</SectionTitle>
-					<p class='text-gray-600 mb-6 max-w-3xl text-center mx-auto'>
-						Basado en tus intereses, estos productos podrían
-						complementar tu experiencia de aprendizaje
-					</p>
+    <!-- Related products section with improved responsive grid -->
+    {
+      finalRecommendations.length > 0 && (
+        <div class="related-section mt-12">
+          <SectionTitle>Recomendaciones para ti</SectionTitle>
+          <p class="mx-auto mb-6 max-w-3xl text-center text-gray-600">
+            Basado en tus intereses, estos productos podrían complementar tu experiencia de
+            aprendizaje
+          </p>
 
-					<div class='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6'>
-						{finalRecommendations.map((item) => (
-							<ProductCard
-								product={item}
-								size='medium'
-								className='h-full'
-								editorial={
-									item.editorialId
-										? editorialData.find(
-												(e) => e.id === item.editorialId
-											)?.nombre
-										: undefined
-								}
-							/>
-						))}
-					</div>
+          <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {finalRecommendations.map((item) => (
+              <ProductCard
+                product={item}
+                size="medium"
+                class="h-full"
+                editorial={
+                  item.editorialId
+                    ? editorialData.find((e) => e.id === item.editorialId)?.name
+                    : undefined
+                }
+              />
+            ))}
+          </div>
 
-					<div class='text-center mt-8'>
-						<Button
-							variant='outline'
-							size='medium'
-							href='/catalogo'
-							class='inline-flex items-center group'>
-							Ver catálogo completo
-							<ArrowRightIcon class='ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform' />
-						</Button>
-					</div>
-				</div>
-			)
-		}
-	</div>
+          <div class="mt-8 text-center">
+            <Button
+              variant="outline"
+              size="medium"
+              href="/catalogo"
+              class="group inline-flex items-center"
+            >
+              Ver catálogo completo
+              <ArrowRightIcon class="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+        </div>
+      )
+    }
+  </div>
 </div>
 
 <script>
-	import { CartManager } from '../../utils/cartManager';
+  import { CartManager } from '../../utils/cartManager';
 
-	document.addEventListener('DOMContentLoaded', () => {
-		// Add event listeners to "Add to Cart" buttons
-		const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
-		addToCartBtns.forEach((btn) => {
-			btn.addEventListener('click', () => {
-				const productId = btn.getAttribute('data-id');
-				const productTitle = btn.getAttribute('data-title');
-				const productPriceStr = btn.getAttribute('data-price');
-				const productImage = btn.getAttribute('data-image');
-				const productType = btn.getAttribute('data-type');
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add event listeners to "Add to Cart" buttons
+    const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+    addToCartBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const productId = btn.getAttribute('data-id');
+        const productTitle = btn.getAttribute('data-title');
+        const productPriceStr = btn.getAttribute('data-price');
+        const productImage = btn.getAttribute('data-image');
+        const productType = btn.getAttribute('data-type');
 
-				if (
-					productId &&
-					productTitle &&
-					productPriceStr &&
-					productImage &&
-					productType
-				) {
-					const productPrice = parseFloat(productPriceStr);
+        if (productId && productTitle && productPriceStr && productImage && productType) {
+          const productPrice = parseFloat(productPriceStr);
 
-					// Add item to cart using CartManager
-					CartManager.addItem({
-						id: productId,
-						title: productTitle,
-						price: productPrice,
-						image: productImage,
-						type: productType as 'book' | 'exam' | 'pack',
-					});
+          // Add item to cart using CartManager
+          CartManager.addItem({
+            id: productId,
+            title: productTitle,
+            price: productPrice,
+            image: productImage,
+            type: productType as 'book' | 'exam' | 'pack',
+          });
 
-					// Show success message
-					CartManager.showNotification(
-						`"${productTitle}" agregado al carrito`
-					);
+          // Show success message
+          CartManager.showNotification(`"${productTitle}" agregado al carrito`);
 
-					// Dispatch event to notify other components about cart update
-					window.dispatchEvent(new CustomEvent('cartUpdated'));
-				}
-			});
-		});
-	});
+          // Dispatch event to notify other components about cart update
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
+        }
+      });
+    });
+  });
 </script>
 
 <style>
-	/* Animation for included items */
-	.included-items-list li {
-		animation: fadeInUp 0.5s ease forwards;
-		opacity: 0;
-	}
+  /* Animation for included items */
+  .included-items-list li {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+  }
 
-	.included-items-list li:nth-child(1) {
-		animation-delay: 0.1s;
-	}
-	.included-items-list li:nth-child(2) {
-		animation-delay: 0.2s;
-	}
-	.included-items-list li:nth-child(3) {
-		animation-delay: 0.3s;
-	}
-	.included-items-list li:nth-child(4) {
-		animation-delay: 0.4s;
-	}
-	.included-items-list li:nth-child(5) {
-		animation-delay: 0.5s;
-	}
-	.included-items-list li:nth-child(6) {
-		animation-delay: 0.6s;
-	}
-	.included-items-list li:nth-child(7) {
-		animation-delay: 0.7s;
-	}
-	.included-items-list li:nth-child(8) {
-		animation-delay: 0.8s;
-	}
+  .included-items-list li:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .included-items-list li:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .included-items-list li:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .included-items-list li:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .included-items-list li:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .included-items-list li:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  .included-items-list li:nth-child(7) {
+    animation-delay: 0.7s;
+  }
+  .included-items-list li:nth-child(8) {
+    animation-delay: 0.8s;
+  }
 
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-	/* Improve tap targets on mobile */
-	@media (max-width: 640px) {
-		.included-items-list li {
-			padding: 6px 0;
-		}
+  /* Improve tap targets on mobile */
+  @media (max-width: 640px) {
+    .included-items-list li {
+      padding: 6px 0;
+    }
 
-		button,
-		a.bg-primary,
-		a.bg-accent {
-			min-height: 42px;
-		}
-	}
+    .add-to-cart-btn,
+    .btn,
+    a.bg-primary,
+    a.bg-accent {
+      min-height: 42px;
+    }
+  }
 
-	/* Animations for included books grid */
-	.included-books-grid > div {
-		opacity: 0;
-		transform: translateY(20px);
-		animation: fadeInStaggered 0.6s ease forwards;
-	}
+  /* Animations for included books grid */
+  .included-books-grid > div {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInStaggered 0.6s ease forwards;
+  }
 
-	.included-books-grid > div:nth-child(1) {
-		animation-delay: 0.1s;
-	}
-	.included-books-grid > div:nth-child(2) {
-		animation-delay: 0.2s;
-	}
-	.included-books-grid > div:nth-child(3) {
-		animation-delay: 0.3s;
-	}
-	.included-books-grid > div:nth-child(4) {
-		animation-delay: 0.4s;
-	}
-	.included-books-grid > div:nth-child(5) {
-		animation-delay: 0.5s;
-	}
-	.included-books-grid > div:nth-child(6) {
-		animation-delay: 0.6s;
-	}
+  .included-books-grid > div:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .included-books-grid > div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .included-books-grid > div:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .included-books-grid > div:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .included-books-grid > div:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .included-books-grid > div:nth-child(6) {
+    animation-delay: 0.6s;
+  }
 
-	@keyframes fadeInStaggered {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+  @keyframes fadeInStaggered {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>

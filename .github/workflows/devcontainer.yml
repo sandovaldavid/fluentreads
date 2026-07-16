@@ -1,0 +1,105 @@
+name: Build DevContainer Image
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - '.devcontainer/**'
+      - '.github/workflows/devcontainer.yml'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Ref to build (main or develop)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  detect-ref:
+    name: Detect ref
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.detect.outputs.ref }}
+    steps:
+      - id: detect
+        run: |
+          if [ -n "${{ inputs.ref }}" ]; then
+            echo "ref=${{ inputs.ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=${GITHUB_REF#refs/heads/}" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    name: Build and push image
+    runs-on: ubuntu-latest
+    needs: detect-ref
+    environment: ${{ needs.detect-ref.outputs.ref == 'main' && 'stable' || 'prerelease' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.detect-ref.outputs.ref == 'main' && 'main' || 'develop' }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/sandovaldavid/fluentreads-devcontainer
+          tags: |
+            type=raw,value=latest,enable=${{ needs.detect-ref.outputs.ref == 'main' }}
+            type=raw,value=stable,enable=${{ needs.detect-ref.outputs.ref == 'main' }}
+            type=raw,value=pre-release,enable=${{ needs.detect-ref.outputs.ref == 'develop' }}
+            type=sha,format=short,enable=${{ needs.detect-ref.outputs.ref == 'main' }}
+            type=sha,format=short,prefix=prerelease-,enable=${{ needs.detect-ref.outputs.ref == 'develop' }}
+            type=semver,pattern={{version}},enable=${{ needs.detect-ref.outputs.ref == 'main' }}
+            type=semver,pattern={{major}}.{{minor}},enable=${{ needs.detect-ref.outputs.ref == 'main' }}
+          labels: |
+            org.opencontainers.image.title=FluentReads DevContainer
+            org.opencontainers.image.description=Development container for FluentReads (Astro 7 + React 19 + Tailwind v4 + bun)
+            org.opencontainers.image.source=https://github.com/sandovaldavid/fluentreads
+            org.opencontainers.image.licenses=MIT
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .devcontainer
+          file: .devcontainer/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: |
+            type=gha
+            type=registry,ref=ghcr.io/sandovaldavid/fluentreads-devcontainer:cache
+          cache-to: |
+            type=gha,mode=max
+            type=registry,ref=ghcr.io/sandovaldavid/fluentreads-devcontainer:cache,mode=max
+
+      - name: Summary
+        run: |
+          echo "### DevContainer image published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Branch: \`${{ needs.detect-ref.outputs.ref }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Tags:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Pull with:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`sh" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ghcr.io/sandovaldavid/fluentreads-devcontainer:latest" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

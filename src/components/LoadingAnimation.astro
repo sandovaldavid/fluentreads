@@ -1,54 +1,47 @@
 ---
 interface Props {
-	size?: 'small' | 'medium' | 'large';
-	color?: 'primary' | 'secondary' | 'accent';
-	text?: string;
-	showText?: boolean;
+  size?: 'small' | 'medium' | 'large';
+  color?: 'primary' | 'secondary' | 'accent';
+  text?: string;
+  showText?: boolean;
 }
 
-const {
-	size = 'medium',
-	color = 'primary',
-	text = 'Cargando...',
-	showText = true,
-} = Astro.props;
+const { size = 'medium', color = 'primary', text = 'Cargando...', showText = true } = Astro.props;
 
 // Size mappings
 const sizeMap = {
-	small: 'w-4 h-4',
-	medium: 'w-8 h-8',
-	large: 'w-12 h-12',
+  small: 'w-4 h-4',
+  medium: 'w-8 h-8',
+  large: 'w-12 h-12',
 };
 
 // Color mappings
 const colorMap = {
-	primary: 'border-primary border-b-transparent',
-	secondary: 'border-secondary border-b-transparent',
-	accent: 'border-accent border-b-transparent',
+  primary: 'border-primary border-b-transparent',
+  secondary: 'border-secondary border-b-transparent',
+  accent: 'border-accent border-b-transparent',
 };
 
 const selectedSize = sizeMap[size];
 const selectedColor = colorMap[color];
 ---
 
-<div class='flex flex-col items-center justify-center' aria-live='polite'>
-	<div
-		class={`${selectedSize} border-4 ${selectedColor} rounded-full animate-spin`}>
-	</div>
-	{showText && <p class='mt-3 text-gray-600'>{text}</p>}
+<div class="flex flex-col items-center justify-center" aria-live="polite">
+  <div class={`${selectedSize} border-4 ${selectedColor} animate-spin rounded-full`}></div>
+  {showText && <p class="mt-3 text-gray-600">{text}</p>}
 </div>
 
 <style>
-	@keyframes spin {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
-	.animate-spin {
-		animation: spin 1s linear infinite;
-	}
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
 </style>

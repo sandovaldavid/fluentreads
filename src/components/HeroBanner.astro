@@ -1,212 +1,235 @@
 ---
 interface OfferReference {
-    id: string;
-    type: "book" | "pack" | "exam";
-    expiration?: string;
-    customLink?: string;
+  id: string;
+  type: 'book' | 'pack' | 'exam';
+  expiration?: string;
+  customLink?: string;
 }
 
 interface Offer {
-    id: string;
-    title: string;
-    description: string;
-    image: string;
-    discount?: string;
-    expiration?: string;
-    link: string;
-    type: "book" | "pack" | "exam";
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  discount?: string;
+  expiration?: string;
+  link: string;
+  type: 'book' | 'pack' | 'exam';
 }
 
 interface Props {
-    title: string;
-    subtitle?: string;
-    ctaText?: string;
-    ctaLink?: string;
-    showCarousel?: boolean;
-    maxOffersToShow?: number;
+  title: string;
+  subtitle?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  showCarousel?: boolean;
+  maxOffersToShow?: number;
 }
 
-const { 
-    title, 
-    subtitle = "Tu fuente principal de recursos para aprender inglés",
-    ctaText = "Explorar Catálogo",
-    ctaLink = "/catalogo",
-    showCarousel = true,
-    maxOffersToShow = 4
+const {
+  title,
+  subtitle = 'Tu fuente principal de recursos para aprender inglés',
+  ctaText = 'Explorar Catálogo',
+  ctaLink = '/catalogo',
+  showCarousel = true,
+  maxOffersToShow = 4,
 } = Astro.props;
 
 // Import references from offerHeroBanner.json
-import offerReferences from '../database/offerHeroBanner.json';
+import offerReferences from '../data/offer-hero-banner.json';
 // Import source data files
-import booksData from '../database/books.json';
-import packsData from '../database/packs.json';
-import examsData from '../database/exams.json';
+import booksData from '../data/books.json';
+import packsData from '../data/packs.json';
+import examsData from '../data/exams.json';
 
 // Function to get product details based on type and ID
 function getProductDetails(reference: OfferReference): Offer | null {
-    let product;
-    
-    switch (reference.type) {
-        case "book":
-            product = booksData.find(book => book.id === reference.id);
-            if (product) {
-                return {
-                    id: product.id,
-                    title: product.title,
-                    description: product.description,
-                    image: product.coverImage,
-                    discount: product.discount ? `${product.discount}%` : undefined,
-                    expiration: reference.expiration,
-                    link: reference.customLink || product.detailsLink,
-                    type: "book"
-                };
-            }
-            break;
-        
-        case "pack":
-            product = packsData.find(pack => pack.id === reference.id);
-            if (product) {
-                return {
-                    id: product.id,
-                    title: product.title,
-                    description: product.description,
-                    image: product.coverImage,
-                    discount: product.discount ? `${product.discount}%` : undefined,
-                    expiration: reference.expiration,
-                    link: reference.customLink || product.detailsLink,
-                    type: "pack"
-                };
-            }
-            break;
-        
-        case "exam":
-            product = examsData.find(exam => exam.id === reference.id);
-            if (product) {
-                return {
-                    id: product.id,
-                    title: product.title,
-                    description: product.description,
-                    image: product.coverImage,
-                    discount: product.discount ? `${product.discount}%` : undefined,
-                    expiration: reference.expiration,
-                    link: reference.customLink || product.detailsLink,
-                    type: "exam"
-                };
-            }
-            break;
-    }
-    
-    return null;
+  let product;
+
+  switch (reference.type) {
+    case 'book':
+      product = booksData.find((book) => book.id === reference.id);
+      if (product) {
+        return {
+          id: product.id,
+          title: product.title,
+          description: product.description,
+          image: product.coverImage,
+          discount: product.discount ? `${product.discount}%` : undefined,
+          expiration: reference.expiration,
+          link: reference.customLink || product.detailsLink,
+          type: 'book',
+        };
+      }
+      break;
+
+    case 'pack':
+      product = packsData.find((pack) => pack.id === reference.id);
+      if (product) {
+        return {
+          id: product.id,
+          title: product.title,
+          description: product.description,
+          image: product.coverImage,
+          discount: product.discount ? `${product.discount}%` : undefined,
+          expiration: reference.expiration,
+          link: reference.customLink || product.detailsLink,
+          type: 'pack',
+        };
+      }
+      break;
+
+    case 'exam':
+      product = examsData.find((exam) => exam.id === reference.id);
+      if (product) {
+        return {
+          id: product.id,
+          title: product.title,
+          description: product.description,
+          image: product.coverImage,
+          discount: product.discount ? `${product.discount}%` : undefined,
+          expiration: reference.expiration,
+          link: reference.customLink || product.detailsLink,
+          type: 'exam',
+        };
+      }
+      break;
+  }
+
+  return null;
 }
 
 // Process offer references to get complete offer data
 const offerReferencesLimited = offerReferences.slice(0, maxOffersToShow);
 const offers: Offer[] = offerReferencesLimited
-    .map(ref => getProductDetails(ref as OfferReference))
-    .filter((offer): offer is Offer => offer !== null);
+  .map((ref) => getProductDetails(ref as OfferReference))
+  .filter((offer): offer is Offer => offer !== null);
 
 import { fade } from 'astro:transitions';
 import '../styles/HeroBanner.css';
 import ArrowRightIcon from './icons/ArrowRight.astro';
-import CarruselButtons from './CarruselButtons.astro';
+import CarouselButtons from './CarouselButtons.astro';
 import Button from './Button.astro';
 ---
 
-<section class="hero-banner bg-primary-dark text-white py-6 md:py-18 lg:py-10 overflow-hidden relative lg:px-8">
-    <!-- Animated particles background effect -->
-    <div class="particles-background absolute inset-0 opacity-20"></div>
-    
-    <div class="container mx-auto px-4 mt-6 relative z-10">
-        <div class="max-w-5xl mx-auto text-center mb-12">
-            <h1 
-                class="text-4xl md:text-6xl font-bold mb-6 animate-title"
-                transition:animate={fade({ duration: '0.8s' })}
-            >
-                {title}
-            </h1>
-            <p 
-                class="text-xl md:text-2xl mb-10 text-secondary-light animate-subtitle"
-                transition:animate={fade({ duration: '0.8s' })}
-            >
-                {subtitle}
-            </p>
-            <Button 
-                href={ctaLink} 
-                variant="secondary"
-                size="large"
-                class="text-primary-dark font-extrabold animate-button-bounce"
-            >
-                {ctaText}
-                <ArrowRightIcon class='h-5 w-5 ml-2 animate-arrow'/>
-            </Button>
-        </div>
+<section
+  class="hero-banner bg-primary-dark relative overflow-hidden py-6 text-white md:py-18 lg:px-8 lg:py-10"
+>
+  <!-- Animated particles background effect -->
+  <div class="particles-background absolute inset-0 opacity-20"></div>
 
-        {showCarousel && offers.length > 0 && (
-            <div class="offers-carousel mt-12 relative" data-offers-count={offers.length}>
-                <div class="carousel-container overflow-hidden rounded-xl shadow-2xl">
-                    <div class="carousel-track flex transition-transform duration-500">
-                        {offers.map((offer, index) => (
-                            <div class="carousel-slide w-full flex-shrink-0 p-6 md:p-8 bg-gradient-to-r from-primary to-primary-light rounded-xl overflow-hidden relative" data-offer-id={offer.id} data-offer-type={offer.type}>
-                                <div class="flex flex-col md:flex-row items-center gap-8">
-                                    <div class="md:w-2/5 relative">
-                                        {offer.discount && (
-                                            <div class="absolute -top-2 -left-2 bg-accent text-white px-4 py-1 rounded-lg font-bold z-20 animate-pulse">
-                                                {offer.discount}
-                                            </div>
-                                        )}
-                                        <div class="absolute -top-2 -right-2 bg-primary-light text-white px-3 py-1 rounded-lg font-bold z-20">
-                                            {offer.type === "book" ? "Libro" : offer.type === "pack" ? "Pack" : "Examen"}
-                                        </div>
-                                        <img 
-                                            src={offer.image} 
-                                            alt={offer.title} 
-                                            class="rounded-lg shadow-lg object-cover w-full h-60 md:h-80 transform transition-transform hover:scale-105"
-                                            loading={index === 0 ? "eager" : "lazy"}
-                                        />
-                                    </div>
-                                    <div class="md:w-3/5 text-left">
-                                        <h3 class="text-2xl md:text-3xl font-bold mb-4 text-secondary">{offer.title}</h3>
-                                        <p class="text-lg md:text-xl mb-6">{offer.description}</p>
-                                        <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
-                                            <Button 
-                                                variant="accent"
-                                                size="medium"
-                                                href={offer.link}
-                                                class="animate-button-slide">
-                                                <span>Ver detalles</span>
-                                                <ArrowRightIcon class='h-5 w-5 ml-2 animate-arrow'/>
-                                            </Button>
-                                            {offer.expiration && (
-                                                <p class="text-sm opacity-80">Expira: {offer.expiration}</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <!-- Carousel controls with proper aria labels -->
-                <CarruselButtons 
-                    ariaLabelPrev="Ver oferta anterior"
-                    ariaLabelNext="Ver oferta siguiente"
-                    className="carousel-buttons"
-                />
-
-                <!-- Carousel indicators -->
-                <div class="carousel-indicators flex justify-center gap-2 mt-6">
-                    {offers.map((_, index) => (
-                        <button 
-                            class={`indicator-dot h-3 w-3 rounded-full ${index === 0 ? 'bg-secondary' : 'bg-gray-400'} hover:bg-secondary transition-colors duration-300 cursor-pointer`} 
-                            data-index={index}
-                            aria-label={`Ver oferta ${index + 1}`}
-                        ></button>
-                    ))}
-                </div>
-            </div>
-        )}
+  <div class="relative z-10 container mx-auto mt-6 px-4">
+    <div class="mx-auto mb-12 max-w-5xl text-center">
+      <h1
+        class="animate-title mb-6 text-4xl font-bold md:text-6xl"
+        transition:animate={fade({ duration: '0.8s' })}
+      >
+        {title}
+      </h1>
+      <p
+        class="text-secondary-light animate-subtitle mb-10 text-xl md:text-2xl"
+        transition:animate={fade({ duration: '0.8s' })}
+      >
+        {subtitle}
+      </p>
+      <Button
+        href={ctaLink}
+        variant="secondary"
+        size="large"
+        class="text-primary-dark animate-button-bounce font-extrabold"
+      >
+        {ctaText}
+        <ArrowRightIcon class="animate-arrow ml-2 h-5 w-5" />
+      </Button>
     </div>
+
+    {
+      showCarousel && offers.length > 0 && (
+        <div class="offers-carousel relative mt-12" data-offers-count={offers.length}>
+          <div class="carousel-container overflow-hidden rounded-xl shadow-2xl">
+            <div class="carousel-track flex transition-transform duration-500">
+              {offers.map((offer, index) => (
+                <div
+                  class="carousel-slide from-primary to-primary-light relative w-full flex-shrink-0 overflow-hidden rounded-xl bg-gradient-to-r p-6 md:p-8"
+                  data-offer-id={offer.id}
+                  data-offer-type={offer.type}
+                >
+                  <div class="flex flex-col items-center gap-8 md:flex-row">
+                    <div class="relative md:w-2/5">
+                      {offer.discount && (
+                        <div class="bg-accent-dark hero-pulse absolute -top-2 -left-2 z-20 rounded-lg px-4 py-1 font-bold text-white">
+                          {offer.discount}
+                        </div>
+                      )}
+                      <div class="bg-primary-light absolute -top-2 -right-2 z-20 rounded-lg px-3 py-1 font-bold text-white">
+                        {offer.type === 'book'
+                          ? 'Libro'
+                          : offer.type === 'pack'
+                            ? 'Pack'
+                            : 'Examen'}
+                      </div>
+                      <img
+                        src={offer.image}
+                        alt={offer.title}
+                        class="h-60 w-full transform rounded-lg object-cover shadow-lg transition-transform hover:scale-105 md:h-80"
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        decoding={index === 0 ? 'sync' : 'async'}
+                        fetchpriority={index === 0 ? 'high' : 'auto'}
+                      />
+                    </div>
+                    <div class="text-left md:w-3/5">
+                      <h3 class="text-secondary mb-4 text-2xl font-bold md:text-3xl">
+                        {offer.title}
+                      </h3>
+                      <p class="mb-6 text-lg md:text-xl">{offer.description}</p>
+                      <div class="flex flex-col items-start gap-4 md:flex-row md:items-center">
+                        <Button
+                          variant="accent"
+                          size="medium"
+                          href={offer.link}
+                          class="animate-button-slide"
+                        >
+                          <span>Ver detalles</span>
+                          <ArrowRightIcon class="animate-arrow ml-2 h-5 w-5" />
+                        </Button>
+                        {offer.expiration && (
+                          <p class="text-sm opacity-80">Expira: {offer.expiration}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Carousel controls with proper aria labels */}
+          <CarouselButtons
+            ariaLabelPrev="Ver oferta anterior"
+            ariaLabelNext="Ver oferta siguiente"
+            class="carousel-buttons"
+          />
+
+          {/* Carousel indicators */}
+          <div class="carousel-indicators mt-6 flex justify-center gap-2">
+            {offers.map((_, index) => (
+              <button
+                type="button"
+                class="carousel-indicator flex size-11 cursor-pointer items-center justify-center rounded-full focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+                data-index={index}
+                aria-label={`Ver oferta ${index + 1}`}
+              >
+                <span
+                  class={`indicator-dot block size-3 rounded-full transition-colors duration-300 ${index === 0 ? 'bg-secondary' : 'bg-gray-400'}`}
+                  aria-hidden="true"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
 </section>
 
 <script src="../scripts/HeroBanner.ts"></script>

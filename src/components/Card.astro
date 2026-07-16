@@ -9,33 +9,31 @@ import BookTags from './BookTags.astro';
 import ReviewStars from './ReviewStars.astro';
 
 interface Props {
-	book: Book;
+  book: Book;
 }
 
 const { book } = Astro.props;
 
 const {
-	title,
-	description,
-	price,
-	coverImage,
-	altText = `${title} Book cover`,
-	includedItems = [],
-	rating,
-	buyLink = '#',
-	detailsLink = '#',
-	discount = 0,
-	level,
-	featured = false,
-	formatTags = [],
-	popularityTags = [],
+  id,
+  title,
+  description,
+  price,
+  coverImage,
+  altText = `${title} Book cover`,
+  includedItems = [],
+  rating,
+  detailsLink = '#',
+  discount = 0,
+  level,
+  featured = false,
+  formatTags = [],
+  popularityTags = [],
 } = book;
 
 // Truncate description if too long
 const truncatedDescription =
-	description.length > 70
-		? `${description.substring(0, 70)}...`
-		: description;
+  description.length > 70 ? `${description.substring(0, 70)}...` : description;
 
 // Price calculations
 const hasDiscount = discount > 0;
@@ -44,169 +42,211 @@ const formattedPrice = `S/${price.toFixed(2)}`;
 const formattedDiscountedPrice = `S/${discountedPrice.toFixed(2)}`;
 
 // Get level configuration
-const levelDisplay = level
-	? levelConfig[level as keyof typeof levelConfig]
-	: null;
+const levelDisplay = level ? levelConfig[level as keyof typeof levelConfig] : null;
 
 // Special status highlighting
 const isSpecialOffer =
-	hasDiscount ||
-	(popularityTags && popularityTags.includes(PopularityTag.SPECIAL_OFFER));
+  hasDiscount || (popularityTags && popularityTags.includes(PopularityTag.SPECIAL_OFFER));
 const isFeaturedOrBestseller =
-	featured ||
-	(popularityTags && popularityTags.includes(PopularityTag.BESTSELLER));
+  featured || (popularityTags && popularityTags.includes(PopularityTag.BESTSELLER));
 ---
 
 <div
-	class:list={[
-		'book-card bg-white rounded-xl overflow-hidden w-full max-w-sm flex flex-col h-full transform transition-all duration-500 book-card-tilt',
-		isFeaturedOrBestseller
-			? 'card-highlighted shadow-xl hover:shadow-2xl hover:-translate-y-2'
-			: 'shadow-md hover:shadow-xl hover:-translate-y-1',
-		isSpecialOffer && 'special-offer-card',
-	]}>
-	<!-- Book Cover Image with Badge -->
-	<div class='relative h-52 overflow-hidden book-cover-container'>
-		<img
-			src={coverImage}
-			alt={altText}
-			class='w-full h-full object-cover transition-transform duration-700 book-cover'
-			loading='lazy'
-		/>
-		<div
-			class='absolute inset-0 bg-gradient-to-b from-transparent to-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cover-overlay'>
-		</div>
+  class:list={[
+    'book-card book-card-tilt focus-visible:ring-primary flex h-full w-full max-w-sm transform flex-col overflow-hidden rounded-xl bg-white transition-all duration-500 focus:outline-none focus-visible:ring-2',
+    isFeaturedOrBestseller
+      ? 'card-highlighted shadow-xl hover:-translate-y-2 hover:shadow-2xl'
+      : 'shadow-md hover:-translate-y-1 hover:shadow-xl',
+    isSpecialOffer && 'special-offer-card',
+  ]}
+  tabindex="0"
+  role="button"
+  aria-label={`Detalles de libro: ${title}. Presiona para expandir en dispositivos móviles.`}
+>
+  <!-- Book Cover Image with Badge -->
+  <div class="book-cover-container relative h-52 overflow-hidden">
+    <img
+      src={coverImage}
+      alt={altText}
+      class="book-cover h-full w-full object-cover transition-transform duration-700"
+      loading="lazy"
+      decoding="async"
+    />
+    <div
+      class="cover-overlay absolute inset-0 bg-gradient-to-b from-transparent to-black/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    >
+    </div>
 
-		<!-- Featured & Level badges -->
-		{
-			featured && (
-				<div class='absolute top-3 left-3 bg-secondary text-black font-bold py-1 px-3 rounded-full text-sm shadow-md animate-pulse-subtle'>
-					Recomendado
-				</div>
-			)
-		}
+    <!-- Featured & Level badges -->
+    {
+      featured && (
+        <div class="bg-secondary animate-pulse-subtle absolute top-3 left-3 rounded-full px-3 py-1 text-sm font-bold text-black shadow-md">
+          Recomendado
+        </div>
+      )
+    }
 
-		{
-			levelDisplay && (
-				<div
-					class={`absolute top-3 ${featured ? 'right-3' : 'left-3'} ${levelDisplay.color} font-medium py-1 px-3 rounded-full text-xs shadow-sm`}>
-					{levelDisplay.label}
-				</div>
-			)
-		}
+    {
+      levelDisplay && (
+        <div
+          class={`absolute top-3 ${featured ? 'right-3' : 'left-3'} ${levelDisplay.color} rounded-full px-3 py-1 text-xs font-medium shadow-sm`}
+        >
+          {levelDisplay.label}
+        </div>
+      )
+    }
 
-		<!-- Discount badge -->
-		{
-			hasDiscount && (
-				<div class='absolute -right-12 top-7 bg-accent text-white font-bold py-1 px-10 shadow-md transform rotate-45 discount-badge'>
-					{discount}% OFF
-				</div>
-			)
-		}
-	</div>
+    <!-- Discount badge -->
+    {
+      hasDiscount && (
+        <div class="bg-accent discount-badge absolute top-7 -right-12 rotate-45 transform px-10 py-1 font-bold text-white shadow-md">
+          {discount}% OFF
+        </div>
+      )
+    }
+  </div>
 
-	<!-- Book Details -->
-	<div class='p-5 flex flex-col flex-grow card-content'>
-		<!-- Title -->
-		<h3
-			class='text-xl font-bold text-gray-800 mb-2 line-clamp-2 book-title'>
-			{title}
-		</h3>
+  <!-- Book Details -->
+  <div class="card-content flex flex-grow flex-col p-5">
+    <!-- Title -->
+    <h3 class="book-title mb-2 line-clamp-2 text-xl font-bold text-gray-800">
+      {title}
+    </h3>
 
-		<!-- Tags Section -->
-		<BookTags
-			formatTags={formatTags}
-			popularityTags={popularityTags}
-			formatConfig={formatConfig}
-			popularityConfig={popularityConfig}
-		/>
+    <!-- Tags Section -->
+    <BookTags
+      formatTags={formatTags}
+      popularityTags={popularityTags}
+      formatConfig={formatConfig}
+      popularityConfig={popularityConfig}
+    />
 
-		<!-- Description -->
-		<p class='text-gray-700 text-sm mb-4 line-clamp-2 book-description'>
-			{truncatedDescription}
-		</p>
+    <!-- Description -->
+    <p class="book-description mb-4 line-clamp-2 text-sm text-gray-700">
+      {truncatedDescription}
+    </p>
 
-		<!-- Price display -->
-		<div class='mb-4 flex items-center price-display'>
-			{
-				hasDiscount ? (
-					<>
-						<span class='text-secondary-dark font-bold text-2xl discounted-price'>
-							{formattedDiscountedPrice}
-						</span>
-						<span class='ml-2 text-sm text-gray-500 line-through original-price'>
-							{formattedPrice}
-						</span>
-						<span class='ml-2 bg-accent/10 text-accent text-xs font-bold px-2 py-0.5 rounded-full discount-tag'>
-							{discount}% OFF
-						</span>
-					</>
-				) : (
-					<span class='text-secondary-dark font-bold text-2xl normal-price'>
-						{formattedPrice}
-					</span>
-				)
-			}
-		</div>
+    <!-- Price display -->
+    <div class="price-display mb-4 flex items-center">
+      {
+        hasDiscount ? (
+          <>
+            <span class="text-secondary-dark discounted-price text-2xl font-bold">
+              {formattedDiscountedPrice}
+            </span>
+            <span class="original-price ml-2 text-sm text-gray-500 line-through">
+              {formattedPrice}
+            </span>
+            <span class="bg-accent/10 text-accent discount-tag ml-2 rounded-full px-2 py-0.5 text-xs font-bold">
+              {discount}% OFF
+            </span>
+          </>
+        ) : (
+          <span class="text-secondary-dark normal-price text-2xl font-bold">{formattedPrice}</span>
+        )
+      }
+    </div>
 
-		<!-- Included items list -->
-		<div class='mb-5 flex-grow included-content'>
-			<p class='font-medium text-gray-700 mb-2'>Incluye:</p>
-			<ul class='text-sm space-y-1.5 included-list'>
-				{
-					includedItems.map((item) => (
-						<li class='flex items-start included-item'>
-							<span class='text-accent mr-1.5 mt-0.5'>✓</span>{' '}
-							{item}
-						</li>
-					))
-				}
-			</ul>
-		</div>
+    <!-- Included items list -->
+    <div class="included-content mb-5 flex-grow">
+      <p class="mb-2 font-medium text-gray-700">Incluye:</p>
+      <ul class="included-list space-y-1.5 text-sm">
+        {
+          includedItems.map((item) => (
+            <li class="included-item flex items-start">
+              <span class="text-accent mt-0.5 mr-1.5">✓</span> {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
 
-		<!-- Rating stars -->
-		{rating && <ReviewStars score={rating.score} className='mb-5' />}
+    <!-- Rating stars -->
+    {rating && <ReviewStars score={rating.score} class="mb-5" />}
 
-		<!-- Action Buttons -->
-		<div class='flex space-x-2 mt-auto action-buttons'>
-			<Button
-				variant='primary'
-				size='small'
-				href={buyLink}
-				fullWidth={true}
-				newTab={false}
-				class='group shadow-md hover:shadow-lg buy-button'>
-				<span>Comprar</span>
-				<ArrowRightIcon class='w-6 h-6 ml' />
-			</Button>
-			<Button
-				variant='outline'
-				size='small'
-				href={detailsLink}
-				newTab={false}
-				class='min-w-[120px] details-button'>
-				Ver Detalles
-			</Button>
-		</div>
-	</div>
+    <!-- Action Buttons -->
+    <div class="action-buttons mt-auto flex space-x-2">
+      <Button
+        variant="primary"
+        size="small"
+        fullWidth={true}
+        class="group buy-button add-to-cart-and-checkout cursor-pointer shadow-md hover:shadow-lg"
+        data-id={id}
+        data-title={title}
+        data-price={discountedPrice}
+        data-image={coverImage}
+        data-type="book"
+      >
+        <span>Comprar</span>
+        <ArrowRightIcon class="ml-1 h-6 w-6" />
+      </Button>
+      <Button
+        variant="outline"
+        size="small"
+        href={detailsLink}
+        newTab={false}
+        class="details-button min-w-[120px]"
+      >
+        Ver Detalles
+      </Button>
+    </div>
+  </div>
 </div>
 
 <script>
-	// Mobile click to expand functionality
-	document.addEventListener('DOMContentLoaded', () => {
-		document.querySelectorAll('.book-card').forEach((card) => {
-			card.addEventListener('click', (e) => {
-				if (window.innerWidth <= 768) {
-					const target = e.target as Element;
-					if (
-						target &&
-						!target.closest('a') &&
-						!target.closest('button')
-					) {
-						card.classList.toggle('expanded');
-					}
-				}
-			});
-		});
-	});
+  import { CartManager } from '../utils/cartManager';
+
+  // Mobile click to expand functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.book-card').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          const target = e.target as Element;
+          if (target && !target.closest('a') && !target.closest('button')) {
+            card.classList.toggle('expanded');
+          }
+        }
+      });
+
+      card.addEventListener('keydown', (e) => {
+        const keyboardEvent = e as KeyboardEvent;
+        if (
+          window.innerWidth <= 768 &&
+          (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ')
+        ) {
+          const target = keyboardEvent.target as Element;
+          if (target && !target.closest('a') && !target.closest('button')) {
+            card.classList.toggle('expanded');
+            keyboardEvent.preventDefault();
+          }
+        }
+      });
+    });
+
+    // Handle "Comprar" button clicks
+    document.querySelectorAll('.add-to-cart-and-checkout').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const id = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title');
+        const priceStr = btn.getAttribute('data-price');
+        const image = btn.getAttribute('data-image');
+        const type = btn.getAttribute('data-type');
+
+        if (id && title && priceStr && image && type) {
+          CartManager.addItem({
+            id,
+            title,
+            price: parseFloat(priceStr),
+            image,
+            type: type as any,
+          });
+
+          window.location.href = '/checkout';
+        }
+      });
+    });
+  });
 </script>

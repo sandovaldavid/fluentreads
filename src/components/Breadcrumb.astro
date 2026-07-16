@@ -1,44 +1,44 @@
 ---
 interface BreadcrumbItem {
-	label: string;
-	url: string;
-	active?: boolean;
+  label: string;
+  url: string;
+  active?: boolean;
 }
 
 interface Props {
-	items: BreadcrumbItem[];
-	class?: string;
+  items: BreadcrumbItem[];
+  class?: string;
 }
 
 const { items, class: className = '' } = Astro.props;
 ---
 
 <nav
-	aria-label='Breadcrumb'
-	class={`breadcrumbs ${className} bg-gray-100 p-4 rounded-lg shadow-sm`}>
-	<ol class='flex flex-wrap items-center text-xs sm:text-sm'>
-		{
-			items.map((item, index) => (
-				<li
-					class={`flex items-center ${index === items.length - 1 ? 'text-primary-dark font-medium' : 'text-gray-500'}`}>
-					{index > 0 && <span class='mx-2 text-gray-400'>/</span>}
-					{item.active ? (
-						<span aria-current='page'>{item.label}</span>
-					) : (
-						<a
-							href={item.url}
-							class='hover:text-primary transition-colors'>
-							{item.label}
-						</a>
-					)}
-				</li>
-			))
-		}
-	</ol>
+  aria-label="Breadcrumb"
+  class={`breadcrumbs ${className} rounded-lg bg-gray-100 p-4 shadow-sm`}
+>
+  <ol class="flex flex-wrap items-center text-xs sm:text-sm">
+    {
+      items.map((item, index) => (
+        <li
+          class={`flex items-center ${index === items.length - 1 ? 'text-primary-dark font-medium' : 'text-gray-500'}`}
+        >
+          {index > 0 && <span class="mx-2 text-gray-400">/</span>}
+          {item.active ? (
+            <span aria-current="page">{item.label}</span>
+          ) : (
+            <a href={item.url} class="hover:text-primary transition-colors">
+              {item.label}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
 </nav>
 
 <style>
-	.breadcrumbs {
-		margin-bottom: 1rem;
-	}
+  .breadcrumbs {
+    margin-bottom: 1rem;
+  }
 </style>

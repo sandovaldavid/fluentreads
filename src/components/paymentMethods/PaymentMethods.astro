@@ -7,163 +7,150 @@ import BbvaIcon from '../icons/payments/Bbva.astro';
 import ScotiabankIcon from '../icons/payments/Scotiabank.astro';
 import BimIcon from '../icons/payments/Bim.astro';
 
-import '../../styles/paymentMethods.css';
+import '../../styles/paymentMethods/paymentMethods.css';
 
 const YapeIcon = '/images/paymentMethods/yape.webp';
 const PlinIcon = '/images/paymentMethods/plin.webp';
 ---
 
-<section id='payment-methods' class='pt-20 md:pt-40 lg:pt-26 bg-white pb-20'>
-	<div class='container mx-auto px-4'>
-		<div class='text-center mb-12'>
-			<SectionTitle>Métodos de pago aceptados</SectionTitle>
-			<p class='text-gray-600 mt-4 max-w-2xl mx-auto'>
-				Ofrecemos varias opciones de pago seguras y convenientes para
-				que puedas adquirir nuestros materiales educativos sin
-				complicaciones.
-			</p>
-		</div>
+<section id="payment-methods" class="bg-white pt-20 pb-20 md:pt-40 lg:pt-26">
+  <div class="container mx-auto px-4">
+    <div class="mb-12 text-center">
+      <SectionTitle>Métodos de pago aceptados</SectionTitle>
+      <p class="mx-auto mt-4 max-w-2xl text-gray-600">
+        Ofrecemos varias opciones de pago seguras y convenientes para que puedas adquirir nuestros
+        materiales educativos sin complicaciones.
+      </p>
+    </div>
 
-		<div
-			class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto'>
-			<!-- Digital payment methods -->
-			<div class='space-y-6'>
-				<h3
-					class='text-xl font-bold text-primary-dark text-center mb-4'>
-					Pagos Digitales
-				</h3>
+    <div class="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <!-- Digital payment methods -->
+      <div class="space-y-6">
+        <h3 class="text-primary-dark mb-4 text-center text-xl font-bold">Pagos Digitales</h3>
 
-				<!-- Yape -->
-				<PaymentCard
-					title='Yape'
-					description='Rápido y sin comisiones'
-					paymentNumber='999-888-777'
-					image={YapeIcon}
-					color='bg-purple-100'
-				/>
+        <!-- Yape -->
+        <PaymentCard
+          title="Yape"
+          description="Rápido y sin comisiones"
+          paymentNumber="999-888-777"
+          image={YapeIcon}
+          color="bg-purple-100"
+        />
 
-				<!-- Plin -->
-				<PaymentCard
-					title='Plin'
-					description='Transfiere desde cualquier banco'
-					paymentNumber='999-888-777'
-					image={PlinIcon}
-					color='bg-blue-100'
-				/>
-			</div>
+        <!-- Plin -->
+        <PaymentCard
+          title="Plin"
+          description="Transfiere desde cualquier banco"
+          paymentNumber="999-888-777"
+          image={PlinIcon}
+          color="bg-blue-100"
+        />
+      </div>
 
-			<!-- Bank transfers -->
-			<div class='space-y-6'>
-				<h3
-					class='text-xl font-bold text-primary-dark text-center mb-4'>
-					Transferencias Bancarias
-				</h3>
+      <!-- Bank transfers -->
+      <div class="space-y-6">
+        <h3 class="text-primary-dark mb-4 text-center text-xl font-bold">
+          Transferencias Bancarias
+        </h3>
 
-				<!-- BCP -->
-				<PaymentCard
-					title='BCP'
-					description='Cuenta Corriente'
-					paymentNumber='193-2345678-0-99'
-					icon={BcpIcon}
-					color='bg-blue-50'
-					instructions='Transfiere desde tu banca móvil o agencia a esta cuenta.'
-					logoWidth='w-12'
-					logoHeight='h-12'
-				/>
+        <!-- BCP -->
+        <PaymentCard
+          title="BCP"
+          description="Cuenta Corriente"
+          paymentNumber="193-2345678-0-99"
+          icon={BcpIcon}
+          color="bg-blue-50"
+          instructions="Transfiere desde tu banca móvil o agencia a esta cuenta."
+          logoWidth="w-12"
+          logoHeight="h-12"
+        />
 
-				<!-- BBVA -->
-				<PaymentCard
-					title='BBVA'
-					description='Cuenta Ahorro'
-					paymentNumber='0011-0057-0234567890'
-					icon={BbvaIcon}
-					color='bg-cyan-50'
-					instructions='Transfiere desde tu banca móvil o agencia a esta cuenta.'
-					logoWidth='w-12'
-					logoHeight='h-12'
-				/>
+        <!-- BBVA -->
+        <PaymentCard
+          title="BBVA"
+          description="Cuenta Ahorro"
+          paymentNumber="0011-0057-0234567890"
+          icon={BbvaIcon}
+          color="bg-cyan-50"
+          instructions="Transfiere desde tu banca móvil o agencia a esta cuenta."
+          logoWidth="w-12"
+          logoHeight="h-12"
+        />
 
-				<!-- Scotiabank -->
-				<PaymentCard
-					title='Scotiabank'
-					description='Cuenta Ahorro'
-					paymentNumber='123-4567890-12'
-					icon={ScotiabankIcon}
-					color='bg-red-50'
-					instructions='Transfiere desde tu banca móvil o agencia a esta cuenta.'
-					logoWidth='w-12'
-					logoHeight='h-12'
-				/>
-			</div>
+        <!-- Scotiabank -->
+        <PaymentCard
+          title="Scotiabank"
+          description="Cuenta Ahorro"
+          paymentNumber="123-4567890-12"
+          icon={ScotiabankIcon}
+          color="bg-red-50"
+          instructions="Transfiere desde tu banca móvil o agencia a esta cuenta."
+          logoWidth="w-12"
+          logoHeight="h-12"
+        />
+      </div>
 
-			<!-- Other payment methods -->
-			<div class='space-y-6'>
-				<h3
-					class='text-xl font-bold text-primary-dark text-center mb-4'>
-					Más Opciones
-				</h3>
+      <!-- Other payment methods -->
+      <div class="space-y-6">
+        <h3 class="text-primary-dark mb-4 text-center text-xl font-bold">Más Opciones</h3>
 
-				<!-- BIM -->
-				<PaymentCard
-					title='BIM'
-					description='Billetera Móvil'
-					paymentNumber='999-888-777'
-					icon={BimIcon}
-					color='bg-amber-50'
-					instructions='Transfiere desde tu aplicación BIM a este número.'
-					logoWidth='w-12'
-					logoHeight='h-12'
-				/>
+        <!-- BIM -->
+        <PaymentCard
+          title="BIM"
+          description="Billetera Móvil"
+          paymentNumber="999-888-777"
+          icon={BimIcon}
+          color="bg-amber-50"
+          instructions="Transfiere desde tu aplicación BIM a este número."
+          logoWidth="w-12"
+          logoHeight="h-12"
+        />
 
-				<!-- PayPal (for international customers) -->
-				<PaymentCard
-					title='PayPal'
-					description='Pago internacional seguro'
-					paymentNumber='fluentreads@example.com'
-					icon={PayPalIcon}
-					color='bg-blue-100'
-					instructions='Puedes pagar con tarjeta de crédito a través de PayPal sin necesidad de crear una cuenta.'
-					logoWidth='w-12'
-					logoHeight='h-12'
-				/>
-			</div>
-		</div>
-	</div>
+        <!-- PayPal (for international customers) -->
+        <PaymentCard
+          title="PayPal"
+          description="Pago internacional seguro"
+          paymentNumber="fluentreads@example.com"
+          icon={PayPalIcon}
+          color="bg-blue-100"
+          instructions="Puedes pagar con tarjeta de crédito a través de PayPal sin necesidad de crear una cuenta."
+          logoWidth="w-12"
+          logoHeight="h-12"
+        />
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
-	// Add clipboard functionality for transfer accounts
-	document.addEventListener('DOMContentLoaded', () => {
-		const copyButtons = document.querySelectorAll('.copy-button');
+  // Add clipboard functionality for transfer accounts
+  document.addEventListener('DOMContentLoaded', () => {
+    const copyButtons = document.querySelectorAll('.copy-button');
 
-		copyButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				const targetId = button
-					.getAttribute('data-clipboard-target')
-					?.substring(1);
-				if (targetId) {
-					const textElement = document.getElementById(targetId);
-					if (textElement) {
-						// Create selection and copy text
-						const text = textElement.innerText;
-						navigator.clipboard.writeText(text).then(() => {
-							// Show success feedback
-							const originalBg = button.className.includes(
-								'bg-primary'
-							)
-								? 'bg-primary'
-								: 'bg-primary-dark';
-							button.classList.remove(originalBg);
-							button.classList.add('bg-accent');
+    copyButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const targetId = button.getAttribute('data-clipboard-target')?.substring(1);
+        if (targetId) {
+          const textElement = document.getElementById(targetId);
+          if (textElement) {
+            // Create selection and copy text
+            const text = textElement.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+              // Show success feedback
+              const originalBg = button.className.includes('bg-primary')
+                ? 'bg-primary'
+                : 'bg-primary-dark';
+              button.classList.remove(originalBg);
+              button.classList.add('bg-accent');
 
-							setTimeout(() => {
-								button.classList.remove('bg-accent');
-								button.classList.add(originalBg);
-							}, 1500);
-						});
-					}
-				}
-			});
-		});
-	});
+              setTimeout(() => {
+                button.classList.remove('bg-accent');
+                button.classList.add(originalBg);
+              }, 1500);
+            });
+          }
+        }
+      });
+    });
+  });
 </script>

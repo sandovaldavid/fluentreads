@@ -2,158 +2,146 @@
 import SuccessIcon from '../icons/Success.astro';
 
 interface Props {
-	id?: string;
-	class?: string;
+  id?: string;
+  class?: string;
 }
 
 const { id, class: className = '' } = Astro.props;
 ---
 
 <div
-	id={id}
-	class={`success-message bg-gradient-to-br from-accent-light/30 to-accent/20 border-l-4 border-accent p-6 rounded-lg shadow-md ${className}`}>
-	<div class='flex items-center'>
-		<!-- Success icon -->
-		<div
-			class='success-icon flex-shrink-0 w-14 h-14 bg-gradient-to-br from-accent to-accent-dark rounded-full flex items-center justify-center text-white shadow-accent/30 shadow-md'>
-			<SuccessIcon class='h-7 w-7' />
-		</div>
+  id={id}
+  class={`success-message from-accent-light/30 to-accent/20 border-accent rounded-lg border-l-4 bg-gradient-to-br p-6 shadow-md ${className}`}
+>
+  <div class="flex items-center">
+    <!-- Success icon -->
+    <div
+      class="success-icon from-accent to-accent-dark shadow-accent/30 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-white shadow-md"
+    >
+      <SuccessIcon class="h-7 w-7" />
+    </div>
 
-		<div class='ml-5'>
-			<h3 class='text-xl font-semibold text-accent-dark'>
-				¡Mensaje enviado con éxito!
-			</h3>
-			<p class='text-accent-dark/80 mt-1'>
-				Gracias por contactarnos. Hemos recibido tu mensaje y te
-				responderemos lo antes posible.
-			</p>
-		</div>
-	</div>
+    <div class="ml-5">
+      <h3 class="text-accent-dark text-xl font-semibold">¡Mensaje enviado con éxito!</h3>
+      <p class="text-accent-dark/80 mt-1">
+        Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos lo antes posible.
+      </p>
+    </div>
+  </div>
 
-	<!-- Additional information -->
-	<div
-		class='mt-6 text-gray-700 bg-white/60 p-4 rounded-lg border border-accent/20'>
-		<p class='font-medium'>Mientras tanto, puedes:</p>
-		<ul class='list-none pl-1 mt-3 space-y-2.5'>
-			<li class='flex items-center'>
-				<span class='inline-block w-2 h-2 bg-primary rounded-full mr-2'
-				></span>
-				<span
-					>Explorar nuestro <a
-						href='/catalogo'
-						class='text-primary font-medium hover:underline transition-all duration-200 hover:text-primary-dark'
-						>catálogo</a
-					> de libros</span
-				>
-			</li>
-			<li class='flex items-center'>
-				<span class='inline-block w-2 h-2 bg-primary rounded-full mr-2'
-				></span>
-				<span
-					>Leer nuestro <a
-						href='/blog'
-						class='text-primary font-medium hover:underline transition-all duration-200 hover:text-primary-dark'
-						>blog</a
-					> con consejos para aprender inglés</span
-				>
-			</li>
-			<li class='flex items-center'>
-				<span class='inline-block w-2 h-2 bg-primary rounded-full mr-2'
-				></span>
-				<span
-					>Seguirnos en nuestras <a
-						href='#'
-						class='text-primary font-medium hover:underline transition-all duration-200 hover:text-primary-dark'
-						>redes sociales</a
-					> para contenido exclusivo</span
-				>
-			</li>
-		</ul>
-	</div>
+  <!-- Additional information -->
+  <div class="border-accent/20 mt-6 rounded-lg border bg-white/60 p-4 text-gray-700">
+    <p class="font-medium">Mientras tanto, puedes:</p>
+    <ul class="mt-3 list-none space-y-2.5 pl-1">
+      <li class="flex items-center">
+        <span class="bg-primary mr-2 inline-block h-2 w-2 rounded-full"></span>
+        <span
+          >Explorar nuestro <a
+            href="/catalogo"
+            class="text-primary hover:text-primary-dark font-medium transition-all duration-200 hover:underline"
+            >catálogo</a
+          > de libros</span
+        >
+      </li>
 
-	<!-- Back to home button -->
-	<div class='mt-6'>
-		<a
-			href='/'
-			class='inline-flex items-center px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-dark transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg group'>
-			<svg
-				xmlns='http://www.w3.org/2000/svg'
-				class='h-5 w-5 mr-2 group-hover:animate-pulse'
-				fill='none'
-				viewBox='0 0 24 24'
-				stroke='currentColor'>
-				<path
-					stroke-linecap='round'
-					stroke-linejoin='round'
-					stroke-width='2'
-					d='M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
-				></path>
-			</svg>
-			Volver a la página principal
-		</a>
-	</div>
+      <li class="flex items-center">
+        <span class="bg-primary mr-2 inline-block h-2 w-2 rounded-full"></span>
+        <span
+          >Seguirnos en nuestras <a
+            href="#"
+            class="text-primary hover:text-primary-dark font-medium transition-all duration-200 hover:underline"
+            >redes sociales</a
+          > para contenido exclusivo</span
+        >
+      </li>
+    </ul>
+  </div>
+
+  <!-- Back to home button -->
+  <div class="mt-6">
+    <a
+      href="/"
+      class="bg-primary hover:bg-primary-dark group inline-flex transform items-center rounded-lg px-5 py-2.5 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="mr-2 h-5 w-5 group-hover:animate-pulse"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        ></path>
+      </svg>
+      Volver a la página principal
+    </a>
+  </div>
 </div>
 
 <style>
-	/* Add entrance animation for success message */
-	.success-message {
-		animation: slideInAndScale 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-		transform-origin: center;
-	}
+  /* Add entrance animation for success message */
+  .success-message {
+    animation: slideInAndScale 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform-origin: center;
+  }
 
-	@keyframes slideInAndScale {
-		0% {
-			opacity: 0;
-			transform: translateY(-20px) scale(0.95);
-		}
-		70% {
-			transform: translateY(5px) scale(1.02);
-		}
-		100% {
-			opacity: 1;
-			transform: translateY(0) scale(1);
-		}
-	}
+  @keyframes slideInAndScale {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+    }
+    70% {
+      transform: translateY(5px) scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
 
-	/* Pulsing animation for success icon */
-	.success-icon {
-		animation: pulseAndSpin 2s infinite;
-	}
+  /* Pulsing animation for success icon */
+  .success-icon {
+    animation: pulseAndSpin 2s infinite;
+  }
 
-	@keyframes pulseAndSpin {
-		0% {
-			box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6);
-			transform: rotate(0deg);
-		}
-		20% {
-			transform: rotate(5deg);
-		}
-		40% {
-			transform: rotate(-5deg);
-		}
-		50% {
-			box-shadow: 0 0 0 12px rgba(22, 163, 74, 0);
-		}
-		100% {
-			box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
-			transform: rotate(0deg);
-		}
-	}
+  @keyframes pulseAndSpin {
+    0% {
+      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6);
+      transform: rotate(0deg);
+    }
+    20% {
+      transform: rotate(5deg);
+    }
+    40% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      box-shadow: 0 0 0 12px rgba(22, 163, 74, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+      transform: rotate(0deg);
+    }
+  }
 
-	/* link effects */
-	.success-message a:not(:hover) {
-		text-decoration: none;
-	}
+  /* link effects */
+  .success-message a:not(:hover) {
+    text-decoration: none;
+  }
 
-	/* Responsive adjustments */
-	@media (max-width: 640px) {
-		.success-message {
-			padding: 1.25rem;
-		}
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .success-message {
+      padding: 1.25rem;
+    }
 
-		.success-icon {
-			width: 3rem;
-			height: 3rem;
-		}
-	}
+    .success-icon {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
 </style>

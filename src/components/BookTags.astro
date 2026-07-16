@@ -2,18 +2,13 @@
 import type { FormatTag, PopularityTag } from '../types/book';
 
 interface Props {
-	formatTags?: (FormatTag | string)[];
-	popularityTags?: (PopularityTag | string)[];
-	formatConfig: Record<string, any>;
-	popularityConfig: Record<string, any>;
+  formatTags?: (FormatTag | string)[];
+  popularityTags?: (PopularityTag | string)[];
+  formatConfig: Record<string, any>;
+  popularityConfig: Record<string, any>;
 }
 
-const {
-	formatTags = [],
-	popularityTags = [],
-	formatConfig,
-	popularityConfig,
-} = Astro.props;
+const { formatTags = [], popularityTags = [], formatConfig, popularityConfig } = Astro.props;
 
 const isLikelyMobile = formatTags.length <= 1 && popularityTags.length <= 1;
 
@@ -24,86 +19,74 @@ const tagDesktopClasses = 'text-xs px-2 py-1 mb-2 mr-1.5';
 const tagClasses = `${tagBaseClasses} ${isLikelyMobile ? tagMobileClasses : tagDesktopClasses}`;
 ---
 
-<div class='tag-container'>
-	{/* Format tags */}
-	{
-		formatTags && formatTags.length > 0 && (
-			<div class='flex flex-wrap mb-1'>
-				{formatTags.map((tag) => {
-					const config =
-						formatConfig[tag as keyof typeof formatConfig];
-					const colorClass =
-						config?.color || 'bg-gray-100 text-gray-800';
+<div class="tag-container">
+  {/* Format tags */}
+  {
+    formatTags && formatTags.length > 0 && (
+      <div class="mb-1 flex flex-wrap">
+        {formatTags.map((tag) => {
+          const config = formatConfig[tag as keyof typeof formatConfig];
+          const colorClass = config?.color || 'bg-gray-100 text-gray-800';
 
-					return (
-						<span class={`${tagClasses} ${colorClass}`}>
-							{/* Always show icon if available */}
-							{config?.icon && (
-								<span class='mr-0.5 sm:mr-1'>
-									{config.icon}
-								</span>
-							)}
-							{/* Show label text only on larger screens */}
-							<span class='hidden xs:inline'>
-								{config?.label || tag}
-							</span>
-						</span>
-					);
-				})}
-			</div>
-		)
-	}
+          return (
+            <span class={`${tagClasses} ${colorClass}`}>
+              {/* Always show icon if available */}
+              {config?.icon && (
+                <span class="mr-0.5 sm:mr-1" aria-hidden="true">
+                  {config.icon}
+                </span>
+              )}
+              {/* Show label text only on larger screens */}
+              <span class="hidden sm:inline">{config?.label || tag}</span>
+            </span>
+          );
+        })}
+      </div>
+    )
+  }
 
-	{/* Popularity tags */}
-	{
-		popularityTags && popularityTags.length > 0 && (
-			<div class='flex flex-wrap'>
-				{popularityTags.map((tag) => {
-					const config =
-						popularityConfig[tag as keyof typeof popularityConfig];
-					const colorClass =
-						config?.color || 'bg-gray-100 text-gray-800';
+  {/* Popularity tags */}
+  {
+    popularityTags && popularityTags.length > 0 && (
+      <div class="flex flex-wrap">
+        {popularityTags.map((tag) => {
+          const config = popularityConfig[tag as keyof typeof popularityConfig];
+          const colorClass = config?.color || 'bg-gray-100 text-gray-800';
 
-					return (
-						<span class={`${tagClasses} ${colorClass}`}>
-							{/* Always show emoji icon if available */}
-							{config?.icon && (
-								<span class='mr-0.5 sm:mr-1'>
-									{config.icon}
-								</span>
-							)}
-							{/* Show label text only on larger screens */}
-							<span class='hidden xs:inline'>
-								{config?.label || tag}
-							</span>
-						</span>
-					);
-				})}
-			</div>
-		)
-	}
+          return (
+            <span class={`${tagClasses} ${colorClass}`}>
+              {/* Always show emoji icon if available */}
+              {config?.icon && (
+                <span class="mr-0.5 sm:mr-1" aria-hidden="true">
+                  {config.icon}
+                </span>
+              )}
+              {/* Show label text only on larger screens */}
+              <span class="hidden sm:inline">{config?.label || tag}</span>
+            </span>
+          );
+        })}
+      </div>
+    )
+  }
 </div>
 
 <style>
-	.tag-container {
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
+  .tag-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
 
-	@media (min-width: 400px) {
-		.xs\:inline {
-			display: inline;
-		}
+  @media (min-width: 640px) {
+    .tag-container {
+      gap: 0.5rem;
+    }
+  }
 
-		.tag-container {
-			gap: 0.5rem;
-		}
-	}
-
-	@media (max-width: 640px) {
-		.tag-container {
-			margin-bottom: 0.25rem;
-		}
-	}
+  @media (max-width: 640px) {
+    .tag-container {
+      margin-bottom: 0.25rem;
+    }
+  }
 </style>

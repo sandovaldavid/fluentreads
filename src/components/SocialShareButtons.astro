@@ -5,43 +5,39 @@ import WhatsAppIcon from './icons/WhatsApp.astro';
 import LinkedInIcon from './icons/LinkedIn.astro';
 import EmailIcon from './icons/Email.astro';
 import ShareIcon from './icons/Share.astro';
-import PageInfo from '../database/pageInformation.json';
+import PageInfo from '../data/page-information.json';
 
 interface Props {
-    url?: string;
-    title?: string;
-    description?: string;
-    image?: string;
-    productType?: 'book' | 'exam' | 'pack';
-    price?: number;
-    currency?: string;
-    size?: 'small' | 'medium' | 'large';
-    className?: string;
+  url?: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  productType?: 'book' | 'exam' | 'pack';
+  price?: number;
+  currency?: string;
+  size?: 'small' | 'medium' | 'large';
+  class?: string;
 }
 
 const {
-    url = Astro.url.href,
-    title = PageInfo.seo.metaTitle,
-    description = PageInfo.seo.metaDescription,
-    image = PageInfo.seo.defaultImage,
-    productType = 'book',
-    price,
-    currency = 'PEN',
-    size = 'medium',
-    className = '',
+  url = Astro.url.href,
+  title = PageInfo.seo.metaTitle,
+  description = PageInfo.seo.metaDescription,
+  image = PageInfo.seo.defaultImage,
+  productType = 'book',
+  price,
+  currency = 'PEN',
+  size = 'medium',
+  class: className = '',
 } = Astro.props;
 
 // Prepare share URLs
 const encodedUrl = encodeURIComponent(url);
 const encodedTitle = encodeURIComponent(title);
-const encodedDescription = encodeURIComponent(description);
-const encodedImage = encodeURIComponent(image);
 
 // Create share messages with pricing if available
 const priceText = price ? `${currency === 'PEN' ? 'S/' : currency}${price.toFixed(2)}` : '';
-const shareText = price 
-    ? `${title} ${priceText} - ${description}` 
-    : `${title} - ${description}`;
+const shareText = price ? `${title} ${priceText} - ${description}` : `${title} - ${description}`;
 const encodedShareText = encodeURIComponent(shareText);
 
 // Social share URLs
@@ -53,133 +49,147 @@ const emailUrl = `mailto:?subject=${encodedTitle}&body=${encodedShareText} ${url
 
 // Size classes
 const buttonSize = {
-    small: 'w-8 h-8',
-    medium: 'w-9 h-9',
-    large: 'w-10 h-10',
+  small: 'w-8 h-8',
+  medium: 'w-9 h-9',
+  large: 'w-10 h-10',
 }[size];
 
 const iconSize = {
-    small: 'w-4 h-4',
-    medium: 'w-5 h-5',
-    large: 'w-5 h-5',
+  small: 'w-4 h-4',
+  medium: 'w-5 h-5',
+  large: 'w-5 h-5',
 }[size];
 ---
 
-<div class={`social-share-buttons inline-flex items-center ${className}`}>
-    <span class="text-xs sm:text-sm text-gray-600 mr-2 whitespace-nowrap hidden sm:inline-block">
-        <ShareIcon class="w-4 h-4 inline-block mr-1" />
-        Compartir
-    </span>
-    <span class="text-xs sm:text-sm text-gray-600 mr-2 whitespace-nowrap sm:hidden">
-        <ShareIcon class="w-4 h-4 inline-block" />
-    </span>
-    <div class="flex space-x-1.5">
-        <!-- Facebook -->
-        <a 
-            href={facebookUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={`share-button facebook-share ${buttonSize} flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors duration-200`}
-            aria-label="Compartir en Facebook"
-            title="Compartir en Facebook">
-            <FacebookIcon class={iconSize} />
-        </a>
+<div
+  class={`social-share-buttons inline-flex items-center ${className}`}
+  data-product-type={productType}
+  data-share-image={image}
+>
+  <span class="mr-2 hidden text-xs whitespace-nowrap text-gray-600 sm:inline-block sm:text-sm">
+    <ShareIcon class="mr-1 inline-block h-4 w-4" aria-hidden="true" />
+    Compartir
+  </span>
+  <span class="mr-2 text-xs whitespace-nowrap text-gray-600 sm:hidden">
+    <ShareIcon class="inline-block h-4 w-4" aria-hidden="true" />
+    <span class="sr-only">Compartir</span>
+  </span>
+  <div class="flex space-x-1.5">
+    <!-- Facebook -->
+    <a
+      href={facebookUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={`share-button facebook-share ${buttonSize} flex items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white`}
+      aria-label="Compartir en Facebook"
+      title="Compartir en Facebook"
+    >
+      <FacebookIcon class={iconSize} />
+    </a>
 
-        <!-- Twitter -->
-        <a 
-            href={twitterUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={`share-button twitter-share ${buttonSize} flex items-center justify-center rounded-full bg-sky-100 text-sky-500 hover:bg-sky-500 hover:text-white transition-colors duration-200`}
-            aria-label="Compartir en Twitter"
-            title="Compartir en Twitter">
-            <TwitterIcon class={iconSize} />
-        </a>
+    <!-- Twitter -->
+    <a
+      href={twitterUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={`share-button twitter-share ${buttonSize} flex items-center justify-center rounded-full bg-sky-100 text-sky-500 transition-colors duration-200 hover:bg-sky-500 hover:text-white`}
+      aria-label="Compartir en Twitter"
+      title="Compartir en Twitter"
+    >
+      <TwitterIcon class={iconSize} />
+    </a>
 
-        <!-- WhatsApp -->
-        <a 
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={`share-button whatsapp-share ${buttonSize} flex items-center justify-center rounded-full bg-green-100 text-green-600 hover:bg-green-600 hover:text-white transition-colors duration-200`}
-            aria-label="Compartir en WhatsApp"
-            title="Compartir en WhatsApp">
-            <WhatsAppIcon class={iconSize} />
-        </a>
+    <!-- WhatsApp -->
+    <a
+      href={whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={`share-button whatsapp-share ${buttonSize} flex items-center justify-center rounded-full bg-green-100 text-green-600 transition-colors duration-200 hover:bg-green-600 hover:text-white`}
+      aria-label="Compartir en WhatsApp"
+      title="Compartir en WhatsApp"
+    >
+      <WhatsAppIcon class={iconSize} />
+    </a>
 
-        <!-- LinkedIn -->
-        <a 
-            href={linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={`share-button linkedin-share ${buttonSize} flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-800 hover:text-white transition-colors duration-200`}
-            aria-label="Compartir en LinkedIn"
-            title="Compartir en LinkedIn">
-            <LinkedInIcon class={iconSize} />
-        </a>
+    <!-- LinkedIn -->
+    <a
+      href={linkedinUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={`share-button linkedin-share ${buttonSize} flex items-center justify-center rounded-full bg-blue-100 text-blue-800 transition-colors duration-200 hover:bg-blue-800 hover:text-white`}
+      aria-label="Compartir en LinkedIn"
+      title="Compartir en LinkedIn"
+    >
+      <LinkedInIcon class={iconSize} />
+    </a>
 
-        <!-- Email -->
-        <a 
-            href={emailUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={`share-button email-share ${buttonSize} flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-600 hover:text-white transition-colors duration-200`}
-            aria-label="Compartir por correo"
-            title="Compartir por correo">
-            <EmailIcon class={iconSize} />
-        </a>
-    </div>
+    <!-- Email -->
+    <a
+      href={emailUrl}
+      class={`share-button email-share ${buttonSize} flex items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-600 hover:text-white`}
+      aria-label="Compartir por correo"
+      title="Compartir por correo"
+    >
+      <EmailIcon class={iconSize} />
+    </a>
+  </div>
 </div>
 
 <script>
-    // Track shares for analytics
-    document.addEventListener('DOMContentLoaded', () => {
-        const shareButtons = document.querySelectorAll('.share-button');
-        shareButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                // Get the network from the class
-                const classList = button.classList;
-                let network = '';
-                
-                if (classList.contains('facebook-share')) network = 'Facebook';
-                else if (classList.contains('twitter-share')) network = 'Twitter';
-                else if (classList.contains('whatsapp-share')) network = 'WhatsApp';
-                else if (classList.contains('linkedin-share')) network = 'LinkedIn';
-                else if (classList.contains('email-share')) network = 'Email';
-                
-                // You can replace this with your analytics tracking
-                console.log(`Product shared on ${network}`);
-            });
-        });
+  // Track shares for analytics
+  document.addEventListener('DOMContentLoaded', () => {
+    const shareButtons = document.querySelectorAll('.share-button');
+    shareButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        // Get the network from the class
+        const classList = button.classList;
+        let network = '';
+
+        if (classList.contains('facebook-share')) network = 'Facebook';
+        else if (classList.contains('twitter-share')) network = 'Twitter';
+        else if (classList.contains('whatsapp-share')) network = 'WhatsApp';
+        else if (classList.contains('linkedin-share')) network = 'LinkedIn';
+        else if (classList.contains('email-share')) network = 'Email';
+
+        // You can replace this with your analytics tracking
+        console.log(`Product shared on ${network}`);
+      });
     });
+  });
 </script>
 
 <style>
-    .social-share-buttons {
-        animation: fadeIn 0.5s ease;
-    }
+  .social-share-buttons {
+    animation: fadeIn 0.5s ease;
+  }
 
-    .share-button {
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        transform: translateY(0);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+  .share-button {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transform: translateY(0);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
 
-    .share-button:hover {
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transform: translateY(-2px);
-    }
+  .share-button:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
     }
+    to {
+      opacity: 1;
+    }
+  }
 
-    /* Make buttons more compact on very small screens */
-    @media (max-width: 360px) {
-        .social-share-buttons .share-button {
-            width: 1.75rem;
-            height: 1.75rem;
-        }
+  /* Make buttons more compact on very small screens */
+  @media (max-width: 360px) {
+    .social-share-buttons .share-button {
+      width: 1.75rem;
+      height: 1.75rem;
     }
+  }
 </style>

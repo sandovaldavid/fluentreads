@@ -5,88 +5,139 @@ import MobileIcon from '../components/icons/Mobile.astro';
 import Navbar from '../components/Navbar.astro';
 const logoImage = '/assets/logo_v4.webp';
 
-import siteInfo from '../database/pageInformation.json';
+import { siteConfig } from '@config/site';
+// siteInfo removed
+import CartIndicator from './CartIndicator.astro';
 ---
 
-<header class='bg-primary text-white shadow-md sticky top-0 w-full z-50'>
-	<div
-		class='container mx-auto px-4 py-3 flex flex-wrap items-center justify-between md:justify-center lg:justify-between'>
-		<!-- Logo -->
-		<a href='/' class='flex items-center lg:pl-8'>
-			<img
-				src={logoImage}
-				alt='FluentReads'
-				class='size-12 rounded-full'
-			/>
-			<span class='font-lora ml-2 font-bold text-2xl md:text-3xl'
-				>{siteInfo.siteName}</span
-			>
-		</a>
+<header class="bg-primary sticky top-0 z-50 w-full text-white shadow-md">
+  <div
+    class="container mx-auto flex flex-wrap items-center justify-between px-4 py-3 xl:flex-nowrap"
+  >
+    <!-- Logo -->
+    <a href="/" class="flex min-w-0 flex-1 items-center xl:flex-none xl:pl-8">
+      <img
+        src={logoImage}
+        alt="FluentReads"
+        class="h-[48px] w-[48px] shrink-0 rounded-full"
+        width="48"
+        height="48"
+      />
+      <span class="font-lora ml-2 min-w-0 text-2xl leading-tight font-bold break-words md:text-3xl"
+        >{siteConfig.name}</span
+      >
+    </a>
 
-		<!-- Mobile menu button -->
-		<button
-			id='mobile-menu-button'
-			class='md:hidden flex items-center px-3 py-2'>
-			<MobileIcon class='w-6 h-6' />
-		</button>
+    <!-- Cart and Mobile Menu Button -->
+    <div class="flex shrink-0 items-center gap-[8px] xl:order-last">
+      <a
+        href="/checkout"
+        class="hover:text-secondary relative flex h-[44px] w-[44px] items-center justify-center rounded-full text-white"
+        aria-label="Ver carrito de compras"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-[24px] w-[24px]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          ></path>
+        </svg>
+        <CartIndicator class="absolute -top-1 -right-1" />
+      </a>
 
-		<!-- Navigation and social icons -->
-		<div
-			id='menu'
-			class='mobile-menu md:flex flex-col w-full md:w-auto md:mt-0 max-h-0 md:max-h-none overflow-hidden opacity-0 md:opacity-100 transition-all duration-300 ease-in-out'>
-			<Navbar />
-		</div>
-	</div>
+      <!-- Mobile menu button -->
+      <button
+        id="mobile-menu-button"
+        class="flex h-[44px] w-[44px] items-center justify-center rounded-full xl:hidden"
+        aria-label="Abrir menú de navegación"
+        aria-expanded="false"
+        aria-controls="menu"
+      >
+        <MobileIcon class="h-[24px] w-[24px]" />
+      </button>
+    </div>
+
+    <!-- Navigation and social icons -->
+    <div
+      id="menu"
+      class="mobile-menu invisible max-h-0 w-full flex-col overflow-hidden opacity-0 transition-all duration-300 ease-in-out xl:visible xl:mt-0 xl:flex xl:max-h-none xl:w-auto xl:opacity-100"
+    >
+      <Navbar />
+    </div>
+  </div>
 </header>
 
 <!-- Floating WhatsApp Button -->
 <SocialMediaButton
-	network='WhatsApp'
-	href='https://wa.me/1234567890'
-	class='fixed bottom-5 right-2 md:bottom-8 md:right-6 bg-accent text-white p-3 rounded-full shadow-lg hover:bg-accent-dark transition-colors z-50'>
-	<WhatsAppIcon class='size-8' />
+  network="WhatsApp"
+  href={siteConfig.whatsappUrl}
+  class="bg-accent hover:bg-accent-dark fixed right-2 bottom-5 z-50 rounded-full p-3 text-white shadow-lg transition-colors md:right-6 md:bottom-8"
+>
+  <WhatsAppIcon class="h-[32px] w-[32px]" />
 </SocialMediaButton>
 
 <script>
-	// Mobile menu toggle functionality with animations
-	document.addEventListener('DOMContentLoaded', () => {
-		const mobileMenuButton = document.getElementById('mobile-menu-button');
-		const menu = document.getElementById('menu');
+  // Mobile menu toggle functionality with animations
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('menu');
 
-		// Function to open the menu with animation
-		const openMenu = () => {
-			menu?.classList.add('menu-open');
-			menu?.classList.remove('max-h-0', 'opacity-0');
-			menu?.classList.add('max-h-[500px]', 'opacity-100');
-		};
+    const updateMenuAccessibility = (isOpen: boolean) => {
+      menu?.setAttribute('aria-hidden', String(!isOpen && window.innerWidth < 1280));
+    };
 
-		// Function to close the menu with animation
-		const closeMenu = () => {
-			menu?.classList.remove('menu-open');
-			menu?.classList.remove('max-h-[500px]', 'opacity-100');
-			menu?.classList.add('max-h-0', 'opacity-0');
-		};
+    // Function to open the menu with animation
+    const openMenu = () => {
+      menu?.classList.add('menu-open');
+      menu?.classList.remove('max-h-0', 'opacity-0', 'invisible');
+      menu?.classList.add('max-h-[500px]', 'opacity-100', 'visible');
+      mobileMenuButton?.setAttribute('aria-expanded', 'true');
+      mobileMenuButton?.setAttribute('aria-label', 'Cerrar menú de navegación');
+      updateMenuAccessibility(true);
+    };
 
-		// Toggle menu function
-		const toggleMenu = () => {
-			if (menu?.classList.contains('menu-open')) {
-				closeMenu();
-			} else {
-				openMenu();
-			}
-		};
+    // Function to close the menu with animation
+    const closeMenu = () => {
+      menu?.classList.remove('menu-open');
+      menu?.classList.remove('max-h-[500px]', 'opacity-100', 'visible');
+      menu?.classList.add('max-h-0', 'opacity-0', 'invisible');
+      mobileMenuButton?.setAttribute('aria-expanded', 'false');
+      mobileMenuButton?.setAttribute('aria-label', 'Abrir menú de navegación');
+      updateMenuAccessibility(false);
+    };
 
-		mobileMenuButton?.addEventListener('click', toggleMenu);
+    // Toggle menu function
+    const toggleMenu = () => {
+      if (menu?.classList.contains('menu-open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    };
 
-		// Handle window resize to ensure menu works correctly when switching between mobile and desktop
-		window.addEventListener('resize', () => {
-			if (window.innerWidth >= 768) {
-				menu?.classList.remove('max-h-0', 'opacity-0');
-				menu?.classList.add('max-h-[500px]', 'opacity-100');
-			} else if (!menu?.classList.contains('menu-open')) {
-				menu?.classList.remove('max-h-[500px]', 'opacity-100');
-				menu?.classList.add('max-h-0', 'opacity-0');
-			}
-		});
-	});
+    mobileMenuButton?.addEventListener('click', toggleMenu);
+
+    // Handle window resize to ensure menu works correctly when switching between mobile and desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1280) {
+        menu?.classList.remove('max-h-0', 'opacity-0', 'invisible');
+        menu?.classList.add('max-h-[500px]', 'opacity-100', 'visible');
+        updateMenuAccessibility(true);
+      } else if (!menu?.classList.contains('menu-open')) {
+        menu?.classList.remove('max-h-[500px]', 'opacity-100', 'visible');
+        menu?.classList.add('max-h-0', 'opacity-0', 'invisible');
+        updateMenuAccessibility(false);
+      }
+    });
+
+    updateMenuAccessibility(false);
+  });
 </script>

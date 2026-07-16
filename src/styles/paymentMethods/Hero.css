@@ -1,73 +1,58 @@
 /* Gradient text effect */
 .text-gradient {
-	background: linear-gradient(
-		to right,
-		var(--color-secondary-light),
-		var(--color-secondary)
-	);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	background-clip: text;
-	color: transparent;
+  background: linear-gradient(to right, var(--color-secondary-light), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 /* Subtle animation for the payment icons */
 .payment-icons-container > div {
-	animation: fadeInUp 0.5s ease forwards;
-	opacity: 0;
-}
-
-@keyframes fadeInUp {
-	from {
-		opacity: 0;
-		transform: translateY(20px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  animation: slideUp 0.5s ease forwards;
+  opacity: 0;
 }
 
 /* Decorative circles */
 .payment-circle {
-	position: absolute;
-	border-radius: 50%;
-	background: var(--color-secondary);
-	opacity: 0.1;
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  opacity: 0.1;
 }
 
 .payment-circle-1 {
-	width: 300px;
-	height: 300px;
-	top: -150px;
-	left: -150px;
+  width: 300px;
+  height: 300px;
+  top: -150px;
+  left: -150px;
 }
 
 .payment-circle-2 {
-	width: 200px;
-	height: 200px;
-	bottom: -100px;
-	right: 10%;
+  width: 200px;
+  height: 200px;
+  bottom: -100px;
+  right: 10%;
 }
 
 .payment-circle-3 {
-	width: 150px;
-	height: 150px;
-	top: 30%;
-	right: -75px;
+  width: 150px;
+  height: 150px;
+  top: 30%;
+  right: -75px;
 }
 
 /* Subtle bounce animation for the icon */
 .animate-bounce-subtle {
-	animation: bounce-subtle 3s infinite;
+  animation: bounce-subtle 3s infinite;
 }
 
 @keyframes bounce-subtle {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-	50% {
-		transform: translateY(-10px);
-	}
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }

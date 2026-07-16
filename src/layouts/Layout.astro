@@ -2,272 +2,255 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
-import siteInfo from '../database/pageInformation.json';
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource/lora/600-italic.css';
+import siteInfo from '../data/page-information.json';
+import { siteConfig } from '@config/site';
 
 interface Props {
-	// SEO Básico
-	title: string;
-	description: string;
+  // SEO Básico
+  title: string;
+  description: string;
 
-	// Atributos de Producto
-	productType?: 'book' | 'pack' | 'exam';
-	price?: number;
-	currency?: string;
-	image?: string;
+  // Atributos de Producto
+  productType?: 'book' | 'pack' | 'exam';
+  price?: number;
+  currency?: string;
+  image?: string;
 
-	// URLs y Canonical
-	canonicalURL?: string | URL;
+  // URLs y Canonical
+  canonicalURL?: string | URL;
 
-	// Open Graph (WhatsApp, Facebook, Telegram, Instagram, Messenger)
-	ogType?: string;
-	ogTitle?: string;
-	ogDescription?: string;
-	ogImage?: string;
-	ogSiteName?: string;
+  // Open Graph (WhatsApp, Facebook, Telegram, Instagram, Messenger)
+  ogType?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogSiteName?: string;
 
-	// Twitter Card
-	twitterCard?: string;
-	twitterTitle?: string;
-	twitterDescription?: string;
-	twitterImage?: string;
-	twitterSite?: string;
+  // Twitter Card
+  twitterCard?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  twitterSite?: string;
 
-	// JSON-LD y Breadcrumbs
-	structuredData?: Record<string, any>;
-	breadcrumbData?: Record<string, any>;
+  // JSON-LD y Breadcrumbs
+  structuredData?: Record<string, any>;
+  breadcrumbData?: Record<string, any>;
 
-	// Idioma y Estilos
-	language?: string;
-	imageWidth?: number;
-	imageHeight?: number;
-	bodyClass?: string;
+  // Idioma y Estilos
+  language?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  bodyClass?: string;
 }
 
 const {
-	title,
-	description,
-	productType,
-	price,
-	currency = 'PEN',
-	image,
-	canonicalURL,
-	ogType = 'website',
-	ogTitle = title,
-	ogDescription = description,
-	ogImage = image,
-	ogSiteName = siteInfo.siteName,
-	twitterCard = 'summary_large_image',
-	twitterTitle = title,
-	twitterDescription = description,
-	twitterImage = image,
-	twitterSite = siteInfo.socialMediaHandles.twitter,
-	structuredData,
-	breadcrumbData,
-	language = 'es',
-	imageWidth = 1200,
-	imageHeight = 630,
-	bodyClass = '',
+  title,
+  description,
+  productType,
+  price,
+  currency = 'PEN',
+  image,
+  canonicalURL,
+  ogType = 'website',
+  ogTitle = title,
+  ogDescription = description,
+  ogImage = image,
+  ogSiteName = siteConfig.name,
+  twitterCard = 'summary_large_image',
+  twitterTitle = title,
+  twitterDescription = description,
+  twitterImage = image,
+  twitterSite = siteConfig.social.twitterHandle,
+  structuredData,
+  breadcrumbData,
+  language = 'es',
+  imageWidth = 1200,
+  imageHeight = 630,
+  bodyClass = '',
 } = Astro.props;
 
-const siteUrl =
-	import.meta.env.PUBLIC_SITE_URL || siteInfo.siteURL || Astro.url.origin;
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || siteConfig.url || Astro.url.origin;
 
 // Función para asegurar URLs absolutas
 const getAbsoluteUrl = (path: string | URL): string =>
-	path instanceof URL
-		? path.toString()
-		: path.startsWith('http')
-			? path
-			: new URL(path, siteUrl).toString();
+  path instanceof URL
+    ? path.toString()
+    : path.startsWith('http')
+      ? path
+      : new URL(path, siteUrl).toString();
 
 // Definir una imagen por defecto si no hay una específica
 const defaultImage = siteInfo.seo?.defaultImage || '/default-thumbnail.jpg';
 const absoluteOgImage = getAbsoluteUrl(ogImage || defaultImage);
 const absoluteTwitterImage = getAbsoluteUrl(twitterImage || defaultImage);
-const absoluteCanonicalUrl = canonicalURL
-	? getAbsoluteUrl(canonicalURL)
-	: siteUrl;
+const absoluteCanonicalUrl = canonicalURL ? getAbsoluteUrl(canonicalURL) : siteUrl;
 
 // JSON-LD dinámico
 const finalStructuredData = structuredData ?? {
-	'@context': 'https://schema.org',
-	'@type': productType ? 'Product' : 'WebSite',
-	...(productType
-		? {
-				name: title,
-				description: description,
-				image: absoluteOgImage,
-				offers: price
-					? {
-							'@type': 'Offer',
-							price: price,
-							priceCurrency: currency,
-							availability: 'https://schema.org/InStock',
-							url: absoluteCanonicalUrl,
-						}
-					: undefined,
-			}
-		: {
-				name: siteInfo.siteName,
-				url: siteUrl,
-				description: siteInfo.siteDescription,
-				potentialAction: {
-					'@type': 'SearchAction',
-					target: `${siteUrl}/catalogo?search={search_term_string}`,
-					'query-input': 'required name=search_term_string',
-				},
-			}),
+  '@context': 'https://schema.org',
+  '@type': productType ? 'Product' : 'WebSite',
+  ...(productType
+    ? {
+        name: title,
+        description: description,
+        image: absoluteOgImage,
+        offers: price
+          ? {
+              '@type': 'Offer',
+              price: price,
+              priceCurrency: currency,
+              availability: 'https://schema.org/InStock',
+              url: absoluteCanonicalUrl,
+            }
+          : undefined,
+      }
+    : {
+        name: siteInfo.siteName,
+        url: siteUrl,
+        description: siteInfo.siteDescription,
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: `${siteUrl}/catalogo?search={search_term_string}`,
+          'query-input': 'required name=search_term_string',
+        },
+      }),
 };
 
 // Breadcrumbs dinámicos
 const finalBreadcrumbData =
-	breadcrumbData ??
-	(productType && {
-		'@context': 'https://schema.org',
-		'@type': 'BreadcrumbList',
-		itemListElement: [
-			{ '@type': 'ListItem', position: 1, name: 'Inicio', item: siteUrl },
-			{
-				'@type': 'ListItem',
-				position: 2,
-				name:
-					productType === 'book'
-						? 'Catálogo'
-						: productType === 'pack'
-							? 'Packs'
-							: 'Exámenes Internacionales',
-				item: `${siteUrl}/${productType === 'book' ? 'catalogo' : productType === 'pack' ? 'packs' : 'examenes-internacionales'}`,
-			},
-			{
-				'@type': 'ListItem',
-				position: 3,
-				name: title,
-				item: absoluteCanonicalUrl,
-			},
-		],
-	});
+  breadcrumbData ??
+  (productType && {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: siteUrl },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name:
+          productType === 'book'
+            ? 'Catálogo'
+            : productType === 'pack'
+              ? 'Packs'
+              : 'Exámenes Internacionales',
+        item: `${siteUrl}/${productType === 'book' ? 'catalogo' : productType === 'pack' ? 'packs' : 'examenes-internacionales'}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: title,
+        item: absoluteCanonicalUrl,
+      },
+    ],
+  });
 
 // Meta Tags Unificados
 const metaData = {
-	og: {
-		type: ogType,
-		url: absoluteCanonicalUrl,
-		title: ogTitle,
-		description: ogDescription,
-		image: absoluteOgImage,
-		siteName: ogSiteName,
-		imageWidth: imageWidth.toString(),
-		imageHeight: imageHeight.toString(),
-	},
-	twitter: {
-		card: twitterCard,
-		url: absoluteCanonicalUrl,
-		title: twitterTitle,
-		description: twitterDescription,
-		image: absoluteTwitterImage,
-		site: twitterSite,
-	},
+  og: {
+    type: ogType,
+    url: absoluteCanonicalUrl,
+    title: ogTitle,
+    description: ogDescription,
+    image: absoluteOgImage,
+    siteName: ogSiteName,
+    imageWidth: imageWidth.toString(),
+    imageHeight: imageHeight.toString(),
+  },
+  twitter: {
+    card: twitterCard,
+    url: absoluteCanonicalUrl,
+    title: twitterTitle,
+    description: twitterDescription,
+    image: absoluteTwitterImage,
+    site: twitterSite,
+  },
 };
 ---
 
 <!doctype html>
 <html lang={language}>
-	<head>
-		<meta charset='UTF-8' />
-		<meta name='viewport' content='width=device-width, initial-scale=1' />
-		<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+  <head>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .catch((err) => console.warn('SW registration failed:', err));
+        });
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-		<!-- Mobile specific meta tags -->
-		<meta name='theme-color' content='#1e3a8a' />
-		<meta
-			name='apple-mobile-web-app-status-bar-style'
-			content='black-translucent'
-		/>
-		<meta name='format-detection' content='telephone=no' />
-		<meta name='color-scheme' content='light' />
+    <!-- Mobile specific meta tags -->
+    <meta name="theme-color" content="#1e3a8a" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="color-scheme" content="light" />
 
-		<title>{title}</title>
-		<meta name='description' content={description} />
-		<link rel='canonical' href={absoluteCanonicalUrl} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={absoluteCanonicalUrl} />
 
-		<!-- SEO Mejorado -->
-		<meta
-			name='robots'
-			content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
-		/>
+    <!-- SEO Mejorado -->
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
 
-		<!-- Open Graph / WhatsApp / Facebook -->
-		{
-			Object.entries(metaData.og).map(([key, value]) => (
-				<meta property={`og:${key}`} content={value} />
-			))
-		}
+    <!-- Open Graph / WhatsApp / Facebook -->
+    {
+      Object.entries(metaData.og).map(([key, value]) => (
+        <meta property={`og:${key}`} content={value} />
+      ))
+    }
 
-		<!-- Twitter Cards -->
-		{
-			Object.entries(metaData.twitter).map(([key, value]) => (
-				<meta name={`twitter:${key}`} content={value} />
-			))
-		}
+    <!-- Twitter Cards -->
+    {
+      Object.entries(metaData.twitter).map(([key, value]) => (
+        <meta name={`twitter:${key}`} content={value} />
+      ))
+    }
 
-		<!-- Meta Tags para WhatsApp (Precio del Producto) -->
-		{
-			productType && price !== undefined && (
-				<>
-					<meta
-						property='product:price:amount'
-						content={price.toFixed(2)}
-					/>
-					<meta
-						property='product:price:currency'
-						content={currency}
-					/>
-				</>
-			)
-		}
+    <!-- Meta Tags para WhatsApp (Precio del Producto) -->
+    {
+      productType && price !== undefined && (
+        <>
+          <meta property="product:price:amount" content={price.toFixed(2)} />
+          <meta property="product:price:currency" content={currency} />
+        </>
+      )
+    }
 
-		<!-- Favicon -->
-		<link rel='icon' type='image/png' href='/favicon.webp' />
-		<link rel='apple-touch-icon' href='/apple-touch-icon.png' />
-		<link rel='manifest' href='/manifest.json' />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.webp" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
 
-		<!-- Preload de fuentes optimizado -->
-		<link rel='preconnect' href='https://fonts.googleapis.com' />
-		<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
-		<link
-			href='https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,600&display=swap'
-			rel='stylesheet'
-		/>
-		<link
-			rel='stylesheet'
-			href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'
-			media='print'
-			onload="this.media='all'"
-		/>
-		<noscript>
-			<link
-				rel='stylesheet'
-				href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'
-			/>
-		</noscript>
-
-		<!-- JSON-LD (Structured Data) -->
-		<script
-			type='application/ld+json'
-			set:html={JSON.stringify(finalStructuredData)}
-		/>
-		{
-			finalBreadcrumbData && (
-				<script
-					type='application/ld+json'
-					set:html={JSON.stringify(finalBreadcrumbData)}
-				/>
-			)
-		}
-	</head>
-	<body class={bodyClass}>
-		<Header />
-		<main><slot /></main>
-		<Footer />
-	</body>
+    <!-- JSON-LD (Structured Data) -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(finalStructuredData)} />
+    {
+      finalBreadcrumbData && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(finalBreadcrumbData)}
+        />
+      )
+    }
+  </head>
+  <body class={bodyClass}>
+    <Header />
+    <main><slot /></main>
+    <Footer />
+  </body>
 </html>

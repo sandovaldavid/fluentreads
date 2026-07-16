@@ -3,27 +3,26 @@ import ProductCard from '../ProductCard.astro';
 import Filter from './Filter.jsx';
 import SkeletonCatalog from '../SkeletonCatalog.astro';
 import type { Pack } from '../../types/pack';
-import { PopularityTag } from '../../types/book';
 
 interface Props {
-	packs: Pack[];
-	initialLevel?: string;
-	initialFormat?: string;
-	initialSort?: string;
-	gridCols?: number;
-	productSize?: 'small' | 'medium' | 'large';
-	showBreadcrumbs?: boolean;
-	useSkeleton?: boolean;
+  packs: Pack[];
+  initialLevel?: string;
+  initialFormat?: string;
+  initialSort?: string;
+  gridCols?: number;
+  productSize?: 'small' | 'medium' | 'large';
+  showBreadcrumbs?: boolean;
+  useSkeleton?: boolean;
 }
 
 const {
-	packs = [],
-	initialLevel = 'all',
-	initialFormat = 'all',
-	initialSort = 'featured',
-	gridCols = 4,
-	productSize = 'medium',
-	useSkeleton = true,
+  packs = [],
+  initialLevel = 'all',
+  initialFormat = 'all',
+  initialSort = 'featured',
+  gridCols = 4,
+  productSize = 'medium',
+  useSkeleton = true,
 } = Astro.props;
 
 // Apply initial filters on the server
@@ -31,53 +30,49 @@ let filteredPacks = [...packs];
 
 // Filter by format if specified
 if (initialFormat !== 'all') {
-	filteredPacks = filteredPacks.filter(
-		(pack) =>
-			pack.formatTags && pack.formatTags.includes(initialFormat as any)
-	);
+  filteredPacks = filteredPacks.filter(
+    (pack) => pack.formatTags && pack.formatTags.includes(initialFormat as any)
+  );
 }
 
 // Filter by level if specified
 if (initialLevel !== 'all') {
-	filteredPacks = filteredPacks.filter((pack) => pack.level === initialLevel);
+  filteredPacks = filteredPacks.filter((pack) => pack.level === initialLevel);
 }
 
 // Apply initial sorting
 if (initialSort === 'price-low') {
-	filteredPacks.sort((a, b) => a.price - b.price);
+  filteredPacks.sort((a, b) => a.price - b.price);
 } else if (initialSort === 'price-high') {
-	filteredPacks.sort((a, b) => b.price - a.price);
+  filteredPacks.sort((a, b) => b.price - a.price);
 } else if (initialSort === 'newest') {
-	// If there's a timestamp field, we would sort by that here
+  // If there's a timestamp field, we would sort by that here
 } else if (initialSort === 'bestseller') {
-	filteredPacks.sort((a, b) => {
-		const aIsBestseller = a.popularityTags?.includes('bestSeller');
-		const bIsBestseller = b.popularityTags?.includes('bestSeller');
-		if (aIsBestseller && !bIsBestseller) return -1;
-		if (!aIsBestseller && bIsBestseller) return 1;
-		return (b.rating?.score || 0) - (a.rating?.score || 0);
-	});
+  filteredPacks.sort((a, b) => {
+    const aIsBestseller = a.popularityTags?.includes('bestSeller');
+    const bIsBestseller = b.popularityTags?.includes('bestSeller');
+    if (aIsBestseller && !bIsBestseller) return -1;
+    if (!aIsBestseller && bIsBestseller) return 1;
+    return (b.rating?.score || 0) - (a.rating?.score || 0);
+  });
 } else {
-	// Default to featured
-	filteredPacks.sort((a, b) =>
-		a.featured === b.featured ? 0 : a.featured ? -1 : 1
-	);
+  // Default to featured
+  filteredPacks.sort((a, b) => (a.featured === b.featured ? 0 : a.featured ? -1 : 1));
 }
 
 // Maps a grid column count to responsive Tailwind classes
 const getGridClassFromColumns = (cols: number): string => {
-	const gridClasses = {
-		2: 'grid-cols-1 sm:grid-cols-2',
-		3: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
-		4: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4',
-		5: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5',
-		6: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6',
-	};
+  const gridClasses = {
+    2: 'grid-cols-1 sm:grid-cols-2',
+    3: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+    4: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4',
+    5: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5',
+    6: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6',
+  };
 
-	return (
-		gridClasses[cols as keyof typeof gridClasses] ||
-		'grid-cols-2 sm:grid-cols-3 md:grid-cols-4'
-	);
+  return (
+    gridClasses[cols as keyof typeof gridClasses] || 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4'
+  );
 };
 
 const gridClass = getGridClassFromColumns(gridCols);
@@ -86,421 +81,375 @@ const gridClass = getGridClassFromColumns(gridCols);
 const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
 ---
 
-<div class='catalog-pack-container'>
-	<!-- Filter UI using React component as a client-side island -->
-	<Filter
-		initialLevel={initialLevel}
-		initialFormat={initialFormat}
-		initialSort={initialSort}
-		productCount={filteredPacks.length}
-		productType='pack'
-		className='mb-8 shadow-lg'
-		client:load
-	/>
+<div class="catalog-pack-container">
+  <!-- Filter UI using React component as a client-side island -->
+  <Filter
+    initialLevel={initialLevel}
+    initialFormat={initialFormat}
+    initialSort={initialSort}
+    productCount={filteredPacks.length}
+    productType="pack"
+    className="mb-8 shadow-lg"
+    client:visible
+  />
 
-	<div id='packs-container' data-is-loading={showSkeletonOnLoad.toString()}>
-		<!-- Skeleton loading state -->
-		<div
-			id='skeleton-loader'
-			class='skeleton-container'
-			style={showSkeletonOnLoad ? '' : 'display: none;'}>
-			<SkeletonCatalog count={gridCols * 2} />
-		</div>
+  <div id="packs-container" data-is-loading={showSkeletonOnLoad.toString()}>
+    <!-- Skeleton loading state -->
+    <div
+      id="skeleton-loader"
+      class="skeleton-container"
+      style={showSkeletonOnLoad ? '' : 'display: none;'}
+    >
+      <SkeletonCatalog count={gridCols * 2} />
+    </div>
 
-		<!-- Packs Grid -->
-		<div
-			id='packs-grid'
-			class={`grid ${gridClass} gap-4 sm:gap-6 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}>
-			{
-				filteredPacks.length > 0 ? (
-					filteredPacks.map((pack) => (
-						<div
-							class='catalog-product-card'
-							data-level={pack.level}
-							data-formats={pack.formatTags?.join(',')}
-							data-price={pack.price}
-							data-bestseller={pack.popularityTags?.includes(
-								'bestSeller'
-							)}
-							data-bookcount={pack.booksIds?.length || 0}
-							data-rating={pack.rating?.score || '0'}
-							data-title={pack.title}>
-							<ProductCard
-								product={{
-									...pack,
-									productType: 'pack',
-									formatTags: pack.formatTags
-										? [...pack.formatTags]
-										: [],
-								}}
-								size={productSize}
-							/>
-						</div>
-					))
-				) : (
-					<div class='col-span-full py-16 text-center bg-neutral-light/50 rounded-lg'>
-						<div class='text-5xl mb-4'>🔍</div>
-						<h3 class='text-xl font-semibold text-primary-dark mb-2'>
-							No se encontraron packs
-						</h3>
-						<p class='text-gray-500 mb-6'>
-							Lo sentimos, no hay packs de materiales que
-							coincidan con los filtros seleccionados.
-						</p>
-						<button
-							id='reset-filters'
-							class='bg-primary hover:bg-primary-dark text-white font-medium py-2 px-6 rounded-lg transition-all duration-300'>
-							Reiniciar filtros
-						</button>
-					</div>
-				)
-			}
-		</div>
+    <!-- Packs Grid -->
+    <div
+      id="packs-grid"
+      class={`grid ${gridClass} gap-4 sm:gap-6 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
+    >
+      {
+        filteredPacks.length > 0 ? (
+          filteredPacks.map((pack) => (
+            <div
+              class="catalog-product-card"
+              data-level={pack.level}
+              data-formats={pack.formatTags?.join(',')}
+              data-price={pack.price}
+              data-bestseller={pack.popularityTags?.includes('bestSeller')}
+              data-bookcount={pack.booksIds?.length || 0}
+              data-rating={pack.rating?.score || '0'}
+              data-title={pack.title}
+            >
+              <ProductCard
+                product={{
+                  ...pack,
+                  productType: 'pack',
+                  formatTags: pack.formatTags ? [...pack.formatTags] : [],
+                }}
+                size={productSize}
+              />
+            </div>
+          ))
+        ) : (
+          <div class="bg-neutral-light/50 col-span-full rounded-lg py-16 text-center">
+            <div class="mb-4 text-5xl">🔍</div>
+            <h3 class="text-primary-dark mb-2 text-xl font-semibold">No se encontraron packs</h3>
+            <p class="mb-6 text-gray-500">
+              Lo sentimos, no hay packs de materiales que coincidan con los filtros seleccionados.
+            </p>
+            <button
+              id="reset-filters"
+              class="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 font-medium text-white transition-all duration-300"
+            >
+              Reiniciar filtros
+            </button>
+          </div>
+        )
+      }
+    </div>
 
-		<!-- Results Summary -->
-		{
-			filteredPacks.length > 0 && (
-				<div class='mt-6 p-4 bg-white rounded-lg shadow-sm text-center'>
-					<p class='text-sm text-gray-600'>
-						Mostrando{' '}
-						<span class='font-semibold'>
-							{filteredPacks.length}
-						</span>{' '}
-						{filteredPacks.length === 1 ? 'pack' : 'packs'}
-						{initialLevel !== 'all' && ` de nivel ${initialLevel}`}
-						{initialFormat !== 'all' &&
-							` en formato ${initialFormat}`}
-					</p>
-				</div>
-			)
-		}
-	</div>
+    <!-- Results Summary -->
+    {
+      filteredPacks.length > 0 && (
+        <div class="mt-6 rounded-lg bg-white p-4 text-center shadow-sm">
+          <p class="text-sm text-gray-600">
+            Mostrando <span class="font-semibold">{filteredPacks.length}</span>{' '}
+            {filteredPacks.length === 1 ? 'pack' : 'packs'}
+            {initialLevel !== 'all' && ` de nivel ${initialLevel}`}
+            {initialFormat !== 'all' && ` en formato ${initialFormat}`}
+          </p>
+        </div>
+      )
+    }
+  </div>
 </div>
 
 <script>
-	// Function to apply filters client-side
-	const filterPacks = (
-		level: string,
-		format: string,
-		sort: string,
-		searchTerm = ''
-	) => {
-		const packsContainer = document.getElementById('packs-container');
-		const packsGrid = document.getElementById('packs-grid') as HTMLElement;
-		const skeletonLoader = document.getElementById(
-			'skeleton-loader'
-		) as HTMLElement;
-		const allPacks = document.querySelectorAll('.catalog-product-card');
+  // Function to apply filters client-side
+  const filterPacks = (level: string, format: string, sort: string, searchTerm = '') => {
+    const packsContainer = document.getElementById('packs-container');
+    const packsGrid = document.getElementById('packs-grid') as HTMLElement;
+    const skeletonLoader = document.getElementById('skeleton-loader') as HTMLElement;
+    const allPacks = document.querySelectorAll('.catalog-product-card');
 
-		// Add loading state
-		document.body.classList.add('filters-loading');
+    // Add loading state
+    document.body.classList.add('filters-loading');
 
-		// Show skeleton loader during filtering
-		if (packsContainer) {
-			packsContainer.setAttribute('data-is-loading', 'true');
-		}
+    // Show skeleton loader during filtering
+    if (packsContainer) {
+      packsContainer.setAttribute('data-is-loading', 'true');
+    }
 
-		if (packsGrid) {
-			packsGrid.classList.add('opacity-0');
-			packsGrid.style.position = 'absolute';
-			packsGrid.style.visibility = 'hidden';
-		}
+    if (packsGrid) {
+      packsGrid.classList.add('opacity-0');
+      packsGrid.style.position = 'absolute';
+      packsGrid.style.visibility = 'hidden';
+    }
 
-		if (skeletonLoader) {
-			skeletonLoader.style.display = 'block';
-			skeletonLoader.style.opacity = '1';
-		}
+    if (skeletonLoader) {
+      skeletonLoader.style.display = 'block';
+      skeletonLoader.style.opacity = '1';
+    }
 
-		// Hide all packs first
-		allPacks.forEach((pack) => {
-			pack.classList.add('hidden');
-		});
+    // Hide all packs first
+    allPacks.forEach((pack) => {
+      pack.classList.add('hidden');
+    });
 
-		// Simulate a loading delay
-		setTimeout(() => {
-			let visibleCount = 0;
+    // Simulate a loading delay
+    setTimeout(() => {
+      let visibleCount = 0;
 
-			// Process the packs based on filters
-			allPacks.forEach((pack) => {
-				const packLevel = pack.getAttribute('data-level') || '';
-				const packFormats = pack.getAttribute('data-formats') || '';
-				const packTitle = pack.getAttribute('data-title') || '';
+      // Process the packs based on filters
+      allPacks.forEach((pack) => {
+        const packLevel = pack.getAttribute('data-level') || '';
+        const packFormats = pack.getAttribute('data-formats') || '';
+        const packTitle = pack.getAttribute('data-title') || '';
 
-				// Check if pack matches all filters
-				const levelMatch = level === 'all' || packLevel === level;
-				const formatMatch =
-					format === 'all' || packFormats.includes(format);
-				const searchMatch =
-					!searchTerm ||
-					packTitle.toLowerCase().includes(searchTerm.toLowerCase());
+        // Check if pack matches all filters
+        const levelMatch = level === 'all' || packLevel === level;
+        const formatMatch = format === 'all' || packFormats.includes(format);
+        const searchMatch =
+          !searchTerm || packTitle.toLowerCase().includes(searchTerm.toLowerCase());
 
-				if (levelMatch && formatMatch && searchMatch) {
-					pack.classList.remove('hidden');
-					visibleCount++;
-				}
-			});
+        if (levelMatch && formatMatch && searchMatch) {
+          pack.classList.remove('hidden');
+          visibleCount++;
+        }
+      });
 
-			// Sort visible packs if needed
-			if (sort !== 'featured') {
-				const sortPacks = (a: Element, b: Element) => {
-					const priceA = parseFloat(
-						a.getAttribute('data-price') || '0'
-					);
-					const priceB = parseFloat(
-						b.getAttribute('data-price') || '0'
-					);
-					const bookCountA = parseInt(
-						a.getAttribute('data-bookcount') || '0'
-					);
-					const bookCountB = parseInt(
-						b.getAttribute('data-bookcount') || '0'
-					);
+      // Sort visible packs if needed
+      if (sort !== 'featured') {
+        const sortPacks = (a: Element, b: Element) => {
+          const priceA = parseFloat(a.getAttribute('data-price') || '0');
+          const priceB = parseFloat(b.getAttribute('data-price') || '0');
+          const bookCountA = parseInt(a.getAttribute('data-bookcount') || '0');
+          const bookCountB = parseInt(b.getAttribute('data-bookcount') || '0');
 
-					if (sort === 'price-low') {
-						return priceA - priceB;
-					} else if (sort === 'price-high') {
-						return priceB - priceA;
-					} else if (sort === 'bestseller') {
-						const aIsBestseller =
-							a.getAttribute('data-bestseller') === 'true';
-						const bIsBestseller =
-							b.getAttribute('data-bestseller') === 'true';
+          if (sort === 'price-low') {
+            return priceA - priceB;
+          } else if (sort === 'price-high') {
+            return priceB - priceA;
+          } else if (sort === 'bestseller') {
+            const aIsBestseller = a.getAttribute('data-bestseller') === 'true';
+            const bIsBestseller = b.getAttribute('data-bestseller') === 'true';
 
-						if (aIsBestseller && !bIsBestseller) return -1;
-						if (!aIsBestseller && bIsBestseller) return 1;
+            if (aIsBestseller && !bIsBestseller) return -1;
+            if (!aIsBestseller && bIsBestseller) return 1;
 
-						const ratingA = parseFloat(
-							a.getAttribute('data-rating') || '0'
-						);
-						const ratingB = parseFloat(
-							b.getAttribute('data-rating') || '0'
-						);
-						return ratingB - ratingA;
-					} else if (sort === 'book-count') {
-						// Special sort for packs: by number of books included
-						return bookCountB - bookCountA;
-					}
+            const ratingA = parseFloat(a.getAttribute('data-rating') || '0');
+            const ratingB = parseFloat(b.getAttribute('data-rating') || '0');
+            return ratingB - ratingA;
+          } else if (sort === 'book-count') {
+            // Special sort for packs: by number of books included
+            return bookCountB - bookCountA;
+          }
 
-					return 0;
-				};
+          return 0;
+        };
 
-				const visiblePacks = Array.from(allPacks).filter(
-					(pack) => !pack.classList.contains('hidden')
-				);
-				visiblePacks.sort(sortPacks);
+        const visiblePacks = Array.from(allPacks).filter(
+          (pack) => !pack.classList.contains('hidden')
+        );
+        visiblePacks.sort(sortPacks);
 
-				if (packsGrid) {
-					visiblePacks.forEach((pack) => {
-						packsGrid.appendChild(pack);
-					});
-				}
-			}
+        if (packsGrid) {
+          visiblePacks.forEach((pack) => {
+            packsGrid.appendChild(pack);
+          });
+        }
+      }
 
-			// Update UI to reflect results
-			document.querySelectorAll('.result-count').forEach((el) => {
-				el.textContent = visibleCount.toString();
-			});
+      // Update UI to reflect results
+      document.querySelectorAll('.result-count').forEach((el) => {
+        el.textContent = visibleCount.toString();
+      });
 
-			// Show empty state if needed
-			const emptyState = document.querySelector('.col-span-full');
-			if (emptyState) {
-				if (visibleCount === 0) {
-					emptyState.classList.remove('hidden');
-				} else {
-					emptyState.classList.add('hidden');
-				}
-			}
+      // Show empty state if needed
+      const emptyState = document.querySelector('.col-span-full');
+      if (emptyState) {
+        if (visibleCount === 0) {
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+        }
+      }
 
-			// Remove loading state and hide skeleton with a slight delay for animation
-			setTimeout(() => {
-				document.body.classList.remove('filters-loading');
+      // Remove loading state and hide skeleton with a slight delay for animation
+      setTimeout(() => {
+        document.body.classList.remove('filters-loading');
 
-				if (packsContainer) {
-					packsContainer.setAttribute('data-is-loading', 'false');
-				}
+        if (packsContainer) {
+          packsContainer.setAttribute('data-is-loading', 'false');
+        }
 
-				if (skeletonLoader) {
-					skeletonLoader.style.opacity = '0';
-					setTimeout(() => {
-						skeletonLoader.style.display = 'none';
-					}, 300); // Short delay for fade out animation
-				}
+        if (skeletonLoader) {
+          skeletonLoader.style.opacity = '0';
+          setTimeout(() => {
+            skeletonLoader.style.display = 'none';
+          }, 300); // Short delay for fade out animation
+        }
 
-				if (packsGrid) {
-					packsGrid.classList.remove('opacity-0');
-					packsGrid.style.position = 'static';
-					packsGrid.style.visibility = 'visible';
+        if (packsGrid) {
+          packsGrid.classList.remove('opacity-0');
+          packsGrid.style.position = 'static';
+          packsGrid.style.visibility = 'visible';
 
-					// Reset animation for visible packs
-					const visiblePacks = document.querySelectorAll(
-						'.catalog-product-card:not(.hidden)'
-					);
-					visiblePacks.forEach((pack, index) => {
-						if (pack instanceof HTMLElement) {
-							pack.style.animationDelay = `${0.05 * index}s`;
-							pack.style.animationPlayState = 'running';
-						}
-					});
-				}
-			}, 300); // Add a slight delay for smoother transition
-		}, 600);
-	};
+          // Reset animation for visible packs
+          const visiblePacks = document.querySelectorAll('.catalog-product-card:not(.hidden)');
+          visiblePacks.forEach((pack, index) => {
+            if (pack instanceof HTMLElement) {
+              pack.style.animationDelay = `${0.05 * index}s`;
+              pack.style.animationPlayState = 'running';
+            }
+          });
+        }
+      }, 300); // Add a slight delay for smoother transition
+    }, 600);
+  };
 
-	// Filter change event handler
-	interface FilterChangeEventDetail {
-		level: string;
-		format: string;
-		sort: string;
-		search?: string;
-	}
+  // Filter change event handler
+  interface FilterChangeEventDetail {
+    level: string;
+    format: string;
+    sort: string;
+    search?: string;
+  }
 
-	const handleFilterChange = (
-		event: CustomEvent<FilterChangeEventDetail>
-	) => {
-		// Get the filter data from the event detail
-		const { level, format, sort, search } = event.detail;
+  const handleFilterChange = (event: CustomEvent<FilterChangeEventDetail>) => {
+    // Get the filter data from the event detail
+    const { level, format, sort, search } = event.detail;
 
-		// Apply client-side filtering without page reload
-		filterPacks(level, format, sort, search);
-	};
+    // Apply client-side filtering without page reload
+    filterPacks(level, format, sort, search);
+  };
 
-	// Reset filters button
-	const resetButton = document.getElementById('reset-filters');
-	if (resetButton) {
-		resetButton.addEventListener('click', () => {
-			// Create and dispatch a reset event
-			const resetEvent = new CustomEvent('resetFilters');
-			document.dispatchEvent(resetEvent);
+  // Reset filters button
+  const resetButton = document.getElementById('reset-filters');
+  if (resetButton) {
+    resetButton.addEventListener('click', () => {
+      // Create and dispatch a reset event
+      const resetEvent = new CustomEvent('resetFilters');
+      document.dispatchEvent(resetEvent);
 
-			// Apply the default filters
-			filterPacks('all', 'all', 'featured');
-		});
-	}
+      // Apply the default filters
+      filterPacks('all', 'all', 'featured');
+    });
+  }
 
-	// Listen for filter changes from the Filter component
-	window.addEventListener(
-		'filterChange',
-		handleFilterChange as EventListener
-	);
+  // Listen for filter changes from the Filter component
+  window.addEventListener('filterChange', handleFilterChange as EventListener);
 
-	// Animation for pack grid items
-	document.addEventListener('DOMContentLoaded', () => {
-		const packsContainer = document.getElementById('packs-container');
-		const skeletonLoader = document.getElementById(
-			'skeleton-loader'
-		) as HTMLElement;
-		const packsGrid = document.getElementById('packs-grid') as HTMLElement;
+  // Animation for pack grid items
+  document.addEventListener('DOMContentLoaded', () => {
+    const packsContainer = document.getElementById('packs-container');
+    const skeletonLoader = document.getElementById('skeleton-loader') as HTMLElement;
+    const packsGrid = document.getElementById('packs-grid') as HTMLElement;
 
-		if (
-			packsContainer &&
-			packsContainer.getAttribute('data-is-loading') === 'true'
-		) {
-			// Simulate loading delay
-			setTimeout(() => {
-				if (skeletonLoader) skeletonLoader.style.opacity = '0';
-				if (packsGrid) {
-					packsGrid.classList.remove('opacity-0');
-					packsGrid.style.position = 'static';
-					packsGrid.style.visibility = 'visible';
-				}
-				packsContainer.setAttribute('data-is-loading', 'false');
+    if (packsContainer && packsContainer.getAttribute('data-is-loading') === 'true') {
+      // Simulate loading delay
+      setTimeout(() => {
+        if (skeletonLoader) skeletonLoader.style.opacity = '0';
+        if (packsGrid) {
+          packsGrid.classList.remove('opacity-0');
+          packsGrid.style.position = 'static';
+          packsGrid.style.visibility = 'visible';
+        }
+        packsContainer.setAttribute('data-is-loading', 'false');
 
-				// Hide skeleton after fade out completes
-				setTimeout(() => {
-					if (skeletonLoader) skeletonLoader.style.display = 'none';
-				}, 300);
-			}, 1000);
-		}
-	});
+        // Hide skeleton after fade out completes
+        setTimeout(() => {
+          if (skeletonLoader) skeletonLoader.style.display = 'none';
+        }, 300);
+      }, 1000);
+    }
+  });
 </script>
 
 <style>
-	/* Loading state animations */
-	body.filters-loading .packs-grid::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: linear-gradient(
-			90deg,
-			rgba(255, 255, 255, 0) 0%,
-			rgba(255, 255, 255, 0.2) 20%,
-			rgba(255, 255, 255, 0.5) 60%,
-			rgba(255, 255, 255, 0.2) 80%,
-			rgba(255, 255, 255, 0) 100%
-		);
-		background-size: 200% 100%;
-		animation: shine 1.5s infinite linear;
-		z-index: 10;
-		pointer-events: none;
-	}
+  /* Loading state animations */
+  body.filters-loading .packs-grid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.5) 60%,
+      rgba(255, 255, 255, 0.2) 80%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shine 1.5s infinite linear;
+    z-index: 10;
+    pointer-events: none;
+  }
 
-	@keyframes shine {
-		to {
-			background-position: 200% 0;
-		}
-	}
+  @keyframes shine {
+    to {
+      background-position: 200% 0;
+    }
+  }
 
-	/* Pack visibility transition for smooth filtering */
-	.catalog-product-card {
-		transition:
-			opacity 0.5s ease,
-			transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-	}
+  /* Pack visibility transition for smooth filtering */
+  .catalog-product-card {
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
 
-	.catalog-product-card.hidden {
-		display: none;
-	}
+  #skeleton-loader {
+    transition: opacity 0.3s ease-out;
+  }
 
-	#skeleton-loader {
-		transition: opacity 0.3s ease-out;
-	}
+  #packs-grid.opacity-0 {
+    position: absolute;
+    visibility: hidden;
+  }
 
-	#packs-grid.opacity-0 {
-		position: absolute;
-		visibility: hidden;
-	}
+  [data-is-loading='false'] #skeleton-loader {
+    display: none;
+  }
 
-	[data-is-loading='false'] #skeleton-loader {
-		display: none;
-	}
+  /* Add fade-in animation for packs after filtering */
+  .catalog-product-card {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-play-state: paused;
+  }
 
-	/* Add fade-in animation for packs after filtering */
-	.catalog-product-card {
-		opacity: 0;
-		animation: fadeInUp 0.5s ease forwards;
-		animation-play-state: paused;
-	}
+  /* Play animation when filters are applied */
+  [data-is-loading='false'] .catalog-product-card:not(.hidden) {
+    animation-play-state: running;
+  }
 
-	/* Play animation when filters are applied */
-	[data-is-loading='false'] .catalog-product-card:not(.hidden) {
-		animation-play-state: running;
-	}
+  /* Animated skeleton pulse */
+  .skeleton-container {
+    animation: fadeIn 0.3s ease-in;
+  }
 
-	/* Animated skeleton pulse */
-	.skeleton-container {
-		animation: fadeIn 0.3s ease-in;
-	}
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 </style>

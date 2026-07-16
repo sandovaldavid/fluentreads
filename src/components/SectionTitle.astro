@@ -1,29 +1,30 @@
 ---
 interface Props {
-	tag?: 'h1' | 'h2' | 'h3';
-	class?: string;
+  tag?: 'h1' | 'h2' | 'h3';
+  class?: string;
 }
 
 const { tag: Tag = 'h2', class: className = '' } = Astro.props;
 ---
 
 <Tag
-	class={`text-3xl md:text-4xl font-bold text-primary-dark relative pb-3 inline-block ${className}`}>
-	<slot />
-	<span
-		class='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-secondary rounded-full'
-	></span>
+  class={`text-primary-dark relative inline-block pb-3 text-3xl font-bold md:text-4xl ${className}`}
+>
+  <slot />
+  <span
+    class="section-title-underline bg-secondary absolute bottom-0 left-1/2 h-1 w-24 -translate-x-1/2 transform rounded-full"
+    aria-hidden="true"></span>
 </Tag>
 
 <style>
-	/* Optional animation for the underline */
-	span {
-		transition: width 0.3s ease-out;
-	}
+  /* Optional animation for the underline */
+  .section-title-underline {
+    transition: width 0.3s ease-out;
+  }
 
-	h1:hover span,
-	h2:hover span,
-	h3:hover span {
-		width: 60%;
-	}
+  h1:hover .section-title-underline,
+  h2:hover .section-title-underline,
+  h3:hover .section-title-underline {
+    width: 60%;
+  }
 </style>

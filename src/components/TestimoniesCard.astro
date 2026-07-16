@@ -3,22 +3,22 @@ import '../styles/TestimoniesCard.css';
 
 // Define the interface for testimonial data
 interface Props {
-	quote: string;
-	author: string;
-	position: string;
-	avatarUrl?: string;
-	rating?: number;
-	compact?: boolean;
+  quote: string;
+  author: string;
+  position: string;
+  avatarUrl?: string;
+  rating?: number;
+  compact?: boolean;
 }
 
 // Receive props with defaults
 const {
-	quote = 'Estos libros transformaron mi carrera. Pude mejorar mi inglés de negocios y conseguir un ascenso en menos de 6 meses.',
-	author = 'María Rodríguez',
-	position = 'Ejecutiva de Marketing',
-	avatarUrl = 'https://i.pravatar.cc/100',
-	rating = 5,
-	compact = false,
+  quote = 'Estos libros transformaron mi carrera. Pude mejorar mi inglés de negocios y conseguir un ascenso en menos de 6 meses.',
+  author = 'María Rodríguez',
+  position = 'Ejecutiva de Marketing',
+  avatarUrl = 'https://i.pravatar.cc/100',
+  rating = 5,
+  compact = false,
 } = Astro.props;
 
 // Create stars based on rating
@@ -38,87 +38,74 @@ const starSize = compact ? 'text-sm' : 'text-lg';
 
 <!-- Enhanced Testimonial Card -->
 <div class={containerClasses}>
-	<!-- Background accent -->
-	<div
-		class='absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500'>
-	</div>
+  <!-- Background accent -->
+  <div
+    class="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+  >
+  </div>
 
-	<!-- Avatar image -->
-	<div class={`${avatarMargin} relative z-10`}>
-		<div
-			class={`${avatarSize} mx-auto rounded-full overflow-hidden border-2 border-secondary shadow-md transform transition-transform duration-300 group-hover:scale-105`}>
-			<img
-				src={avatarUrl}
-				alt={`Foto de ${author}`}
-				class='w-full h-full object-cover'
-			/>
-		</div>
-	</div>
+  <!-- Avatar image -->
+  <div class={`${avatarMargin} relative z-10`}>
+    <div
+      class={`${avatarSize} border-secondary mx-auto transform overflow-hidden rounded-full border-2 shadow-md transition-transform duration-300 group-hover:scale-105`}
+    >
+      <img src={avatarUrl} alt={`Foto de ${author}`} class="h-full w-full object-cover" />
+    </div>
+  </div>
 
-	<!-- Quote icon with animation -->
-	<div
-		class={`quote-icon ${marginBottom} ${quoteSize} text-secondary opacity-80 leading-none relative z-10 transform transition-transform duration-300 group-hover:scale-110`}>
-		❝
-	</div>
+  <!-- Quote icon with animation -->
+  <div
+    class={`quote-icon ${marginBottom} ${quoteSize} text-secondary relative z-10 transform leading-none opacity-80 transition-transform duration-300 group-hover:scale-110`}
+    aria-hidden="true"
+  >
+    ❝
+  </div>
 
-	<!-- Testimonial text -->
-	<p
-		class={`${textSize} italic text-gray-700 max-w-3xl mx-auto ${marginBottom} relative z-10`}>
-		{quote}
-	</p>
+  <!-- Testimonial text -->
+  <p class={`${textSize} mx-auto max-w-3xl text-gray-700 italic ${marginBottom} relative z-10`}>
+    {quote}
+  </p>
 
-	<!-- Star rating -->
-	<div class='flex justify-center mb-3 star-rating'>
-		{
-			Array(fullStars)
-				.fill(0)
-				.map(() => (
-					<span class={`text-yellow-400 ${starSize} shine-effect`}>
-						★
-					</span>
-				))
-		}
-		{
-			hasHalfStar && (
-				<span class={`text-yellow-400 ${starSize} shine-effect`}>
-					★
-				</span>
-			)
-		}
-		{
-			Array(emptyStars)
-				.fill(0)
-				.map(() => <span class={`text-gray-300 ${starSize}`}>☆</span>)
-		}
-	</div>
+  <!-- Star rating -->
+  <div class="star-rating mb-3 flex justify-center">
+    {
+      Array(fullStars)
+        .fill(0)
+        .map(() => <span class={`text-yellow-400 ${starSize} shine-effect`}>★</span>)
+    }
+    {hasHalfStar && <span class={`text-yellow-400 ${starSize} shine-effect`}>★</span>}
+    {
+      Array(emptyStars)
+        .fill(0)
+        .map(() => <span class={`text-gray-300 ${starSize}`}>☆</span>)
+    }
+  </div>
 
-	<!-- Author information -->
-	<div class='text-primary font-medium relative z-10'>
-		<span class='font-bold'>{author}</span>, <span class='text-gray-600'
-			>{position}</span
-		>
-	</div>
+  <!-- Author information -->
+  <div class="text-primary relative z-10 font-medium">
+    <span class="font-bold">{author}</span>, <span class="text-gray-600">{position}</span>
+  </div>
 </div>
 
 <script>
-	// Add scroll animations using Intersection Observer
-	document.addEventListener('DOMContentLoaded', () => {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('fade-in-visible');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{ threshold: 0.1 }
-		);
+  // Add scroll animations using Intersection Observer
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-		// Observe testimonial cards for fade-in animation
-		document.querySelectorAll('.testimonial-snippet').forEach((el) => {
-			el.classList.add('fade-in-element');
-			observer.observe(el);
-		});
-	});
+    // Observe testimonial cards for fade-in animation
+    document.querySelectorAll('.testimonial-snippet').forEach((el) => {
+      el.classList.add('fade-in-element');
+      observer.observe(el);
+    });
+  });
 </script>

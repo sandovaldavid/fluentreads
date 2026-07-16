@@ -3,152 +3,182 @@ import Copy from '../icons/Copy.astro';
 import '../../styles/paymentMethods/paymentCard.css';
 
 interface Props {
-	title: string;
-	description: string;
-	paymentNumber: string;
-	icon?: any;
-	color?: string;
-	instructions?: string;
-	logoWidth?: string;
-	logoHeight?: string;
-	image?: string;
+  title: string;
+  description: string;
+  paymentNumber: string;
+  icon?: any;
+  color?: string;
+  instructions?: string;
+  logoWidth?: string;
+  logoHeight?: string;
+  image?: string;
 }
 
 const {
-	title,
-	description,
-	paymentNumber,
-	icon: Icon,
-	color = 'bg-purple-100', // Default color
-	instructions = 'Captura la pantalla de confirmación para enviarla como comprobante.',
-	logoWidth = 'w-10',
-	logoHeight = 'h-10',
-	image,
+  title,
+  description,
+  paymentNumber,
+  icon: Icon,
+  color = 'bg-purple-100', // Default color
+  instructions = 'Captura la pantalla de confirmación para enviarla como comprobante.',
+  logoWidth = 'w-10',
+  logoHeight = 'h-10',
+  image,
 } = Astro.props;
 
 // Generate a unique ID for this payment method (for copy functionality)
-const paymentId = `payment-${Math.random().toString(36).substring(2, 9)}`;
+const paymentId = `payment-${title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
 ---
 
 <div
-	class='payment-method-card bg-white rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:shadow-lg group relative overflow-hidden'>
-	<!-- Subtle background effect on hover -->
-	<div
-		class='absolute inset-0 bg-gradient-to-b from-transparent to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500'>
-	</div>
+  class="payment-method-card group relative overflow-hidden rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:shadow-lg"
+>
+  <!-- Subtle background effect on hover -->
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-transparent to-gray-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+  >
+  </div>
 
-	<div class='relative z-10'>
-		<div class='flex justify-center mb-4'>
-			<div
-				class={`w-16 h-16 flex items-center justify-center rounded-full ${color} transition-transform duration-300 group-hover:scale-110 shadow-sm group-hover:shadow-md`}>
-				{
-					image ? (
-						<img
-							src={image}
-							class={`${logoWidth} ${logoHeight} object-contain transition-all duration-300`}
-							alt={title}
-						/>
-					) : Icon ? (
-						<Icon
-							class={`${logoWidth} ${logoHeight} transition-all duration-300`}
-						/>
-					) : (
-						<span class='text-3xl'>📱</span>
-					)
-				}
-			</div>
-		</div>
-		<h3 class='text-xl font-bold text-primary-dark text-center mb-2'>
-			{title}
-		</h3>
-		<p class='text-gray-600 text-center mb-4'>{description}</p>
+  <div class="relative z-10">
+    <div class="mb-4 flex justify-center">
+      <div
+        class={`flex h-16 w-16 items-center justify-center rounded-full ${color} shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md`}
+      >
+        {
+          image ? (
+            <img
+              src={image}
+              class={`${logoWidth} ${logoHeight} object-contain transition-all duration-300`}
+              alt={title}
+            />
+          ) : Icon ? (
+            <Icon class={`${logoWidth} ${logoHeight} transition-all duration-300`} />
+          ) : (
+            <span class="text-3xl">📱</span>
+          )
+        }
+      </div>
+    </div>
+    <h3 class="text-primary-dark mb-2 text-center text-xl font-bold">
+      {title}
+    </h3>
+    <p class="mb-4 text-center text-gray-600">{description}</p>
 
-		<!-- Payment Number with Copy Button -->
-		<div
-			class='bg-gray-100 rounded-lg p-3 mb-4 relative group-payment overflow-hidden hover:bg-gray-50 transition-colors duration-300 border border-transparent hover:border-gray-200'>
-			<p
-				id={paymentId}
-				class='text-center font-mono text-gray-800 select-all'>
-				{paymentNumber}
-			</p>
+    <!-- Payment Number with Copy Button -->
+    <div
+      class="group-payment relative mb-4 overflow-hidden rounded-lg border border-transparent bg-gray-100 p-3 transition-colors duration-300 hover:border-gray-200 hover:bg-gray-50"
+    >
+      <p id={paymentId} class="text-center font-mono text-gray-800 select-all">
+        {paymentNumber}
+      </p>
 
-			<!-- Subtle shimmer effect on hover -->
-			<div
-				class='absolute inset-0 bg-gradient-to-r from-transparent via-gray-200/20 to-transparent shimmer-effect opacity-0 group-hover:opacity-100'>
-			</div>
+      <!-- Subtle shimmer effect on hover -->
+      <div
+        class="shimmer-effect absolute inset-0 bg-gradient-to-r from-transparent via-gray-200/20 to-transparent opacity-0 group-hover:opacity-100"
+      >
+      </div>
 
-			<button
-				class='copy-button absolute right-3 top-1/2 transform -translate-y-1/2 bg-primary text-white p-1.5 rounded-full lg:opacity-0 group-hover:opacity-100 group-payment-hover:opacity-100 transition-all duration-300 hover:bg-primary-dark'
-				data-clipboard-target={`#${paymentId}`}
-				aria-label='Copiar número'>
-				<Copy class='w-4 h-4' />
-			</button>
+      <button
+        class="copy-button bg-primary hover:bg-primary-dark absolute top-1/2 right-3 -translate-y-1/2 transform rounded-full p-1.5 text-white opacity-100 transition-all duration-300"
+        data-clipboard-target={`#${paymentId}`}
+        aria-label="Copiar número"
+      >
+        <Copy class="h-4 w-4" aria-hidden="true" />
+      </button>
 
-			<!-- Success message that appears when copied -->
-			<div
-				class='copied-message absolute right-3 top-1/2 transform -translate-y-1/2 bg-accent text-white py-1 px-3 rounded-full text-xs opacity-0 pointer-events-none transition-opacity duration-300'
-				data-for={paymentId}>
-				¡Copiado!
-			</div>
-		</div>
+      <!-- Success message that appears when copied -->
+      <div
+        class="copied-message bg-accent pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 transform rounded-full px-3 py-1 text-xs text-white opacity-0 transition-opacity duration-300"
+        data-for={paymentId}
+      >
+        ¡Copiado!
+      </div>
+    </div>
 
-		<p class='text-sm text-gray-500 text-center'>
-			{instructions}
-		</p>
-	</div>
+    <p class="text-center text-sm text-gray-500">
+      {instructions}
+    </p>
+  </div>
 </div>
 
 <script>
-	// Add clipboard functionality with better feedback
-	document.addEventListener('DOMContentLoaded', () => {
-		const copyButtons = document.querySelectorAll('.copy-button');
+  // Add clipboard functionality with better feedback
+  document.addEventListener('DOMContentLoaded', () => {
+    const copyButtons = document.querySelectorAll('.copy-button');
 
-		copyButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				const targetId = button
-					.getAttribute('data-clipboard-target')
-					?.substring(1);
-				if (targetId) {
-					const textElement = document.getElementById(targetId);
-					if (textElement) {
-						// Create selection and copy text
-						const text = textElement.innerText;
-						navigator.clipboard
-							.writeText(text)
-							.then(() => {
-								// Hide the button temporarily
-								(button as HTMLElement).style.opacity = '0';
+    copyButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const targetId = button.getAttribute('data-clipboard-target')?.substring(1);
+        if (targetId) {
+          const textElement = document.getElementById(targetId);
+          if (textElement) {
+            // Create selection and copy text with robust fallback (Issue 10)
+            const text = textElement.innerText;
+            const copyText = (txt: string) => {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(txt);
+              }
+              // Fallback for non-secure HTTP or older browsers
+              return new Promise<void>((resolve, reject) => {
+                try {
+                  const textArea = document.createElement('textarea');
+                  textArea.value = txt;
+                  textArea.style.position = 'fixed';
+                  textArea.style.opacity = '0';
+                  document.body.appendChild(textArea);
+                  textArea.focus();
+                  textArea.select();
+                  // execCommand is deprecated but kept as an intentional fallback for browsers/contexts without the Clipboard API (docs/security.md)
+                  const successful = document.execCommand('copy');
+                  document.body.removeChild(textArea);
+                  if (successful) {
+                    resolve();
+                  } else {
+                    reject(new Error('Fallback copy failed'));
+                  }
+                } catch (err) {
+                  reject(err);
+                }
+              });
+            };
 
-								// Find the success message element
-								const successMessage =
-									button.parentElement?.querySelector(
-										`.copied-message[data-for="${targetId}"]`
-									) as HTMLElement;
+            copyText(text)
+              .then(() => {
+                // Hide the button temporarily by adding opacity-0 (instead of inline styles that break hover states)
+                (button as HTMLElement).classList.add('opacity-0');
+                (button as HTMLElement).classList.remove(
+                  'group-payment-hover:opacity-100',
+                  'group-hover:opacity-100'
+                );
 
-								const copyButton =
-									button.parentElement?.querySelector(
-										'.copy-button'
-									) as HTMLElement;
+                // Find the success message element
+                const successMessage = button.parentElement?.querySelector(
+                  `.copied-message[data-for="${targetId}"]`
+                ) as HTMLElement;
 
-								if (successMessage) {
-									// Show the copied message
-									successMessage.style.opacity = '1';
+                if (successMessage) {
+                  // Show the copied message
+                  successMessage.classList.remove('opacity-0');
+                  successMessage.classList.add('opacity-100');
 
-									// Hide the message and show the button after delay
-									setTimeout(() => {
-										successMessage.style.opacity = '0';
-										(button as HTMLElement).style.opacity =
-											'1';
-										copyButton.style.opacity = '0';
-									}, 1500);
-								}
-							})
-							.catch((err) => {
-								console.error('Failed to copy text: ', err);
-							});
-					}
-				}
-			});
-		});
-	});
+                  // Hide the message and show the button after delay
+                  setTimeout(() => {
+                    successMessage.classList.remove('opacity-100');
+                    successMessage.classList.add('opacity-0');
+                    (button as HTMLElement).classList.remove('opacity-0');
+                    (button as HTMLElement).classList.add(
+                      'group-payment-hover:opacity-100',
+                      'group-hover:opacity-100'
+                    );
+                  }, 1500);
+                }
+              })
+              .catch((err) => {
+                console.error('Failed to copy text: ', err);
+              });
+          }
+        }
+      });
+    });
+  });
 </script>

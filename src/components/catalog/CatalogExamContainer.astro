@@ -5,24 +5,24 @@ import SkeletonCatalog from '../SkeletonCatalog.astro';
 import type { Exam } from '../../types/exam';
 
 interface Props {
-	exams: Exam[];
-	initialDifficulty?: string;
-	initialExamType?: string;
-	initialSort?: string;
-	gridCols?: number;
-	productSize?: 'small' | 'medium' | 'large';
-	showBreadcrumbs?: boolean;
-	useSkeleton?: boolean;
+  exams: Exam[];
+  initialDifficulty?: string;
+  initialExamType?: string;
+  initialSort?: string;
+  gridCols?: number;
+  productSize?: 'small' | 'medium' | 'large';
+  showBreadcrumbs?: boolean;
+  useSkeleton?: boolean;
 }
 
 const {
-	exams = [],
-	initialDifficulty = 'all',
-	initialExamType = 'all',
-	initialSort = 'featured',
-	gridCols = 4,
-	productSize = 'medium',
-	useSkeleton = true,
+  exams = [],
+  initialDifficulty = 'all',
+  initialExamType = 'all',
+  initialSort = 'featured',
+  gridCols = 4,
+  productSize = 'medium',
+  useSkeleton = true,
 } = Astro.props;
 
 // Apply initial filters on the server for better SEO
@@ -30,529 +30,485 @@ let filteredExams = [...exams];
 
 // Filter by difficulty if specified
 if (initialDifficulty !== 'all') {
-	filteredExams = filteredExams.filter(
-		(exam) => exam.difficulty === initialDifficulty
-	);
+  filteredExams = filteredExams.filter((exam) => exam.difficulty === initialDifficulty);
 }
 
 // Filter by exam type if specified
 if (initialExamType !== 'all') {
-	filteredExams = filteredExams.filter(
-		(exam) => exam.examType === initialExamType
-	);
+  filteredExams = filteredExams.filter((exam) => exam.examType === initialExamType);
 }
 
 // Apply initial sorting
 if (initialSort === 'price_low') {
-	filteredExams.sort((a, b) => a.price - b.price);
+  filteredExams.sort((a, b) => a.price - b.price);
 } else if (initialSort === 'price_high') {
-	filteredExams.sort((a, b) => b.price - a.price);
+  filteredExams.sort((a, b) => b.price - a.price);
 } else if (initialSort === 'name_asc') {
-	filteredExams.sort((a, b) => a.title.localeCompare(b.title));
+  filteredExams.sort((a, b) => a.title.localeCompare(b.title));
 } else if (initialSort === 'name_desc') {
-	filteredExams.sort((a, b) => b.title.localeCompare(a.title));
+  filteredExams.sort((a, b) => b.title.localeCompare(a.title));
 } else {
-	// Default to featured
-	filteredExams.sort((a, b) => {
-		if (a.featured && !b.featured) return -1;
-		if (!a.featured && b.featured) return 1;
-		return 0;
-	});
+  // Default to featured
+  filteredExams.sort((a, b) => {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    return 0;
+  });
 }
 
 // Helper function to determine grid class based on number of exams
 function getGridClass(count: number): string {
-	if (count <= 2) return 'grid-cols-1 sm:grid-cols-2';
-	if (count === 3) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
-	return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+  if (count <= 2) return 'grid-cols-1 sm:grid-cols-2';
+  if (count === 3) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+  return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
 }
 
 // Determine if skeleton should be shown initially
 const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
 ---
 
-<div
-	class='catalog-container'
-	id='exams-container'
-	data-is-loading={showSkeletonOnLoad.toString()}>
-	<!-- Filter component integration with props -->
-	<Filter
-		client:load
-		initialLevel={initialDifficulty}
-		initialFormat={initialExamType}
-		initialSort={initialSort}
-		productType='exam'
-		productCount={exams.length}
-		className='mb-8 shadow-lg'
-	/>
+<div class="catalog-container" id="exams-container" data-is-loading={showSkeletonOnLoad.toString()}>
+  <!-- Filter component integration with props -->
+  <Filter
+    client:visible
+    initialLevel={initialDifficulty}
+    initialFormat={initialExamType}
+    initialSort={initialSort}
+    productType="exam"
+    productCount={exams.length}
+    className="mb-8 shadow-lg"
+  />
 
-	<!-- Loading skeleton -->
-	{
-		useSkeleton && (
-			<div
-				id='skeleton-loader'
-				class='skeleton-container'
-				style={showSkeletonOnLoad ? '' : 'display: none;'}>
-				<SkeletonCatalog count={gridCols * 2} />
-			</div>
-		)
-	}
+  <!-- Loading skeleton -->
+  {
+    useSkeleton && (
+      <div
+        id="skeleton-loader"
+        class="skeleton-container"
+        style={showSkeletonOnLoad ? '' : 'display: none;'}
+      >
+        <SkeletonCatalog count={gridCols * 2} />
+      </div>
+    )
+  }
 
-	<!-- Results Count -->
-	<div class='flex justify-between items-center mb-4 mt-6'>
-		<div class='results-count text-sm text-gray-500'>
-			<span class='total-count'>{filteredExams.length}</span> exámenes encontrados
-		</div>
+  <!-- Results Count -->
+  <div class="mt-6 mb-4 flex items-center justify-between">
+    <div class="results-count text-sm text-gray-500">
+      <span class="total-count">{filteredExams.length}</span> exámenes encontrados
+    </div>
 
-		<!-- Reset filters button (hidden initially) -->
-		<button
-			id='reset-filters'
-			class='hidden px-4 py-2 text-sm bg-primary-light hover:bg-primary-dark text-white rounded-md transition-colors'>
-			Restablecer filtros
-		</button>
-	</div>
+    <!-- Reset filters button (hidden initially) -->
+    <button
+      id="reset-filters"
+      class="bg-primary-light hover:bg-primary-dark hidden rounded-md px-4 py-2 text-sm text-white transition-colors"
+    >
+      Restablecer filtros
+    </button>
+  </div>
 
-	<!-- Exams grid -->
-	<div
-		id='exams-grid'
-		class={`grid ${getGridClass(filteredExams.length)} gap-6 md:gap-8 mb-12 relative transition-all duration-300 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}>
-		{
-			filteredExams.map((exam) => (
-				<div
-					class='catalog-product-card'
-					data-id={exam.id}
-					data-title={exam.title}
-					data-price={exam.price}
-					data-discount={exam.discount || 0}
-					data-difficulty={exam.difficulty}
-					data-examtype={exam.examType}
-					data-featured={exam.featured ? 'true' : 'false'}>
-					<ProductCard
-						product={{
-							...exam,
-							productType: 'exam',
-							formatTags: exam.formatTags || [],
-							level: exam.difficulty, // Map difficulty to level for ProductCard
-						}}
-						size={productSize}
-					/>
-				</div>
-			))
-		}
-	</div>
+  <!-- Exams grid -->
+  <div
+    id="exams-grid"
+    class={`grid ${getGridClass(filteredExams.length)} relative mb-12 gap-6 transition-all duration-300 md:gap-8 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
+  >
+    {
+      filteredExams.map((exam) => (
+        <div
+          class="catalog-product-card"
+          data-id={exam.id}
+          data-title={exam.title}
+          data-price={exam.price}
+          data-discount={exam.discount || 0}
+          data-difficulty={exam.difficulty}
+          data-examtype={exam.examType}
+          data-featured={exam.featured ? 'true' : 'false'}
+        >
+          <ProductCard
+            product={{
+              ...exam,
+              productType: 'exam',
+              formatTags: exam.formatTags || [],
+              level: exam.difficulty, // Map difficulty to level for ProductCard
+            }}
+            size={productSize}
+          />
+        </div>
+      ))
+    }
+  </div>
 
-	<!-- No Results State -->
-	<div
-		id='no-results'
-		class='hidden bg-white rounded-xl p-8 text-center shadow-sm border border-gray-100 animate-fadeIn'>
-		<h3 class='text-xl font-bold text-primary-dark mb-3'>
-			No se encontraron exámenes
-		</h3>
-		<p class='text-gray-600 mb-6'>
-			No hay exámenes que coincidan con los filtros seleccionados. Prueba
-			con diferentes criterios.
-		</p>
-		<button
-			id='reset-filters-empty'
-			class='bg-primary hover:bg-primary-dark text-white font-medium py-2 px-6 rounded-lg transition-all duration-300'>
-			Reiniciar filtros
-		</button>
-	</div>
+  <!-- No Results State -->
+  <div
+    id="no-results"
+    class="animate-fadeIn hidden rounded-xl border border-gray-100 bg-white p-8 text-center shadow-sm"
+  >
+    <h3 class="text-primary-dark mb-3 text-xl font-bold">No se encontraron exámenes</h3>
+    <p class="mb-6 text-gray-600">
+      No hay exámenes que coincidan con los filtros seleccionados. Prueba con diferentes criterios.
+    </p>
+    <button
+      id="reset-filters-empty"
+      class="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 font-medium text-white transition-all duration-300"
+    >
+      Reiniciar filtros
+    </button>
+  </div>
 </div>
 
 <script>
-	// Use TypeScript for better type safety
-	import type { Exam } from '../../types/exam';
+  // Use TypeScript for better type safety
+  import type { Exam } from '../../types/exam';
 
-	// Initialize the component functionality
-	document.addEventListener('DOMContentLoaded', () => {
-		// Container references
-		const examsContainer = document.getElementById('exams-container');
-		const examsGrid = document.getElementById('exams-grid');
-		const skeletonLoader = document.getElementById('skeleton-loader');
-		const noResults = document.getElementById('no-results');
-		const totalCountEl = document.querySelector('.total-count');
-		const resetFiltersBtn = document.getElementById('reset-filters');
-		const resetFiltersEmptyBtn = document.getElementById(
-			'reset-filters-empty'
-		);
+  // Initialize the component functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    // Container references
+    const examsContainer = document.getElementById('exams-container');
+    const examsGrid = document.getElementById('exams-grid');
+    const skeletonLoader = document.getElementById('skeleton-loader');
+    const noResults = document.getElementById('no-results');
+    const totalCountEl = document.querySelector('.total-count');
+    const resetFiltersBtn = document.getElementById('reset-filters');
+    const resetFiltersEmptyBtn = document.getElementById('reset-filters-empty');
 
-		// Parse all exam cards to create our client-side data
-		const initialExams: Partial<Exam>[] = [];
-		document.querySelectorAll('.catalog-product-card').forEach((card) => {
-			const cardEl = card as HTMLElement;
+    // Parse all exam cards to create our client-side data
+    const initialExams: Partial<Exam>[] = [];
+    document.querySelectorAll('.catalog-product-card').forEach((card) => {
+      const cardEl = card as HTMLElement;
 
-			initialExams.push({
-				id: cardEl.dataset.id,
-				title: cardEl.dataset.title,
-				price: parseFloat(cardEl.dataset.price || '0'),
-				discount: parseFloat(cardEl.dataset.discount || '0'),
-				difficulty: cardEl.dataset.difficulty,
-				examType: cardEl.dataset.examtype,
-				featured: cardEl.dataset.featured === 'true',
-			});
-		});
+      initialExams.push({
+        id: cardEl.dataset.id,
+        title: cardEl.dataset.title,
+        price: parseFloat(cardEl.dataset.price || '0'),
+        discount: parseFloat(cardEl.dataset.discount || '0'),
+        difficulty: cardEl.dataset.difficulty,
+        examType: cardEl.dataset.examtype,
+        featured: cardEl.dataset.featured === 'true',
+      });
+    });
 
-		// Function to filter exams based on criteria
-		function filterExams(
-			difficulty: string,
-			examType: string,
-			sort: string,
-			searchTerm = ''
-		) {
-			if (!examsContainer || !examsGrid || !skeletonLoader) return;
+    // Function to filter exams based on criteria
+    function filterExams(difficulty: string, examType: string, sort: string, searchTerm = '') {
+      if (!examsContainer || !examsGrid || !skeletonLoader) return;
 
-			// Add loading state
-			document.body.classList.add('filters-loading');
-			examsContainer.setAttribute('data-is-loading', 'true');
+      // Add loading state
+      document.body.classList.add('filters-loading');
+      examsContainer.setAttribute('data-is-loading', 'true');
 
-			// Show skeleton loader during filtering
-			if (skeletonLoader) {
-				skeletonLoader.style.display = 'block';
-				skeletonLoader.style.opacity = '1';
-			}
+      // Show skeleton loader during filtering
+      if (skeletonLoader) {
+        skeletonLoader.style.display = 'block';
+        skeletonLoader.style.opacity = '1';
+      }
 
-			if (examsGrid) {
-				examsGrid.classList.add('opacity-0');
-				examsGrid.style.position = 'absolute';
-				examsGrid.style.visibility = 'hidden';
-			}
+      if (examsGrid) {
+        examsGrid.classList.add('opacity-0');
+        examsGrid.style.position = 'absolute';
+        examsGrid.style.visibility = 'hidden';
+      }
 
-			// Hide all exams first
-			document
-				.querySelectorAll('.catalog-product-card')
-				.forEach((card) => {
-					card.classList.add('hidden');
-				});
+      // Hide all exams first
+      document.querySelectorAll('.catalog-product-card').forEach((card) => {
+        card.classList.add('hidden');
+      });
 
-			// Perform the actual filtering with a deliberate delay
-			// to allow the skeleton loader to be visible
-			setTimeout(() => {
-				let filteredExams = [...initialExams];
-				let visibleCount = 0;
+      // Perform the actual filtering with a deliberate delay
+      // to allow the skeleton loader to be visible
+      setTimeout(() => {
+        let filteredExams = [...initialExams];
+        let visibleCount = 0;
 
-				// Apply difficulty filter
-				if (difficulty !== 'all') {
-					filteredExams = filteredExams.filter(
-						(exam) => exam.difficulty === difficulty
-					);
-				}
+        // Apply difficulty filter
+        if (difficulty !== 'all') {
+          filteredExams = filteredExams.filter((exam) => exam.difficulty === difficulty);
+        }
 
-				// Apply exam type filter
-				if (examType !== 'all') {
-					filteredExams = filteredExams.filter(
-						(exam) => exam.examType === examType
-					);
-				}
+        // Apply exam type filter
+        if (examType !== 'all') {
+          filteredExams = filteredExams.filter((exam) => exam.examType === examType);
+        }
 
-				// Apply search term filter if provided
-				if (searchTerm) {
-					const normalizedSearchTerm = searchTerm.toLowerCase();
-					filteredExams = filteredExams.filter((exam) =>
-						exam.title?.toLowerCase().includes(normalizedSearchTerm)
-					);
-				}
+        // Apply search term filter if provided
+        if (searchTerm) {
+          const normalizedSearchTerm = searchTerm.toLowerCase();
+          filteredExams = filteredExams.filter((exam) =>
+            exam.title?.toLowerCase().includes(normalizedSearchTerm)
+          );
+        }
 
-				// Apply sorting
-				switch (sort) {
-					case 'price-low':
-					case 'price_low':
-						filteredExams.sort(
-							(a, b) => (a.price || 0) - (b.price || 0)
-						);
-						break;
-					case 'price-high':
-					case 'price_high':
-						filteredExams.sort(
-							(a, b) => (b.price || 0) - (a.price || 0)
-						);
-						break;
-					case 'name-asc':
-					case 'name_asc':
-						filteredExams.sort((a, b) =>
-							(a.title || '').localeCompare(b.title || '')
-						);
-						break;
-					case 'name-desc':
-					case 'name_desc':
-						filteredExams.sort((a, b) =>
-							(b.title || '').localeCompare(a.title || '')
-						);
-						break;
-					case 'bestseller':
-						filteredExams.sort((a, b) => {
-							if (a.featured && !b.featured) return -1;
-							if (!a.featured && b.featured) return 1;
-							return 0;
-						});
-						break;
-					default:
-						// For featured, prioritize featured items
-						filteredExams.sort((a, b) => {
-							if (a.featured && !b.featured) return -1;
-							if (!a.featured && b.featured) return 1;
-							return 0;
-						});
-				}
+        // Apply sorting
+        switch (sort) {
+          case 'price-low':
+          case 'price_low':
+            filteredExams.sort((a, b) => (a.price || 0) - (b.price || 0));
+            break;
+          case 'price-high':
+          case 'price_high':
+            filteredExams.sort((a, b) => (b.price || 0) - (a.price || 0));
+            break;
+          case 'name-asc':
+          case 'name_asc':
+            filteredExams.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+            break;
+          case 'name-desc':
+          case 'name_desc':
+            filteredExams.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+            break;
+          case 'bestseller':
+            filteredExams.sort((a, b) => {
+              if (a.featured && !b.featured) return -1;
+              if (!a.featured && b.featured) return 1;
+              return 0;
+            });
+            break;
+          default:
+            // For featured, prioritize featured items
+            filteredExams.sort((a, b) => {
+              if (a.featured && !b.featured) return -1;
+              if (!a.featured && b.featured) return 1;
+              return 0;
+            });
+        }
 
-				// Update DOM based on filtered results
-				const productCards = document.querySelectorAll(
-					'.catalog-product-card'
-				);
+        // Update DOM based on filtered results
+        const productCards = document.querySelectorAll('.catalog-product-card');
 
-				productCards.forEach((card) => {
-					const cardElement = card as HTMLElement;
-					const cardId = cardElement.dataset.id;
-					const isVisible = filteredExams.some(
-						(exam) => exam.id === cardId
-					);
+        productCards.forEach((card) => {
+          const cardElement = card as HTMLElement;
+          const cardId = cardElement.dataset.id;
+          const isVisible = filteredExams.some((exam) => exam.id === cardId);
 
-					if (isVisible) {
-						cardElement.classList.remove('hidden');
-						visibleCount++;
-					}
-				});
+          if (isVisible) {
+            cardElement.classList.remove('hidden');
+            visibleCount++;
+          }
+        });
 
-				// Show reset filters button if filters are applied
-				if (resetFiltersBtn) {
-					resetFiltersBtn.classList.toggle(
-						'hidden',
-						difficulty === 'all' &&
-							examType === 'all' &&
-							!searchTerm
-					);
-				}
+        // Show reset filters button if filters are applied
+        if (resetFiltersBtn) {
+          resetFiltersBtn.classList.toggle(
+            'hidden',
+            difficulty === 'all' && examType === 'all' && !searchTerm
+          );
+        }
 
-				// Update count and handle empty results
-				if (totalCountEl)
-					totalCountEl.textContent = visibleCount.toString();
+        // Update count and handle empty results
+        if (totalCountEl) totalCountEl.textContent = visibleCount.toString();
 
-				// Show no results message if needed
-				if (examsGrid && noResults) {
-					if (visibleCount === 0) {
-						examsGrid.classList.add('hidden');
-						noResults.classList.remove('hidden');
-					} else {
-						examsGrid.classList.remove('hidden');
-						noResults.classList.add('hidden');
-					}
-				}
+        // Show no results message if needed
+        if (examsGrid && noResults) {
+          if (visibleCount === 0) {
+            examsGrid.classList.add('hidden');
+            noResults.classList.remove('hidden');
+          } else {
+            examsGrid.classList.remove('hidden');
+            noResults.classList.add('hidden');
+          }
+        }
 
-				// Remove loading state with a slight delay for animation
-				setTimeout(() => {
-					document.body.classList.remove('filters-loading');
+        // Remove loading state with a slight delay for animation
+        setTimeout(() => {
+          document.body.classList.remove('filters-loading');
 
-					if (examsContainer) {
-						examsContainer.setAttribute('data-is-loading', 'false');
-					}
+          if (examsContainer) {
+            examsContainer.setAttribute('data-is-loading', 'false');
+          }
 
-					if (skeletonLoader) {
-						skeletonLoader.style.opacity = '0';
-						setTimeout(() => {
-							skeletonLoader.style.display = 'none';
-						}, 300); // Short delay for fade out animation
-					}
+          if (skeletonLoader) {
+            skeletonLoader.style.opacity = '0';
+            setTimeout(() => {
+              skeletonLoader.style.display = 'none';
+            }, 300); // Short delay for fade out animation
+          }
 
-					if (examsGrid) {
-						examsGrid.classList.remove('opacity-0');
-						examsGrid.style.position = 'static';
-						examsGrid.style.visibility = 'visible';
-					}
-				}, 300);
-			}, 600); // Deliberate delay to show skeleton loader
-		}
+          if (examsGrid) {
+            examsGrid.classList.remove('opacity-0');
+            examsGrid.style.position = 'static';
+            examsGrid.style.visibility = 'visible';
+          }
+        }, 300);
+      }, 600); // Deliberate delay to show skeleton loader
+    }
 
-		// Listen for filter changes from Filter component
-		interface FilterChangeEventDetail {
-			level: string;
-			format: string;
-			sort: string;
-			search?: string;
-		}
+    // Listen for filter changes from Filter component
+    interface FilterChangeEventDetail {
+      level: string;
+      format: string;
+      sort: string;
+      search?: string;
+    }
 
-		const handleFilterChange = (
-			event: CustomEvent<FilterChangeEventDetail>
-		) => {
-			// Get the filter data from the event detail
-			const { level, format, sort, search = '' } = event.detail;
+    const handleFilterChange = (event: CustomEvent<FilterChangeEventDetail>) => {
+      // Get the filter data from the event detail
+      const { level, format, sort, search = '' } = event.detail;
 
-			// For exams, we map "level" to "difficulty" and "format" from Filter.jsx to "examType"
-			filterExams(level, format, sort, search);
+      // For exams, we map "level" to "difficulty" and "format" from Filter.jsx to "examType"
+      filterExams(level, format, sort, search);
 
-			// Update URL for SEO and bookmark-ability
-			const url = new URL(window.location.href);
-			if (level !== 'all') url.searchParams.set('difficulty', level);
-			else url.searchParams.delete('difficulty');
+      // Update URL for SEO and bookmark-ability
+      const url = new URL(window.location.href);
+      if (level !== 'all') url.searchParams.set('difficulty', level);
+      else url.searchParams.delete('difficulty');
 
-			if (format !== 'all') url.searchParams.set('examType', format);
-			else url.searchParams.delete('examType');
+      if (format !== 'all') url.searchParams.set('examType', format);
+      else url.searchParams.delete('examType');
 
-			if (sort !== 'featured') url.searchParams.set('sort', sort);
-			else url.searchParams.delete('sort');
+      if (sort !== 'featured') url.searchParams.set('sort', sort);
+      else url.searchParams.delete('sort');
 
-			window.history.replaceState({}, '', url.toString());
-		};
+      window.history.replaceState({}, '', url.toString());
+    };
 
-		window.addEventListener(
-			'filterChange',
-			handleFilterChange as EventListener
-		);
+    window.addEventListener('filterChange', handleFilterChange as EventListener);
 
-		// Reset filters functionality
-		const resetFilters = () => {
-			// Create and dispatch a reset event for Filter.jsx
-			document.dispatchEvent(new CustomEvent('resetFilters'));
+    // Reset filters functionality
+    const resetFilters = () => {
+      // Create and dispatch a reset event for Filter.jsx
+      document.dispatchEvent(new CustomEvent('resetFilters'));
 
-			// Also handle the filtering ourselves
-			filterExams('all', 'all', 'featured', '');
+      // Also handle the filtering ourselves
+      filterExams('all', 'all', 'featured', '');
 
-			// Reset URL
-			const url = new URL(window.location.href);
-			url.search = '';
-			window.history.replaceState({}, '', url.toString());
-		};
+      // Reset URL
+      const url = new URL(window.location.href);
+      url.search = '';
+      window.history.replaceState({}, '', url.toString());
+    };
 
-		// Add event listeners to reset buttons
-		if (resetFiltersBtn) {
-			resetFiltersBtn.addEventListener('click', resetFilters);
-		}
+    // Add event listeners to reset buttons
+    if (resetFiltersBtn) {
+      resetFiltersBtn.addEventListener('click', resetFilters);
+    }
 
-		if (resetFiltersEmptyBtn) {
-			resetFiltersEmptyBtn.addEventListener('click', resetFilters);
-		}
+    if (resetFiltersEmptyBtn) {
+      resetFiltersEmptyBtn.addEventListener('click', resetFilters);
+    }
 
-		// Set up intersection observer for animations
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('in-view');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{ threshold: 0.1 }
-		);
+    // Set up intersection observer for animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-		// Observe all product cards for animation
-		document.querySelectorAll('.catalog-product-card').forEach((card) => {
-			observer.observe(card);
-		});
+    // Observe all product cards for animation
+    document.querySelectorAll('.catalog-product-card').forEach((card) => {
+      observer.observe(card);
+    });
 
-		// Simulation for initial loading if needed
-		if (
-			examsContainer &&
-			examsContainer.getAttribute('data-is-loading') === 'true'
-		) {
-			setTimeout(() => {
-				if (skeletonLoader) skeletonLoader.style.opacity = '0';
-				if (examsGrid) {
-					examsGrid.classList.remove('opacity-0');
-					examsGrid.style.position = 'static';
-					examsGrid.style.visibility = 'visible';
-				}
-				examsContainer.setAttribute('data-is-loading', 'false');
+    // Simulation for initial loading if needed
+    if (examsContainer && examsContainer.getAttribute('data-is-loading') === 'true') {
+      setTimeout(() => {
+        if (skeletonLoader) skeletonLoader.style.opacity = '0';
+        if (examsGrid) {
+          examsGrid.classList.remove('opacity-0');
+          examsGrid.style.position = 'static';
+          examsGrid.style.visibility = 'visible';
+        }
+        examsContainer.setAttribute('data-is-loading', 'false');
 
-				// Hide skeleton after fade out completes
-				setTimeout(() => {
-					if (skeletonLoader) skeletonLoader.style.display = 'none';
-				}, 300);
-			}, 800);
-		}
-	});
+        // Hide skeleton after fade out completes
+        setTimeout(() => {
+          if (skeletonLoader) skeletonLoader.style.display = 'none';
+        }, 300);
+      }, 800);
+    }
+  });
 </script>
 
 <style>
-	/* Loading state animations */
-	body.filters-loading .exams-grid::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: linear-gradient(
-			90deg,
-			rgba(255, 255, 255, 0) 0%,
-			rgba(255, 255, 255, 0.2) 20%,
-			rgba(255, 255, 255, 0.5) 60%,
-			rgba(255, 255, 255, 0.2) 80%,
-			rgba(255, 255, 255, 0) 100%
-		);
-		background-size: 200% 100%;
-		animation: shine 1.5s infinite linear;
-		z-index: 10;
-		pointer-events: none;
-	}
+  /* Loading state animations */
+  body.filters-loading .exams-grid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.5) 60%,
+      rgba(255, 255, 255, 0.2) 80%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shine 1.5s infinite linear;
+    z-index: 10;
+    pointer-events: none;
+  }
 
-	@keyframes shine {
-		to {
-			background-position: 200% 0;
-		}
-	}
+  @keyframes shine {
+    to {
+      background-position: 200% 0;
+    }
+  }
 
-	/* Exam visibility transition for smooth filtering */
-	.catalog-product-card {
-		transition:
-			opacity 0.5s ease,
-			transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-	}
+  /* Exam visibility transition for smooth filtering */
+  .catalog-product-card {
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
 
-	.catalog-product-card.hidden {
-		display: none;
-	}
+  #skeleton-loader {
+    transition: opacity 0.3s ease-out;
+  }
 
-	#skeleton-loader {
-		transition: opacity 0.3s ease-out;
-	}
+  #exams-grid.opacity-0 {
+    position: absolute;
+    visibility: hidden;
+  }
 
-	#exams-grid.opacity-0 {
-		position: absolute;
-		visibility: hidden;
-	}
+  [data-is-loading='false'] #skeleton-loader {
+    display: none;
+  }
 
-	[data-is-loading='false'] #skeleton-loader {
-		display: none;
-	}
+  /* Add fade-in animation for exams after filtering */
+  .catalog-product-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease forwards;
+    animation-play-state: paused;
+  }
 
-	/* Add fade-in animation for exams after filtering */
-	.catalog-product-card {
-		opacity: 0;
-		transform: translateY(20px);
-		animation: fadeInUp 0.5s ease forwards;
-		animation-play-state: paused;
-	}
+  /* Play animation when filters are applied */
+  [data-is-loading='false'] .catalog-product-card:not(.hidden) {
+    animation-play-state: running;
+  }
 
-	/* Play animation when filters are applied */
-	[data-is-loading='false'] .catalog-product-card:not(.hidden) {
-		animation-play-state: running;
-	}
+  .catalog-product-card.in-view {
+    animation-play-state: running;
+  }
 
-	.catalog-product-card.in-view {
-		animation-play-state: running;
-	}
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-
-	.animate-fadeIn {
-		animation: fadeIn 0.5s ease-out;
-	}
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
+  }
 </style>

@@ -1,92 +1,122 @@
 @import 'tailwindcss';
+@source '../';
+@import './animations.css';
 
 @theme {
-	/* Font Type*/
-	--font-poppins: Poppins, sans-serif;
-	--font-lora: Lora, serif;
+  /* Font Type*/
+  --font-poppins: Poppins, sans-serif;
+  --font-lora: Lora, serif;
 
-	/* Pimary Color*/
-	--color-primary-light: #3b82f6;
-	--color-primary: #1e3a8a;
-	--color-primary-dark: #1e40af;
+  /* Pimary Color*/
+  --color-primary-light: #3b82f6;
+  --color-primary: #1e3a8a;
+  --color-primary-dark: #1e40af;
 
-	/* Secondary Color */
-	--color-secondary-light: #fde047;
-	--color-secondary: #facc15;
-	--color-secondary-dark: #eab308;
+  /* Secondary Color */
+  --color-secondary-light: #fde047;
+  --color-secondary: #facc15;
+  --color-secondary-dark: #eab308;
 
-	/* Accent Color */
-	--color-accent-light: #86efac;
-	--color-accent: #16a34a;
-	--color-accent-dark: #166534;
+  /* Accent Color */
+  --color-accent-light: #86efac;
+  --color-accent: #16a34a;
+  --color-accent-dark: #166534;
 
-	/* Neutral Color */
-	--color-neutral-light: #f3f4f6;
-	--color-neutral: #e5e7eb;
-	--color-neutral-dark: #9ca3af;
+  /* Neutral Color */
+  --color-neutral-light: #f3f4f6;
+  --color-neutral: #e5e7eb;
+  --color-neutral-dark: #9ca3af;
 
-	/* Text Color */
-	--color-white: #f8fafc;
-	--color-black: #18181b;
+  /* Text Color */
+  --color-white: #f8fafc;
+  --color-black: #18181b;
 }
 
 html {
-	scroll-behavior: smooth;
-	scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
 }
 
 body {
-	background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e3a8a' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url('/pattern.svg');
 }
 
 /* Navbar */
 nav a {
-	position: relative;
+  position: relative;
 }
 
 /* Only show underline animation on desktop */
-@media (min-width: 768px) {
-	nav a::after {
-		content: '';
-		position: absolute;
-		bottom: 0;
-		left: 50%;
-		width: 0;
-		height: 2px;
-		background-color: var(--color-secondary);
-		transition: width 0.3s ease, left 0.3s ease;
-		transform: translateX(-50%);
-	}
+@media (min-width: 1280px) {
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-secondary);
+    transition:
+      width 0.3s ease,
+      left 0.3s ease;
+    transform: translateX(-50%);
+  }
 
-	nav a:hover::after {
-		width: 70%;
-	}
+  nav a:hover::after {
+    width: 70%;
+  }
 
-	/* Special styling for active links */
-	nav a.active::after,
-	nav a[aria-current='page']::after {
-		width: 70%;
-		background-color: var(--color-secondary-dark);
-	}
+  /* Special styling for active links */
+  nav a.active::after,
+  nav a[aria-current='page']::after {
+    width: 70%;
+    background-color: var(--color-secondary-dark);
+  }
 }
 
 /* Mobile specific styles */
-@media (max-width: 768px) {
-	.mobile-menu {
-		transform: translateY(-10px);
-		transition: opacity 0.3s ease, max-height 0.3s ease, transform 0.3s ease;
-	}
+@media (max-width: 1279px) {
+  .mobile-menu {
+    transform: translateY(-10px);
+    transition:
+      opacity 0.3s ease,
+      max-height 0.3s ease,
+      transform 0.3s ease;
+  }
 
-	.mobile-menu.menu-open {
-		transform: translateY(0);
-	}
+  .mobile-menu.menu-open {
+    transform: translateY(0);
+  }
 
-	nav a {
-		margin: 0.25rem 0;
-		text-align: center;
-		&.active {
-			background-color: var(--color-primary-dark);
-			border-left: 3px solid var(--color-secondary);
-		}
-	}
+  nav a {
+    margin: 0.25rem 0;
+    text-align: center;
+    &.active {
+      background-color: var(--color-primary-dark);
+      border-left: 3px solid var(--color-secondary);
+    }
+  }
+}
+
+/* Custom text utility classes */
+.text-2xs {
+  font-size: 0.65rem;
+  line-height: 1rem;
+}
+
+.text-3xs {
+  font-size: 0.6rem;
+  line-height: 0.9rem;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

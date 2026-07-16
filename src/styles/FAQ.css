@@ -1,20 +1,22 @@
 /* Base styles for animation */
 .question-card {
-	opacity: 0;
-	transform: translateY(20px);
-	transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .question-card.fade-in-visible {
-	opacity: 1;
-	transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
-	.question-card {
-		transition: none !important;
-		opacity: 1;
-		transform: translateY(0);
-	}
+  .question-card {
+    transition: none !important;
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

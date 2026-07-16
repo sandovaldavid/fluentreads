@@ -1,293 +1,285 @@
 /* Enhanced card styling */
 .book-card {
-	backface-visibility: hidden;
-	will-change: transform;
-	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-	position: relative;
-	z-index: 1;
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 1;
 }
 
 /* Card hover effects - consolidated */
 .book-card:hover {
-	z-index: 10;
-	transform: translateY(-5px);
+  z-index: 10;
+  transform: translateY(-5px);
 }
 
 /* 3D tilt effect variant */
 .book-card-tilt {
-	transform-style: preserve-3d;
-	perspective: 1000px;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .book-card-tilt:hover {
-	transform: rotateX(5deg) rotateY(5deg);
+  transform: rotateX(5deg) rotateY(5deg);
 }
 
 .book-card-tilt:hover .book-cover {
-	transform: translateZ(20px);
+  transform: translateZ(20px);
 }
 
 /* Expanded state */
 .book-card.expanded {
-	transform: scale(1.05);
-	z-index: 20;
+  transform: scale(1.05);
+  z-index: 20;
 }
 
 .book-card.expanded .book-description {
-	max-height: none;
+  max-height: none;
 }
 
 /* Special highlight for featured/bestsellers */
 .card-highlighted {
-	border: 1px solid rgba(var(--color-secondary), 0.1);
-	position: relative;
+  border: 1px solid rgba(var(--color-secondary), 0.1);
+  position: relative;
 }
 
 .card-highlighted::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	z-index: -1;
-	background: linear-gradient(
-		135deg,
-		var(--color-primary-light) 0%,
-		transparent 50%,
-		var(--color-secondary-light) 100%
-	);
-	opacity: 0.05;
-	border-radius: inherit;
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-light) 0%,
+    transparent 50%,
+    var(--color-secondary-light) 100%
+  );
+  opacity: 0.05;
+  border-radius: inherit;
 }
 
 /* Special styling for discounted items */
 .special-offer-card {
-	border: 1px solid rgba(var(--color-accent), 0.15);
+  border: 1px solid rgba(var(--color-accent), 0.15);
 }
 
 /* Cover image enhancements */
 .book-cover-container {
-	overflow: hidden;
-	position: relative;
+  overflow: hidden;
+  position: relative;
 }
 
 /* Book cover hover effects */
 .book-cover-container:hover .book-cover {
-	transform: scale(1.15);
+  transform: scale(1.15);
 }
 
 .book-cover-container:hover .cover-overlay {
-	opacity: 1;
+  opacity: 1;
 }
 
 /* Shine effect on book covers */
 .book-cover-container::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: -75%;
-	width: 50%;
-	height: 100%;
-	background: linear-gradient(
-		to right,
-		rgba(255, 255, 255, 0) 0%,
-		rgba(255, 255, 255, 0.3) 100%
-	);
-	transform: skewX(-25deg);
-	z-index: 2;
-	opacity: 0;
-	transition: all 0.7s ease;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 100%);
+  transform: skewX(-25deg);
+  z-index: 2;
+  opacity: 0;
+  transition: all 0.7s ease;
 }
 
 .book-card:hover .book-cover-container::before {
-	animation: shine 1.2s;
+  animation: shine 1.2s;
 }
 
 /* Title animation */
 .book-card:hover .book-title {
-	color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* Tags styling - consolidated */
 .format-tag,
 .popularity-tag {
-	transition: all 0.3s ease;
-	cursor: pointer;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .format-tag:hover {
-	transform: translateY(-3px) rotate(-2deg);
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px) rotate(-2deg);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .popularity-tag:hover {
-	transform: translateY(-3px) rotate(2deg);
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px) rotate(2deg);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Special animation for bestseller tags */
 .popularity-tag:has(.bestseller) {
-	position: relative;
-	overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
 
 .popularity-tag:has(.bestseller)::after {
-	content: '';
-	position: absolute;
-	top: -50%;
-	left: -50%;
-	width: 200%;
-	height: 200%;
-	background: linear-gradient(
-		transparent,
-		rgba(255, 255, 255, 0.4),
-		transparent
-	);
-	opacity: 0.6;
-	transform: rotate(30deg);
-	animation: glint 3s infinite;
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.4), transparent);
+  opacity: 0.6;
+  transform: rotate(30deg);
+  animation: glint 3s infinite;
 }
 
 /* Price display enhancements - consolidated */
 .discounted-price {
-	position: relative;
-	display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .discounted-price::after {
-	content: '';
-	position: absolute;
-	bottom: -2px;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background-color: var(--color-accent);
-	transform: scaleX(0);
-	transform-origin: right;
-	transition: transform 0.3s ease;
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
 }
 
 .book-card:hover .discounted-price::after {
-	transform: scaleX(1);
-	transform-origin: left;
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .book-card:hover .discounted-price {
-	color: var(--color-accent);
-	animation: pop 0.4s ease-out;
+  color: var(--color-accent);
+  animation: pop 0.4s ease-out;
 }
 
 .price-display {
-	position: relative;
+  position: relative;
 }
 
 /* Included items list styling */
 .included-item {
-	transition: transform 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .included-item:hover {
-	transform: translateX(3px);
-	color: var(--color-primary);
+  transform: translateX(3px);
+  color: var(--color-primary);
 }
 
 /* Animation for the "Recommended" badge */
 @keyframes pulse-subtle {
-	0%,
-	100% {
-		opacity: 0.9;
-		transform: scale(1);
-	}
-	50% {
-		opacity: 1;
-		transform: scale(1.05);
-	}
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 .animate-pulse-subtle {
-	animation: pulse-subtle 2s infinite;
+  animation: pulse-subtle 2s infinite;
 }
 
 /* Discount badge styling */
 .discount-badge {
-	z-index: 10;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Star rating styling */
 .star-icon {
-	display: inline-block;
-	transition: transform 0.2s ease;
+  display: inline-block;
+  transition: transform 0.2s ease;
 }
 
 .book-card:hover .star-icon {
-	transform: rotate(5deg) scale(1.1);
+  transform: rotate(5deg) scale(1.1);
 }
 
 /* Button enhancements - consolidated */
 .buy-button {
-	transition: all 0.3s ease;
-	position: relative;
-	overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .buy-button::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(
-		to right,
-		rgba(255, 255, 255, 0) 0%,
-		rgba(255, 255, 255, 0.2) 50%,
-		rgba(255, 255, 255, 0) 100%
-	);
-	transform: translateX(-100%);
-	transition: all 0.6s;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%);
+  transition: all 0.6s;
 }
 
 .book-card:hover .buy-button::before {
-	animation: shimmer 1.5s infinite;
+  animation: shimmer 1.5s infinite;
 }
 
 /* Animations */
 @keyframes shine {
-	100% {
-		left: 125%;
-		opacity: 1;
-	}
+  100% {
+    left: 125%;
+    opacity: 1;
+  }
 }
 
 @keyframes pop {
-	0% {
-		transform: scale(1);
-	}
-	50% {
-		transform: scale(1.15);
-	}
-	100% {
-		transform: scale(1);
-	}
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes shimmer {
-	100% {
-		transform: translateX(100%);
-	}
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes glint {
-	0% {
-		transform: translate(-50%, -50%) rotate(0deg);
-	}
-	100% {
-		transform: translate(50%, 50%) rotate(30deg);
-	}
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(50%, 50%) rotate(30deg);
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-	.book-card:hover {
-		transform: translateY(-5px);
-	}
+  .book-card:hover {
+    transform: translateY(-5px);
+  }
 }

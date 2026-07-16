@@ -1,0 +1,107 @@
+[
+  {
+    "id": "complete-english-pack",
+    "title": "Complete English Learning Pack",
+    "description": "Un pack con los mejores libros para aprender inglés desde cero.",
+    "price": 99.99,
+    "discount": 15,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848806/book-sample-03_tgi57l.jpg",
+    "booksIds": ["business-english-master", "grammar-fundamentals"],
+    "formatTags": ["pdf", "audio", "video"],
+    "popularityTags": ["completePack"],
+    "featured": true,
+    "detailsLink": "/catalogo/packs/complete-english-pack",
+    "buyLink": "/checkout/english-complete-pack",
+    "includedItems": ["Audios adicionales", "Guía de estudio"],
+    "level": "beginner",
+    "offerDays": 15,
+    "rating": {
+      "score": 4.8,
+      "reviewCount": 124
+    }
+  },
+  {
+    "id": "business-pro-pack",
+    "title": "Business English Pro Pack",
+    "description": "Domina el inglés empresarial con este pack que incluye libros esenciales para mejorar tu comunicación profesional.",
+    "price": 79.99,
+    "discount": 10,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848807/book-sample-02_s2kr5g.jpg",
+    "booksIds": ["business-english-master", "advanced-business-communication"],
+    "formatTags": ["pdf", "audio"],
+    "popularityTags": ["specialOffer"],
+    "featured": true,
+    "detailsLink": "/catalogo/packs/business-pro-pack",
+    "buyLink": "/checkout/business-pro-pack",
+    "includedItems": ["Casos de estudio", "Acceso a webinars"],
+    "level": "intermediate",
+    "offerDays": 10,
+    "rating": {
+      "score": 4.7,
+      "reviewCount": 98
+    }
+  },
+  {
+    "id": "grammar-mastery-pack",
+    "title": "Grammar Mastery Pack",
+    "description": "Mejora tu gramática inglesa con este pack que incluye libros fundamentales sobre estructuras gramaticales y ejercicios.",
+    "price": 69.99,
+    "discount": 20,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848806/book-sample-01_zm2gtc.jpg",
+    "booksIds": ["grammar-fundamentals", "advanced-grammar-usage"],
+    "formatTags": ["pdf", "workbook"],
+    "popularityTags": ["bestSeller"],
+    "featured": false,
+    "detailsLink": "/catalogo/packs/grammar-mastery-pack",
+    "buyLink": "/checkout/grammar-mastery-pack",
+    "includedItems": ["Ejercicios interactivos", "Simulaciones de examen"],
+    "level": "intermediate",
+    "offerDays": 7,
+    "rating": {
+      "score": 4.6,
+      "reviewCount": 85
+    }
+  },
+  {
+    "id": "conversation-boost-pack",
+    "title": "Conversation Boost Pack",
+    "description": "Mejora tu fluidez y confianza al hablar inglés con este pack diseñado para la práctica de conversación.",
+    "price": 59.99,
+    "discount": 15,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848806/book-sample-03_tgi57l.jpg",
+    "booksIds": ["conversation-strategies", "fluency-builder"],
+    "formatTags": ["pdf", "audio", "video"],
+    "popularityTags": ["bestSeller"],
+    "featured": true,
+    "detailsLink": "/catalogo/packs/conversation-boost-pack",
+    "buyLink": "/checkout/conversation-boost-pack",
+    "includedItems": ["Audios de diálogos", "Acceso a prácticas en línea"],
+    "level": "intermediate",
+    "offerDays": 7,
+    "rating": {
+      "score": 4.9,
+      "reviewCount": 110
+    }
+  },
+  {
+    "id": "ielts-preparation-pack",
+    "title": "IELTS Preparation Pack",
+    "description": "Prepárate para el examen IELTS con este pack que cubre todas las secciones de la prueba.",
+    "price": 89.99,
+    "discount": 10,
+    "coverImage": "https://res.cloudinary.com/didokliuv/image/upload/v1742848807/book-sample-02_s2kr5g.jpg",
+    "booksIds": ["ielts-strategies", "academic-writing-guide"],
+    "formatTags": ["pdf", "audio", "workbook"],
+    "popularityTags": ["new"],
+    "featured": false,
+    "detailsLink": "/catalogo/packs/ielts-preparation-pack",
+    "buyLink": "/checkout/ielts-preparation-pack",
+    "includedItems": ["Simulaciones de examen", "Consejos de expertos"],
+    "level": "international-exam",
+    "offerDays": 7,
+    "rating": {
+      "score": 4.8,
+      "reviewCount": 95
+    }
+  }
+]

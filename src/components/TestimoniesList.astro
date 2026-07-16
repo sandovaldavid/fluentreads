@@ -2,25 +2,25 @@
 import TestimoniesCard from './TestimoniesCard.astro';
 import SectionTitle from './SectionTitle.astro';
 import Button from './Button.astro';
-import testimoniesData from '../database/testimonies.json';
+import testimoniesData from '../data/testimonies.json';
 import '../styles/TestimoniesList.css';
 
 interface Props {
-	count?: number;
-	showTitle?: boolean;
-	titleText?: string;
-	showCTA?: boolean;
-	ctaText?: string;
-	ctaLink?: string;
+  count?: number;
+  showTitle?: boolean;
+  titleText?: string;
+  showCTA?: boolean;
+  ctaText?: string;
+  ctaLink?: string;
 }
 
 const {
-	count = 3,
-	showTitle = true,
-	titleText = 'Lo que dicen nuestros clientes',
-	showCTA = true,
-	ctaText = 'Ver más testimonios',
-	ctaLink = '/testimonios',
+  count = 3,
+  showTitle = true,
+  titleText = 'Lo que dicen nuestros clientes',
+  showCTA = true,
+  ctaText = 'Ver más testimonios',
+  ctaLink = '/testimonios',
 } = Astro.props;
 
 // Ensure we don't exceed the array length
@@ -29,155 +29,155 @@ const testimoniesToShow = testimoniesData.slice(0, count);
 // Calculate statistics for testimonials
 const totalTestimonials = testimoniesData.length;
 const averageRating =
-	testimoniesData.reduce(
-		(sum, testimony) => sum + (testimony.rating || 5),
-		0
-	) / totalTestimonials;
+  testimoniesData.reduce((sum, testimony) => sum + (testimony.rating || 5), 0) / totalTestimonials;
 const roundedRating = Math.round(averageRating * 10) / 10;
 ---
 
-<section class='testimonies-section py-16 lg:px-8 relative overflow-hidden'>
-	<!-- Background elements for visual appeal -->
-	<div class='absolute inset-0 bg-pattern opacity-5 z-0'></div>
-	<div
-		class='absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-3xl'>
-	</div>
-	<div
-		class='absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full -ml-32 -mb-32 blur-3xl'>
-	</div>
+<section class="testimonies-section relative overflow-hidden py-16 lg:px-8">
+  <!-- Background elements for visual appeal -->
+  <div class="bg-pattern absolute inset-0 z-0 opacity-5"></div>
+  <div class="bg-primary/10 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl">
+  </div>
+  <div
+    class="bg-secondary/10 absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full blur-3xl"
+  >
+  </div>
 
-	<div class='container mx-auto px-4 relative z-10'>
-		<!-- Header with trust indicators -->
-		{
-			showTitle && (
-				<div class='text-center mb-10 flex flex-col items-center'>
-					<div class='inline-block bg-primary/10 text-primary font-medium rounded-full px-4 py-1 mb-3 trust-badge'>
-						<span class='text-yellow-400 mr-1'>★</span>{' '}
-						{roundedRating}/5 basado en {totalTestimonials}{' '}
-						opiniones
-					</div>
-					<SectionTitle>{titleText}</SectionTitle>
-					<p class='text-gray-600 max-w-2xl mx-auto mt-4'>
-						Descubre cómo nuestros materiales han transformado la
-						carrera profesional de miles de estudiantes en todo el
-						país.
-					</p>
-				</div>
-			)
-		}
+  <div class="relative z-10 container mx-auto px-4">
+    <!-- Header with trust indicators -->
+    {
+      showTitle && (
+        <div class="mb-10 flex flex-col items-center text-center">
+          <div class="bg-primary/10 text-primary trust-badge mb-3 inline-block rounded-full px-4 py-1 font-medium">
+            <span class="mr-1 text-yellow-400">★</span> {roundedRating}/5 basado en{' '}
+            {totalTestimonials} opiniones
+          </div>
+          <SectionTitle>{titleText}</SectionTitle>
+          <p class="mx-auto mt-4 max-w-2xl text-gray-600">
+            Descubre cómo nuestros materiales han transformado la carrera profesional de miles de
+            estudiantes en todo el país.
+          </p>
+        </div>
+      )
+    }
 
-		<!-- Trust stats bar -->
-		<div
-			class='trust-stats mb-12 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 bg-white shadow-md rounded-xl p-6'>
-			<div class='text-center'>
-				<div class='text-3xl font-bold text-primary mb-1'>
-					{totalTestimonials}+
-				</div>
-				<div class='text-sm text-gray-500'>Testimonios</div>
-			</div>
-			<div class='text-center'>
-				<div class='text-3xl font-bold text-primary mb-1'>
-					{roundedRating}/5
-				</div>
-				<div class='text-sm text-gray-500'>Valoración media</div>
-			</div>
-			<div class='text-center'>
-				<div class='text-3xl font-bold text-primary mb-1'>24h</div>
-				<div class='text-sm text-gray-500'>Soporte rápido</div>
-			</div>
-			<div class='text-center'>
-				<div class='text-3xl font-bold text-primary mb-1'>98%</div>
-				<div class='text-sm text-gray-500'>Satisfacción</div>
-			</div>
-		</div>
+    <!-- Trust stats bar -->
+    <div
+      class="trust-stats mx-auto mb-12 grid max-w-4xl grid-cols-2 gap-4 rounded-xl bg-white p-6 shadow-md md:grid-cols-4"
+    >
+      <div class="text-center">
+        <div class="text-primary mb-1 text-3xl font-bold">
+          {totalTestimonials}+
+        </div>
+        <div class="text-sm text-gray-500">Testimonios</div>
+      </div>
+      <div class="text-center">
+        <div class="text-primary mb-1 text-3xl font-bold">
+          {roundedRating}/5
+        </div>
+        <div class="text-sm text-gray-500">Valoración media</div>
+      </div>
+      <div class="text-center">
+        <div class="text-primary mb-1 text-3xl font-bold">24h</div>
+        <div class="text-sm text-gray-500">Soporte rápido</div>
+      </div>
+      <div class="text-center">
+        <div class="text-primary mb-1 text-3xl font-bold">98%</div>
+        <div class="text-sm text-gray-500">Satisfacción</div>
+      </div>
+    </div>
 
-		<!-- Testimonial cards with staggered animation -->
-		<div
-			class='testimonies-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8'>
-			{
-				testimoniesToShow.map((testimony, index) => (
-					<div class={`testimony-item appear-${index + 1}`}>
-						<TestimoniesCard
-							quote={testimony.quote}
-							author={testimony.author}
-							position={testimony.position}
-							avatarUrl={testimony.avatarUrl}
-							rating={testimony.rating || 5}
-						/>
-					</div>
-				))
-			}
-		</div>
+    <!-- Testimonial cards with staggered animation -->
+    <div class="testimonies-grid grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+      {
+        testimoniesToShow.map((testimony, index) => (
+          <div class={`testimony-item appear-${index + 1}`}>
+            <TestimoniesCard
+              quote={testimony.quote}
+              author={testimony.author}
+              position={testimony.position}
+              avatarUrl={testimony.avatarUrl}
+              rating={testimony.rating || 5}
+            />
+          </div>
+        ))
+      }
+    </div>
 
-		<!-- Call to action for more testimonials -->
-		{
-			showCTA && totalTestimonials > count && (
-				<div class='text-center mt-10'>
-					<Button
-						variant='primary'
-						size='large'
-						href={ctaLink}
-						class='shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group'>
-						<span class='relative z-10 flex items-center'>
-							{ctaText}
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								class='h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform'
-								fill='none'
-								viewBox='0 0 24 24'
-								stroke='currentColor'>
-								<path
-									stroke-linecap='round'
-									stroke-linejoin='round'
-									stroke-width='2'
-									d='M14 5l7 7m0 0l-7 7m7-7H3'
-								/>
-							</svg>
-						</span>
-					</Button>
-				</div>
-			)
-		}
+    <!-- Call to action for more testimonials -->
+    {
+      showCTA && totalTestimonials > count && (
+        <div class="mt-10 text-center">
+          <Button
+            variant="primary"
+            size="large"
+            href={ctaLink}
+            class="group transform shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <span class="relative z-10 flex items-center">
+              {ctaText}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </span>
+          </Button>
+        </div>
+      )
+    }
 
-		<!-- Trust badges for social proof -->
-		<div class='flex flex-wrap justify-center gap-4 mt-12'>
-			<div
-				class='bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-100 text-gray-600 text-sm flex items-center'>
-				<span class='text-primary mr-2'>✓</span> 100% Garantía de satisfacción
-			</div>
-			<div
-				class='bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-100 text-gray-600 text-sm flex items-center'>
-				<span class='text-primary mr-2'>✓</span> Soporte personalizado
-			</div>
-			<div
-				class='bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-100 text-gray-600 text-sm flex items-center'>
-				<span class='text-primary mr-2'>✓</span> Acceso inmediato
-			</div>
-		</div>
-	</div>
+    <!-- Trust badges for social proof -->
+    <div class="mt-12 flex flex-wrap justify-center gap-4">
+      <div
+        class="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
+      >
+        <span class="text-primary mr-2">✓</span> 100% Garantía de satisfacción
+      </div>
+      <div
+        class="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
+      >
+        <span class="text-primary mr-2">✓</span> Soporte personalizado
+      </div>
+      <div
+        class="flex items-center rounded-lg border border-gray-100 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm"
+      >
+        <span class="text-primary mr-2">✓</span> Acceso inmediato
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
-	// Intersection Observer to trigger animations when elements enter viewport
-	document.addEventListener('DOMContentLoaded', () => {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('in-view');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{
-				threshold: 0.1,
-				rootMargin: '0px 0px -50px 0px',
-			}
-		);
+  // Intersection Observer to trigger animations when elements enter viewport
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
 
-		// Observe all animated elements
-		document.querySelectorAll('.testimony-item').forEach((el) => {
-			observer.observe(el);
-		});
-	});
+    // Observe all animated elements
+    document.querySelectorAll('.testimony-item').forEach((el) => {
+      observer.observe(el);
+    });
+  });
 </script>

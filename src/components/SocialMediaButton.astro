@@ -1,17 +1,19 @@
 ---
 interface Props {
-	network: string;
-	href: string;
-	class?: string;
+  network: string;
+  href: string;
+  class?: string;
 }
 
 const { network, href, class: className = '' } = Astro.props;
 ---
 
 <a
-	href={href}
-	target='_blank'
-	aria-label={`Visit our ${network} page`}
-	class={`text-white hover:text-secondary transition-colors ${className}`}>
-	<slot />
+  href={href}
+  target="_blank"
+  aria-label={`Visitar ${network}`}
+  class={`hover:text-secondary inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-white transition-colors ${className}`}
+  rel="noopener noreferrer"
+>
+  <slot />
 </a>

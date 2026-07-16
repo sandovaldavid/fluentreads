@@ -1,136 +1,154 @@
 ---
+const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY || '';
+const actionUrl = `https://send.pageclip.co/${pageclipKey}/newsletter`;
 import EmailIcon from './icons/Email.astro';
 import BookIcon from './icons/Book.astro';
 import HandshakeIcon from './icons/Handshake.astro';
 import CTABackground from './icons/background/CTA.astro';
 interface Props {
-	title?: string;
-	subtitle?: string;
-	buttonText?: string;
-	buttonLink?: string;
-	className?: string;
-	type?: 'default' | 'newsletter' | 'consultation';
+  title?: string;
+  subtitle?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  class?: string;
+  type?: 'default' | 'newsletter' | 'consultation';
 }
 
 const {
-	title = 'Impulsa tu carrera con el inglés que necesitas',
-	subtitle = 'No esperes más para empezar a mejorar tu inglés con nuestros materiales de alta calidad',
-	buttonText = 'Explorar materiales',
-	buttonLink = '/catalogo',
-	className = '',
-	type = 'default',
+  title = 'Impulsa tu carrera con el inglés que necesitas',
+  subtitle = 'No esperes más para empezar a mejorar tu inglés con nuestros materiales de alta calidad',
+  buttonText = 'Explorar materiales',
+  buttonLink = '/catalogo',
+  class: className = '',
+  type = 'default',
 } = Astro.props;
 
 // Different CTA types
 const ctaConfig = {
-	default: {
-		title: title,
-		subtitle: subtitle,
-		buttonText: buttonText,
-		buttonLink: buttonLink,
-		bgClass: 'bg-gradient-to-r from-primary to-primary-dark',
-		icon: 'BookIcon',
-	},
-	newsletter: {
-		title: 'Mantente actualizado con nuestras novedades',
-		subtitle:
-			'Suscríbete a nuestro boletín para recibir ofertas exclusivas y nuevos materiales',
-		buttonText: 'Suscribirme',
-		buttonLink: '#newsletter-form',
-		bgClass: 'bg-gradient-to-r from-accent-dark to-accent',
-		icon: 'EmailIcon',
-	},
-	consultation: {
-		title: '¿Necesitas asesoramiento personalizado?',
-		subtitle:
-			'Nuestros especialistas pueden ayudarte a encontrar los materiales perfectos para tus necesidades',
-		buttonText: 'Solicitar consulta',
-		buttonLink: '/contacto',
-		bgClass: 'bg-gradient-to-r from-secondary-dark to-secondary',
-		icon: 'HandshakeIcon',
-	},
+  default: {
+    title: title,
+    subtitle: subtitle,
+    buttonText: buttonText,
+    buttonLink: buttonLink,
+    bgClass: 'bg-gradient-to-r from-primary to-primary-dark',
+    icon: 'BookIcon',
+  },
+  newsletter: {
+    title: 'Mantente actualizado con nuestras novedades',
+    subtitle: 'Suscríbete a nuestro boletín para recibir ofertas exclusivas y nuevos materiales',
+    buttonText: 'Suscribirme',
+    buttonLink: '#newsletter-form',
+    bgClass: 'bg-gradient-to-r from-accent-dark to-accent',
+    icon: 'EmailIcon',
+  },
+  consultation: {
+    title: '¿Necesitas asesoramiento personalizado?',
+    subtitle:
+      'Nuestros especialistas pueden ayudarte a encontrar los materiales perfectos para tus necesidades',
+    buttonText: 'Solicitar consulta',
+    buttonLink: '/contacto',
+    bgClass: 'bg-gradient-to-r from-secondary-dark to-secondary',
+    icon: 'HandshakeIcon',
+  },
 };
 
 const currentCta = ctaConfig[type];
 ---
 
-<div
-	class={`cta-banner ${currentCta.bgClass} rounded-xl overflow-hidden shadow-xl ${className}`}>
-	<div class='container mx-auto px-6 py-10 relative'>
-		<!-- Background decoration -->
-		<CTABackground
-			class='absolute top-0 right-0 w-64 h-64 opacity-10 text-amber-50'
-		/>
-		<div
-			class='flex flex-col md:flex-row items-center justify-between relative z-10'>
-			<!-- Left Content -->
-			<div
-				class='mb-6 md:mb-0 md:mr-6 text-white text-center md:text-left'>
-				{
-					type === 'newsletter' ? (
-						<EmailIcon class='w-10 h-10 md:w-15 md:h-15 mb-4' />
-					) : type === 'consultation' ? (
-						<HandshakeIcon class='w-16 h-16 md:w-20 md:h-20 mb-4' />
-					) : (
-						<BookIcon class='w-10 h-10 md:w-15 md:h-15 mb-4' />
-					)
-				}
-				<h3 class='text-2xl md:text-3xl font-bold mb-2'>
-					{currentCta.title}
-				</h3>
-				<p class='text-white/90 max-w-xl'>{currentCta.subtitle}</p>
-			</div>
+<div class={`cta-banner ${currentCta.bgClass} overflow-hidden rounded-xl shadow-xl ${className}`}>
+  <div class="relative container mx-auto px-6 py-10">
+    <!-- Background decoration -->
+    <CTABackground class="absolute top-0 right-0 h-64 w-64 text-amber-50 opacity-10" />
+    <div class="relative z-10 flex flex-col items-center justify-between md:flex-row">
+      <!-- Left Content -->
+      <div class="mb-6 text-center text-white md:mr-6 md:mb-0 md:text-left">
+        {
+          type === 'newsletter' ? (
+            <EmailIcon class="mb-4 h-10 w-10 md:h-15 md:w-15" />
+          ) : type === 'consultation' ? (
+            <HandshakeIcon class="mb-4 h-16 w-16 md:h-20 md:w-20" />
+          ) : (
+            <BookIcon class="mb-4 h-10 w-10 md:h-15 md:w-15" />
+          )
+        }
+        <h3 class="mb-2 text-2xl font-bold md:text-3xl">
+          {currentCta.title}
+        </h3>
+        <p class="max-w-xl text-white/90">{currentCta.subtitle}</p>
+      </div>
 
-			<!-- Right Content -->
-			<div class='flex-shrink-0'>
-				{
-					type === 'newsletter' ? (
-						<form
-							id='newsletter-form'
-							class='flex flex-col sm:flex-row gap-3 items-center'>
-							<input
-								type='email'
-								placeholder='Tu correo electrónico'
-								class='px-4 py-3 rounded-lg border-2 border-white/30 bg-white/10 text-white placeholder:text-white/70 focus:outline-none focus:border-white'
-								required
-							/>
-							<button
-								type='submit'
-								class='bg-white text-primary-dark hover:bg-neutral-light transition-colors px-6 py-3 rounded-lg font-bold shadow-md'>
-								{currentCta.buttonText}
-							</button>
-						</form>
-					) : (
-						<a
-							href={currentCta.buttonLink}
-							class='inline-block px-6 py-3 bg-white text-primary-dark hover:bg-neutral-light transition-colors rounded-lg font-bold shadow-md'>
-							{currentCta.buttonText}
-						</a>
-					)
-				}
-			</div>
-		</div>
-	</div>
+      <!-- Right Content -->
+      <div class="flex-shrink-0">
+        {
+          type === 'newsletter' ? (
+            <form
+              id="newsletter-form"
+              action={actionUrl}
+              method="POST"
+              class="flex flex-col items-center gap-3 sm:flex-row"
+            >
+              <input
+                type="email"
+                name="email"
+                placeholder="Tu correo electrónico"
+                class="rounded-lg border-2 border-white/30 bg-white/10 px-4 py-3 text-white placeholder:text-white/70 focus:border-white focus:outline-none"
+                aria-label="Correo electrónico para boletín informativo"
+                required
+              />
+              <button
+                type="submit"
+                class="text-primary-dark hover:bg-neutral-light rounded-lg bg-white px-6 py-3 font-bold shadow-md transition-colors"
+              >
+                {currentCta.buttonText}
+              </button>
+            </form>
+          ) : (
+            <a
+              href={currentCta.buttonLink}
+              class="text-primary-dark hover:bg-neutral-light inline-block rounded-lg bg-white px-6 py-3 font-bold shadow-md transition-colors"
+            >
+              {currentCta.buttonText}
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-	// Newsletter form handling
-	document.addEventListener('DOMContentLoaded', () => {
-		const newsletterForm = document.getElementById('newsletter-form');
-		if (newsletterForm) {
-			newsletterForm.addEventListener('submit', (e) => {
-				e.preventDefault();
-				const emailInput = newsletterForm.querySelector(
-					'input[type="email"]'
-				);
-				if (emailInput) {
-					const email = (emailInput as HTMLInputElement).value;
-					alert(
-						`¡Gracias por suscribirte con ${email}! Pronto recibirás nuestras novedades.`
-					);
-					(emailInput as HTMLInputElement).value = '';
-				}
-			});
-		}
-	});
+  // Newsletter form handling
+  document.addEventListener('DOMContentLoaded', () => {
+    const newsletterForm = document.getElementById('newsletter-form') as HTMLFormElement | null;
+    if (newsletterForm) {
+      newsletterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailInput = newsletterForm.querySelector(
+          "input[name='email']"
+        ) as HTMLInputElement | null;
+        if (emailInput && emailInput.value) {
+          fetch(newsletterForm.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({ email: emailInput.value }),
+          })
+            .then((res) => {
+              if (res.ok) {
+                alert('¡Gracias por suscribirte! Pronto recibirás nuestras novedades.');
+                newsletterForm.reset();
+              } else {
+                throw new Error('Error en el servidor');
+              }
+            })
+            .catch((err) => {
+              console.error('Error newsletter signup:', err);
+              alert('Hubo un error al procesar tu suscripción. Por favor, inténtalo de nuevo.');
+            });
+        }
+      });
+    }
+  });
 </script>

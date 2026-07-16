@@ -1,115 +1,111 @@
 ---
 import SectionTitle from './SectionTitle.astro';
-import '../styles/Benefits.css';
+import '../styles/benefits/Benefits.css';
 import BenefitsCard from './benefits/BenefitsCard.astro';
 import PurchaseStepsCard from './benefits/PurchaseStepsCard.astro';
 import SpecialOffersCard from './benefits/SpecialOffersCard.astro';
 import Statistics from './benefits/StatisticsCard.astro';
 ---
 
-<section
-	class='py-12 md:px-8 md:py-16 relative overflow-hidden benefits-section'>
-	<!-- Background pattern and decorative elements -->
-	<div class='absolute inset-0 bg-pattern opacity-5'></div>
-	<div class='decorative-shape shape-1'></div>
-	<div class='decorative-shape shape-2'></div>
+<section class="benefits-section relative overflow-hidden py-12 md:px-8 md:py-16">
+  <!-- Background pattern and decorative elements -->
+  <div class="bg-pattern absolute inset-0 opacity-5"></div>
+  <div class="decorative-shape shape-1"></div>
+  <div class="decorative-shape shape-2"></div>
 
-	<div class='container mx-auto px-4 relative z-10'>
-		<div class='text-center mb-8 md:mb-12 fade-in-element'>
-			<SectionTitle>¿Por qué elegirnos?</SectionTitle>
-			<p class='text-gray-600 mt-4 max-w-2xl mx-auto'>
-				En FluentReads nos enfocamos en ofrecerte la mejor experiencia
-				de aprendizaje con materiales de alta calidad y un servicio
-				excepcional.
-			</p>
-		</div>
+  <div class="relative z-10 container mx-auto px-4">
+    <div class="fade-in-element mb-8 text-center md:mb-12">
+      <SectionTitle>¿Por qué elegirnos?</SectionTitle>
+      <p class="mx-auto mt-4 max-w-2xl text-gray-600">
+        En FluentReads nos enfocamos en ofrecerte la mejor experiencia de aprendizaje con materiales
+        de alta calidad y un servicio excepcional.
+      </p>
+    </div>
 
-		<!-- Grid layout for tablets -->
-		<div class='grid grid-rows-1'>
-			<div class='grid sm:grid-cols-1 md:grid-cols-2 gap-6 md:gap-8'>
-				<!-- Benefits Column -->
-				<BenefitsCard className='fade-in-element' />
-				<!-- Purchase Steps Column -->
-				<PurchaseStepsCard className='fade-in-element' />
-			</div>
+    <!-- Grid layout for tablets -->
+    <div class="grid grid-rows-1">
+      <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 md:gap-8">
+        <!-- Benefits Column -->
+        <BenefitsCard class="fade-in-element" />
+        <!-- Purchase Steps Column -->
+        <PurchaseStepsCard class="fade-in-element" />
+      </div>
 
-			<!-- Customer Stats -->
-			<Statistics className='my-10 fade-in-element' />
-		</div>
-		<div>
-			<!-- Special Offers Card -->
-			<SpecialOffersCard />
-		</div>
-	</div>
+      <!-- Customer Stats -->
+      <Statistics class="fade-in-element my-10" />
+    </div>
+    <div>
+      <!-- Special Offers Card -->
+      <SpecialOffersCard />
+    </div>
+  </div>
 </section>
 
 <script>
-	// Subtle animations for benefit cards on hover
-	document.addEventListener('DOMContentLoaded', () => {
-		const benefitCards = document.querySelectorAll('.benefit-card');
-		benefitCards.forEach((card) => {
-			card.addEventListener('mouseenter', () => {
-				const icon = card.querySelector('.benefit-icon');
-				if (icon) {
-					icon.classList.add('animate-wiggle');
-					setTimeout(() => {
-						icon.classList.remove('animate-wiggle');
-					}, 500);
-				}
-			});
-		});
-	});
+  // Subtle animations for benefit cards on hover
+  document.addEventListener('DOMContentLoaded', () => {
+    const benefitCards = document.querySelectorAll('.benefit-card');
+    benefitCards.forEach((card) => {
+      card.addEventListener('mouseenter', () => {
+        const icon = card.querySelector('.benefit-icon');
+        if (icon) {
+          icon.classList.add('animate-wiggle');
+          setTimeout(() => {
+            icon.classList.remove('animate-wiggle');
+          }, 500);
+        }
+      });
+    });
+  });
 
-	// Scroll animations using Intersection Observer
-	document.addEventListener('DOMContentLoaded', () => {
-		// Observer for regular fade-in elements
-		const fadeObserver = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('fade-in-visible');
-						fadeObserver.unobserve(entry.target);
-					}
-				});
-			},
-			{ threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-		);
+  // Scroll animations using Intersection Observer
+  document.addEventListener('DOMContentLoaded', () => {
+    // Observer for regular fade-in elements
+    const fadeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-visible');
+            fadeObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
 
-		// Observer specifically for benefit items with staggered animation
-		const benefitObserver = new IntersectionObserver(
-			(entries) => {
-				if (entries[0].isIntersecting) {
-					const benefits = document.querySelectorAll('.benefit-item');
-					benefits.forEach((benefit, index) => {
-						// Add slight delay between each item appearing
-						setTimeout(() => {
-							benefit.classList.add('visible');
-						}, 100 * index);
-					});
-					benefitObserver.unobserve(entries[0].target);
-				}
-			},
-			{ threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-		);
+    // Observer specifically for benefit items with staggered animation
+    const benefitObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          const benefits = document.querySelectorAll('.benefit-item');
+          benefits.forEach((benefit, index) => {
+            // Add slight delay between each item appearing
+            setTimeout(() => {
+              benefit.classList.add('visible');
+            }, 100 * index);
+          });
+          benefitObserver.unobserve(entries[0].target);
+        }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
 
-		// Observe elements for standard fade-in
-		document.querySelectorAll('.fade-in-element').forEach((el) => {
-			fadeObserver.observe(el);
-		});
+    // Observe elements for standard fade-in
+    document.querySelectorAll('.fade-in-element').forEach((el) => {
+      fadeObserver.observe(el);
+    });
 
-		// Observe the benefits grid container
-		const benefitsGrid = document.querySelector('.benefits-grid');
-		if (benefitsGrid) {
-			benefitObserver.observe(benefitsGrid);
-		}
+    // Observe the benefits grid container
+    const benefitsGrid = document.querySelector('.benefits-grid');
+    if (benefitsGrid) {
+      benefitObserver.observe(benefitsGrid);
+    }
 
-		// Observe special elements for custom animations if needed
-		document
-			.querySelectorAll(
-				'.step-container, .special-offer-banner, .testimonial-container'
-			)
-			.forEach((el) => {
-				fadeObserver.observe(el);
-			});
-	});
+    // Observe special elements for custom animations if needed
+    document
+      .querySelectorAll('.step-container, .special-offer-banner, .testimonial-container')
+      .forEach((el) => {
+        fadeObserver.observe(el);
+      });
+  });
 </script>
