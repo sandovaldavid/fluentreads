@@ -1,0 +1,118 @@
+/* Decorative shapes */
+.decorative-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.shape-1 {
+  top: -10%;
+  right: -5%;
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(45deg, var(--color-primary-light), var(--color-primary));
+}
+
+.shape-2 {
+  bottom: -5%;
+  left: -5%;
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(45deg, var(--color-secondary), var(--color-accent));
+}
+
+/* Statistics section enhancements */
+.stats-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.trust-banner {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Fade-in animations for elements */
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Benefit items specific animations */
+.benefit-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.benefit-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Add staggered delays for benefits */
+.benefit-item-1 {
+  transition-delay: 0.1s;
+}
+.benefit-item-2 {
+  transition-delay: 0.2s;
+}
+.benefit-item-3 {
+  transition-delay: 0.3s;
+}
+.benefit-item-4 {
+  transition-delay: 0.4s;
+}
+.benefit-item-5 {
+  transition-delay: 0.5s;
+}
+.benefit-item-6 {
+  transition-delay: 0.6s;
+}
+
+/* Pulse animation for CTA buttons */
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(26, 86, 219, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(26, 86, 219, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(26, 86, 219, 0);
+  }
+}
+
+/* Respect user preferences for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .benefit-item,
+  .fade-in-element {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}

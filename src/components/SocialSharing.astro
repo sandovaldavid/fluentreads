@@ -5,86 +5,94 @@ import WhatsAppIcon from './icons/WhatsApp.astro';
 import TelegramIcon from './icons/Telegram.astro';
 import ArrowRightIcon from './icons/ArrowRight.astro';
 import Button from './Button.astro';
+import { siteConfig } from '@config/site';
 
 // Define the variant type to match Button component's expectations
 type ButtonVariant = 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost' | undefined;
 
 // Define social sharing options
 const socialOptions = [
-	{
-		name: 'WhatsApp',
-		icon: WhatsAppIcon,
-		url: 'https://wa.me/1234567890?text=Hola,%20adjunto%20mi%20comprobante%20de%20pago%20para%20mi%20pedido%20en%20FluentReads.',
-		variant: 'accent' as ButtonVariant,
-		description: 'Respuesta rápida',
-		emoji: '⚡',
-	},
-	{
-		name: 'Telegram',
-		icon: TelegramIcon,
-		url: 'https://t.me/FluentReads',
-		variant: 'primary' as ButtonVariant,
-		description: 'Archivos grandes',
-		emoji: '📁',
-	},
+  {
+    name: 'WhatsApp',
+    icon: WhatsAppIcon,
+    url: `${siteConfig.whatsappUrl}?text=Hola,%20adjunto%20mi%20comprobante%20de%20pago%20para%20mi%20pedido%20en%20FluentReads.`,
+    variant: 'accent' as ButtonVariant,
+    description: 'Respuesta rápida',
+    emoji: '⚡',
+  },
+  {
+    name: 'Telegram',
+    icon: TelegramIcon,
+    url: 'https://t.me/FluentReads',
+    variant: 'primary' as ButtonVariant,
+    description: 'Archivos grandes',
+    emoji: '📁',
+  },
 ];
 ---
 
-<div class="min-w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl bg-gradient-to-br from-primary-light to-primary rounded-lg shadow-lg p-4 sm:p-6 md:p-7 overflow-hidden flex flex-col mb-8 sm:mb-10 mx-auto">
-	<!-- Header -->
-	<div class="flex items-center space-x-3 pb-3 border-b border-white/20 mb-4 sm:mb-5">
-		<CellphoneMessageIcon class="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-secondary" />
-		<h3 class="text-white font-semibold text-sm sm:text-base md:text-lg">Envía tu comprobante:</h3>
-	</div>
+<div
+  class="from-primary-light to-primary mx-auto mb-8 flex max-w-sm min-w-full flex-col overflow-hidden rounded-lg bg-gradient-to-br p-4 shadow-lg sm:mb-10 sm:max-w-md sm:p-6 md:max-w-lg md:p-7 lg:max-w-2xl"
+>
+  <!-- Header -->
+  <div class="mb-4 flex items-center space-x-3 border-b border-white/20 pb-3 sm:mb-5">
+    <CellphoneMessageIcon class="text-secondary h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7" />
+    <h3 class="text-sm font-semibold text-white sm:text-base md:text-lg">Envía tu comprobante:</h3>
+  </div>
 
-	<!-- Social buttons -->
-	<div class="flex flex-col sm:flex-row justify-around gap-3 sm:gap-4 md:gap-6 flex-1 overflow-y-auto pr-1 my-2">
-		{
-			socialOptions.map((option) => (
-				<Button 
-					variant={option.variant}
-					href={option.url}
-					class="justify-between rounded-md w-full p-3 sm:p-4"
-					aria-label={`Enviar por ${option.name}`}
-				>
-					<!-- Icon with badge -->
-					<div class="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white/10 rounded-lg flex items-center justify-center mr-3 relative">
-						<option.icon class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-						<span class="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center bg-white text-xs sm:text-sm text-black rounded-full">
-							{option.emoji}
-						</span>
-					</div>
-					
-					<!-- Text content -->
-					<div class="flex-1 min-w-0 text-left">
-						<span class="block font-medium text-sm sm:text-base md:text-lg truncate">{option.name}</span>
-						<span class="block text-xs sm:text-sm opacity-80 truncate">{option.description}</span>
-					</div>
-					
-					<!-- Arrow icon -->
-					<ArrowRightIcon class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ml-2 transform group-hover:translate-x-1 transition-transform duration-200 arrow-icon" />
-				</Button>
-			))
-		}
-	</div>
+  <!-- Social buttons -->
+  <div
+    class="my-2 flex flex-1 flex-col justify-around gap-3 overflow-y-auto pr-1 sm:flex-row sm:gap-4 md:gap-6"
+  >
+    {
+      socialOptions.map((option) => (
+        <Button
+          variant={option.variant}
+          href={option.url}
+          newTab={true}
+          class="w-full justify-between rounded-md p-3 sm:p-4"
+          aria-label={`Enviar por ${option.name}`}
+        >
+          {/* Icon with badge */}
+          <div class="relative mr-3 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/10 sm:h-10 sm:w-10 md:h-12 md:w-12">
+            <option.icon class="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+            <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-xs text-black sm:h-5 sm:w-5 sm:text-sm">
+              {option.emoji}
+            </span>
+          </div>
 
-	<!-- Footer -->
-	<div class="flex justify-center space-x-2 pt-3 mt-2 sm:mt-3 border-t border-white/20">
-		<ShieldCheckIcon class="w-3 h-3 sm:w-4 sm:h-4 text-secondary" />
-		<p class="text-white/70 text-xs sm:text-sm">Datos protegidos</p>
-	</div>
+          {/* Text content */}
+          <div class="min-w-0 flex-1 text-left">
+            <span class="block truncate text-sm font-medium sm:text-base md:text-lg">
+              {option.name}
+            </span>
+            <span class="block truncate text-xs opacity-80 sm:text-sm">{option.description}</span>
+          </div>
+
+          {/* Arrow icon */}
+          <ArrowRightIcon class="arrow-icon ml-2 h-4 w-4 transform transition-transform duration-200 group-hover:translate-x-1 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+        </Button>
+      ))
+    }
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-2 flex justify-center space-x-2 border-t border-white/20 pt-3 sm:mt-3">
+    <ShieldCheckIcon class="text-secondary h-3 w-3 sm:h-4 sm:w-4" />
+    <p class="text-xs text-white/70 sm:text-sm">Datos protegidos</p>
+  </div>
 </div>
 
 <script>
-	document.addEventListener('DOMContentLoaded', () => {
-		document.querySelectorAll('.arrow-icon').forEach(icon => {
-			const element = icon as HTMLElement;
-			element.parentElement?.addEventListener('mouseenter', () => {
-				element.classList.add('animate-bounce-x');
-				setTimeout(() => {
-					element.classList.remove('animate-bounce-x');
-				}, 500);
-			});
-		});
-	});
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.arrow-icon').forEach((icon) => {
+      const element = icon as HTMLElement;
+      element.parentElement?.addEventListener('mouseenter', () => {
+        element.classList.add('animate-bounce-x');
+        setTimeout(() => {
+          element.classList.remove('animate-bounce-x');
+        }, 500);
+      });
+    });
+  });
 </script>

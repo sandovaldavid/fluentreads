@@ -1,0 +1,43 @@
+[
+  {
+    "key": "ctrl+alt+d",
+    "command": "workbench.action.tasks.runTask",
+    "args": "dev",
+    "when": "editorTextFocus || terminalFocus"
+  },
+  {
+    "key": "ctrl+alt+b",
+    "command": "workbench.action.tasks.build",
+    "when": "editorTextFocus || terminalFocus"
+  },
+  {
+    "key": "ctrl+alt+l",
+    "command": "workbench.action.tasks.runTask",
+    "args": "lint",
+    "when": "editorTextFocus || terminalFocus"
+  },
+  {
+    "key": "ctrl+alt+e",
+    "command": "workbench.action.tasks.runTask",
+    "args": "lint:fix",
+    "when": "editorTextFocus || terminalFocus"
+  },
+  {
+    "key": "ctrl+alt+shift+f",
+    "command": "workbench.action.tasks.runTask",
+    "args": "format",
+    "when": "editorTextFocus || terminalFocus"
+  },
+  {
+    "key": "ctrl+alt+c",
+    "command": "workbench.action.tasks.runTask",
+    "args": "check",
+    "when": "editorTextFocus || terminalFocus"
+  },
+  {
+    "key": "ctrl+alt+p",
+    "command": "workbench.action.tasks.runTask",
+    "args": "preview",
+    "when": "editorTextFocus || terminalFocus"
+  }
+]

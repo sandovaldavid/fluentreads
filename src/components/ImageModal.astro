@@ -1,169 +1,161 @@
 ---
-import CarruselButtons from './CarruselButtons.astro';
+import CarouselButtons from './CarouselButtons.astro';
 import SpinnerIcon from './icons/Spinner.astro';
 import CloseIcon from './icons/Close.astro';
 
 interface Props {
-	id?: string;
+  id?: string;
 }
 
 const { id = 'image-modal' } = Astro.props;
 ---
 
 <div
-	id={id}
-	class='fixed inset-0 bg-black bg-opacity-90 z-50 items-center justify-center media-modal hidden'
-	role='dialog'
-	aria-modal='true'>
-	<!-- Close button -->
-	<span
-		id='modal-close-btn'
-		class='absolute top-5 right-5 text-white hover:text-red-400 z-20 cursor-pointer border-0 hover:scale-110 transform transition-transform'
-		aria-label='Cerrar'>
-		<CloseIcon class='h-8 w-8' />
-	</span>
+  id={id}
+  class="bg-opacity-90 media-modal fixed inset-0 z-50 hidden items-center justify-center bg-black"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="modal-title"
+>
+  <h2 id="modal-title" class="sr-only">Galería de imágenes</h2>
 
-	<!-- Navigation using CarruselButtons component -->
-	<CarruselButtons
-		ariaLabelPrev='Imagen anterior'
-		ariaLabelNext='Siguiente imagen'
-	/>
+  <!-- Close button -->
+  <button
+    id="modal-close-btn"
+    class="absolute top-5 right-5 z-20 transform cursor-pointer rounded-full border-0 bg-transparent p-1 text-white transition-transform hover:scale-110 hover:text-red-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+    aria-label="Cerrar galería"
+  >
+    <CloseIcon class="h-8 w-8" />
+  </button>
 
-	<!-- Main image container -->
-	<div class='relative w-full h-full flex items-center justify-center p-4'>
-		<!-- Loading spinner -->
-		<div
-			id='modal-spinner'
-			class='absolute inset-0 flex items-center justify-center z-10'>
-			<SpinnerIcon class='animate-spin h-12 w-12 text-white' />
-		</div>
+  <!-- Navigation using CarouselButtons component -->
+  <CarouselButtons ariaLabelPrev="Imagen anterior" ariaLabelNext="Siguiente imagen" />
 
-		<!-- Image -->
-		<img
-			id='modal-image'
-			src=''
-			alt='Imagen ampliada'
-			class='max-h-[90vh] max-w-[90vw] object-contain modal-image z-5'
-		/>
-	</div>
+  <!-- Main image container -->
+  <div class="relative flex h-full w-full items-center justify-center p-4">
+    <!-- Loading spinner -->
+    <div id="modal-spinner" class="absolute inset-0 z-10 flex items-center justify-center">
+      <SpinnerIcon class="h-12 w-12 animate-spin text-white" />
+    </div>
+
+    <!-- Image -->
+    <img
+      id="modal-image"
+      src=""
+      alt="Imagen ampliada"
+      class="modal-image z-5 max-h-[90vh] max-w-[90vw] object-contain"
+    />
+  </div>
 </div>
 
 <script>
-	// Add fallback direct event handlers in case the main script missed something
-	document.addEventListener('DOMContentLoaded', () => {
-		// Close button handler with animation
-		const closeBtn = document.getElementById('modal-close-btn');
-		const modal = document.getElementById('image-modal');
-		const modalImage = document.getElementById(
-			'modal-image'
-		) as HTMLElement;
+  // Add fallback direct event handlers in case the main script missed something
+  document.addEventListener('DOMContentLoaded', () => {
+    // Close button handler with animation
+    const closeBtn = document.getElementById('modal-close-btn');
+    const modal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image') as HTMLElement;
 
-		if (closeBtn && modal) {
-			closeBtn.addEventListener('click', () => {
-				closeModalWithAnimation(modal, modalImage);
-			});
-		}
+    if (closeBtn && modal) {
+      closeBtn.addEventListener('click', () => {
+        closeModalWithAnimation(modal, modalImage);
+      });
+    }
 
-		// Background click to close with animation
-		if (modal) {
-			modal.addEventListener('click', (e) => {
-				if (e.target === modal) {
-					closeModalWithAnimation(modal, modalImage);
-				}
-			});
-		}
+    // Background click to close with animation
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModalWithAnimation(modal, modalImage);
+        }
+      });
+    }
 
-		// Function to close modal with fade-out animation
-		function closeModalWithAnimation(
-			modal: HTMLElement,
-			modalImage: HTMLElement
-		) {
-			// Step 1: Add fade-out class to image
-			if (modalImage) {
-				modalImage.classList.add('modal-image-fadeout');
-			}
+    // Function to close modal with fade-out animation
+    function closeModalWithAnimation(modal: HTMLElement, modalImage: HTMLElement) {
+      // Step 1: Add fade-out class to image
+      if (modalImage) {
+        modalImage.classList.add('modal-image-fadeout');
+      }
 
-			// Step 2: Add fade-out class to modal
-			modal.classList.add('modal-fadeout');
+      // Step 2: Add fade-out class to modal
+      modal.classList.add('modal-fadeout');
 
-			// Step 3: Wait for animation to complete before hiding
-			setTimeout(() => {
-				modal.classList.add('hidden');
-				document.body.style.overflow = '';
+      // Step 3: Wait for animation to complete before hiding
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
 
-				// Reset classes for next opening
-				modal.classList.remove('modal-fadeout');
-				if (modalImage) {
-					modalImage.classList.remove('modal-image-fadeout');
-				}
-			}, 300); // Match transition duration
-		}
+        // Reset classes for next opening
+        modal.classList.remove('modal-fadeout');
+        if (modalImage) {
+          modalImage.classList.remove('modal-image-fadeout');
+        }
+      }, 300); // Match transition duration
+    }
 
-		// Make sure the modal's CarruselButtons work directly
-		const modalPrevBtn = document.querySelector(
-			'#image-modal .carousel-control.prev'
-		);
-		const modalNextBtn = document.querySelector(
-			'#image-modal .carousel-control.next'
-		);
+    // Make sure the modal's CarouselButtons work directly
+    const modalPrevBtn = document.querySelector('#image-modal .carousel-control.prev');
+    const modalNextBtn = document.querySelector('#image-modal .carousel-control.next');
 
-		if (modalPrevBtn) {
-			modalPrevBtn.id = 'modal-prev-btn';
-		}
+    if (modalPrevBtn) {
+      modalPrevBtn.id = 'modal-prev-btn';
+    }
 
-		if (modalNextBtn) {
-			modalNextBtn.id = 'modal-next-btn';
-		}
-	});
+    if (modalNextBtn) {
+      modalNextBtn.id = 'modal-next-btn';
+    }
+  });
 </script>
 
 <style>
-	/* Modal styles */
-	.media-modal {
-		animation: fadeIn 0.3s ease-out;
-		opacity: 1;
-		transition: opacity 0.3s ease;
-	}
+  /* Modal styles */
+  .media-modal {
+    animation: fadeIn 0.3s ease-out;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
 
-	.modal-fadeout {
-		opacity: 0;
-	}
+  .modal-fadeout {
+    opacity: 0;
+  }
 
-	.modal-image {
-		transition:
-			transform 0.3s ease,
-			opacity 0.3s ease;
-		opacity: 1;
-	}
+  .modal-image {
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+    opacity: 1;
+  }
 
-	.modal-image-fadeout {
-		transform: scale(0.9);
-		opacity: 0;
-	}
+  .modal-image-fadeout {
+    transform: scale(0.9);
+    opacity: 0;
+  }
 
-	.modal-image:hover {
-		transform: scale(1.1);
-	}
+  .modal-image:hover {
+    transform: scale(1.1);
+  }
 
-	/* Fade in animation */
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
-	#modal-close-btn {
-		transition: all 0.2s ease;
-	}
+  #modal-close-btn {
+    transition: all 0.2s ease;
+  }
 
-	#modal-close-btn:hover {
-		text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-	}
+  #modal-close-btn:hover {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  }
 
-	#modal-close-btn:active {
-		transform: scale(0.9);
-	}
+  #modal-close-btn:active {
+    transform: scale(0.9);
+  }
 </style>

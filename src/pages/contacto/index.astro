@@ -6,116 +6,114 @@ import SectionTitle from '../../components/SectionTitle.astro';
 import Schedule from '../../components/contact/Schedule.astro';
 import SocialNetwork from '../../components/contact/SocialNetwork.astro';
 import LocationCard from '../../components/contact/LocationCard.astro';
-import siteInfo from '../../database/pageInformation.json';
+import siteInfo from '../../data/page-information.json';
+import { siteConfig } from '@config/site';
 
 // SEO metadata
 const pageTitle = 'Contacto | FluentReads';
 const pageDescription =
-	'¿Tienes alguna duda o comentario? ¡Contáctanos y te responderemos a la brevedad! Encuentra todas las formas de comunicarte con el equipo de FluentReads.';
-const canonicalURL = new URL('/contacto', siteInfo.siteURL).toString();
+  '¿Tienes alguna duda o comentario? ¡Contáctanos y te responderemos a la brevedad! Encuentra todas las formas de comunicarte con el equipo de FluentReads.';
+const canonicalURL = new URL('/contacto', siteConfig.url).toString();
 
 // Get OG image from site info or use default
 const ogImage = siteInfo.seo.images.contact || siteInfo.seo.defaultImage;
 
 // Structured data for contact page
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@type': 'ContactPage',
-	name: pageTitle,
-	description: pageDescription,
-	url: canonicalURL,
-	mainEntity: {
-		'@type': 'Organization',
-		name: siteInfo.seo.organizationInfo.name,
-		telephone: siteInfo.contact.phone,
-		email: siteInfo.contact.email,
-		address: {
-			'@type': 'PostalAddress',
-			streetAddress: siteInfo.seo.organizationInfo.address.street,
-			addressLocality: siteInfo.seo.organizationInfo.address.city,
-			addressRegion: siteInfo.seo.organizationInfo.address.region,
-			postalCode: siteInfo.seo.organizationInfo.address.postalCode,
-			addressCountry: siteInfo.seo.organizationInfo.address.country,
-		},
-		sameAs: [
-			siteInfo.socialMedia.facebook,
-			siteInfo.socialMedia.instagram,
-			siteInfo.socialMedia.linkedin,
-			siteInfo.socialMedia.twitter,
-		],
-	},
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalURL,
+  mainEntity: {
+    '@type': 'Organization',
+    name: siteInfo.seo.organizationInfo.name,
+    telephone: siteConfig.contact.phone,
+    email: siteConfig.contact.email,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: siteInfo.seo.organizationInfo.address.street,
+      addressLocality: siteInfo.seo.organizationInfo.address.city,
+      addressRegion: siteInfo.seo.organizationInfo.address.region,
+      postalCode: siteInfo.seo.organizationInfo.address.postalCode,
+      addressCountry: siteInfo.seo.organizationInfo.address.country,
+    },
+    sameAs: [
+      siteConfig.social.facebook,
+      siteConfig.social.instagram,
+      siteConfig.social.linkedin,
+      siteConfig.social.twitter,
+    ],
+  },
 };
 
 // Create breadcrumbs data
 const breadcrumbData = {
-	'@context': 'https://schema.org',
-	'@type': 'BreadcrumbList',
-	itemListElement: [
-		{
-			'@type': 'ListItem',
-			position: 1,
-			name: 'Inicio',
-			item: siteInfo.siteURL,
-		},
-		{
-			'@type': 'ListItem',
-			position: 2,
-			name: 'Contacto',
-			item: canonicalURL,
-		},
-	],
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Inicio',
+      item: siteConfig.url,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Contacto',
+      item: canonicalURL,
+    },
+  ],
 };
 ---
 
 <Layout
-	title={pageTitle}
-	description={pageDescription}
-	canonicalURL={canonicalURL}
-	ogType='website'
-	ogTitle={pageTitle}
-	ogDescription={pageDescription}
-	ogImage={ogImage}
-	ogSiteName={siteInfo.siteName}
-	twitterCard={siteInfo.seo.images.contact}
-	twitterTitle={pageTitle}
-	twitterDescription={pageDescription}
-	twitterImage={ogImage}
-	twitterSite={siteInfo.socialMediaHandles.twitter}
-	structuredData={structuredData}
-	breadcrumbData={breadcrumbData}>
-	<div class='px-4 py-4 md:py-12'>
-		<div class='flex flex-col items-center'>
-			<SectionTitle tag='h1' class='mb-8 text-center'>
-				Contacta con Nosotros
-			</SectionTitle>
-			<p class='text-gray-600 max-w-3xl mx-auto text-center mb-2'>
-				Estamos aquí para ayudarte. Completa el formulario a
-				continuación o utiliza nuestras otras vías de contacto para
-				comunicarte con el equipo de FluentReads.
-			</p>
-		</div>
+  title={pageTitle}
+  description={pageDescription}
+  canonicalURL={canonicalURL}
+  ogType="website"
+  ogTitle={pageTitle}
+  ogDescription={pageDescription}
+  ogImage={ogImage}
+  ogSiteName={siteInfo.siteName}
+  twitterCard="summary_large_image"
+  twitterTitle={pageTitle}
+  twitterDescription={pageDescription}
+  twitterImage={ogImage}
+  twitterSite={siteInfo.socialMediaHandles.twitter}
+  structuredData={structuredData}
+  breadcrumbData={breadcrumbData}
+>
+  <div class="px-4 py-4 md:py-12">
+    <div class="flex flex-col items-center">
+      <SectionTitle tag="h1" class="mb-8 text-center"> Contacta con Nosotros </SectionTitle>
+      <p class="mx-auto mb-2 max-w-3xl text-center text-gray-600">
+        Estamos aquí para ayudarte. Completa el formulario a continuación o utiliza nuestras otras
+        vías de contacto para comunicarte con el equipo de FluentReads.
+      </p>
+    </div>
 
-		<div class='grid grid-cols-1 lg:grid-cols-2 gap-2'>
-			<div
-				class='flex flex-col gap-8 my-4 md:my-8 lg:mx-6 justify-between'>
-				<!--Location Section -->
-				<LocationCard />
+    <div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+      <div class="my-4 flex flex-col justify-between gap-8 md:my-8 lg:mx-6">
+        <!--Location Section -->
+        <LocationCard />
 
-				<!-- Schedule section -->
-				<Schedule />
+        <!-- Schedule section -->
+        <Schedule />
 
-				<!-- Social Network section -->
-				<SocialNetwork
-					facebookUrl='https://facebook.com/fluentreads'
-					instagramUrl='https://instagram.com/fluentreads'
-					tiktokUrl='https://tiktok.com/@fluentreads'
-				/>
-			</div>
-			<!-- Contact form section -->
-			<Form />
-		</div>
+        <!-- Social Network section -->
+        <SocialNetwork
+          facebookUrl="https://facebook.com/fluentreads"
+          instagramUrl="https://instagram.com/fluentreads"
+          tiktokUrl="https://tiktok.com/@fluentreads"
+        />
+      </div>
+      <!-- Contact form section -->
+      <Form />
+    </div>
 
-		<!-- Contact information section -->
-		<ContactInfo />
-	</div>
+    <!-- Contact information section -->
+    <ContactInfo />
+  </div>
 </Layout>

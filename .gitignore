@@ -1,7 +1,7 @@
 # build output
 dist/
 
-# generated types
+# generated types and internal Astro data
 .astro/
 
 # dependencies
@@ -12,13 +12,34 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+*.log
 
 # environment variables
 .env
 .env.production
+.env.local
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# husky internals
+.husky/_
+
+# eslint cache
+.eslintcache
+
+# test coverage
+coverage/
+
+# personal AI/MCP configs (do not commit)
+.mcp.json
+.claude/settings.local.json
+.claude/*.local.json
+
+# one-off local scratch scripts (not project tooling)
+scratch/
+
+.playwright-mcp/

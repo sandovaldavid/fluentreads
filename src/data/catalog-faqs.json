@@ -1,0 +1,27 @@
+[
+  {
+    "id": "tipos-libros",
+    "question": "¿Qué tipos de libros están disponibles en el catálogo?",
+    "answer": "Nuestro catálogo incluye libros sobre gramática, vocabulario, conversación y exámenes internacionales. Cada libro viene en formato digital con materiales de apoyo adicionales."
+  },
+  {
+    "id": "formatos-libros",
+    "question": "¿En qué formatos están disponibles los libros?",
+    "answer": "Todos los libros están disponibles en formato PDF. Algunos incluyen recursos adicionales como workbooks, software digital, archivos de audio y videos."
+  },
+  {
+    "id": "derechos-autor",
+    "question": "¿Los libros tienen derechos de autor?",
+    "answer": "Sí, todos los libros en nuestro catálogo tienen derechos de autor. La distribución o reproducción no autorizada está estrictamente prohibida."
+  },
+  {
+    "id": "actualizaciones-catalogo",
+    "question": "¿Con qué frecuencia se actualiza el catálogo?",
+    "answer": "Actualizamos nuestro catálogo regularmente para agregar nuevos libros y asegurar que los materiales sean relevantes para los estudiantes de todos los niveles."
+  },
+  {
+    "id": "muestra-previa",
+    "question": "¿Puedo obtener una muestra antes de comprar un libro?",
+    "answer": "Actualmente no ofrecemos muestras gratuitas, pero proporcionamos descripciones detalladas y vistas previas para ayudarte a elegir el libro adecuado."
+  }
+]

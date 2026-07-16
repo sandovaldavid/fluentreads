@@ -12,8 +12,9 @@ import type { Product } from '../../types/product';
 
 // Import our products utility functions
 import { getAllProducts } from '../../utils/listProducts';
-import editorialsData from '../../database/editorial.json';
-import siteInfo from '../../database/pageInformation.json';
+import editorialsData from '../../data/editorial.json';
+import siteInfo from '../../data/page-information.json';
+import { siteConfig } from '@config/site';
 
 // Get filter parameters from URL if any
 const { searchParams } = Astro.url;
@@ -21,282 +22,258 @@ const level = searchParams.get('level') || 'all';
 const format = searchParams.get('format') || 'all';
 const sort = searchParams.get('sort') || 'featured';
 const type = searchParams.get('type') || 'any'; // Default to 'any' for showing all products
+const search = searchParams.get('q') || searchParams.get('search') || '';
 
 // Determine page title based on filters
 let pageTitle = 'Catálogo Completo de Materiales en Inglés';
 let pageDescription =
-	'Explora nuestra amplia selección de materiales educativos en inglés para todos los niveles. Encuentra el recurso perfecto para tus necesidades de aprendizaje.';
+  'Explora nuestra amplia selección de materiales educativos en inglés para todos los niveles. Encuentra el recurso perfecto para tus necesidades de aprendizaje.';
 
 // Define level name mapping
 const levelNames: Record<string, string> = {
-	basic: 'Nivel Básico',
-	intermediate: 'Nivel Intermedio',
-	advanced: 'Nivel Avanzado',
-	professional: 'Nivel Profesional',
-	'all-levels': 'Multi-nivel',
+  basic: 'Nivel Básico',
+  intermediate: 'Nivel Intermedio',
+  advanced: 'Nivel Avanzado',
+  professional: 'Nivel Profesional',
+  'all-levels': 'Multi-nivel',
+  'international-exam': 'Examen Internacional',
 };
 
 // Apply level filter to title if specified
 if (level !== 'all') {
-	const levelName = levelNames[level] || level;
-	pageTitle = `Materiales en Inglés - ${levelName}`;
-	pageDescription = `Materiales educativos en inglés para ${levelName}. Encuentra los recursos perfectos para tu nivel de aprendizaje.`;
+  const levelName = levelNames[level] || level;
+  pageTitle = `Materiales en Inglés - ${levelName}`;
+  pageDescription = `Materiales educativos en inglés para ${levelName}. Encuentra los recursos perfectos para tu nivel de aprendizaje.`;
 }
 
 // Define format name mapping
 const formatNames: Record<string, string> = {
-	pdf: 'PDF',
-	workbook: 'Workbooks',
-	audio: 'Material con Audio',
-	video: 'Material con Video',
-	software: 'Software',
-	exams: 'Exámenes de Práctica',
+  pdf: 'PDF',
+  workbook: 'Workbooks',
+  audio: 'Material con Audio',
+  video: 'Material con Video',
+  software: 'Software',
+  exams: 'Exámenes de Práctica',
 };
 
 // Apply format filter to title if specified
 if (format !== 'all') {
-	const formatName = formatNames[format] || format;
-	pageTitle = `${formatName} - ${pageTitle}`;
-	pageDescription = `${formatName} ${pageDescription}`;
+  const formatName = formatNames[format] || format;
+  pageTitle = `${formatName} - ${pageTitle}`;
+  pageDescription = `${formatName} ${pageDescription}`;
 }
 
 // Define product type mapping
 const typeNames: Record<string, string> = {
-	book: 'Libros',
-	exam: 'Exámenes',
-	pack: 'Packs',
+  book: 'Libros',
+  exam: 'Exámenes',
+  pack: 'Packs',
 };
 
 // Apply product type filter to title if specified
 if (type !== 'any') {
-	const typeName = typeNames[type as keyof typeof typeNames] || type;
-	pageTitle = `${typeName} - ${pageTitle}`;
-	pageDescription = `${typeName} de inglés. ${pageDescription}`;
+  const typeName = typeNames[type as keyof typeof typeNames] || type;
+  pageTitle = `${typeName} - ${pageTitle}`;
+  pageDescription = `${typeName} de inglés. ${pageDescription}`;
 }
 
 // Create editorial lookup map
 const editorialMap = new Map();
 editorialsData.forEach((editorial) => {
-	editorialMap.set(editorial.id, editorial.nombre);
+  editorialMap.set(editorial.id, editorial.name);
 });
 
 // Get all products with our utility function
 const allProducts: Product[] = getAllProducts();
 
-// Log the count of each product type for debugging
-console.log(`Total products: ${allProducts.length}`);
-console.log(
-	`Books: ${allProducts.filter((p) => p.productType === 'book').length}`
-);
-console.log(
-	`Exams: ${allProducts.filter((p) => p.productType === 'exam').length}`
-);
-console.log(
-	`Packs: ${allProducts.filter((p) => p.productType === 'pack').length}`
-);
-
-// Add a check to see if we have exam products
-const haveExams = allProducts.some((p) => p.productType === 'exam');
-console.log(`Have exam products: ${haveExams}`);
-if (!haveExams) {
-	console.warn('No exam products found - check exams.json format');
-}
-
 // Build canonical URL
-const canonicalURL = new URL('/catalogo', siteInfo.siteURL).toString();
+const canonicalURL = new URL('/catalogo', siteConfig.url).toString();
 
 // Create structured data for catalog page
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@type': 'CollectionPage',
-	name: pageTitle,
-	description: pageDescription,
-	url: canonicalURL,
-	isPartOf: {
-		'@type': 'WebSite',
-		name: siteInfo.siteName,
-		url: siteInfo.siteURL,
-	},
-	about: {
-		'@type': 'Thing',
-		name: 'Materiales educativos en inglés',
-	},
-	numberOfItems: allProducts.length,
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalURL,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: siteConfig.name,
+    url: siteConfig.url,
+  },
+  about: {
+    '@type': 'Thing',
+    name: 'Materiales educativos en inglés',
+  },
+  numberOfItems: allProducts.length,
 };
 
 // Create breadcrumbs data
 const breadcrumbData = {
-	'@context': 'https://schema.org',
-	'@type': 'BreadcrumbList',
-	itemListElement: [
-		{
-			'@type': 'ListItem',
-			position: 1,
-			name: 'Inicio',
-			item: siteInfo.siteURL,
-		},
-		{
-			'@type': 'ListItem',
-			position: 2,
-			name: 'Catálogo',
-			item: canonicalURL,
-		},
-	],
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Inicio',
+      item: siteConfig.url,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Catálogo',
+      item: canonicalURL,
+    },
+  ],
 };
 
 // Build OG image URL based on filters or use default
-const ogImage =
-	level !== 'all' || format !== 'all' || type !== 'any'
-		? `${siteInfo.siteURL}/api/og?title=${encodeURIComponent(pageTitle)}&filter=true`
-		: siteInfo.seo.images.home || siteInfo.seo.defaultImage;
+const ogImage = siteInfo.seo.images.catalog || siteInfo.seo.defaultImage;
 ---
 
 <Layout
-	title={`${pageTitle} | ${siteInfo.siteName}`}
-	description={pageDescription}
-	canonicalURL={canonicalURL}
-	ogType='website'
-	ogTitle={pageTitle}
-	ogDescription={pageDescription}
-	ogImage={ogImage}
-	ogSiteName={siteInfo.siteName}
-	twitterCard={siteInfo.seo.images.catalog}
-	twitterTitle={pageTitle}
-	twitterDescription={pageDescription}
-	twitterImage={ogImage}
-	twitterSite={siteInfo.socialMediaHandles.twitter}
-	structuredData={structuredData}
-	breadcrumbData={breadcrumbData}
-	bodyClass='catalog-page'>
-	<!-- Hero Section -->
-	<CatalogHero />
+  title={`${pageTitle} | ${siteInfo.siteName}`}
+  description={pageDescription}
+  canonicalURL={canonicalURL}
+  ogType="website"
+  ogTitle={pageTitle}
+  ogDescription={pageDescription}
+  ogImage={ogImage}
+  ogSiteName={siteInfo.siteName}
+  twitterCard="summary_large_image"
+  twitterTitle={pageTitle}
+  twitterDescription={pageDescription}
+  twitterImage={ogImage}
+  twitterSite={siteInfo.socialMediaHandles.twitter}
+  structuredData={structuredData}
+  breadcrumbData={breadcrumbData}
+  bodyClass="catalog-page"
+>
+  <!-- Hero Section -->
+  <CatalogHero />
 
-	<!-- Categories Section -->
-	<section class='py-12 container mx-auto px-4'>
-		<div class='text-center mb-10 fade-in'>
-			<SectionTitle>Categorías principales</SectionTitle>
-			<p class='text-gray-600 max-w-3xl mx-auto'>
-				Explora nuestros materiales por categoría y encuentra
-				exactamente lo que necesitas.
-			</p>
-		</div>
-		<CategoryCards />
-	</section>
+  <!-- Categories Section -->
+  <section class="container mx-auto px-4 py-12">
+    <div class="fade-in mb-10 text-center">
+      <SectionTitle>Categorías principales</SectionTitle>
+      <p class="mx-auto max-w-3xl text-gray-600">
+        Explora nuestros materiales por categoría y encuentra exactamente lo que necesitas.
+      </p>
+    </div>
+    <CategoryCards />
+  </section>
 
-	<!-- Main Catalog Section -->
-	<section class='py-12 relative catalog-section' id='catalog'>
-		<!-- Background decorative elements -->
-		<div class='absolute inset-0 catalog-pattern opacity-[0.03]'></div>
-		<div class='accent-shape'></div>
+  <!-- Main Catalog Section -->
+  <section class="catalog-section relative py-12" id="catalog">
+    <!-- Background decorative elements -->
+    <div class="catalog-pattern absolute inset-0 opacity-[0.03]"></div>
+    <div class="accent-shape"></div>
 
-		<div class='container mx-auto px-4 relative z-10'>
-			<div class='flex flex-col items-center fade-in mb-8'>
-				<SectionTitle tag='h2' class='mb-4 text-center'>
-					Explora nuestro catálogo completo
-				</SectionTitle>
-				<p class='text-gray-600 max-w-3xl mx-auto text-center'>
-					Encuentra los mejores materiales para dominar el inglés,
-					desde nivel principiante hasta profesional.
-				</p>
-			</div>
+    <div class="relative z-10 container mx-auto px-4">
+      <div class="fade-in mb-8 flex flex-col items-center">
+        <SectionTitle tag="h2" class="mb-4 text-center">
+          Explora nuestro catálogo completo
+        </SectionTitle>
+        <p class="mx-auto max-w-3xl text-center text-gray-600">
+          Encuentra los mejores materiales para dominar el inglés, desde nivel principiante hasta
+          profesional.
+        </p>
+      </div>
 
-			<!-- Integrated Catalog Container with a unified products array -->
-			<CatalogContainer
-				products={allProducts}
-				initialLevel={level}
-				initialFormat={format}
-				initialSort={sort}
-				initialResourceType={type}
-				editorialMap={editorialMap}
-				gridCols={4}
-				productSize='medium'
-				enableResourceTypeFilter={true}
-			/>
-		</div>
-	</section>
+      <!-- Integrated Catalog Container with a unified products array -->
+      <CatalogContainer
+        products={allProducts}
+        initialLevel={level}
+        initialFormat={format}
+        initialSort={sort}
+        initialResourceType={type}
+        initialSearch={search}
+        editorialMap={editorialMap}
+        gridCols={4}
+        productSize="medium"
+        enableResourceTypeFilter={true}
+      />
+    </div>
+  </section>
 
-	<!-- Promotional Section -->
-	<PromoSection
-		title='Ofertas y Promociones Exclusivas'
-		subtitle='Ofertas Especiales'
-		className='bg-gradient-to-br from-primary/5 to-accent/5 py-16'
-		countdownDays={5}
-		cardSize='large'
-	/>
+  <!-- Promotional Section -->
+  <PromoSection
+    title="Ofertas y Promociones Exclusivas"
+    subtitle="Ofertas Especiales"
+    class="from-primary/5 to-accent/5 bg-gradient-to-br py-16"
+    countdownDays={5}
+    cardSize="large"
+  />
 
-	<!-- FAQ Section -->
-	<FAQ
-		className='py-16'
-		dataset='catalog'
-		title='Preguntas frecuentes sobre nuestros materiales'
-		description='Resolvemos tus dudas sobre nuestros libros y materiales digitales de inglés.'
-	/>
+  <!-- FAQ Section -->
+  <FAQ
+    class="py-16"
+    dataset="catalog"
+    title="Preguntas frecuentes sobre nuestros materiales"
+    description="Resolvemos tus dudas sobre nuestros libros y materiales digitales de inglés."
+  />
 
-	<!-- CTA Banner -->
-	<div class='container mx-auto px-4 mb-16'>
-		<CTABanner />
-	</div>
+  <!-- CTA Banner -->
+  <div class="container mx-auto mb-16 px-4">
+    <CTABanner />
+  </div>
 </Layout>
 
 <script>
-	// Initialize scroll and animation behaviors
-	document.addEventListener('DOMContentLoaded', () => {
-		// Get the hash from URL to check if we need to scroll to catalog section
-		const hash = window.location.hash;
-		if (hash === '#catalog') {
-			// Delay scrolling slightly to ensure the page is loaded
-			setTimeout(() => {
-				const catalogSection = document.getElementById('catalog');
-				if (catalogSection) {
-					catalogSection.scrollIntoView({ behavior: 'smooth' });
-				}
-			}, 500);
-		}
+  // Initialize scroll and animation behaviors
+  document.addEventListener('DOMContentLoaded', () => {
+    // Get the hash from URL to check if we need to scroll to catalog section
+    const hash = window.location.hash;
+    if (hash === '#catalog') {
+      // Delay scrolling slightly to ensure the page is loaded
+      setTimeout(() => {
+        const catalogSection = document.getElementById('catalog');
+        if (catalogSection) {
+          catalogSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
+    }
 
-		// Set up intersection observer for animations
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('in-view');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{
-				threshold: 0.1,
-				rootMargin: '0px 0px -50px 0px',
-			}
-		);
+    // Set up intersection observer for animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
 
-		// Observe elements that should animate on scroll
-		document
-			.querySelectorAll(
-				'.fade-in, .slide-up, .category-card, .promo-item'
-			)
-			.forEach((el) => observer.observe(el));
-	});
+    // Observe elements that should animate on scroll
+    document
+      .querySelectorAll('.fade-in, .slide-up, .category-card, .promo-item')
+      .forEach((el) => observer.observe(el));
+  });
 </script>
 
 <style>
-	/* Add any additional specific styles for this page */
-	.catalog-pattern {
-		background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-	}
+  /* Add any additional specific styles for this page */
+  .catalog-pattern {
+    background-image: url('/pattern.svg');
+    opacity: 0.05;
+  }
 
-	.accent-shape {
-		position: absolute;
-		width: 500px;
-		height: 500px;
-		border-radius: 50%;
-		background: linear-gradient(
-			135deg,
-			rgba(59, 130, 246, 0.05) 0%,
-			rgba(147, 51, 234, 0.05) 100%
-		);
-		top: -200px;
-		right: -200px;
-		z-index: -1;
-		filter: blur(70px);
-	}
+  .accent-shape {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.05) 100%);
+    top: -200px;
+    right: -200px;
+    z-index: -1;
+    filter: blur(70px);
+  }
 </style>

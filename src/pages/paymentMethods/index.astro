@@ -6,108 +6,110 @@ import HowToPay from '../../components/paymentMethods/HowToPay.astro';
 import DeliveryTime from '../../components/paymentMethods/DeliveryTime.astro';
 import FAQ from '../../components/FAQ.astro';
 import CTA from '../../components/paymentMethods/CTA.astro';
-import siteInfo from '../../database/pageInformation.json';
+import siteInfo from '../../data/page-information.json';
+import { siteConfig } from '@config/site';
 
-import '../../styles/paymentMethods.css';
+import '../../styles/paymentMethods/paymentMethods.css';
 
 // SEO metadata
 const pageTitle = 'Métodos de Pago | FluentReads';
 const pageDescription =
-	'Conoce los diferentes métodos de pago que aceptamos en FluentReads para adquirir tus materiales educativos en inglés.';
-const canonicalURL = new URL('/paymentMethods', siteInfo.siteURL).toString();
+  'Conoce los diferentes métodos de pago que aceptamos en FluentReads para adquirir tus materiales educativos en inglés.';
+const canonicalURL = new URL('/paymentMethods', siteConfig.url).toString();
 
 // Get OG image from site info or use default
 const ogImage = siteInfo.seo.images.paymentMethods || siteInfo.seo.defaultImage;
 
 // Structured data for payment methods page
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@type': 'WebPage',
-	name: pageTitle,
-	description: pageDescription,
-	url: canonicalURL,
-	mainEntity: {
-		'@type': 'ItemList',
-		itemListElement: [
-			{
-				'@type': 'ListItem',
-				position: 1,
-				name: 'Transferencias Bancarias',
-				url: `${canonicalURL}#bank-transfers`,
-			},
-			{
-				'@type': 'ListItem',
-				position: 2,
-				name: 'Billeteras Digitales',
-				url: `${canonicalURL}#digital-wallets`,
-			},
-			{
-				'@type': 'ListItem',
-				position: 3,
-				name: 'Proceso de Pago',
-				url: `${canonicalURL}#payment-process`,
-			},
-		],
-	},
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalURL,
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Transferencias Bancarias',
+        url: `${canonicalURL}#bank-transfers`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Billeteras Digitales',
+        url: `${canonicalURL}#digital-wallets`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Proceso de Pago',
+        url: `${canonicalURL}#payment-process`,
+      },
+    ],
+  },
 };
 
 // Create breadcrumbs data
 const breadcrumbData = {
-	'@context': 'https://schema.org',
-	'@type': 'BreadcrumbList',
-	itemListElement: [
-		{
-			'@type': 'ListItem',
-			position: 1,
-			name: 'Inicio',
-			item: siteInfo.siteURL,
-		},
-		{
-			'@type': 'ListItem',
-			position: 2,
-			name: 'Métodos de Pago',
-			item: canonicalURL,
-		},
-	],
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Inicio',
+      item: siteConfig.url,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Métodos de Pago',
+      item: canonicalURL,
+    },
+  ],
 };
 ---
 
 <Layout
-	title={pageTitle}
-	description={pageDescription}
-	canonicalURL={canonicalURL}
-	ogType='website'
-	ogTitle={pageTitle}
-	ogDescription={pageDescription}
-	ogImage={ogImage}
-	ogSiteName={siteInfo.siteName}
-	twitterCard={siteInfo.seo.images.paymentMethods}
-	twitterTitle={pageTitle}
-	twitterDescription={pageDescription}
-	twitterImage={ogImage}
-	twitterSite={siteInfo.socialMediaHandles.twitter}
-	structuredData={structuredData}
-	breadcrumbData={breadcrumbData}>
-	<!-- Hero Section -->
-	<Hero />
+  title={pageTitle}
+  description={pageDescription}
+  canonicalURL={canonicalURL}
+  ogType="website"
+  ogTitle={pageTitle}
+  ogDescription={pageDescription}
+  ogImage={ogImage}
+  ogSiteName={siteInfo.siteName}
+  twitterCard="summary_large_image"
+  twitterTitle={pageTitle}
+  twitterDescription={pageDescription}
+  twitterImage={ogImage}
+  twitterSite={siteInfo.socialMediaHandles.twitter}
+  structuredData={structuredData}
+  breadcrumbData={breadcrumbData}
+>
+  <!-- Hero Section -->
+  <Hero />
 
-	<!-- Payment Methods -->
-	<PaymentMethods />
+  <!-- Payment Methods -->
+  <PaymentMethods />
 
-	<!-- How to Pay - Enhanced Version -->
-	<HowToPay />
+  <!-- How to Pay - Enhanced Version -->
+  <HowToPay />
 
-	<!-- Delivery Time -->
-	<DeliveryTime />
+  <!-- Delivery Time -->
+  <DeliveryTime />
 
-	<!-- FAQ Section -->
-	<FAQ
-		className='py-18'
-		dataset='payment'
-		title='Preguntas frecuentes sobre pagos'
-		description='Resolvemos tus dudas sobre el proceso de pago y entrega de materiales.'
-	/>
+  <!-- FAQ Section -->
+  <FAQ
+    class="py-18"
+    dataset="payment"
+    title="Preguntas frecuentes sobre pagos"
+    description="Resolvemos tus dudas sobre el proceso de pago y entrega de materiales."
+  />
 
-	<!-- CTA Section -->
-	<CTA />
+  <!-- CTA Section -->
+  <CTA />
 </Layout>

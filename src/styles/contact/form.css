@@ -7,7 +7,8 @@
 }
 
 /* Input focus styles */
-.form-input:focus, .form-textarea:focus {
+.form-input:focus,
+.form-textarea:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2);
 }
@@ -108,18 +109,7 @@
 
 /* Form entrance animation */
 #contact-form {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  animation: slideUp 0.5s ease-in-out;
 }
 
 /* Loading overlay animation */
@@ -134,7 +124,7 @@
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  .form-group .form-input, 
+  .form-group .form-input,
   .form-group .form-textarea {
     font-size: 16px; /* Prevent zoom on iOS devices */
   }
@@ -200,14 +190,13 @@
   animation: fadeIn 0.3s ease forwards;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 /* Remove the default Pageclip loading spinner since we're using our own */

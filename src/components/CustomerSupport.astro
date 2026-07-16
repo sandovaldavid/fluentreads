@@ -2,86 +2,82 @@
 import WhatsAppIcon from './icons/WhatsApp.astro';
 import ContactIcon from './icons/Contact.astro';
 import SupportIcon from './icons/Support.astro';
-import PageInfo from '../database/pageInformation.json';
+import { siteConfig } from '@config/site';
 
 // WhatsApp contact information
-const whatsappNumber = PageInfo.contact.whatsapp;
+const whatsappNumber = siteConfig.contact.phone;
 const whatsappMessage = 'Hola, tengo una consulta sobre los libros digitales.';
-const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/\+|\s/g, '')}?text=${encodeURIComponent(whatsappMessage)}`;
+const whatsappUrl = `${siteConfig.whatsappUrl}?text=${encodeURIComponent(whatsappMessage)}`;
 const Schedule = 'Lun-Vie 9am-6pm | Sáb 9am-1pm';
 
 interface Props {
-	class?: string;
+  class?: string;
 }
 
 const { class: className = '' } = Astro.props;
 ---
 
 <div
-	class={`customer-support-widget rounded-lg bg-primary/5 p-3 border border-primary/20 shadow-sm ${className}`}>
-	<h3 class='text-base font-bold text-primary-dark mb-2 flex items-center'>
-		<span class='bg-primary text-white p-1 rounded-full mr-2'>
-			<SupportIcon class='w-4 h-4' />
-		</span>
-		¿Necesitas ayuda?
-	</h3>
+  class={`customer-support-widget bg-primary/5 border-primary/20 rounded-lg border p-3 shadow-sm ${className}`}
+>
+  <h3 class="text-primary-dark mb-2 flex items-center text-base font-bold">
+    <span class="bg-primary mr-2 rounded-full p-1 text-white">
+      <SupportIcon class="h-4 w-4" />
+    </span>
+    ¿Necesitas ayuda?
+  </h3>
 
-	<div class='space-y-2'>
-		<a
-			href={whatsappUrl}
-			target='_blank'
-			rel='noopener noreferrer'
-			class='flex items-center p-2 bg-green-50 hover:bg-green-100 text-green-800 rounded-lg border border-green-200 transition-colors duration-300'>
-			<WhatsAppIcon class='w-5 h-5 mr-2 text-green-600' />
-			<div class='font-medium'>{whatsappNumber}</div>
-		</a>
+  <div class="space-y-2">
+    <a
+      href={whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center rounded-lg border border-green-200 bg-green-50 p-2 text-green-800 transition-colors duration-300 hover:bg-green-100"
+    >
+      <WhatsAppIcon class="mr-2 h-5 w-5 text-green-600" />
+      <div class="font-medium">{whatsappNumber}</div>
+    </a>
 
-		<a
-			href='/contacto'
-			class='text-sm text-primary hover:text-primary-dark flex items-center'>
-			<ContactIcon class='w-4 h-4 mr-1 text-primary' />
-			<span>Más opciones de contacto</span>
-		</a>
-	</div>
+    <a href="/contacto" class="text-primary hover:text-primary-dark flex items-center text-sm">
+      <ContactIcon class="text-primary mr-1 h-4 w-4" />
+      <span>Más opciones de contacto</span>
+    </a>
+  </div>
 
-	<div class='mt-2 pt-2 border-t border-gray-200'>
-		<p class='text-xs text-gray-500'>
-			Horario: <span class='font-bold border-0'>{Schedule}</span>
-		</p>
-	</div>
+  <div class="mt-2 border-t border-gray-200 pt-2">
+    <p class="text-xs text-gray-500">
+      Horario: <span class="border-0 font-bold">{Schedule}</span>
+    </p>
+  </div>
 </div>
 
 <script>
-	// Optional: Add click tracking for support options
-	document.addEventListener('DOMContentLoaded', () => {
-		const supportLinks = document.querySelectorAll(
-			'.customer-support-widget a'
-		);
+  // Optional: Add click tracking for support options
+  document.addEventListener('DOMContentLoaded', () => {
+    const supportLinks = document.querySelectorAll('.customer-support-widget a');
 
-		supportLinks.forEach((link) => {
-			link.addEventListener('click', (e) => {
-				// TODO: add analytics tracking here
-				console.log(
-					`Support option clicked: ${(link as HTMLAnchorElement).href}`
-				);
-			});
-		});
-	});
+    supportLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        // TODO: add analytics tracking here
+        console.log(`Support option clicked: ${(link as HTMLAnchorElement).href}`);
+      });
+    });
+  });
 </script>
 
 <style>
-	.customer-support-widget {
-		animation: fadeIn 0.5s ease-out;
-	}
+  .customer-support-widget {
+    animation: fadeIn 0.5s ease-out;
+  }
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>

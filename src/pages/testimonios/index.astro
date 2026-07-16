@@ -5,416 +5,393 @@ import TestimoniesCard from '../../components/TestimoniesCard.astro';
 import Button from '../../components/Button.astro';
 import FAQ from '../../components/FAQ.astro';
 import CTABanner from '../../components/CTA-Banner.astro';
-import siteInfo from '../../database/pageInformation.json';
+import siteInfo from '../../data/page-information.json';
+import { siteConfig } from '@config/site';
 
 // Import testimonies data
-import testimonies from '../../database/testimonies.json';
+import rawTestimonies from '../../data/testimonies.json';
+const testimonies = [...rawTestimonies].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
 
 // Calculate statistics
 const totalTestimonials = testimonies.length;
 const averageRating =
-	testimonies.reduce((sum, testimony) => sum + (testimony.rating || 5), 0) /
-	totalTestimonials;
+  testimonies.reduce((sum, testimony) => sum + (testimony.rating || 5), 0) / totalTestimonials;
 const roundedRating = Math.round(averageRating * 10) / 10;
 const satisfactionRate = '98%';
 
 // SEO metadata
 const pageTitle = 'Testimonios de Clientes | FluentReads';
 const pageDescription =
-	'Descubre qué opinan nuestros clientes sobre nuestros libros y materiales en inglés. Historias reales de éxito y experiencias positivas con FluentReads.';
-const canonicalUrl = new URL('/testimonios', siteInfo.siteURL).toString();
+  'Descubre qué opinan nuestros clientes sobre nuestros libros y materiales en inglés. Historias reales de éxito y experiencias positivas con FluentReads.';
+const canonicalUrl = new URL('/testimonios', siteConfig.url).toString();
 
 // Get OG image from site info or use default
 const ogImage = siteInfo.seo.images.testimonials || siteInfo.seo.defaultImage;
 
 // Structured data for testimonials page
 const structuredData = {
-	'@context': 'https://schema.org',
-	'@type': 'WebPage',
-	name: pageTitle,
-	description: pageDescription,
-	url: canonicalUrl,
-	mainEntity: {
-		'@type': 'ItemList',
-		itemListElement: testimonies.map((testimony, index) => ({
-			'@type': 'ListItem',
-			position: index + 1,
-			item: {
-				'@type': 'Review',
-				reviewRating: {
-					'@type': 'Rating',
-					ratingValue: testimony.rating,
-					bestRating: '5',
-				},
-				author: {
-					'@type': 'Person',
-					name: testimony.author,
-				},
-				reviewBody: testimony.quote,
-			},
-		})),
-	},
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: testimonies.map((testimony, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Review',
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: testimony.rating,
+          bestRating: '5',
+        },
+        author: {
+          '@type': 'Person',
+          name: testimony.author,
+        },
+        reviewBody: testimony.quote,
+      },
+    })),
+  },
 };
 
 // Create breadcrumbs data
 const breadcrumbData = {
-	'@context': 'https://schema.org',
-	'@type': 'BreadcrumbList',
-	itemListElement: [
-		{
-			'@type': 'ListItem',
-			position: 1,
-			name: 'Inicio',
-			item: siteInfo.siteURL,
-		},
-		{
-			'@type': 'ListItem',
-			position: 2,
-			name: 'Testimonios',
-			item: canonicalUrl,
-		},
-	],
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Inicio',
+      item: siteConfig.url,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Testimonios',
+      item: canonicalUrl,
+    },
+  ],
 };
 ---
 
 <Layout
-	title={pageTitle}
-	description={pageDescription}
-	canonicalURL={canonicalUrl}
-	ogType='website'
-	ogTitle={pageTitle}
-	ogDescription={pageDescription}
-	ogImage={ogImage}
-	ogSiteName={siteInfo.siteName}
-	twitterCard={siteInfo.seo.images.testimonials}
-	twitterTitle={pageTitle}
-	twitterDescription={pageDescription}
-	twitterImage={ogImage}
-	twitterSite={siteInfo.socialMediaHandles.twitter}
-	structuredData={structuredData}
-	breadcrumbData={breadcrumbData}>
-	<!-- Hero section with statistics -->
-	<section
-		class='py-12 bg-gradient-to-br from-primary/10 to-secondary/5 relative overflow-hidden'>
-		<!-- Decorative elements -->
-		<div
-			class='absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-3xl'>
-		</div>
-		<div
-			class='absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full -ml-32 -mb-32 blur-3xl'>
-		</div>
+  title={pageTitle}
+  description={pageDescription}
+  canonicalURL={canonicalUrl}
+  ogType="website"
+  ogTitle={pageTitle}
+  ogDescription={pageDescription}
+  ogImage={ogImage}
+  ogSiteName={siteInfo.siteName}
+  twitterCard="summary_large_image"
+  twitterTitle={pageTitle}
+  twitterDescription={pageDescription}
+  twitterImage={ogImage}
+  twitterSite={siteInfo.socialMediaHandles.twitter}
+  structuredData={structuredData}
+  breadcrumbData={breadcrumbData}
+>
+  <!-- Hero section with statistics -->
+  <section class="from-primary/10 to-secondary/5 relative overflow-hidden bg-gradient-to-br py-12">
+    <!-- Decorative elements -->
+    <div class="bg-primary/10 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-3xl">
+    </div>
+    <div
+      class="bg-secondary/10 absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full blur-3xl"
+    >
+    </div>
 
-		<div class='container mx-auto px-4'>
-			<div class='max-w-4xl mx-auto text-center'>
-				<div class='flex flex-col items-center'>
-					<div
-						class='inline-block bg-primary/10 text-primary font-medium rounded-full px-4 py-1 mb-3 animate-fadeIn'>
-						<span class='text-yellow-400 mr-1'>★</span>
-						{roundedRating}/5 basado en {totalTestimonials} opiniones
-					</div>
+    <div class="container mx-auto px-4">
+      <div class="mx-auto max-w-4xl text-center">
+        <div class="flex flex-col items-center">
+          <div
+            class="bg-primary/10 text-primary animate-fadeIn mb-3 inline-block rounded-full px-4 py-1 font-medium"
+          >
+            <span class="mr-1 text-yellow-400">★</span>
+            {roundedRating}/5 basado en {totalTestimonials} opiniones
+          </div>
 
-					<SectionTitle
-						tag='h1'
-						class='mb-6 text-center animate-fadeIn'>
-						Experiencias de Nuestros Clientes
-					</SectionTitle>
-				</div>
+          <SectionTitle tag="h1" class="animate-fadeIn mb-6 text-center">
+            Experiencias de Nuestros Clientes
+          </SectionTitle>
+        </div>
 
-				<p
-					class='text-gray-600 max-w-3xl mx-auto text-center mb-8 animate-fadeIn'>
-					Descubre cómo nuestros materiales han transformado la
-					experiencia de aprendizaje de miles de estudiantes y
-					profesionales en todo el mundo.
-				</p>
+        <p class="animate-fadeIn mx-auto mb-8 max-w-3xl text-center text-gray-600">
+          Descubre cómo nuestros materiales han transformado la experiencia de aprendizaje de miles
+          de estudiantes y profesionales en todo el mundo.
+        </p>
 
-				<!-- Statistics cards -->
-				<div
-					class='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-10'>
-					<div
-						class='bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1'>
-						<div class='text-3xl font-bold text-primary mb-1'>
-							{totalTestimonials}+
-						</div>
-						<div class='text-sm text-gray-500'>Testimonios</div>
-					</div>
+        <!-- Statistics cards -->
+        <div class="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+          <div
+            class="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div class="text-primary mb-1 text-3xl font-bold">
+              {totalTestimonials}+
+            </div>
+            <div class="text-sm text-gray-500">Testimonios</div>
+          </div>
 
-					<div
-						class='bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1'>
-						<div class='text-3xl font-bold text-primary mb-1'>
-							{roundedRating}/5
-						</div>
-						<div class='text-sm text-gray-500'>
-							Valoración media
-						</div>
-					</div>
+          <div
+            class="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div class="text-primary mb-1 text-3xl font-bold">
+              {roundedRating}/5
+            </div>
+            <div class="text-sm text-gray-500">Valoración media</div>
+          </div>
 
-					<div
-						class='bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1'>
-						<div class='text-3xl font-bold text-primary mb-1'>
-							{satisfactionRate}
-						</div>
-						<div class='text-sm text-gray-500'>Satisfacción</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+          <div
+            class="transform rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div class="text-primary mb-1 text-3xl font-bold">
+              {satisfactionRate}
+            </div>
+            <div class="text-sm text-gray-500">Satisfacción</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-	<!-- Testimonials filter and grid section -->
-	<section class='py-12 bg-neutral-light'>
-		<div class='container mx-auto px-4'>
-			<!-- Filter controls (can be expanded with actual filtering functionality) -->
-			<div class='flex flex-wrap items-center justify-between mb-8'>
-				<h2 class='text-2xl font-bold text-primary-dark'>
-					Todos los testimonios
-				</h2>
+  <!-- Testimonials filter and grid section -->
+  <section class="bg-neutral-light py-12">
+    <div class="container mx-auto px-4">
+      <!-- Filter controls (can be expanded with actual filtering functionality) -->
+      <div class="mb-8 flex flex-wrap items-center justify-between">
+        <h2 class="text-primary-dark text-2xl font-bold">Todos los testimonios</h2>
 
-				<div class='flex items-center space-x-2 mt-4 sm:mt-0'>
-					<span class='text-sm text-gray-600'>Filtrar por:</span>
-					<button
-						id='filter-all'
-						class='filter-btn active px-3 py-1 text-sm rounded-full bg-primary text-white'>
-						Todos
-					</button>
-					<button
-						id='filter-5star'
-						class='filter-btn px-3 py-1 text-sm rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700'>
-						5 estrellas
-					</button>
-					<button
-						id='filter-recent'
-						class='filter-btn px-3 py-1 text-sm rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700'>
-						Recientes
-					</button>
-				</div>
-			</div>
+        <div class="mt-4 flex items-center space-x-2 sm:mt-0">
+          <span class="text-sm text-gray-600">Filtrar por:</span>
+          <button
+            id="filter-all"
+            class="filter-btn active bg-primary rounded-full px-3 py-1 text-sm text-white"
+          >
+            Todos
+          </button>
+          <button
+            id="filter-5star"
+            class="filter-btn rounded-full bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
+          >
+            5 estrellas
+          </button>
+          <button
+            id="filter-recent"
+            class="filter-btn rounded-full bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
+          >
+            Recientes
+          </button>
+        </div>
+      </div>
 
-			<!-- Testimonials grid with improved spacing and layout -->
-			<div
-				class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 testimonials-grid'>
-				{
-					testimonies.map((testimony, index) => (
-						<div
-							class={`testimony-item appear-${(index % 9) + 1}`}
-							data-rating={testimony.rating}>
-							<TestimoniesCard
-								quote={testimony.quote}
-								author={testimony.author}
-								position={testimony.position}
-								avatarUrl={testimony.avatarUrl}
-								rating={testimony.rating || 5}
-							/>
-						</div>
-					))
-				}
-			</div>
+      <!-- Testimonials grid with improved spacing and layout -->
+      <div class="testimonials-grid grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {
+          testimonies.map((testimony, index) => (
+            <div
+              class={`testimony-item appear-${(index % 9) + 1}`}
+              data-rating={testimony.rating}
+              data-date={testimony.date}
+            >
+              <TestimoniesCard
+                quote={testimony.quote}
+                author={testimony.author}
+                position={testimony.position}
+                avatarUrl={testimony.avatarUrl}
+                rating={testimony.rating || 5}
+              />
+            </div>
+          ))
+        }
+      </div>
 
-			<!-- No results message (hidden by default) -->
-			<div id='no-results' class='hidden text-center py-16'>
-				<div class='text-xl font-semibold text-gray-600 mb-3'>
-					No se encontraron testimonios
-				</div>
-				<p class='text-gray-500 mb-6'>
-					Por favor, intenta con otro filtro.
-				</p>
-				<Button id='reset-filters' variant='primary' size='medium'
-					>Mostrar todos</Button
-				>
-			</div>
-		</div>
-	</section>
+      <!-- No results message (hidden by default) -->
+      <div id="no-results" class="hidden py-16 text-center">
+        <div class="mb-3 text-xl font-semibold text-gray-600">No se encontraron testimonios</div>
+        <p class="mb-6 text-gray-500">Por favor, intenta con otro filtro.</p>
+        <Button id="reset-filters" variant="primary" size="medium">Mostrar todos</Button>
+      </div>
+    </div>
+  </section>
 
-	<!-- Call to action section -->
-	<section class='py-16 bg-white'>
-		<div class='container mx-auto px-4'>
-			<div class='max-w-3xl mx-auto text-center'>
-				<SectionTitle>¿Listo para mejorar tu inglés?</SectionTitle>
-				<p class='text-gray-600 mt-4 mb-8'>
-					Únete a miles de estudiantes satisfechos y descubre nuestros
-					materiales de alta calidad para mejorar tu nivel de inglés
-					de forma efectiva.
-				</p>
-				<div class='flex flex-wrap justify-center gap-4'>
-					<Button
-						variant='primary'
-						size='large'
-						href='/catalogo'
-						class='shadow-md hover:shadow-lg transition-all duration-300'>
-						Ver catálogo
-					</Button>
-					<Button
-						variant='outline'
-						size='large'
-						href='/contacto'
-						class='hover:bg-gray-50'>
-						Contactar con nosotros
-					</Button>
-				</div>
-			</div>
-		</div>
-	</section>
+  <!-- Call to action section -->
+  <section class="bg-white py-16">
+    <div class="container mx-auto px-4">
+      <div class="mx-auto max-w-3xl text-center">
+        <SectionTitle>¿Listo para mejorar tu inglés?</SectionTitle>
+        <p class="mt-4 mb-8 text-gray-600">
+          Únete a miles de estudiantes satisfechos y descubre nuestros materiales de alta calidad
+          para mejorar tu nivel de inglés de forma efectiva.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <Button
+            variant="primary"
+            size="large"
+            href="/catalogo"
+            class="shadow-md transition-all duration-300 hover:shadow-lg"
+          >
+            Ver catálogo
+          </Button>
+          <Button variant="outline" size="large" href="/contacto" class="hover:bg-gray-50">
+            Contactar con nosotros
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-	<!-- FAQ Section -->
-	<FAQ
-		className='py-16 bg-neutral-light'
-		dataset='general'
-		title='Preguntas frecuentes sobre nuestros servicios'
-		description='Resolvemos tus dudas sobre materiales, métodos de pago y entrega.'
-	/>
+  <!-- FAQ Section -->
+  <FAQ
+    class="bg-neutral-light py-16"
+    dataset="general"
+    title="Preguntas frecuentes sobre nuestros servicios"
+    description="Resolvemos tus dudas sobre materiales, métodos de pago y entrega."
+  />
 
-	<!-- CTA Banner -->
-	<div class='container mx-auto px-4 py-8 mb-8'>
-		<CTABanner />
-	</div>
+  <!-- CTA Banner -->
+  <div class="container mx-auto mb-8 px-4 py-8">
+    <CTABanner />
+  </div>
 </Layout>
 
 <script>
-	// Animation for testimonial cards on scroll
-	document.addEventListener('DOMContentLoaded', () => {
-		// Set up intersection observer for animations
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('in-view');
-						observer.unobserve(entry.target);
-					}
-				});
-			},
-			{
-				threshold: 0.1,
-				rootMargin: '0px 0px -50px 0px',
-			}
-		);
+  // Animation for testimonial cards on scroll
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set up intersection observer for animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
 
-		// Observe all testimony items
-		document.querySelectorAll('.testimony-item').forEach((item, index) => {
-			// Add staggered delay based on index
-			setTimeout(() => {
-				observer.observe(item);
-			}, index * 100);
-		});
+    // Observe all testimony items
+    document.querySelectorAll('.testimony-item').forEach((item, index) => {
+      // Add staggered delay based on index
+      setTimeout(() => {
+        observer.observe(item);
+      }, index * 100);
+    });
 
-		// Simple filtering functionality
-		const filterButtons = document.querySelectorAll('.filter-btn');
-		const testimonialItems = document.querySelectorAll('.testimony-item');
-		const noResultsMessage = document.getElementById('no-results');
+    // Simple filtering functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const testimonialItems = document.querySelectorAll('.testimony-item');
+    const noResultsMessage = document.getElementById('no-results');
 
-		// Check if filter buttons exist
-		if (filterButtons.length > 0) {
-			filterButtons.forEach((button) => {
-				button.addEventListener('click', () => {
-					// Remove active class from all buttons
-					filterButtons.forEach((btn) =>
-						btn.classList.remove('active')
-					);
+    // Check if filter buttons exist
+    if (filterButtons.length > 0) {
+      filterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons
+          filterButtons.forEach((btn) => btn.classList.remove('active'));
 
-					// Add active class to clicked button
-					button.classList.add('active');
+          // Add active class to clicked button
+          button.classList.add('active');
 
-					let visibleCount = 0;
+          let visibleCount = 0;
 
-					// Apply filter
-					if (button.id === 'filter-all') {
-						testimonialItems.forEach((item) => {
-							(item as HTMLElement).style.display = 'block';
-							visibleCount++;
-						});
-					} else if (button.id === 'filter-5star') {
-						testimonialItems.forEach((item) => {
-							const rating = parseFloat(
-								item.getAttribute('data-rating') || '0'
-							);
-							if (rating >= 5) {
-								(item as HTMLElement).style.display = 'block';
-								visibleCount++;
-							} else {
-								(item as HTMLElement).style.display = 'none';
-							}
-						});
-					} else if (button.id === 'filter-recent') {
-						// For demo purposes, just show first 3 items as "recent"
-						testimonialItems.forEach((item, index) => {
-							if (index < 3) {
-								(item as HTMLElement).style.display = 'block';
-								visibleCount++;
-							} else {
-								(item as HTMLElement).style.display = 'none';
-							}
-						});
-					}
+          // Apply filter
+          if (button.id === 'filter-all') {
+            testimonialItems.forEach((item) => {
+              (item as HTMLElement).style.display = 'block';
+              visibleCount++;
+            });
+          } else if (button.id === 'filter-5star') {
+            testimonialItems.forEach((item) => {
+              const rating = parseFloat(item.getAttribute('data-rating') || '0');
+              if (rating >= 5) {
+                (item as HTMLElement).style.display = 'block';
+                visibleCount++;
+              } else {
+                (item as HTMLElement).style.display = 'none';
+              }
+            });
+          } else if (button.id === 'filter-recent') {
+            // For demo purposes, just show first 3 items as "recent"
+            testimonialItems.forEach((item, index) => {
+              if (index < 3) {
+                (item as HTMLElement).style.display = 'block';
+                visibleCount++;
+              } else {
+                (item as HTMLElement).style.display = 'none';
+              }
+            });
+          }
 
-					// Toggle no results message
-					if (noResultsMessage) {
-						if (visibleCount === 0) {
-							noResultsMessage.classList.remove('hidden');
-						} else {
-							noResultsMessage.classList.add('hidden');
-						}
-					}
-				});
-			});
-		}
+          // Toggle no results message
+          if (noResultsMessage) {
+            if (visibleCount === 0) {
+              noResultsMessage.classList.remove('hidden');
+            } else {
+              noResultsMessage.classList.add('hidden');
+            }
+          }
+        });
+      });
+    }
 
-		// Reset filters button
-		const resetButton = document.getElementById('reset-filters');
-		if (resetButton) {
-			resetButton.addEventListener('click', () => {
-				const allFilterButton = document.getElementById('filter-all');
-				if (allFilterButton) {
-					// Create and dispatch a click event
-					const clickEvent = new MouseEvent('click', {
-						bubbles: true,
-						cancelable: true,
-						view: window,
-					});
-					allFilterButton.dispatchEvent(clickEvent);
-				}
-			});
-		}
-	});
+    // Reset filters button
+    const resetButton = document.getElementById('reset-filters');
+    if (resetButton) {
+      resetButton.addEventListener('click', () => {
+        const allFilterButton = document.getElementById('filter-all');
+        if (allFilterButton) {
+          // Create and dispatch a click event
+          const clickEvent = new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          });
+          allFilterButton.dispatchEvent(clickEvent);
+        }
+      });
+    }
+  });
 </script>
 
 <style>
-	.animate-fadeIn {
-		animation: fadeIn 0.8s ease-out forwards;
-	}
+  .animate-fadeIn {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
 
-	.testimonials-grid .testimony-item {
-		opacity: 0;
-		transform: translateY(20px);
-		transition: all 0.5s ease-out;
-	}
+  .testimonials-grid .testimony-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-out;
+  }
 
-	.testimonials-grid .testimony-item.in-view {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  .testimonials-grid .testimony-item.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-	.filter-btn {
-		transition: all 0.2s ease;
-	}
+  .filter-btn {
+    transition: all 0.2s ease;
+  }
 
-	.filter-btn.active {
-		background-color: var(--color-primary);
-		color: white;
-	}
+  .filter-btn.active {
+    background-color: var(--color-primary);
+    color: white;
+  }
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	@media (max-width: 640px) {
-		.filter-btn {
-			font-size: 0.75rem;
-			padding: 0.25rem 0.75rem;
-		}
-	}
+  @media (max-width: 640px) {
+    .filter-btn {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+    }
+  }
 </style>

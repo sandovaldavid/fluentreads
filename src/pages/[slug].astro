@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+
+export async function getStaticPaths() {
+  const legalEntries = await getCollection('legal');
+  return legalEntries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout
+  title={`${entry.data.title} | FluentReads`}
+  description={entry.data.description || 'Páginas legales de FluentReads'}
+>
+  <div class="mx-auto max-w-3xl px-4 py-12">
+    <SectionTitle>{entry.data.title}</SectionTitle>
+    <div class="mt-8 space-y-6 leading-relaxed text-gray-700">
+      <Content />
+    </div>
+  </div>
+</Layout>
