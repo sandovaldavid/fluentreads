@@ -11,9 +11,9 @@ const { pathname } = Astro.url;
 const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path));
 ---
 
-<nav class="flex flex-col py-2 md:flex-row md:items-center md:justify-between">
+<nav class="flex flex-col py-2 xl:flex-row xl:items-center xl:justify-between">
   <!-- Navigation links -->
-  <div class="flex flex-col md:flex-row md:items-center lg:mr-4">
+  <div class="flex flex-col xl:mr-4 xl:flex-row xl:items-center">
     <a
       href="/"
       class:list={[
@@ -77,9 +77,9 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
     >
   </div>
 
-  <div class="flex flex-col md:flex-row md:items-center md:space-x-3">
+  <div class="flex flex-col xl:flex-row xl:items-center xl:space-x-3">
     <!-- Social Icons -->
-    <div class="mt-4 md:mt-0">
+    <div class="mt-4 xl:mt-0">
       <SocialMediaContent
         showFacebook={true}
         showInstagram={true}
@@ -89,7 +89,7 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
         instagramUrl="#"
         twitterUrl="#"
         class="justify-center"
-        iconSize="mx-2 h-6 w-6 md:mx-0"
+        iconSize="mx-2 h-[24px] w-[24px] xl:mx-0"
       />
     </div>
   </div>

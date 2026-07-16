@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Carousel functionality
   const carouselTrack = document.querySelector('.carousel-track') as HTMLElement;
   const slides = document.querySelectorAll('.carousel-slide');
-  const indicators = document.querySelectorAll('.indicator-dot');
+  const indicators = document.querySelectorAll<HTMLButtonElement>('.carousel-indicator');
   const prevButton = document.querySelector('.carousel-control.prev') as HTMLButtonElement;
   const nextButton = document.querySelector('.carousel-control.next') as HTMLButtonElement;
   const carousel = document.querySelector('.offers-carousel') as HTMLElement;
@@ -112,7 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
     carouselTrack.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 
     // Update indicators
-    indicators.forEach((dot, index) => {
+    indicators.forEach((indicator, index) => {
+      const dot = indicator.querySelector('.indicator-dot');
+      if (!dot) return;
+
       if (index === currentIndex) {
         dot.classList.add('bg-secondary');
         dot.classList.remove('bg-gray-400');

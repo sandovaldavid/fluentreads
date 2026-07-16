@@ -64,7 +64,7 @@
 @media (hover: hover) {
   .carousel-control {
     opacity: 0;
-    transform: translateY(-50%) scale(0.9);
+    transform: translateY(-50%) scale(1);
   }
 
   .carousel-control:focus {
@@ -79,10 +79,6 @@
 }
 
 @media (max-width: 640px) {
-  .carousel-control {
-    padding: 0.35rem;
-  }
-
   .carousel-control svg {
     width: 1rem;
     height: 1rem;

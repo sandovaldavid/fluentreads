@@ -27,7 +27,7 @@ const {
 
 // Base classes that apply to all buttons
 const baseClasses =
-  'font-[Poppins] rounded-full transition-all duration-300 ease-out inline-flex items-center justify-center focus:outline-none focus:ring-2';
+  'font-[Poppins] min-h-[44px] min-w-[44px] rounded-full transition-all duration-300 ease-out inline-flex items-center justify-center focus:outline-none focus:ring-2';
 
 // Size-specific classes with improved responsive sizing
 const sizeClasses = {
@@ -44,7 +44,7 @@ const variantClasses = {
   secondary:
     'bg-secondary text-black hover:bg-secondary-dark focus:ring-secondary-light focus:ring-opacity-50 transition-all duration-300 ease-out hover:shadow-md',
   accent:
-    'bg-accent text-white hover:bg-accent-dark focus:ring-accent-light focus:ring-opacity-50 transition-all duration-300 ease-out hover:shadow-md',
+    'bg-accent-dark text-white hover:bg-green-900 focus:ring-accent focus:ring-opacity-50 transition-all duration-300 ease-out hover:shadow-md',
   outline:
     'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary-light focus:ring-opacity-50 hover:shadow-md',
   ghost:
@@ -98,18 +98,3 @@ const linkProps = isLink
   <slot />
   {newTab && isLink && <span class="sr-only">(se abre en una nueva pestaña)</span>}
 </Element>
-
-<style>
-  /* Improve touch target size on mobile */
-  @media (max-width: 640px) {
-    a:not(.size-xsmall),
-    button:not(.size-xsmall) {
-      min-height: 25px;
-    }
-
-    a.size-xsmall,
-    button.size-xsmall {
-      min-height: 30px;
-    }
-  }
-</style>

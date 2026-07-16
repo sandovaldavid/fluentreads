@@ -154,7 +154,10 @@ const showEditorial = size !== 'small' && editorial;
 
     {/* Title - Improved font scaling */}
     <h3 class={`mb-1 line-clamp-2 font-bold text-gray-800 ${fontSizes[size]}`}>
-      <a href={detailsLink} class="hover:text-primary transition-colors">
+      <a
+        href={detailsLink}
+        class="hover:text-primary inline-flex min-h-11 items-center transition-colors"
+      >
         {title}
       </a>
     </h3>
@@ -278,15 +281,6 @@ const showEditorial = size !== 'small' && editorial;
   /* Bestseller badge animation */
   .bestseller-badge {
     animation: pulse-badge 2s infinite;
-  }
-
-  /* Better touch target sizes on small screens */
-  @media (max-width: 480px) {
-    .product-card a.bg-primary {
-      padding: 0.25rem 0.5rem;
-      min-width: 32px;
-      text-align: center;
-    }
   }
 
   /* Fix line height on small screens */
