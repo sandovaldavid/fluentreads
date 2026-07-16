@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.4.0...fluentreads-v0.4.1) (2026-07-16)
+
+
+### Bug Fixes
+
+* **a11y:** resolve responsive interaction issues ([#45](https://github.com/sandovaldavid/fluentreads/issues/45)) ([c0f1e67](https://github.com/sandovaldavid/fluentreads/commit/c0f1e677f49103057bf2d6526bc999fe539f0675))
+* **components:** improve navigation accessibility ([#43](https://github.com/sandovaldavid/fluentreads/issues/43)) ([8db8f79](https://github.com/sandovaldavid/fluentreads/commit/8db8f79d4c25d3a73fb42421ff997e7cd54173fe))
+
 ## [0.4.0](https://github.com/sandovaldavid/fluentreads/compare/fluentreads-v0.3.3...fluentreads-v0.4.0) (2026-07-09)
 
 
