@@ -4,6 +4,7 @@ import BookTags from './BookTags.astro';
 import Button from './Button.astro';
 import { levelConfig, formatConfig, popularityConfig } from '../utils/bookTags';
 import { difficultyConfig } from '../utils/examTags';
+import { calculateDiscountedPrice } from '../utils/pricing';
 import type { Product } from '../types/product';
 import type { FormatTag, PopularityTag } from '../types/book';
 import '../styles/Card.css';
@@ -38,7 +39,7 @@ const {
 
 // Calculate discount if provided
 const hasDiscount = discount > 0;
-const discountedPrice = hasDiscount ? price * (1 - discount / 100) : price;
+const discountedPrice = calculateDiscountedPrice(price, discount);
 const finalPrice = discountedPrice;
 
 // Format prices

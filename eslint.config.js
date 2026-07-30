@@ -9,7 +9,15 @@ import prettier from 'eslint-config-prettier';
 
 export default [
   {
-    ignores: ['dist/', '.astro/', 'node_modules/', 'public/', '*.config.mjs', '*.config.cjs'],
+    ignores: [
+      'dist/',
+      '.astro/',
+      'node_modules/',
+      'public/',
+      '*.config.mjs',
+      '*.config.cjs',
+      'playwright.config.ts',
+    ],
   },
   {
     ...js.configs.recommended,
@@ -98,6 +106,7 @@ export default [
         // DOM types
         Image: 'readonly',
         NodeListOf: 'readonly',
+        Storage: 'readonly',
       },
     },
     plugins: {

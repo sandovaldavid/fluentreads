@@ -70,6 +70,7 @@ const whatsappNumber = siteConfig.whatsapp;
 
 <script>
   import { CartManager, type CartItem } from '@utils/cartManager';
+  import { buildWhatsAppMessage, buildWhatsAppUrl } from '@utils/checkoutMessage';
 
   document.addEventListener('DOMContentLoaded', () => {
     const checkoutDataEl = document.getElementById('checkout-data');
@@ -291,16 +292,10 @@ const whatsappNumber = siteConfig.whatsapp;
       const total = CartManager.getCartTotal();
 
       // Prepare WhatsApp message
-      let message = `*Nuevo pedido desde FluentReads*\n\n*Productos:*\n`;
-
-      cart.forEach((item: CartItem, index: number) => {
-        message += `${index + 1}. ${item.title} (${item.quantity}x) - S/${(item.price * item.quantity).toFixed(2)}\n`;
-      });
-
-      message += `\n*Total: S/${total.toFixed(2)}*\n\nPor favor, confirmame este pedido para enviarte los datos de pago. ¡Gracias!`;
+      const message = buildWhatsAppMessage(cart, total);
 
       // Open WhatsApp with the message
-      window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+      window.open(buildWhatsAppUrl(whatsappNumber, message), '_blank');
     });
 
     // Listen for cart update events
