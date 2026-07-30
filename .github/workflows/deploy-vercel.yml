@@ -13,6 +13,10 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    # Without a timeout, a misconfigured Vercel CLI call (e.g. missing
+    # org/project id) prompts interactively and hangs for the GitHub Actions
+    # default of 6h on every single push instead of failing fast.
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,6 +31,17 @@ jobs:
 
       - name: Build
         run: bun run build
+
+      - name: Verify Vercel secrets are configured
+        run: |
+          missing=()
+          [ -z "${{ secrets.VERCEL_TOKEN }}" ] && missing+=("VERCEL_TOKEN")
+          [ -z "${{ secrets.VERCEL_ORG_ID }}" ] && missing+=("VERCEL_ORG_ID")
+          [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ] && missing+=("VERCEL_PROJECT_ID")
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing repo secrets: ${missing[*]}. Without vercel-org-id/vercel-project-id the Vercel CLI prompts interactively and this job hangs until the timeout instead of deploying. Get these from 'vercel link' locally or the Vercel dashboard (Project Settings > General), then add them under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
 
       - name: Deploy Preview (develop)
         if: github.ref == 'refs/heads/develop'
