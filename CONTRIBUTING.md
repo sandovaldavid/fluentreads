@@ -69,6 +69,18 @@ Antes de crear un commit o un Pull Request, te sugerimos correr los checks local
 bun run lint             # Verifica errores de ESLint
 bun run check            # Verifica tipado de TypeScript y archivos .astro (Type-check)
 bun run build            # Realiza el build del proyecto asegurando que todo compila
+bun run test:unit        # Corre la suite de pruebas unitarias (bun:test)
+bun run test:e2e         # Corre la suite E2E de Playwright (requiere navegador instalado)
 ```
+
+## Despliegue y Rollback
+
+- `develop` → Vercel Preview. `main` → Vercel Producción. Ambos se despliegan desde el workflow `deploy-vercel.yml` (GitHub Actions); el Git integration nativo de Vercel está deshabilitado para que un mismo commit no se despliegue dos veces por dos mecanismos distintos.
+- `release-please` corre únicamente en `main`: cada merge de su PR de release publica un GitHub Release y un tag `vX.Y.Z`.
+- `main` no admite force-push ni borrado (bloqueado por ruleset), así que el rollback de producción se hace revirtiendo commits, no reescribiendo historial:
+  1. Ubica el último commit bueno: `git log --oneline origin/main`.
+  2. Revierte el/los commits problemáticos en una rama nueva: `git revert <sha-malo>` (o `git revert -m 1 <sha-merge>` si es un merge commit).
+  3. Abre un PR normal hacia `main` con el revert; debe pasar `lint`/`check`/`build` como cualquier otro cambio.
+  4. Al mergear, `Deploy to Vercel` publica la versión revertida automáticamente, y el siguiente release de `release-please` reflejará el revert en el changelog.
 
 ¡Gracias por ayudar a construir FluentReads!
