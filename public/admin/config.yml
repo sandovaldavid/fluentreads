@@ -1,7 +1,11 @@
 backend:
   name: github
   repo: sandovaldavid/fluentreads
-  branch: feat/b9-decap-cms
+  branch: main
+# main requires a pull request + passing lint/check/build status checks
+# (see repo ruleset), so edits must go through a PR rather than a direct
+# push straight to the protected branch.
+publish_mode: editorial_workflow
 local_backend: true
 media_folder: public/images
 public_folder: /images
