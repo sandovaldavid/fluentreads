@@ -227,11 +227,13 @@
                     ) {
                       setReactInputValue(detailsLinkInput, `/catalogo/${category}/${slug}`);
                     }
+                    // El checkout actual es una sola página basada en carrito
+                    // (localStorage), no una ruta por producto.
                     if (
                       buyLinkInput &&
-                      (!buyLinkInput.value || buyLinkInput.value.includes('/checkout/'))
+                      (!buyLinkInput.value || buyLinkInput.value.startsWith('/checkout/'))
                     ) {
-                      setReactInputValue(buyLinkInput, `/checkout/${slug}`);
+                      setReactInputValue(buyLinkInput, '/checkout');
                     }
                   }
                 });
@@ -244,10 +246,14 @@
       }
     </script>
 
-    <!-- Incluye el script de Decap CMS de forma nativa desde unpkg -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <!-- Integración con Cloudinary Media Library -->
-    <script src="https://unpkg.com/decap-cms-media-library-cloudinary@^1.3.0/dist/decap-cms-media-library-cloudinary.js"></script>
+    <!-- Incluye el script de Decap CMS de forma nativa desde unpkg. Versión
+         exacta (no rango) + SRI por reproducibilidad y para detectar si el
+         CDN sirviera un archivo distinto al esperado. -->
+    <script
+      src="https://unpkg.com/decap-cms@3.15.1/dist/decap-cms.js"
+      integrity="sha384-in6eHztHveqQ7uMZ1fDaKlDmacQLFuLH2wWrFTiymyuS8zQ5bixwL8U3AeRi8h/L"
+      crossorigin="anonymous"
+    ></script>
     <script>
       // Detectar si estamos en desarrollo local
       const isLocal =
