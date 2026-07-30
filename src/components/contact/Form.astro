@@ -21,18 +21,15 @@ interface FormField {
   errorMessage: string;
 }
 
-// Environment variables configuration supporting both client (PUBLIC_) and server scopes (Issues 5, 11)
-const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY || import.meta.env.PAGECLIP_KEY;
-const isDevelopment =
-  import.meta.env.PUBLIC_IS_DEVELOPMENT === 'true' || import.meta.env.IS_DEVELOPMENT === 'true';
+// This is a static site: all env vars read here run at build time, so only
+// the PUBLIC_-prefixed names are used (single canonical name per value,
+// matching the static-first model instead of a confusing fallback chain).
+const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY;
+const isDevelopment = import.meta.env.PUBLIC_IS_DEVELOPMENT === 'true';
 
 // In development mode, always disable reCAPTCHA to avoid COEP errors
-const enableRecaptcha = isDevelopment
-  ? false
-  : import.meta.env.PUBLIC_ENABLE_RECAPTCHA !== 'false' &&
-    import.meta.env.ENABLE_RECAPTCHA !== 'false';
-const recaptchaSiteKey =
-  import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY || import.meta.env.RECAPTCHA_SITE_KEY;
+const enableRecaptcha = isDevelopment ? false : import.meta.env.PUBLIC_ENABLE_RECAPTCHA !== 'false';
+const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 
 // Configure form with environment variables (Issue 6)
 const isConfigured = !!pageclipKey;
@@ -296,6 +293,21 @@ const contactForm = {
         )
       }
 
+      <!-- Inline, non-blocking feedback for submission-level errors (replaces alert()) -->
+      <div
+        id="form-error-banner"
+        class="hidden border-l-4 border-red-500 bg-red-50 p-4"
+        role="alert"
+        aria-live="polite"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <WarningIcon class="h-5 w-5 text-red-500" />
+          </div>
+          <p id="form-error-banner-text" class="ml-3 text-sm text-red-700"></p>
+        </div>
+      </div>
+
       <!-- Submit Button with loading state -->
       <div class="flex justify-end">
         <!-- Corregido: Estructura del botón para mostrar correctamente el texto -->
@@ -334,19 +346,14 @@ const contactForm = {
 <script
   is:inline
   define:vars={{
-    siteKey: contactForm.recaptcha.siteKey,
     isDevelopment: contactForm.recaptcha.isDevelopment,
     enabled: contactForm.recaptcha.enabled,
   }}
 >
   if (!isDevelopment && enabled) {
-    // Log reCAPTCHA parameters to console
-    console.log('Client-side reCAPTCHA check - Site key:', siteKey);
-
     // Function to initialize reCAPTCHA
     function initRecaptcha() {
       if (typeof grecaptcha !== 'undefined' && grecaptcha) {
-        console.log('reCAPTCHA API loaded successfully');
         // Nothing needed here - the API will render automatically with the widget div
       } else {
         console.error('reCAPTCHA API not available');
@@ -376,13 +383,6 @@ const contactForm = {
 
 <script define:vars={{ contactForm }} is:inline>
   document.addEventListener('DOMContentLoaded', () => {
-    // Debug logging for client-side
-    console.log('Form initialized, reCAPTCHA enabled:', contactForm.recaptcha.enabled);
-    console.log('Development mode:', contactForm.recaptcha.isDevelopment);
-    if (contactForm.recaptcha.enabled) {
-      console.log('Using reCAPTCHA site key:', contactForm.recaptcha.siteKey);
-    }
-
     const form = document.getElementById('contactForm');
     const formContainer = document.getElementById('form-container');
     const responseContainer = document.getElementById('form-response-container');
@@ -391,37 +391,18 @@ const contactForm = {
     const submitButtonContent = submitButton.querySelector('.submit-button-content');
     const submitButtonLoading = submitButton.querySelector('.submit-button-loading');
     const formGroups = document.querySelectorAll('.form-group');
+    const errorBanner = document.getElementById('form-error-banner');
+    const errorBannerText = document.getElementById('form-error-banner-text');
 
-    // Track the submit event ourselves instead of relying on the deprecated global `event`
-    let currentSubmitEvent = null;
-    form.addEventListener('submit', (e) => {
-      currentSubmitEvent = e;
-    });
-
-    // Hide default Pageclip thank you page
-    // Esto asegura que el mensaje predeterminado de Pageclip se elimine del DOM
-    function hideDefaultPageclipMessage() {
-      const pageclipMessages = document.querySelectorAll('.pageclip-form__success');
-      pageclipMessages.forEach((message) => {
-        message.style.display = 'none';
-        message.remove();
-      });
+    function showFormError(message) {
+      if (!errorBanner || !errorBannerText) return;
+      errorBannerText.textContent = message;
+      errorBanner.classList.remove('hidden');
     }
 
-    // Override default pageclip success message
-    // Agregar un estilo para ocultar la página de agradecimiento predeterminada
-    const style = document.createElement('style');
-    style.textContent = `
-			.pageclip-form__success {
-				display: none !important;
-				visibility: hidden !important;
-				opacity: 0 !important;
-				height: 0 !important;
-				overflow: hidden !important;
-				pointer-events: none !important;
-			}
-		`;
-    document.head.appendChild(style);
+    function hideFormError() {
+      errorBanner?.classList.add('hidden');
+    }
 
     // Form validation function
     function validateField(input) {
@@ -466,21 +447,21 @@ const contactForm = {
           // Check if grecaptcha is available
           if (typeof grecaptcha === 'undefined') {
             console.error('reCAPTCHA not loaded');
-            alert('Error: reCAPTCHA no ha cargado correctamente. Por favor, recarga la página.');
+            showFormError('reCAPTCHA no ha cargado correctamente. Por favor, recarga la página.');
             isFormValid = false;
           } else {
-            // Get the response
             const recaptchaResponse = grecaptcha.getResponse();
-            console.log('reCAPTCHA response length:', recaptchaResponse?.length);
 
             if (!recaptchaResponse || recaptchaResponse.length === 0) {
-              alert('Por favor, complete el captcha para continuar');
+              showFormError('Por favor, completa el captcha para continuar.');
               isFormValid = false;
             }
           }
         } catch (error) {
           console.error('Error checking reCAPTCHA:', error);
-          alert('Error al verificar reCAPTCHA. Por favor, recarga la página e intenta de nuevo.');
+          showFormError(
+            'Error al verificar reCAPTCHA. Por favor, recarga la página e intenta de nuevo.'
+          );
           isFormValid = false;
         }
       }
@@ -507,97 +488,73 @@ const contactForm = {
       }
     });
 
-    // Pageclip integration with better UX
-    if (typeof Pageclip !== 'undefined') {
-      Pageclip.form(form, {
-        onSubmit: function () {
-          // Show loading state on the button
-          submitButton.classList.add('is-loading');
-          submitButtonContent.classList.add('hidden');
-          submitButtonLoading.classList.remove('hidden');
-          submitButtonLoading.classList.add('flex');
-
-          // Disable button and inputs during submission to prevent multiple submissions
-          submitButton.disabled = true;
-          form.querySelectorAll('input, textarea').forEach((input) => {
-            input.disabled = true;
-          });
-
-          return validateForm();
-        },
-        onResponse: function (error) {
-          // Ocultar mensajes de Pageclip predeterminados inmediatamente
-          hideDefaultPageclipMessage();
-
-          if (!error) {
-            // Evitar redireccionamiento y mostrar nuestro mensaje personalizado
-            if (currentSubmitEvent && currentSubmitEvent.preventDefault) {
-              currentSubmitEvent.preventDefault();
-            }
-
-            // Hide form and show success message with smooth animation
-            formContainer.style.height = formContainer.offsetHeight + 'px';
-            formContainer.style.opacity = '1';
-
-            setTimeout(() => {
-              formContainer.style.height = '0';
-              formContainer.style.opacity = '0';
-              formContainer.style.overflow = 'hidden';
-              formContainer.style.margin = '0';
-              formContainer.style.padding = '0';
-
-              // Show success message
-              successMessage.classList.remove('hidden');
-              responseContainer.style.height = 'auto';
-              responseContainer.style.opacity = '1';
-
-              // Asegurarnos de que el mensaje predeterminado siga oculto
-              hideDefaultPageclipMessage();
-            }, 100);
-
-            // Track form submission (if analytics exists)
-            if (typeof gtag === 'function') {
-              gtag('event', 'form_submission', {
-                event_category: 'Contact',
-                event_label: 'Contact Form',
-              });
-            }
-          } else {
-            // Reset button and form state on error
-            submitButton.classList.remove('is-loading');
-            submitButtonLoading.classList.add('hidden');
-            submitButtonLoading.classList.remove('flex');
-            submitButtonContent.classList.remove('hidden');
-            submitButton.disabled = false;
-            form.querySelectorAll('input, textarea').forEach((input) => {
-              input.disabled = false;
-            });
-
-            // Show error alert
-            alert('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo.');
-          }
-        },
+    function setSubmitting(isSubmitting) {
+      submitButton.classList.toggle('is-loading', isSubmitting);
+      submitButtonContent.classList.toggle('hidden', isSubmitting);
+      submitButtonLoading.classList.toggle('hidden', !isSubmitting);
+      submitButtonLoading.classList.toggle('flex', isSubmitting);
+      submitButton.disabled = isSubmitting;
+      form.querySelectorAll('input, textarea').forEach((input) => {
+        input.disabled = isSubmitting;
       });
-
-      // Observar cambios en el DOM para eliminar el mensaje de agradecimiento de Pageclip
-      const observer = new MutationObserver(hideDefaultPageclipMessage);
-      observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    // Only perform reCAPTCHA checks if not in development mode
-    if (
-      !contactForm.recaptcha.isDevelopment &&
-      contactForm.recaptcha.enabled &&
-      window.grecaptcha
-    ) {
-      try {
-        window.grecaptcha.ready(function () {
-          console.log('reCAPTCHA is ready');
+    function showSuccess() {
+      // Hide form and show success message with smooth animation
+      formContainer.style.height = formContainer.offsetHeight + 'px';
+      formContainer.style.opacity = '1';
+
+      setTimeout(() => {
+        formContainer.style.height = '0';
+        formContainer.style.opacity = '0';
+        formContainer.style.overflow = 'hidden';
+        formContainer.style.margin = '0';
+        formContainer.style.padding = '0';
+
+        successMessage.classList.remove('hidden');
+        responseContainer.style.height = 'auto';
+        responseContainer.style.opacity = '1';
+      }, 100);
+
+      // Track form submission (if analytics exists)
+      if (typeof gtag === 'function') {
+        gtag('event', 'form_submission', {
+          event_category: 'Contact',
+          event_label: 'Contact Form',
         });
-      } catch (error) {
-        console.error('Error initializing reCAPTCHA:', error);
       }
     }
+
+    // Submit via fetch + FormData (the same payload shape Pageclip's action
+    // URL accepts from a plain HTML form POST) so we control the response
+    // handling directly, instead of depending on Pageclip's optional JS
+    // enhancement library (which isn't loaded on this site).
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      hideFormError();
+
+      if (!contactForm.isConfigured || !validateForm()) return;
+
+      setSubmitting(true);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        showSuccess();
+      } catch (error) {
+        console.error('Contact form submission failed:', error);
+        setSubmitting(false);
+        showFormError('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo.');
+      }
+    });
 
     // Asegurarnos de que el botón de envío se muestre correctamente al cargar la página
     if (submitButtonContent) {
