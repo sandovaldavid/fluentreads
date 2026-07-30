@@ -1,6 +1,9 @@
 ---
-const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY || '';
-const actionUrl = `https://send.pageclip.co/${pageclipKey}/newsletter`;
+const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY;
+const isNewsletterConfigured = !!pageclipKey;
+const actionUrl = isNewsletterConfigured
+  ? `https://send.pageclip.co/${pageclipKey}/newsletter`
+  : '#';
 import EmailIcon from './icons/Email.astro';
 import BookIcon from './icons/Book.astro';
 import HandshakeIcon from './icons/Handshake.astro';
@@ -81,27 +84,37 @@ const currentCta = ctaConfig[type];
       <div class="flex-shrink-0">
         {
           type === 'newsletter' ? (
-            <form
-              id="newsletter-form"
-              action={actionUrl}
-              method="POST"
-              class="flex flex-col items-center gap-3 sm:flex-row"
-            >
-              <input
-                type="email"
-                name="email"
-                placeholder="Tu correo electrónico"
-                class="rounded-lg border-2 border-white/30 bg-white/10 px-4 py-3 text-white placeholder:text-white/70 focus:border-white focus:outline-none"
-                aria-label="Correo electrónico para boletín informativo"
-                required
-              />
-              <button
-                type="submit"
-                class="text-primary-dark hover:bg-neutral-light rounded-lg bg-white px-6 py-3 font-bold shadow-md transition-colors"
+            <div>
+              <form
+                id="newsletter-form"
+                action={actionUrl}
+                method="POST"
+                class="flex flex-col items-center gap-3 sm:flex-row"
               >
-                {currentCta.buttonText}
-              </button>
-            </form>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Tu correo electrónico"
+                  class="rounded-lg border-2 border-white/30 bg-white/10 px-4 py-3 text-white placeholder:text-white/70 focus:border-white focus:outline-none disabled:opacity-50"
+                  aria-label="Correo electrónico para boletín informativo"
+                  disabled={!isNewsletterConfigured}
+                  required
+                />
+                <button
+                  type="submit"
+                  class="text-primary-dark hover:bg-neutral-light cursor-pointer rounded-lg bg-white px-6 py-3 font-bold shadow-md transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={!isNewsletterConfigured}
+                >
+                  {currentCta.buttonText}
+                </button>
+              </form>
+              <p
+                id="newsletter-form-message"
+                class="mt-2 hidden text-center text-sm text-white sm:text-left"
+                role="status"
+                aria-live="polite"
+              />
+            </div>
           ) : (
             <a
               href={currentCta.buttonLink}
@@ -117,38 +130,9 @@ const currentCta = ctaConfig[type];
 </div>
 
 <script>
-  // Newsletter form handling
+  import { initNewsletterForm } from '@utils/newsletterForm';
+
   document.addEventListener('DOMContentLoaded', () => {
-    const newsletterForm = document.getElementById('newsletter-form') as HTMLFormElement | null;
-    if (newsletterForm) {
-      newsletterForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const emailInput = newsletterForm.querySelector(
-          "input[name='email']"
-        ) as HTMLInputElement | null;
-        if (emailInput && emailInput.value) {
-          fetch(newsletterForm.action, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
-            body: JSON.stringify({ email: emailInput.value }),
-          })
-            .then((res) => {
-              if (res.ok) {
-                alert('¡Gracias por suscribirte! Pronto recibirás nuestras novedades.');
-                newsletterForm.reset();
-              } else {
-                throw new Error('Error en el servidor');
-              }
-            })
-            .catch((err) => {
-              console.error('Error newsletter signup:', err);
-              alert('Hubo un error al procesar tu suscripción. Por favor, inténtalo de nuevo.');
-            });
-        }
-      });
-    }
+    initNewsletterForm({ formId: 'newsletter-form', messageId: 'newsletter-form-message' });
   });
 </script>
