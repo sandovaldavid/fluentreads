@@ -65,7 +65,7 @@ jobs:
         run: bun run format:check
 
       - name: Build
-        run: bun run build:force
+        run: bun run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
