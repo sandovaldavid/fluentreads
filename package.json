@@ -12,7 +12,7 @@
     "build:force": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check || true",
+    "check": "astro check",
     "typecheck": "bun run check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
