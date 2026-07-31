@@ -197,8 +197,9 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
       pack.classList.add('hidden');
     });
 
-    // Simulate a loading delay
-    setTimeout(() => {
+    // Filtering runs over an in-memory array already on the page — there's
+    // no real async work here, so no artificial delay before it (see #62).
+    (() => {
       let visibleCount = 0;
 
       // Process the packs based on filters
@@ -276,37 +277,37 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
         }
       }
 
-      // Remove loading state and hide skeleton with a slight delay for animation
-      setTimeout(() => {
-        document.body.classList.remove('filters-loading');
+      // Remove loading state and hide skeleton
+      document.body.classList.remove('filters-loading');
 
-        if (packsContainer) {
-          packsContainer.setAttribute('data-is-loading', 'false');
-        }
+      if (packsContainer) {
+        packsContainer.setAttribute('data-is-loading', 'false');
+      }
 
-        if (skeletonLoader) {
-          skeletonLoader.style.opacity = '0';
-          setTimeout(() => {
-            skeletonLoader.style.display = 'none';
-          }, 300); // Short delay for fade out animation
-        }
+      if (skeletonLoader) {
+        skeletonLoader.style.opacity = '0';
+        // Kept: matches the skeleton's actual CSS opacity transition
+        // duration, unlike the artificial delays removed above.
+        setTimeout(() => {
+          skeletonLoader.style.display = 'none';
+        }, 300);
+      }
 
-        if (packsGrid) {
-          packsGrid.classList.remove('opacity-0');
-          packsGrid.style.position = 'static';
-          packsGrid.style.visibility = 'visible';
+      if (packsGrid) {
+        packsGrid.classList.remove('opacity-0');
+        packsGrid.style.position = 'static';
+        packsGrid.style.visibility = 'visible';
 
-          // Reset animation for visible packs
-          const visiblePacks = document.querySelectorAll('.catalog-product-card:not(.hidden)');
-          visiblePacks.forEach((pack, index) => {
-            if (pack instanceof HTMLElement) {
-              pack.style.animationDelay = `${0.05 * index}s`;
-              pack.style.animationPlayState = 'running';
-            }
-          });
-        }
-      }, 300); // Add a slight delay for smoother transition
-    }, 600);
+        // Reset animation for visible packs
+        const visiblePacks = document.querySelectorAll('.catalog-product-card:not(.hidden)');
+        visiblePacks.forEach((pack, index) => {
+          if (pack instanceof HTMLElement) {
+            pack.style.animationDelay = `${0.05 * index}s`;
+            pack.style.animationPlayState = 'running';
+          }
+        });
+      }
+    })();
   };
 
   // Filter change event handler
@@ -348,21 +349,20 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
     const packsGrid = document.getElementById('packs-grid') as HTMLElement;
 
     if (packsContainer && packsContainer.getAttribute('data-is-loading') === 'true') {
-      // Simulate loading delay
-      setTimeout(() => {
-        if (skeletonLoader) skeletonLoader.style.opacity = '0';
-        if (packsGrid) {
-          packsGrid.classList.remove('opacity-0');
-          packsGrid.style.position = 'static';
-          packsGrid.style.visibility = 'visible';
-        }
-        packsContainer.setAttribute('data-is-loading', 'false');
+      // The grid is already server-rendered — reveal it immediately
+      // instead of holding the skeleton up with an artificial delay (#62).
+      if (skeletonLoader) skeletonLoader.style.opacity = '0';
+      if (packsGrid) {
+        packsGrid.classList.remove('opacity-0');
+        packsGrid.style.position = 'static';
+        packsGrid.style.visibility = 'visible';
+      }
+      packsContainer.setAttribute('data-is-loading', 'false');
 
-        // Hide skeleton after fade out completes
-        setTimeout(() => {
-          if (skeletonLoader) skeletonLoader.style.display = 'none';
-        }, 300);
-      }, 1000);
+      // Kept: matches the skeleton's actual CSS opacity transition duration.
+      setTimeout(() => {
+        if (skeletonLoader) skeletonLoader.style.display = 'none';
+      }, 300);
     }
   });
 </script>
