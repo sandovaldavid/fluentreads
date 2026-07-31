@@ -532,7 +532,7 @@ const jsonLd = {
 </div>
 
 <script>
-  import { CartManager } from '../../utils/cartManager';
+  import { CartManager, type ProductType } from '../../utils/cartManager';
 
   document.addEventListener('DOMContentLoaded', () => {
     // Add event listeners to "Add to Cart" buttons
@@ -541,24 +541,15 @@ const jsonLd = {
       btn.addEventListener('click', () => {
         const productId = btn.getAttribute('data-id');
         const productTitle = btn.getAttribute('data-title');
-        const productPriceStr = btn.getAttribute('data-price');
-        const productImage = btn.getAttribute('data-image');
         const productType = btn.getAttribute('data-type');
 
-        if (productId && productTitle && productPriceStr && productImage && productType) {
-          const productPrice = parseFloat(productPriceStr);
-
-          // Add item to cart using CartManager
-          CartManager.addItem({
-            id: productId,
-            title: productTitle,
-            price: productPrice,
-            image: productImage,
-            type: productType as 'book' | 'exam' | 'pack',
-          });
+        if (productId && productType) {
+          // Only identity is persisted — price/title are resolved from the
+          // canonical catalog at checkout, never trusted from this button.
+          CartManager.addItem(productId, productType as ProductType);
 
           // Show success message
-          CartManager.showNotification(`"${productTitle}" agregado al carrito`);
+          CartManager.showNotification(`"${productTitle || 'Producto'}" agregado al carrito`);
 
           // Dispatch event to notify other components about cart update
           window.dispatchEvent(new CustomEvent('cartUpdated'));

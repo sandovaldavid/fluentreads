@@ -192,7 +192,7 @@ const isFeaturedOrBestseller =
 </div>
 
 <script>
-  import { CartManager } from '../utils/cartManager';
+  import { CartManager, type ProductType } from '../utils/cartManager';
 
   // Mobile click to expand functionality. The card itself is not a focusable
   // control (the real "Ver Detalles" link and "Comprar" button already cover
@@ -216,20 +216,12 @@ const isFeaturedOrBestseller =
         e.stopPropagation();
 
         const id = btn.getAttribute('data-id');
-        const title = btn.getAttribute('data-title');
-        const priceStr = btn.getAttribute('data-price');
-        const image = btn.getAttribute('data-image');
         const type = btn.getAttribute('data-type');
 
-        if (id && title && priceStr && image && type) {
-          CartManager.addItem({
-            id,
-            title,
-            price: parseFloat(priceStr),
-            image,
-            type: type as any,
-          });
-
+        if (id && type) {
+          // Only identity is persisted — price/title are resolved from the
+          // canonical catalog at checkout, never trusted from this button.
+          CartManager.addItem(id, type as ProductType);
           window.location.href = '/checkout';
         }
       });
