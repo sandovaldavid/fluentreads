@@ -10,7 +10,7 @@ FluentReads is a high-performance, 100% static e-commerce platform designed for 
 - **Dynamic Static Catalog**: Products are defined as JSON content collections and baked directly into HTML at build time, yielding near-instant page loads.
 - **Client-Side Cart**: Managed entirely via `CartManager.ts`, synchronizing state in `localStorage` and dispatching custom reactive events.
 - **WhatsApp Checkout**: Generates checkout summaries and transfers order details directly to the seller via WhatsApp.
-- **Decap CMS Support**: Administrators can manage and edit the catalog using a web UI at `/admin`. Changes are saved back to GitHub, triggering an automatic Vercel build.
+- **Decap CMS Support**: Administrators can manage and edit the catalog using a web UI at `/admin`. The CMS backend targets `main`, which requires a PR with passing `lint`/`check`/`build` checks — content edits go through the same review gate as code. Merging triggers the `deploy-vercel.yml` GitHub Actions workflow (Vercel's native Git integration is intentionally disabled to avoid double-deploying the same commit).
 - **Service Worker Integration**: Integrates a custom service worker (`public/sw.js`) supporting stale-while-revalidate and offline-first cache strategies for resources.
 
 ## Architecture and Structure
@@ -32,8 +32,11 @@ The codebase is organized as follows:
 │   ├── scripts/            # Client-side scripts and interaction logic
 │   ├── styles/             # Global styling (Tailwind CSS v4)
 │   ├── types/              # Strict TypeScript type declarations
-│   └── utils/              # Helper utilities (CartManager, filtering)
-├── docs/                   # Roadmaps, technical audits, and sprint documentation
+│   └── utils/              # Helper utilities (CartManager, catalogFilters, etc.)
+├── tests/
+│   ├── unit/                # bun:test suites
+│   └── e2e/                 # Playwright suites (catalog, checkout, forms, a11y, SEO, etc.)
+├── docs/                   # Historical technical audit (see docs/README.md) — not an active backlog
 └── package.json            # Scripts, dependencies, and configuration
 ```
 
@@ -103,18 +106,22 @@ bun run preview
 
 The following helper scripts are configured in `package.json`:
 
-| Script         | Command                        | Purpose                                          |
-| :------------- | :----------------------------- | :----------------------------------------------- |
-| `dev`          | `astro dev`                    | Run the local dev server                         |
-| `build`        | `bun run check && astro build` | Verify and bundle static files                   |
-| `build:force`  | `astro build`                  | Build without verification checks                |
-| `preview`      | `astro preview`                | Serve the production build locally               |
-| `check`        | `astro check`                  | Run Astro validation and TypeScript verification |
-| `typecheck`    | `bun run check`                | Run type checking across the project             |
-| `lint`         | `eslint .`                     | Verify codebase styles with ESLint               |
-| `lint:fix`     | `eslint . --fix`               | Automatically fix linting violations             |
-| `format`       | `prettier --write .`           | Format files according to Prettier settings      |
-| `format:check` | `prettier --check .`           | Check files formatting without writing           |
+| Script         | Command                                 | Purpose                                                   |
+| :------------- | :-------------------------------------- | :-------------------------------------------------------- |
+| `dev`          | `astro dev`                             | Run the local dev server                                  |
+| `build`        | `bun run check && astro build`          | Verify and bundle static files                            |
+| `build:force`  | `astro build`                           | Build without verification checks                         |
+| `preview`      | `astro preview`                         | Serve the production build locally                        |
+| `check`        | `astro check`                           | Run Astro validation and TypeScript verification          |
+| `typecheck`    | `bun run check`                         | Run type checking across the project                      |
+| `lint`         | `eslint .`                              | Verify codebase styles with ESLint                        |
+| `lint:fix`     | `eslint . --fix`                        | Automatically fix linting violations                      |
+| `format`       | `prettier --write .`                    | Format files according to Prettier settings               |
+| `format:check` | `prettier --check .`                    | Check files formatting without writing                    |
+| `test:unit`    | `bun test tests/unit`                   | Run the `bun:test` unit suite                             |
+| `test:e2e`     | `playwright test`                       | Run the Playwright E2E suite (requires a browser install) |
+| `test`         | alias of `test:unit`                    | Run unit tests                                            |
+| `check:links`  | `node scripts/check-internal-links.mjs` | Verify internal links in the built site don't 404         |
 
 ## Content Collections
 
@@ -146,7 +153,7 @@ window.CMS.registerFormat('json-array', 'json', {
 });
 ```
 
-Modifying content in the `/admin` portal commits files directly to GitHub, triggering a rebuild on Vercel automatically.
+Modifying content in the `/admin` portal opens a PR against `main` (auth via GitHub OAuth). Once the PR's CI checks pass and it merges, `deploy-vercel.yml` builds and deploys via the Vercel CLI — not Vercel's native Git integration, which is disabled to prevent a single commit from triggering two separate deployments.
 
 ## Environment Variables
 
@@ -165,5 +172,11 @@ We enforce conventional commit messages. All pull requests and commits must foll
 type(scope): description in imperative
 ```
 
-- **Branching Policy**: Merges to the `develop` branch generate Vercel preview environments. Merges to `main` update the production site and trigger `release-please` to auto-bump version numbers and generate changelogs.
-- **Git Hooks**: Pre-commit hooks run ESLint and Prettier check formatting before code is allowed to commit.
+- **Branching Policy**: Merges to `develop` deploy a Vercel Preview environment (no release is cut). Merges to `main` deploy production and trigger `release-please` — which runs only on `main` — to open a release PR that, once merged, auto-bumps the version, publishes a GitHub Release, and updates `CHANGELOG.md`.
+- **Required checks**: `main` and `develop` both require a PR with passing `lint`/`check`/`build` status checks before merge (force-push and branch deletion are blocked on both).
+- **Git Hooks**: Pre-commit hooks run ESLint and Prettier check formatting before code is allowed to commit; commit-msg hooks validate Conventional Commits formatting.
+
+## Known Gaps
+
+- **Deploy secrets**: `deploy-vercel.yml` requires `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` configured as repository secrets. Without them the deploy job fails fast rather than publishing — see [issue #63](https://github.com/sandovaldavid/fluentreads/issues/63).
+- **Catalog data**: the current `src/data/*.json` catalog content is demo/placeholder data, not verified real business data — see [issue #53](https://github.com/sandovaldavid/fluentreads/issues/53).

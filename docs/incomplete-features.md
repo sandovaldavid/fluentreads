@@ -1,8 +1,11 @@
 ---
-status: done
+status: historical
 block: B9
 priority: P2
 ---
+
+> [!NOTE]
+> **Documento histórico.** Esta es una fotografía de la auditoría técnica original (previa a la estabilización del proyecto). Los hallazgos aquí descritos ya fueron total o parcialmente resueltos a través de las issues [#50](https://github.com/sandovaldavid/fluentreads/issues/50)-[#65](https://github.com/sandovaldavid/fluentreads/issues/65). Para el estado vigente de la deuda técnica, consulta la issue de seguimiento [#65](https://github.com/sandovaldavid/fluentreads/issues/65), no este documento. No uses este archivo como backlog activo.
 
 # Features incompletas
 
@@ -156,9 +159,9 @@ Lista de features a medio hacer, rutas rotas y placeholders, con referencias `ar
 **Estado**: Completado (`done`).
 **Solucion**:
 
-- Instalado y configurado `decap-cms-app` en [public/admin/index.html](file:///home/sandovaldavid/workspaces/me/projects/fluentreads/public/admin/index.html) y [public/admin/config.yml](file:///home/sandovaldavid/workspaces/me/projects/fluentreads/public/admin/config.yml).
+- Instalado y configurado `decap-cms-app` en [public/admin/index.html](../public/admin/index.html) y [public/admin/config.yml](../public/admin/config.yml).
 - Implementado proxy de desarrollo local en puerto `8081` (`decap-server`).
-- Creadas **previsualizaciones personalizadas en tiempo real de alta fidelidad** en React + CSS personalizado [public/admin/preview.css](file:///home/sandovaldavid/workspaces/me/projects/fluentreads/public/admin/preview.css) para todas las colecciones (Libros, Packs, Exámenes, Editoriales, Categorías, Testimonios, Ofertas Especiales, FAQs y Banner Hero de Ofertas).
+- Creadas **previsualizaciones personalizadas en tiempo real de alta fidelidad** en React + CSS personalizado [public/admin/preview.css](../public/admin/preview.css) para todas las colecciones (Libros, Packs, Exámenes, Editoriales, Categorías, Testimonios, Ofertas Especiales, FAQs y Banner Hero de Ofertas).
 - Añadido motor de **autogeneración de metadatos** (IDs, detalles y enlaces de compra automáticos al escribir el título de un ítem) con sincronización de estado en React.
 - Configurado widget `select` estático para la asignación de editoriales de forma consistente y robusta.
 - Implementadas **validaciones de rangos numéricos** (`min`/`max`) en todas las colecciones para puntajes, precios, descuentos y contadores.
