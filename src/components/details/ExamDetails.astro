@@ -92,35 +92,13 @@ const shareTitle = exam.title;
 const shareDescription =
   exam.description.substring(0, 100) + (exam.description.length > 100 ? '...' : '');
 const shareImage = exam.coverImage;
-
-// SEO JSON-LD
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Product',
-  name: exam.title,
-  description: exam.description,
-  image: exam.coverImage,
-  offers: {
-    '@type': 'Offer',
-    price: discountedPrice,
-    priceCurrency: 'PEN',
-    availability: 'https://schema.org/InStock',
-  },
-  category: `Examen ${exam.examType}`,
-  aggregateRating: exam.rating
-    ? {
-        '@type': 'AggregateRating',
-        ratingValue: exam.rating.score,
-        reviewCount: exam.rating.reviewCount,
-      }
-    : undefined,
-};
 ---
 
+<!-- JSON-LD for this page is already emitted by Layout.astro (fed from
+     src/pages/catalogo/examenes-internacionales/[id].astro's structuredData
+     prop) — this component used to emit a second, duplicate/conflicting
+     Product schema with an unverified aggregateRating. See issue #58. -->
 <div class="product-detail-container bg-gray-50">
-  <!-- JSON-LD Schema for SEO -->
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
-
   <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:py-8">
     <!-- Breadcrumbs -->
     <nav

@@ -60,38 +60,29 @@ const description =
 const siteUrl = new URL(siteConfig.url);
 const canonicalURL = new URL(`/catalogo/libros/${book.id}`, siteUrl);
 
-// Structured data for rich snippets
+// Structured data for rich snippets. No isbn (the book's internal id isn't
+// a real ISBN), no priceValidUntil (there's no actual expiring offer to
+// report), no aggregateRating (the rating in books.json isn't backed by
+// verified, visible reviews) — emitting any of these would be an unsupported
+// claim to search engines. See issue #58.
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Book',
   name: book.title,
   description: book.description,
   image: book.coverImage,
-  isbn: book.id, // Using ID as ISBN for example
   offers: {
     '@type': 'Offer',
     price: discountedPrice,
     priceCurrency: 'PEN',
     availability: 'https://schema.org/InStock',
     url: canonicalURL.toString(),
-    priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-      .toISOString()
-      .split('T')[0],
   },
   publisher: {
     '@type': 'Organization',
     name: book.editorialId || siteInfo.siteName,
   },
   inLanguage: 'en',
-  aggregateRating: book.rating
-    ? {
-        '@type': 'AggregateRating',
-        ratingValue: book.rating.score,
-        reviewCount: book.rating.reviewCount,
-        bestRating: '5',
-        worstRating: '1',
-      }
-    : undefined,
 };
 
 // Breadcrumb structured data
