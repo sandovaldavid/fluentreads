@@ -1,85 +1,88 @@
 ---
-import ProductCard from '../ProductCard.astro';
-import Filter from './Filter.jsx';
-import SkeletonCatalog from '../SkeletonCatalog.astro';
-import type { Exam } from '../../types/exam';
+import ProductCard from '@components/ProductCard.astro';
+import Filter from '@components/catalog/Filter.tsx';
+import SkeletonCatalog from '@components/SkeletonCatalog.astro';
+import type { Exam } from '@app-types/exam';
+import type { Product } from '@app-types/product';
+import {
+  DEFAULT_EXAM_TYPE,
+  DEFAULT_FORMAT,
+  DEFAULT_LEVEL,
+  DEFAULT_RESOURCE_TYPE,
+  DEFAULT_SORT,
+  processProducts,
+} from '@utils/catalogFilters';
 
 interface Props {
   exams: Exam[];
-  initialDifficulty?: string;
+  initialLevel?: string;
+  initialFormat?: string;
   initialExamType?: string;
   initialSort?: string;
   gridCols?: number;
   productSize?: 'small' | 'medium' | 'large';
-  showBreadcrumbs?: boolean;
   useSkeleton?: boolean;
 }
 
 const {
   exams = [],
-  initialDifficulty = 'all',
-  initialExamType = 'all',
-  initialSort = 'featured',
+  initialLevel = DEFAULT_LEVEL,
+  initialFormat = DEFAULT_FORMAT,
+  initialExamType = DEFAULT_EXAM_TYPE,
+  initialSort = DEFAULT_SORT,
   gridCols = 4,
   productSize = 'medium',
   useSkeleton = true,
 } = Astro.props;
 
-// Apply initial filters on the server for better SEO
-let filteredExams = [...exams];
+const products: Product[] = exams.map((exam) => ({
+  ...exam,
+  productType: 'exam' as const,
+  formatTags: exam.formatTags ?? [],
+  level: exam.difficulty, // Map difficulty to level for the shared filter engine
+}));
 
-// Filter by difficulty if specified
-if (initialDifficulty !== 'all') {
-  filteredExams = filteredExams.filter((exam) => exam.difficulty === initialDifficulty);
-}
+// Server-render with the exact same function the client re-runs on every
+// filter change (see src/utils/catalogFilters.ts). Previously this container
+// used its own underscore-separated sort values (price_low/name_asc) that
+// didn't match what Filter.tsx ever sends (price-low/price-high/bestseller),
+// causing the initial SSR order to silently desync from the applied filter
+// UI state on reload — that class of bug is now impossible since both sides
+// call the same function with the same vocabulary.
+const filteredProducts = processProducts(
+  products,
+  {
+    resourceType: DEFAULT_RESOURCE_TYPE,
+    level: initialLevel,
+    format: initialFormat,
+    examType: initialExamType,
+    search: '',
+  },
+  initialSort
+);
 
-// Filter by exam type if specified
-if (initialExamType !== 'all') {
-  filteredExams = filteredExams.filter((exam) => exam.examType === initialExamType);
-}
-
-// Apply initial sorting
-if (initialSort === 'price_low') {
-  filteredExams.sort((a, b) => a.price - b.price);
-} else if (initialSort === 'price_high') {
-  filteredExams.sort((a, b) => b.price - a.price);
-} else if (initialSort === 'name_asc') {
-  filteredExams.sort((a, b) => a.title.localeCompare(b.title));
-} else if (initialSort === 'name_desc') {
-  filteredExams.sort((a, b) => b.title.localeCompare(a.title));
-} else {
-  // Default to featured
-  filteredExams.sort((a, b) => {
-    if (a.featured && !b.featured) return -1;
-    if (!a.featured && b.featured) return 1;
-    return 0;
-  });
-}
-
-// Helper function to determine grid class based on number of exams
 function getGridClass(count: number): string {
   if (count <= 2) return 'grid-cols-1 sm:grid-cols-2';
   if (count === 3) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
   return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
 }
 
-// Determine if skeleton should be shown initially
-const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
+const showSkeletonOnLoad = useSkeleton && filteredProducts.length > 8;
 ---
 
 <div class="catalog-container" id="exams-container" data-is-loading={showSkeletonOnLoad.toString()}>
-  <!-- Filter component integration with props -->
   <Filter
     client:visible
-    initialLevel={initialDifficulty}
-    initialFormat={initialExamType}
+    initialLevel={initialLevel}
+    initialFormat={initialFormat}
+    initialExamType={initialExamType}
     initialSort={initialSort}
+    enableExamTypeFilter={true}
     productType="exam"
-    productCount={exams.length}
+    productCount={filteredProducts.length}
     className="mb-8 shadow-lg"
   />
 
-  <!-- Loading skeleton -->
   {
     useSkeleton && (
       <div
@@ -92,13 +95,11 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
     )
   }
 
-  <!-- Results Count -->
   <div class="mt-6 mb-4 flex items-center justify-between">
     <div class="results-count text-sm text-gray-500">
-      <span class="total-count">{filteredExams.length}</span> exámenes encontrados
+      <span class="total-count">{filteredProducts.length}</span> exámenes encontrados
     </div>
 
-    <!-- Reset filters button (hidden initially) -->
     <button
       id="reset-filters"
       class="bg-primary-light hover:bg-primary-dark hidden rounded-md px-4 py-2 text-sm text-white transition-colors"
@@ -107,41 +108,28 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
     </button>
   </div>
 
-  <!-- Exams grid -->
   <div
     id="exams-grid"
-    class={`grid ${getGridClass(filteredExams.length)} relative mb-12 gap-6 transition-all duration-300 md:gap-8 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
+    class={`grid ${getGridClass(products.length)} relative mb-12 gap-6 transition-all duration-300 md:gap-8 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
   >
     {
-      filteredExams.map((exam) => (
-        <div
-          class="catalog-product-card"
-          data-id={exam.id}
-          data-title={exam.title}
-          data-price={exam.price}
-          data-discount={exam.discount || 0}
-          data-difficulty={exam.difficulty}
-          data-examtype={exam.examType}
-          data-featured={exam.featured ? 'true' : 'false'}
-        >
-          <ProductCard
-            product={{
-              ...exam,
-              productType: 'exam',
-              formatTags: exam.formatTags || [],
-              level: exam.difficulty, // Map difficulty to level for ProductCard
-            }}
-            size={productSize}
-          />
-        </div>
-      ))
+      products.map((product) => {
+        const isInitiallyVisible = filteredProducts.some((p) => p.id === product.id);
+        return (
+          <div
+            class={`catalog-product-card ${isInitiallyVisible ? '' : 'hidden'}`}
+            data-product-id={product.id}
+          >
+            <ProductCard product={product} size={productSize} />
+          </div>
+        );
+      })
     }
   </div>
 
-  <!-- No Results State -->
   <div
     id="no-results"
-    class="animate-fadeIn hidden rounded-xl border border-gray-100 bg-white p-8 text-center shadow-sm"
+    class={`animate-fadeIn rounded-xl border border-gray-100 bg-white p-8 text-center shadow-sm ${filteredProducts.length === 0 ? '' : 'hidden'}`}
   >
     <h3 class="text-primary-dark mb-3 text-xl font-bold">No se encontraron exámenes</h3>
     <p class="mb-6 text-gray-600">
@@ -154,15 +142,37 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
       Reiniciar filtros
     </button>
   </div>
+
+  <!-- Real product data for client-side filtering — parsed once, never
+       reconstructed from data-* attributes on the cards. -->
+  <script
+    type="application/json"
+    id="catalog-products-data"
+    set:html={JSON.stringify(products)}
+    is:inline
+  />
 </div>
 
 <script>
-  // Use TypeScript for better type safety
-  import type { Exam } from '../../types/exam';
+  import {
+    filterProducts,
+    sortProducts,
+    buildCatalogURL,
+    parseCatalogParams,
+    DEFAULT_LEVEL,
+    DEFAULT_FORMAT,
+    DEFAULT_EXAM_TYPE,
+    DEFAULT_SORT,
+    DEFAULT_SEARCH,
+  } from '@utils/catalogFilters';
+  import { applyProductOrder } from '@utils/catalogDom';
+  import type { Product } from '@app-types/product';
+  import type { CatalogFilterChangeDetail } from '@components/catalog/Filter.tsx';
 
-  // Initialize the component functionality
   document.addEventListener('DOMContentLoaded', () => {
-    // Container references
+    const dataEl = document.getElementById('catalog-products-data');
+    const allProducts: Product[] = dataEl?.textContent ? JSON.parse(dataEl.textContent) : [];
+
     const examsContainer = document.getElementById('exams-container');
     const examsGrid = document.getElementById('exams-grid');
     const skeletonLoader = document.getElementById('skeleton-loader');
@@ -171,220 +181,97 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
     const resetFiltersBtn = document.getElementById('reset-filters');
     const resetFiltersEmptyBtn = document.getElementById('reset-filters-empty');
 
-    // Parse all exam cards to create our client-side data
-    const initialExams: Partial<Exam>[] = [];
-    document.querySelectorAll('.catalog-product-card').forEach((card) => {
-      const cardEl = card as HTMLElement;
+    // Computes the filtered/sorted result and applies it to the DOM. This is
+    // the ONLY place that touches the grid's visibility/order — both the
+    // animated "user changed a filter" path and the silent "deep link on
+    // load" path below call through it, so they can never disagree.
+    const computeAndApply = (detail: CatalogFilterChangeDetail): number => {
+      if (!examsGrid) return 0;
+      const filtered = filterProducts(allProducts, detail);
+      const sorted = sortProducts(filtered, detail.sort);
+      const orderedIds = sorted.map((p) => p.id);
+      const items = Array.from(examsGrid.querySelectorAll('.catalog-product-card'));
+      return applyProductOrder(examsGrid, items, orderedIds);
+    };
 
-      initialExams.push({
-        id: cardEl.dataset.id,
-        title: cardEl.dataset.title,
-        price: parseFloat(cardEl.dataset.price || '0'),
-        discount: parseFloat(cardEl.dataset.discount || '0'),
-        difficulty: cardEl.dataset.difficulty,
-        examType: cardEl.dataset.examtype,
-        featured: cardEl.dataset.featured === 'true',
-      });
-    });
+    const applyFilters = (detail: CatalogFilterChangeDetail): void => {
+      if (!examsContainer || !examsGrid) return;
 
-    // Function to filter exams based on criteria
-    function filterExams(difficulty: string, examType: string, sort: string, searchTerm = '') {
-      if (!examsContainer || !examsGrid || !skeletonLoader) return;
-
-      // Add loading state
       document.body.classList.add('filters-loading');
       examsContainer.setAttribute('data-is-loading', 'true');
 
-      // Show skeleton loader during filtering
       if (skeletonLoader) {
         skeletonLoader.style.display = 'block';
         skeletonLoader.style.opacity = '1';
       }
-
-      if (examsGrid) {
-        examsGrid.classList.add('opacity-0');
-        examsGrid.style.position = 'absolute';
-        examsGrid.style.visibility = 'hidden';
-      }
-
-      // Hide all exams first
-      document.querySelectorAll('.catalog-product-card').forEach((card) => {
-        card.classList.add('hidden');
-      });
+      examsGrid.classList.add('opacity-0');
+      examsGrid.style.position = 'absolute';
+      examsGrid.style.visibility = 'hidden';
 
       // Filtering runs over an in-memory array already on the page — there's
       // no real async work here, so no artificial delay before it (see #62).
-      (() => {
-        let filteredExams = [...initialExams];
-        let visibleCount = 0;
+      const visibleCount = computeAndApply(detail);
 
-        // Apply difficulty filter
-        if (difficulty !== 'all') {
-          filteredExams = filteredExams.filter((exam) => exam.difficulty === difficulty);
-        }
+      window.history.replaceState({}, '', buildCatalogURL(window.location.href, detail));
 
-        // Apply exam type filter
-        if (examType !== 'all') {
-          filteredExams = filteredExams.filter((exam) => exam.examType === examType);
-        }
+      resetFiltersBtn?.classList.toggle(
+        'hidden',
+        detail.level === 'all' &&
+          detail.format === 'all' &&
+          detail.examType === 'all' &&
+          !detail.search
+      );
 
-        // Apply search term filter if provided
-        if (searchTerm) {
-          const normalizedSearchTerm = searchTerm.toLowerCase();
-          filteredExams = filteredExams.filter((exam) =>
-            exam.title?.toLowerCase().includes(normalizedSearchTerm)
-          );
-        }
+      if (totalCountEl) totalCountEl.textContent = String(visibleCount);
 
-        // Apply sorting
-        switch (sort) {
-          case 'price-low':
-          case 'price_low':
-            filteredExams.sort((a, b) => (a.price || 0) - (b.price || 0));
-            break;
-          case 'price-high':
-          case 'price_high':
-            filteredExams.sort((a, b) => (b.price || 0) - (a.price || 0));
-            break;
-          case 'name-asc':
-          case 'name_asc':
-            filteredExams.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-            break;
-          case 'name-desc':
-          case 'name_desc':
-            filteredExams.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
-            break;
-          case 'bestseller':
-            filteredExams.sort((a, b) => {
-              if (a.featured && !b.featured) return -1;
-              if (!a.featured && b.featured) return 1;
-              return 0;
-            });
-            break;
-          default:
-            // For featured, prioritize featured items
-            filteredExams.sort((a, b) => {
-              if (a.featured && !b.featured) return -1;
-              if (!a.featured && b.featured) return 1;
-              return 0;
-            });
-        }
+      if (visibleCount === 0) {
+        examsGrid.classList.add('hidden');
+        noResults?.classList.remove('hidden');
+      } else {
+        examsGrid.classList.remove('hidden');
+        noResults?.classList.add('hidden');
+      }
 
-        // Update DOM based on filtered results
-        const productCards = document.querySelectorAll('.catalog-product-card');
+      document.body.classList.remove('filters-loading');
+      examsContainer.setAttribute('data-is-loading', 'false');
 
-        productCards.forEach((card) => {
-          const cardElement = card as HTMLElement;
-          const cardId = cardElement.dataset.id;
-          const isVisible = filteredExams.some((exam) => exam.id === cardId);
+      if (skeletonLoader) {
+        skeletonLoader.style.opacity = '0';
+        // Kept: matches the skeleton's actual CSS opacity transition duration.
+        setTimeout(() => {
+          skeletonLoader.style.display = 'none';
+        }, 300);
+      }
+      examsGrid.classList.remove('opacity-0');
+      examsGrid.style.position = 'static';
+      examsGrid.style.visibility = 'visible';
 
-          if (isVisible) {
-            cardElement.classList.remove('hidden');
-            visibleCount++;
-          }
-        });
+      window.dispatchEvent(
+        new CustomEvent('updateFilterCount', { detail: { count: visibleCount } })
+      );
+    };
 
-        // Show reset filters button if filters are applied
-        if (resetFiltersBtn) {
-          resetFiltersBtn.classList.toggle(
-            'hidden',
-            difficulty === 'all' && examType === 'all' && !searchTerm
-          );
-        }
-
-        // Update count and handle empty results
-        if (totalCountEl) totalCountEl.textContent = visibleCount.toString();
-
-        // Show no results message if needed
-        if (examsGrid && noResults) {
-          if (visibleCount === 0) {
-            examsGrid.classList.add('hidden');
-            noResults.classList.remove('hidden');
-          } else {
-            examsGrid.classList.remove('hidden');
-            noResults.classList.add('hidden');
-          }
-        }
-
-        // Remove loading state
-        document.body.classList.remove('filters-loading');
-
-        if (examsContainer) {
-          examsContainer.setAttribute('data-is-loading', 'false');
-        }
-
-        if (skeletonLoader) {
-          skeletonLoader.style.opacity = '0';
-          // Kept: matches the skeleton's actual CSS opacity transition
-          // duration, unlike the artificial delays removed above.
-          setTimeout(() => {
-            skeletonLoader.style.display = 'none';
-          }, 300);
-        }
-
-        if (examsGrid) {
-          examsGrid.classList.remove('opacity-0');
-          examsGrid.style.position = 'static';
-          examsGrid.style.visibility = 'visible';
-        }
-      })();
-    }
-
-    // Listen for filter changes from Filter component
-    interface FilterChangeEventDetail {
-      level: string;
-      format: string;
-      sort: string;
-      search?: string;
-    }
-
-    const handleFilterChange = (event: CustomEvent<FilterChangeEventDetail>) => {
-      // Get the filter data from the event detail
-      const { level, format, sort, search = '' } = event.detail;
-
-      // For exams, we map "level" to "difficulty" and "format" from Filter.jsx to "examType"
-      filterExams(level, format, sort, search);
-
-      // Update URL for SEO and bookmark-ability
-      const url = new URL(window.location.href);
-      if (level !== 'all') url.searchParams.set('difficulty', level);
-      else url.searchParams.delete('difficulty');
-
-      if (format !== 'all') url.searchParams.set('examType', format);
-      else url.searchParams.delete('examType');
-
-      if (sort !== 'featured') url.searchParams.set('sort', sort);
-      else url.searchParams.delete('sort');
-
-      window.history.replaceState({}, '', url.toString());
+    const handleFilterChange = (event: Event) => {
+      applyFilters((event as CustomEvent<CatalogFilterChangeDetail>).detail);
     };
 
     window.addEventListener('filterChange', handleFilterChange as EventListener);
 
-    // Reset filters functionality
     const resetFilters = () => {
-      // Create and dispatch a reset event for Filter.jsx
       document.dispatchEvent(new CustomEvent('resetFilters'));
-
-      // Also handle the filtering ourselves
-      filterExams('all', 'all', 'featured', '');
-
-      // Reset URL
-      const url = new URL(window.location.href);
-      url.search = '';
-      window.history.replaceState({}, '', url.toString());
+      applyFilters({
+        level: 'all',
+        format: 'all',
+        examType: 'all',
+        sort: 'featured',
+        resourceType: 'any',
+        search: '',
+      });
     };
 
-    // Add event listeners to reset buttons
-    if (resetFiltersBtn) {
-      resetFiltersBtn.addEventListener('click', resetFilters);
-    }
+    resetFiltersBtn?.addEventListener('click', resetFilters);
+    resetFiltersEmptyBtn?.addEventListener('click', resetFilters);
 
-    if (resetFiltersEmptyBtn) {
-      resetFiltersEmptyBtn.addEventListener('click', resetFilters);
-    }
-
-    // Set up intersection observer for animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -396,16 +283,12 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
       },
       { threshold: 0.1 }
     );
-
-    // Observe all product cards for animation
-    document.querySelectorAll('.catalog-product-card').forEach((card) => {
-      observer.observe(card);
-    });
+    document.querySelectorAll('.catalog-product-card').forEach((card) => observer.observe(card));
 
     // The grid is already server-rendered — reveal it immediately instead
     // of holding the skeleton up with an artificial delay (#62).
     if (examsContainer && examsContainer.getAttribute('data-is-loading') === 'true') {
-      if (skeletonLoader) skeletonLoader.style.opacity = '0';
+      if (skeletonLoader) (skeletonLoader as HTMLElement).style.opacity = '0';
       if (examsGrid) {
         examsGrid.classList.remove('opacity-0');
         examsGrid.style.position = 'static';
@@ -415,14 +298,50 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
 
       // Kept: matches the skeleton's actual CSS opacity transition duration.
       setTimeout(() => {
-        if (skeletonLoader) skeletonLoader.style.display = 'none';
+        if (skeletonLoader) (skeletonLoader as HTMLElement).style.display = 'none';
       }, 300);
+    }
+
+    // This site builds as fully static output with no SSR adapter — the
+    // markup above was rendered at BUILD time, when there is no real request
+    // and therefore no query string. A deep link like ?level=advanced only
+    // reflects the right exams because this runs client-side, where
+    // location.search is the actual browser URL. Skips the loading/skeleton
+    // choreography (this is a correction on first paint, not a user action).
+    const initialParams = parseCatalogParams(new URLSearchParams(window.location.search));
+    const isNonDefault =
+      initialParams.level !== DEFAULT_LEVEL ||
+      initialParams.format !== DEFAULT_FORMAT ||
+      initialParams.examType !== DEFAULT_EXAM_TYPE ||
+      initialParams.sort !== DEFAULT_SORT ||
+      initialParams.search !== DEFAULT_SEARCH;
+
+    if (isNonDefault && examsGrid) {
+      const visibleCount = computeAndApply(initialParams);
+
+      resetFiltersBtn?.classList.toggle(
+        'hidden',
+        initialParams.level === 'all' &&
+          initialParams.format === 'all' &&
+          initialParams.examType === 'all' &&
+          !initialParams.search
+      );
+      if (totalCountEl) totalCountEl.textContent = String(visibleCount);
+      if (visibleCount === 0) {
+        examsGrid.classList.add('hidden');
+        noResults?.classList.remove('hidden');
+      } else {
+        examsGrid.classList.remove('hidden');
+        noResults?.classList.add('hidden');
+      }
+      window.dispatchEvent(
+        new CustomEvent('updateFilterCount', { detail: { count: visibleCount } })
+      );
     }
   });
 </script>
 
 <style>
-  /* Loading state animations */
   body.filters-loading .exams-grid::before {
     content: '';
     position: absolute;
@@ -450,7 +369,6 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
     }
   }
 
-  /* Exam visibility transition for smooth filtering */
   .catalog-product-card {
     transition:
       opacity 0.5s ease,
@@ -470,7 +388,6 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
     display: none;
   }
 
-  /* Add fade-in animation for exams after filtering */
   .catalog-product-card {
     opacity: 0;
     transform: translateY(20px);
@@ -478,7 +395,6 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
     animation-play-state: paused;
   }
 
-  /* Play animation when filters are applied */
   [data-is-loading='false'] .catalog-product-card:not(.hidden) {
     animation-play-state: running;
   }

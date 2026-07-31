@@ -1,26 +1,16 @@
 import { useEffect, useId, useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+import { BookLevel } from '@app-types/book';
+import { ExamType } from '@app-types/exam';
+import {
+  DEFAULT_EXAM_TYPE,
+  DEFAULT_FORMAT,
+  DEFAULT_LEVEL,
+  DEFAULT_RESOURCE_TYPE,
+  DEFAULT_SORT,
+  parseCatalogParams,
+} from '@utils/catalogFilters';
 
-// Create BookLevel and FormatTag as standard JavaScript objects instead of TypeScript enums
-const BookLevel = {
-  BASIC: 'basic',
-  INTERMEDIATE: 'intermediate',
-  ADVANCED: 'advanced',
-  ALL_LEVELS: 'all-levels',
-  PROFESSIONAL: 'professional',
-  INTERNATIONAL_EXAM: 'international-exam',
-};
-
-const FormatTag = {
-  PDF: 'pdf',
-  WORKBOOK: 'workbook',
-  AUDIO: 'audio',
-  VIDEO: 'video',
-  SOFTWARE: 'software',
-  EXAMS: 'exams',
-};
-
-// Icons need to be converted to React components or imported from a library
-// For now we'll create placeholder components
 const FilterIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -107,187 +97,173 @@ const ClearIcon = () => (
   </svg>
 );
 
+const levelLabels: Record<string, string> = {
+  [BookLevel.BASIC]: 'Básico',
+  [BookLevel.INTERMEDIATE]: 'Intermedio',
+  [BookLevel.ADVANCED]: 'Avanzado',
+  [BookLevel.PROFESSIONAL]: 'Profesional',
+  [BookLevel.ALL_LEVELS]: 'Multi-nivel',
+  [BookLevel.INTERNATIONAL_EXAM]: 'Examen Internacional',
+};
+
+const formatLabels: Record<string, string> = {
+  pdf: 'PDF',
+  workbook: 'Workbook',
+  audio: 'Audio',
+  video: 'Video',
+  software: 'Software',
+  exams: 'Exámenes',
+};
+
+const examTypeLabels: Record<string, string> = {
+  [ExamType.IELTS]: 'IELTS',
+  [ExamType.TOEFL]: 'TOEFL',
+  [ExamType.CAMBRIDGE]: 'Cambridge',
+  [ExamType.SAT]: 'SAT',
+  [ExamType.PTE]: 'PTE',
+  [ExamType.FCE]: 'FCE',
+  [ExamType.CPE]: 'CPE',
+  [ExamType.GRE]: 'GRE',
+  [ExamType.OTHER]: 'Otros',
+};
+
+const levelOptions = [
+  { value: DEFAULT_LEVEL, label: 'Todos los niveles' },
+  ...Object.values(BookLevel).map((value) => ({ value, label: levelLabels[value] || value })),
+];
+
+const formatOptions = [
+  { value: DEFAULT_FORMAT, label: 'Todos los formatos' },
+  ...Object.keys(formatLabels).map((value) => ({ value, label: formatLabels[value] })),
+];
+
+const examTypeOptions = [
+  { value: DEFAULT_EXAM_TYPE, label: 'Todos los tipos de examen' },
+  ...Object.values(ExamType).map((value) => ({ value, label: examTypeLabels[value] || value })),
+];
+
+const resourceTypeOptions = [
+  { value: DEFAULT_RESOURCE_TYPE, label: 'Todos los tipos' },
+  { value: 'book', label: 'Libros' },
+  { value: 'pack', label: 'Packs' },
+  { value: 'exam', label: 'Exámenes' },
+];
+
+const sortOptions = [
+  { value: 'featured', label: 'Destacados' },
+  { value: 'price-low', label: 'Precio: menor a mayor' },
+  { value: 'price-high', label: 'Precio: mayor a menor' },
+  { value: 'bestseller', label: 'Más vendidos' },
+];
+
+interface ActiveTag {
+  name: 'search' | 'level' | 'format' | 'examType' | 'resourceType';
+  value: string;
+  label: string;
+  displayName: string;
+}
+
+export interface CatalogFilterChangeDetail {
+  level: string;
+  format: string;
+  examType: string;
+  sort: string;
+  resourceType: string;
+  search: string;
+}
+
+interface Props {
+  initialLevel?: string;
+  initialFormat?: string;
+  initialExamType?: string;
+  initialSort?: string;
+  initialResourceType?: string;
+  initialSearch?: string;
+  enableResourceTypeFilter?: boolean;
+  enableExamTypeFilter?: boolean;
+  productType?: string;
+  productCount?: number;
+  className?: string;
+}
+
 const CatalogFilter = ({
-  initialLevel = 'all',
-  initialFormat = 'all',
-  initialSort = 'featured',
-  initialResourceType = 'any',
+  initialLevel = DEFAULT_LEVEL,
+  initialFormat = DEFAULT_FORMAT,
+  initialExamType = DEFAULT_EXAM_TYPE,
+  initialSort = DEFAULT_SORT,
+  initialResourceType = DEFAULT_RESOURCE_TYPE,
   initialSearch = '',
-  enableResourceTypeFilter = false, // New prop to control if resource type filtering is enabled
-  resourceType: propResourceType = 'any', // Resource type passed as prop
-  productType = 'book', // Default product type context
+  enableResourceTypeFilter = false,
+  enableExamTypeFilter = false,
+  productType = 'book',
   productCount = 0,
   className = '',
-}) => {
+}: Props) => {
   const idPrefix = useId();
   const mobileLevelId = `${idPrefix}-mobile-level`;
   const mobileFormatId = `${idPrefix}-mobile-format`;
+  const mobileExamTypeId = `${idPrefix}-mobile-exam-type`;
   const mobileResourceTypeId = `${idPrefix}-mobile-resource-type`;
   const mobileSortId = `${idPrefix}-mobile-sort`;
 
-  // State for filters
   const [level, setLevel] = useState(initialLevel);
   const [format, setFormat] = useState(initialFormat);
+  const [examType, setExamType] = useState(initialExamType);
   const [sort, setSort] = useState(initialSort);
-  const [resourceType, setResourceType] = useState(propResourceType || initialResourceType);
+  const [resourceType, setResourceType] = useState(initialResourceType);
   const [mobileFiltersVisible, setMobileFiltersVisible] = useState(false);
-  const [activeTags, setActiveTags] = useState([]);
+  const [activeTags, setActiveTags] = useState<ActiveTag[]>([]);
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-
-  // New state for showing resource type filter
-  const [showTypeFilter, setShowTypeFilter] = useState(enableResourceTypeFilter);
-
-  // State for displayed product count
   const [displayedProductCount, setDisplayedProductCount] = useState(productCount);
 
-  // Update resource type when prop changes
+  // Sync with URL parameters on mount — same param vocabulary every catalog
+  // page writes (see src/utils/catalogFilters.ts), so this works identically
+  // regardless of which container hosts this component.
   useEffect(() => {
-    if (propResourceType !== resourceType) {
-      setResourceType(propResourceType);
+    const parsed = parseCatalogParams(new URLSearchParams(window.location.search));
+    setSearchTerm(parsed.search ?? '');
+    setLevel(parsed.level ?? DEFAULT_LEVEL);
+    setFormat(parsed.format ?? DEFAULT_FORMAT);
+    setExamType(parsed.examType ?? DEFAULT_EXAM_TYPE);
+    setSort(parsed.sort ?? DEFAULT_SORT);
+    if (enableResourceTypeFilter) {
+      setResourceType(parsed.resourceType ?? DEFAULT_RESOURCE_TYPE);
     }
-  }, [propResourceType]);
-
-  // Update showTypeFilter when enableResourceTypeFilter prop changes
-  useEffect(() => {
-    setShowTypeFilter(enableResourceTypeFilter);
-  }, [enableResourceTypeFilter]);
-
-  // Sync with URL parameters on mount
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get('q') || urlParams.get('search') || '';
-    if (searchParam) {
-      setSearchTerm(searchParam);
-    }
-    const levelParam = urlParams.get('level') || 'all';
-    if (levelParam) {
-      setLevel(levelParam);
-    }
-    const formatParam = urlParams.get('format') || 'all';
-    if (formatParam) {
-      setFormat(formatParam);
-    }
-    const sortParam = urlParams.get('sort') || 'featured';
-    if (sortParam) {
-      setSort(sortParam);
-    }
-    const typeParam = urlParams.get('type') || 'any';
-    if (typeParam) {
-      setResourceType(typeParam);
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Listen for product count updates from outside the component
   useEffect(() => {
-    const handleProductCountUpdate = (event) => {
-      if (event.detail && typeof event.detail.count === 'number') {
-        setDisplayedProductCount(event.detail.count);
+    const handleProductCountUpdate = (event: Event) => {
+      const detail = (event as CustomEvent<{ count: number }>).detail;
+      if (detail && typeof detail.count === 'number') {
+        setDisplayedProductCount(detail.count);
       }
     };
 
     window.addEventListener('updateFilterCount', handleProductCountUpdate);
-
-    // Cleanup listener on component unmount
-    return () => {
-      window.removeEventListener('updateFilterCount', handleProductCountUpdate);
-    };
+    return () => window.removeEventListener('updateFilterCount', handleProductCountUpdate);
   }, []);
 
-  // Filter options including "all" and enum values
-  const levelOptions = [
-    { value: 'all', label: 'Todos los niveles' },
-    ...Object.entries(BookLevel).map(([_, value]) => {
-      // Map enum values to human-readable labels
-      const label = (() => {
-        switch (value) {
-          case BookLevel.BASIC:
-            return 'Básico';
-          case BookLevel.INTERMEDIATE:
-            return 'Intermedio';
-          case BookLevel.ADVANCED:
-            return 'Avanzado';
-          case BookLevel.PROFESSIONAL:
-            return 'Profesional';
-          case BookLevel.ALL_LEVELS:
-            return 'Multi-nivel';
-          case BookLevel.INTERNATIONAL_EXAM:
-            return 'Examen Internacional';
-          default:
-            return value;
-        }
-      })();
-
-      return { value, label };
-    }),
-  ];
-
-  // Format options including "all" and enum values
-  const formatOptions = [
-    { value: 'all', label: 'Todos los formatos' },
-    ...Object.entries(FormatTag).map(([_, value]) => {
-      // Map enum values to human-readable labels
-      const label = (() => {
-        switch (value) {
-          case FormatTag.PDF:
-            return 'PDF';
-          case FormatTag.WORKBOOK:
-            return 'Workbook';
-          case FormatTag.AUDIO:
-            return 'Audio';
-          case FormatTag.VIDEO:
-            return 'Video';
-          case FormatTag.SOFTWARE:
-            return 'Software';
-          case FormatTag.EXAMS:
-            return 'Exámenes';
-          default:
-            return value;
-        }
-      })();
-
-      return { value, label };
-    }),
-  ];
-
-  // Resource type options
-  const resourceTypeOptions = [
-    { value: 'any', label: 'Todos los tipos' },
-    { value: 'book', label: 'Libros' },
-    { value: 'pack', label: 'Packs' },
-    { value: 'exam', label: 'Exámenes' },
-  ];
-
-  const sortOptions = [
-    { value: 'featured', label: 'Destacados' },
-    { value: 'price-low', label: 'Precio: menor a mayor' },
-    { value: 'price-high', label: 'Precio: mayor a menor' },
-    { value: 'newest', label: 'Más recientes' },
-    { value: 'bestseller', label: 'Más vendidos' },
-  ];
-
-  // Define filter labels for display
-  const filterLabels = {
+  const filterLabels: Record<ActiveTag['name'], string> = {
     level: 'Nivel',
     format: 'Formato',
-    sort: 'Orden',
+    examType: 'Tipo de examen',
     search: 'Búsqueda',
     resourceType: 'Tipo',
   };
 
-  // Calculate active filter count for badge - including resourceType when enabled
   const activeFilterCount = [
-    level !== 'all' ? 1 : 0,
-    format !== 'all' ? 1 : 0,
+    level !== DEFAULT_LEVEL ? 1 : 0,
+    format !== DEFAULT_FORMAT ? 1 : 0,
+    enableExamTypeFilter && examType !== DEFAULT_EXAM_TYPE ? 1 : 0,
     searchTerm ? 1 : 0,
-    showTypeFilter && resourceType !== 'any' ? 1 : 0,
+    enableResourceTypeFilter && resourceType !== DEFAULT_RESOURCE_TYPE ? 1 : 0,
   ].reduce((a, b) => a + b, 0);
 
-  // Update active tags when filter values change
   useEffect(() => {
-    const newTags = [];
+    const newTags: ActiveTag[] = [];
 
-    // Add search tag if not empty
     if (searchTerm) {
       newTags.push({
         name: 'search',
@@ -297,8 +273,7 @@ const CatalogFilter = ({
       });
     }
 
-    // Add level tag if not default
-    if (level !== 'all') {
+    if (level !== DEFAULT_LEVEL) {
       const option = levelOptions.find((opt) => opt.value === level);
       if (option) {
         newTags.push({
@@ -310,8 +285,7 @@ const CatalogFilter = ({
       }
     }
 
-    // Add format tag if not default
-    if (format !== 'all') {
+    if (format !== DEFAULT_FORMAT) {
       const option = formatOptions.find((opt) => opt.value === format);
       if (option) {
         newTags.push({
@@ -323,8 +297,19 @@ const CatalogFilter = ({
       }
     }
 
-    // Add resource type tag if enabled and not default
-    if (showTypeFilter && resourceType !== 'any') {
+    if (enableExamTypeFilter && examType !== DEFAULT_EXAM_TYPE) {
+      const option = examTypeOptions.find((opt) => opt.value === examType);
+      if (option) {
+        newTags.push({
+          name: 'examType',
+          value: examType,
+          label: option.label,
+          displayName: filterLabels.examType,
+        });
+      }
+    }
+
+    if (enableResourceTypeFilter && resourceType !== DEFAULT_RESOURCE_TYPE) {
       const option = resourceTypeOptions.find((opt) => opt.value === resourceType);
       if (option) {
         newTags.push({
@@ -337,131 +322,108 @@ const CatalogFilter = ({
     }
 
     setActiveTags(newTags);
-  }, [level, format, searchTerm, resourceType, showTypeFilter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [level, format, examType, searchTerm, resourceType]);
 
-  // Listen for reset filters event from outside this component
   useEffect(() => {
     const handleResetFilters = () => {
-      setLevel('all');
-      setFormat('all');
-      setSort('featured');
+      setLevel(DEFAULT_LEVEL);
+      setFormat(DEFAULT_FORMAT);
+      setExamType(DEFAULT_EXAM_TYPE);
+      setSort(DEFAULT_SORT);
       setSearchTerm('');
-      if (showTypeFilter) setResourceType('any');
-      applyFilters('all', 'all', 'featured', showTypeFilter ? 'any' : resourceType, '');
+      if (enableResourceTypeFilter) setResourceType(DEFAULT_RESOURCE_TYPE);
+      applyFilters(
+        DEFAULT_LEVEL,
+        DEFAULT_FORMAT,
+        DEFAULT_EXAM_TYPE,
+        DEFAULT_SORT,
+        DEFAULT_RESOURCE_TYPE,
+        ''
+      );
     };
 
     document.addEventListener('resetFilters', handleResetFilters);
+    return () => document.removeEventListener('resetFilters', handleResetFilters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableResourceTypeFilter]);
 
-    // Cleanup listener on component unmount
-    return () => {
-      document.removeEventListener('resetFilters', handleResetFilters);
-    };
-  }, [showTypeFilter, resourceType]);
-
-  // Handler for filter changes
-  const handleFilterChange = (name, value) => {
-    switch (name) {
-      case 'level':
-        setLevel(value);
-        break;
-      case 'format':
-        setFormat(value);
-        break;
-      case 'sort':
-        setSort(value);
-        break;
-      case 'search':
-        setSearchTerm(value);
-        break;
-      case 'resourceType':
-        setResourceType(value);
-        break;
-    }
+  const handleFilterChange = (name: 'level' | 'format' | 'examType' | 'sort', value: string) => {
+    if (name === 'level') setLevel(value);
+    if (name === 'format') setFormat(value);
+    if (name === 'examType') setExamType(value);
+    if (name === 'sort') setSort(value);
   };
 
-  // Handle search input change
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value);
 
-  // Handle search form submission
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    applyFilters(level, format, sort, resourceType, searchTerm);
+    applyFilters(level, format, examType, sort, resourceType, searchTerm);
   };
 
-  // Clear search term
   const clearSearch = () => {
     setSearchTerm('');
-    applyFilters(level, format, sort, resourceType, '');
+    applyFilters(level, format, examType, sort, resourceType, '');
   };
 
-  // Apply filters
   const applyFilters = (
     currentLevel = level,
     currentFormat = format,
+    currentExamType = examType,
     currentSort = sort,
     currentResourceType = resourceType,
     currentSearchTerm = searchTerm
   ) => {
     setMobileFiltersVisible(false);
 
-    // Dispatch event to Astro
-    const event = new CustomEvent('filterChange', {
-      detail: {
-        level: currentLevel,
-        format: currentFormat,
-        sort: currentSort,
-        resourceType: showTypeFilter ? currentResourceType : 'any',
-        search: currentSearchTerm,
-      },
-    });
-    window.dispatchEvent(event);
+    const detail: CatalogFilterChangeDetail = {
+      level: currentLevel,
+      format: currentFormat,
+      examType: enableExamTypeFilter ? currentExamType : DEFAULT_EXAM_TYPE,
+      sort: currentSort,
+      resourceType: enableResourceTypeFilter ? currentResourceType : DEFAULT_RESOURCE_TYPE,
+      search: currentSearchTerm,
+    };
+
+    window.dispatchEvent(new CustomEvent<CatalogFilterChangeDetail>('filterChange', { detail }));
   };
 
-  // Clear all filters - don't reset resource type if it's prop-controlled and filter is disabled
   const clearFilters = () => {
-    setLevel('all');
-    setFormat('all');
-    setSort('featured');
+    setLevel(DEFAULT_LEVEL);
+    setFormat(DEFAULT_FORMAT);
+    setExamType(DEFAULT_EXAM_TYPE);
+    setSort(DEFAULT_SORT);
     setSearchTerm('');
-    if (showTypeFilter) setResourceType('any');
+    if (enableResourceTypeFilter) setResourceType(DEFAULT_RESOURCE_TYPE);
 
-    // Apply the cleared filters but keep resource type if not enabled
-    applyFilters('all', 'all', 'featured', showTypeFilter ? 'any' : resourceType, '');
+    applyFilters(
+      DEFAULT_LEVEL,
+      DEFAULT_FORMAT,
+      DEFAULT_EXAM_TYPE,
+      DEFAULT_SORT,
+      DEFAULT_RESOURCE_TYPE,
+      ''
+    );
   };
 
-  // Remove a specific filter tag
-  const removeFilterTag = (name) => {
-    const newLevel = name === 'level' ? 'all' : level;
-    const newFormat = name === 'format' ? 'all' : format;
+  const removeFilterTag = (name: ActiveTag['name']) => {
+    const newLevel = name === 'level' ? DEFAULT_LEVEL : level;
+    const newFormat = name === 'format' ? DEFAULT_FORMAT : format;
+    const newExamType = name === 'examType' ? DEFAULT_EXAM_TYPE : examType;
     const newSearchTerm = name === 'search' ? '' : searchTerm;
-    const newResourceType = name === 'resourceType' ? 'any' : resourceType;
+    const newResourceType = name === 'resourceType' ? DEFAULT_RESOURCE_TYPE : resourceType;
 
-    if (name === 'level') setLevel('all');
-    if (name === 'format') setFormat('all');
+    if (name === 'level') setLevel(DEFAULT_LEVEL);
+    if (name === 'format') setFormat(DEFAULT_FORMAT);
+    if (name === 'examType') setExamType(DEFAULT_EXAM_TYPE);
     if (name === 'search') setSearchTerm('');
-    if (name === 'resourceType') setResourceType('any');
+    if (name === 'resourceType') setResourceType(DEFAULT_RESOURCE_TYPE);
 
-    // Apply the updated filters
-    applyFilters(newLevel, newFormat, sort, newResourceType, newSearchTerm);
+    applyFilters(newLevel, newFormat, newExamType, sort, newResourceType, newSearchTerm);
   };
 
-  // Toggle mobile filters visibility
-  const toggleMobileFilters = () => {
-    setMobileFiltersVisible(!mobileFiltersVisible);
-  };
-
-  // Toggle resource type filter
-  const toggleTypeFilter = () => {
-    setShowTypeFilter(!showTypeFilter);
-
-    // If we're hiding the filter, reset to "any" and apply filters
-    if (showTypeFilter) {
-      setResourceType('any');
-      applyFilters(level, format, sort, 'any', searchTerm);
-    }
-  };
+  const toggleMobileFilters = () => setMobileFiltersVisible(!mobileFiltersVisible);
 
   return (
     <div
@@ -470,16 +432,13 @@ const CatalogFilter = ({
       className={`filter-container mb-8 min-w-full rounded-xl bg-white p-4 shadow-md md:min-w-[600px] md:p-6 ${className}`}
     >
       <form id="filter-form" className="filter-form" onSubmit={handleSearchSubmit}>
-        {/* Search Bar - Always visible */}
         <div className="mb-4 px-4 md:mb-6 md:px-8">
           <div
-            className={`relative transition-all duration-300 ${
-              isSearchFocused ? 'ring-primary ring-2' : ''
-            }`}
+            className={`relative transition-all duration-300 ${isSearchFocused ? 'ring-primary ring-2' : ''}`}
           >
             <input
               type="text"
-              placeholder="Buscar por título, autor, editorial..."
+              placeholder="Buscar por título..."
               value={searchTerm}
               onChange={handleSearchChange}
               onFocus={() => setIsSearchFocused(true)}
@@ -509,7 +468,6 @@ const CatalogFilter = ({
             </button>
           </div>
 
-          {/* Filters count, results count, and toggle for resource type filter */}
           <div className="mt-3 flex items-center justify-between text-sm text-gray-500">
             <div className="flex items-center">
               <span>
@@ -523,37 +481,10 @@ const CatalogFilter = ({
                 </span>
               )}
             </div>
-
-            {/* Toggle switch for resource type filter */}
-            <div className="flex items-center">
-              <span className="mr-2 text-xs">Filtrar por tipo</span>
-              <button
-                type="button"
-                onClick={toggleTypeFilter}
-                className="focus:ring-primary inline-flex size-11 items-center justify-center rounded-full focus:ring-2 focus:outline-none"
-                role="switch"
-                aria-checked={showTypeFilter}
-                aria-label="Filtrar por tipo de recurso"
-              >
-                <span className="sr-only">
-                  {showTypeFilter ? 'Filtro por tipo activado' : 'Filtro por tipo desactivado'}
-                </span>
-                <span
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showTypeFilter ? 'bg-primary' : 'bg-gray-300'}`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showTypeFilter ? 'translate-x-6' : 'translate-x-1'}`}
-                  />
-                </span>
-              </button>
-            </div>
           </div>
         </div>
 
-        {/* Rest of mobile and desktop filters */}
         <div className="flex flex-col gap-4 px-4 md:flex-row md:items-center md:gap-6 md:px-8">
-          {/* Mobile filter button with badge */}
           <button
             type="button"
             className="bg-neutral-light text-primary-dark filter-toggle relative flex w-full items-center justify-between rounded-lg px-4 py-3 font-medium md:hidden"
@@ -571,15 +502,12 @@ const CatalogFilter = ({
               )}
             </span>
             <span
-              className={`transition-transform duration-300 ${
-                mobileFiltersVisible ? 'rotate-180' : ''
-              }`}
+              className={`transition-transform duration-300 ${mobileFiltersVisible ? 'rotate-180' : ''}`}
             >
               <ArrowDownIcon />
             </span>
           </button>
 
-          {/* Mobile filters */}
           {mobileFiltersVisible && (
             <div
               id="mobile-filters"
@@ -633,8 +561,36 @@ const CatalogFilter = ({
                 </div>
               </div>
 
-              {/* Resource type filter in mobile - only shown when enabled */}
-              {showTypeFilter && (
+              {enableExamTypeFilter && (
+                <div className="space-y-2">
+                  <label
+                    htmlFor={mobileExamTypeId}
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Tipo de examen
+                  </label>
+                  <div className="relative">
+                    <select
+                      id={mobileExamTypeId}
+                      name="examType"
+                      value={examType}
+                      onChange={(e) => handleFilterChange('examType', e.target.value)}
+                      className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select min-h-11 w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
+                    >
+                      {examTypeOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-primary pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
+                      <ArrowDownIcon />
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {enableResourceTypeFilter && (
                 <div className="space-y-2">
                   <label
                     htmlFor={mobileResourceTypeId}
@@ -647,7 +603,7 @@ const CatalogFilter = ({
                       id={mobileResourceTypeId}
                       name="resourceType"
                       value={resourceType}
-                      onChange={(e) => handleFilterChange('resourceType', e.target.value)}
+                      onChange={(e) => setResourceType(e.target.value)}
                       className="bg-neutral-light text-primary-dark focus:ring-primary mobile-filter-select min-h-11 w-full appearance-none rounded-lg border-gray-300 px-4 py-2.5 shadow-sm focus:ring-2 focus:outline-none"
                     >
                       {resourceTypeOptions.map((option) => (
@@ -708,7 +664,6 @@ const CatalogFilter = ({
             </div>
           )}
 
-          {/* Desktop filters */}
           <div className="hidden flex-1 flex-wrap items-center gap-4 md:flex">
             <div className="relative flex items-center">
               <div className="bg-primary/10 mr-2 flex items-center rounded-full p-1.5">
@@ -753,13 +708,33 @@ const CatalogFilter = ({
               </span>
             </div>
 
-            {/* Resource type filter - only shown when enabled */}
-            {showTypeFilter && (
+            {enableExamTypeFilter && (
+              <div className="relative">
+                <select
+                  name="examType"
+                  value={examType}
+                  onChange={(e) => handleFilterChange('examType', e.target.value)}
+                  className="bg-neutral-light text-primary-dark focus:ring-primary filter-select min-h-11 appearance-none rounded-lg px-4 py-2.5 pr-8 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
+                  aria-label="Filtrar por tipo de examen"
+                >
+                  {examTypeOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <span className="text-primary pointer-events-none absolute top-1/2 right-2 -translate-y-1/2">
+                  <ArrowDownIcon />
+                </span>
+              </div>
+            )}
+
+            {enableResourceTypeFilter && (
               <div className="relative">
                 <select
                   name="resourceType"
                   value={resourceType}
-                  onChange={(e) => handleFilterChange('resourceType', e.target.value)}
+                  onChange={(e) => setResourceType(e.target.value)}
                   className="bg-neutral-light text-primary-dark focus:ring-primary filter-select min-h-11 appearance-none rounded-lg px-4 py-2.5 pr-8 shadow-sm transition-all duration-300 hover:shadow focus:ring-2 focus:outline-none"
                   aria-label="Filtrar por tipo de producto"
                 >
@@ -820,7 +795,6 @@ const CatalogFilter = ({
           </div>
         </div>
 
-        {/* Active filter tags */}
         {activeTags.length > 0 && (
           <div className="active-filters mt-4 flex flex-wrap gap-2 px-4 md:px-8" aria-live="polite">
             {activeTags.map((tag) => (
@@ -860,5 +834,4 @@ const CatalogFilter = ({
   );
 };
 
-// Default export for proper importing
 export default CatalogFilter;
