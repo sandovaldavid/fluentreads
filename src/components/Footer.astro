@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 const pageclipKey = import.meta.env.PUBLIC_PAGECLIP_KEY;
 const isNewsletterConfigured = !!pageclipKey;
 const actionUrl = isNewsletterConfigured
@@ -10,6 +11,12 @@ import '../styles/Footer.css';
 import { siteConfig } from '@config/site';
 
 const currentYear = new Date().getFullYear();
+
+// Category links come from the categories collection instead of being
+// hand-typed, so the footer can never link to a category that doesn't
+// actually exist as a catalog route. See issue #59.
+const categories = await getCollection('categories');
+
 const footerLinks = [
   {
     title: 'Navegación',
@@ -22,13 +29,10 @@ const footerLinks = [
   },
   {
     title: 'Categorías',
-    links: [
-      { text: 'Inglés para Negocios', url: '/catalogo/negocios' },
-      { text: 'Inglés Profesional', url: '/catalogo/profesional' },
-      { text: 'Gramática & Vocabulario', url: '/catalogo/gramatica' },
-      { text: 'Certificaciones', url: '/catalogo/certificaciones' },
-      { text: 'Materiales Didácticos', url: '/catalogo/didacticos' },
-    ],
+    links: categories.map((category) => ({
+      text: category.data.name,
+      url: category.data.link,
+    })),
   },
   {
     title: 'Ayuda',

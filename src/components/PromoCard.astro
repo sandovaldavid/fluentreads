@@ -1,7 +1,6 @@
 ---
 import Button from './Button.astro';
 import DiscountBadge from './DiscountBadge.astro';
-import ArrowRightIcon from './icons/ArrowRight.astro';
 
 interface OfferProps {
   id?: string;
@@ -13,7 +12,6 @@ interface OfferProps {
   salePrice: number;
   image: string;
   link: string;
-  detailsLink?: string; // Optional details link
 }
 
 interface Props {
@@ -30,10 +28,6 @@ const { Offer, index, size = 'large' } = Astro.props;
 // single product).
 const offerId = Offer.id || (Offer.link ? Offer.link.replace('/checkout/', '') : '');
 const offerType = 'offer';
-
-// Default details link if not provided
-const detailsLink =
-  Offer.detailsLink || `/ofertas/${Offer.title.toLowerCase().replace(/\s+/g, '-')}`;
 
 // Animation delay based on index
 const animationDelay = `${(index % 3) * 0.15}s`;
@@ -122,25 +116,10 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
 
       <!-- Action buttons - full width -->
       <div class="flex w-full flex-wrap gap-1 sm:gap-2">
-        <!-- For small size, only show the buy button -->
-        {
-          !isSmallLayout && (
-            <Button
-              variant="outline"
-              size={buttonSize}
-              href={detailsLink}
-              class="flex flex-1 items-center justify-center"
-            >
-              {isSmallLayout ? '' : 'Detalles'}
-              <ArrowRightIcon class={`${isSmallLayout ? 'h-2 w-2' : 'ml-1 h-3 w-3'}`} />
-            </Button>
-          )
-        }
-
         <Button
           variant="primary"
           size={buttonSize}
-          class={`${isSmallLayout ? 'w-full' : 'flex-1'} flex items-center justify-center promo-add-to-cart cursor-pointer`}
+          class="promo-add-to-cart flex w-full flex-1 cursor-pointer items-center justify-center"
           data-id={offerId}
           data-title={Offer.title}
           data-price={Offer.salePrice}
@@ -188,17 +167,6 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
 
             {/* Action buttons */}
             <div class="ml-4 flex space-x-3">
-              {/* View Details Button */}
-              <Button
-                variant="outline"
-                size="small"
-                href={detailsLink}
-                class="group flex items-center gap-1"
-              >
-                Detalles
-                <ArrowRightIcon class="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
-              </Button>
-
               {/* Buy Now Button */}
               <Button
                 variant="primary"
