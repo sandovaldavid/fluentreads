@@ -63,7 +63,10 @@ const description =
 const siteUrl = new URL(siteConfig.url);
 const canonicalURL = new URL(`/catalogo/packs/${pack.id}`, siteUrl);
 
-// Structured data for rich snippets
+// Structured data for rich snippets. No priceValidUntil (there's no actual
+// expiring offer to report), no aggregateRating (the rating in packs.json
+// isn't backed by verified, visible reviews) — emitting either would be an
+// unsupported claim to search engines. See issue #58.
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Product',
@@ -77,23 +80,11 @@ const structuredData = {
     priceCurrency: 'PEN',
     availability: 'https://schema.org/InStock',
     url: canonicalURL.toString(),
-    priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-      .toISOString()
-      .split('T')[0],
   },
   brand: {
     '@type': 'Brand',
     name: siteInfo.siteName,
   },
-  aggregateRating: pack.rating
-    ? {
-        '@type': 'AggregateRating',
-        ratingValue: pack.rating.score,
-        reviewCount: pack.rating.reviewCount,
-        bestRating: '5',
-        worstRating: '1',
-      }
-    : undefined,
 };
 
 // Breadcrumb structured data

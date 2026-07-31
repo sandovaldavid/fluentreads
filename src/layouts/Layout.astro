@@ -152,26 +152,29 @@ const finalBreadcrumbData =
   });
 
 // Meta Tags Unificados
-const metaData = {
-  og: {
-    type: ogType,
-    url: absoluteCanonicalUrl,
-    title: ogTitle,
-    description: ogDescription,
-    image: absoluteOgImage,
-    siteName: ogSiteName,
-    imageWidth: imageWidth.toString(),
-    imageHeight: imageHeight.toString(),
-  },
-  twitter: {
-    card: twitterCard,
-    url: absoluteCanonicalUrl,
-    title: twitterTitle,
-    description: twitterDescription,
-    image: absoluteTwitterImage,
-    site: twitterSite,
-  },
-};
+// Open Graph property names are explicit here (not derived from camelCase
+// keys) because "og:site_name"/"og:image:width"/"og:image:height" don't
+// follow the same casing/separator convention as the rest — a naive
+// `og:${camelCaseKey}` mapping previously produced invalid properties like
+// "og:siteName" and "og:imageWidth" that crawlers don't recognize.
+const ogMeta: [string, string][] = [
+  ['og:type', ogType],
+  ['og:url', absoluteCanonicalUrl],
+  ['og:title', ogTitle],
+  ['og:description', ogDescription],
+  ['og:image', absoluteOgImage],
+  ['og:site_name', ogSiteName],
+  ['og:image:width', imageWidth.toString()],
+  ['og:image:height', imageHeight.toString()],
+];
+
+const twitterMeta: [string, string][] = [
+  ['twitter:card', twitterCard],
+  ['twitter:title', twitterTitle],
+  ['twitter:description', twitterDescription],
+  ['twitter:image', absoluteTwitterImage],
+  ['twitter:site', twitterSite],
+];
 ---
 
 <!doctype html>
@@ -208,18 +211,10 @@ const metaData = {
     />
 
     <!-- Open Graph / WhatsApp / Facebook -->
-    {
-      Object.entries(metaData.og).map(([key, value]) => (
-        <meta property={`og:${key}`} content={value} />
-      ))
-    }
+    {ogMeta.map(([property, content]) => <meta property={property} content={content} />)}
 
     <!-- Twitter Cards -->
-    {
-      Object.entries(metaData.twitter).map(([key, value]) => (
-        <meta name={`twitter:${key}`} content={value} />
-      ))
-    }
+    {twitterMeta.map(([name, content]) => <meta name={name} content={content} />)}
 
     <!-- Meta Tags para WhatsApp (Precio del Producto) -->
     {

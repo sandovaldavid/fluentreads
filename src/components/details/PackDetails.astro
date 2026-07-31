@@ -103,34 +103,13 @@ const shareTitle = pack.title;
 const shareDescription =
   pack.description.substring(0, 100) + (pack.description.length > 100 ? '...' : '');
 const shareImage = pack.coverImage;
-
-// SEO JSON-LD
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Product',
-  name: pack.title,
-  description: pack.description,
-  image: pack.coverImage,
-  offers: {
-    '@type': 'Offer',
-    price: discountedPrice,
-    priceCurrency: 'PEN',
-    availability: 'https://schema.org/InStock',
-  },
-  aggregateRating: pack.rating
-    ? {
-        '@type': 'AggregateRating',
-        ratingValue: pack.rating.score,
-        reviewCount: pack.rating.reviewCount,
-      }
-    : undefined,
-};
 ---
 
+<!-- JSON-LD for this page is already emitted by Layout.astro (fed from
+     src/pages/catalogo/packs/[id].astro's structuredData prop) — this
+     component used to emit a second, duplicate/conflicting Product schema
+     with an unverified aggregateRating. See issue #58. -->
 <div class="product-detail-container bg-gray-50">
-  <!-- JSON-LD Schema for SEO -->
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
-
   <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:py-8">
     <!-- Breadcrumbs -->
     <nav
