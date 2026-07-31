@@ -202,8 +202,9 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
       book.classList.add('hidden');
     });
 
-    // Simulate a loading delay
-    setTimeout(() => {
+    // Filtering runs over an in-memory array already on the page — there's
+    // no real async work here, so no artificial delay before it (see #62).
+    (() => {
       let visibleCount = 0;
 
       // Process the books based on filters
@@ -298,7 +299,7 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
         booksGrid.style.position = 'static';
         booksGrid.style.visibility = 'visible';
       }
-    }, 600);
+    })();
   };
 
   // Filter change event handler
@@ -340,16 +341,15 @@ const showSkeletonOnLoad = useSkeleton && filteredBooks.length > 10;
     const booksGrid = document.getElementById('books-grid');
 
     if (booksContainer && booksContainer.getAttribute('data-is-loading') === 'true') {
-      // Simulate loading delay
-      setTimeout(() => {
-        if (skeletonLoader) skeletonLoader.style.opacity = '0';
-        if (booksGrid) {
-          booksGrid.classList.remove('opacity-0');
-          booksGrid.style.position = 'static';
-          booksGrid.style.visibility = 'visible';
-        }
-        booksContainer.setAttribute('data-is-loading', 'false');
-      }, 1000);
+      // The grid is already server-rendered — reveal it immediately
+      // instead of holding the skeleton up with an artificial delay (#62).
+      if (skeletonLoader) skeletonLoader.style.opacity = '0';
+      if (booksGrid) {
+        booksGrid.classList.remove('opacity-0');
+        booksGrid.style.position = 'static';
+        booksGrid.style.visibility = 'visible';
+      }
+      booksContainer.setAttribute('data-is-loading', 'false');
     }
   });
 </script>

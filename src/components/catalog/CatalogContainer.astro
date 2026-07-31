@@ -293,8 +293,9 @@ const gridClass = getGridClassFromColumns(gridCols);
     ): void => {
       showLoading(true);
 
-      // Incrementa el retraso para dar tiempo a ver el skeleton
-      setTimeout(() => {
+      // Filtering runs over an in-memory array already on the page — there's
+      // no real async work here, so no artificial delay before it (see #62).
+      (() => {
         // Apply filters
         let filtered = [...allProducts];
 
@@ -329,21 +330,6 @@ const gridClass = getGridClassFromColumns(gridCols);
           filtered = filtered.filter((product) =>
             product.title.toLowerCase().includes(normalizedSearchTerm)
           );
-        }
-
-        // Debug logs
-        console.log(`Filtered to ${filtered.length} products`);
-        console.log(`Resource type filter: ${resourceType}`);
-        if (resourceType !== 'any') {
-          const typeCounts = filtered.reduce(
-            (acc, product) => {
-              acc[product.productType] = (acc[product.productType] || 0) + 1;
-              return acc;
-            },
-            {} as Record<string, number>
-          );
-
-          console.log('Products by type:', typeCounts);
         }
 
         // Apply sorting
@@ -419,7 +405,7 @@ const gridClass = getGridClassFromColumns(gridCols);
             detail: { count: visibleCount },
           })
         );
-      }, 600); // Aumentamos el retraso para apreciar mejor el skeleton
+      })();
     };
 
     // Filter change event handler - THIS IS THE KEY PART

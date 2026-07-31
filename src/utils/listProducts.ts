@@ -38,32 +38,6 @@ export function getAllProducts(): Product[] {
 }
 
 /**
- * Get a random selection of products
- * @param count Number of products to return
- * @param filterFn Optional filter function to apply
- * @returns Array of random products
- */
-export function getRandomProducts(
-  count: number,
-  filterFn?: (product: Product) => boolean
-): Product[] {
-  const allProducts = getAllProducts();
-
-  // Apply filter if provided
-  const filteredProducts = filterFn ? allProducts.filter(filterFn) : allProducts;
-
-  // Shuffle the products array using Fisher-Yates algorithm
-  const shuffled = [...filteredProducts];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-
-  // Return the requested number of products, or all if count exceeds available products
-  return shuffled.slice(0, Math.min(count, shuffled.length));
-}
-
-/**
  * Get products filtered by type
  * @param type Product type to filter by ('book', 'pack', or 'exam')
  * @param count Maximum number of products to return (optional)
@@ -81,19 +55,6 @@ export function getProductsByType(type: 'book' | 'pack' | 'exam', count?: number
 }
 
 /**
- * Get featured products across all types or of a specific type
- * @param count Number of featured products to return
- * @param type Optional product type to filter by
- * @returns Array of featured products
- */
-export function getFeaturedProducts(count: number, type?: 'book' | 'pack' | 'exam'): Product[] {
-  return getRandomProducts(count, (product) => {
-    const typeMatch = type ? product.productType === type : true;
-    return typeMatch && !!product.featured;
-  });
-}
-
-/**
  * Get products by level
  * @param level The level to filter by
  * @param count Maximum number of products to return
@@ -108,17 +69,4 @@ export function getProductsByLevel(level: string, count?: number): Product[] {
   }
 
   return filteredByLevel;
-}
-
-/**
- * Get bestseller products
- * @param count Number of bestseller products to return
- * @returns Array of bestseller products
- */
-export function getBestsellerProducts(count: number): Product[] {
-  return getRandomProducts(
-    count,
-    (product) =>
-      Array.isArray(product.popularityTags) && product.popularityTags.includes('bestSeller')
-  );
 }

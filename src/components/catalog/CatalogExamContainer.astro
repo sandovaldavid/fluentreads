@@ -212,9 +212,9 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
         card.classList.add('hidden');
       });
 
-      // Perform the actual filtering with a deliberate delay
-      // to allow the skeleton loader to be visible
-      setTimeout(() => {
+      // Filtering runs over an in-memory array already on the page — there's
+      // no real async work here, so no artificial delay before it (see #62).
+      (() => {
         let filteredExams = [...initialExams];
         let visibleCount = 0;
 
@@ -306,28 +306,28 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
           }
         }
 
-        // Remove loading state with a slight delay for animation
-        setTimeout(() => {
-          document.body.classList.remove('filters-loading');
+        // Remove loading state
+        document.body.classList.remove('filters-loading');
 
-          if (examsContainer) {
-            examsContainer.setAttribute('data-is-loading', 'false');
-          }
+        if (examsContainer) {
+          examsContainer.setAttribute('data-is-loading', 'false');
+        }
 
-          if (skeletonLoader) {
-            skeletonLoader.style.opacity = '0';
-            setTimeout(() => {
-              skeletonLoader.style.display = 'none';
-            }, 300); // Short delay for fade out animation
-          }
+        if (skeletonLoader) {
+          skeletonLoader.style.opacity = '0';
+          // Kept: matches the skeleton's actual CSS opacity transition
+          // duration, unlike the artificial delays removed above.
+          setTimeout(() => {
+            skeletonLoader.style.display = 'none';
+          }, 300);
+        }
 
-          if (examsGrid) {
-            examsGrid.classList.remove('opacity-0');
-            examsGrid.style.position = 'static';
-            examsGrid.style.visibility = 'visible';
-          }
-        }, 300);
-      }, 600); // Deliberate delay to show skeleton loader
+        if (examsGrid) {
+          examsGrid.classList.remove('opacity-0');
+          examsGrid.style.position = 'static';
+          examsGrid.style.visibility = 'visible';
+        }
+      })();
     }
 
     // Listen for filter changes from Filter component
@@ -402,22 +402,21 @@ const showSkeletonOnLoad = useSkeleton && filteredExams.length > 8;
       observer.observe(card);
     });
 
-    // Simulation for initial loading if needed
+    // The grid is already server-rendered — reveal it immediately instead
+    // of holding the skeleton up with an artificial delay (#62).
     if (examsContainer && examsContainer.getAttribute('data-is-loading') === 'true') {
-      setTimeout(() => {
-        if (skeletonLoader) skeletonLoader.style.opacity = '0';
-        if (examsGrid) {
-          examsGrid.classList.remove('opacity-0');
-          examsGrid.style.position = 'static';
-          examsGrid.style.visibility = 'visible';
-        }
-        examsContainer.setAttribute('data-is-loading', 'false');
+      if (skeletonLoader) skeletonLoader.style.opacity = '0';
+      if (examsGrid) {
+        examsGrid.classList.remove('opacity-0');
+        examsGrid.style.position = 'static';
+        examsGrid.style.visibility = 'visible';
+      }
+      examsContainer.setAttribute('data-is-loading', 'false');
 
-        // Hide skeleton after fade out completes
-        setTimeout(() => {
-          if (skeletonLoader) skeletonLoader.style.display = 'none';
-        }, 300);
-      }, 800);
+      // Kept: matches the skeleton's actual CSS opacity transition duration.
+      setTimeout(() => {
+        if (skeletonLoader) skeletonLoader.style.display = 'none';
+      }, 300);
     }
   });
 </script>
