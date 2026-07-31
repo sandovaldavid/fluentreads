@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+---
+
+<Layout
+  title="Página no encontrada | FluentReads"
+  description="La página que buscas no existe. Explora nuestro catálogo de libros y materiales para aprender inglés."
+>
+  <div class="mx-auto max-w-2xl px-4 py-20 text-center">
+    <div class="mb-4 text-6xl" aria-hidden="true">🔍</div>
+    <SectionTitle tag="h1">Página no encontrada</SectionTitle>
+    <p class="mt-4 mb-8 text-gray-500">
+      La página que buscas no existe o ha cambiado de dirección. Puedes seguir explorando nuestro
+      catálogo o contactarnos si crees que esto es un error.
+    </p>
+    <div class="flex flex-col justify-center gap-3 sm:flex-row">
+      <Button
+        variant="primary"
+        size="medium"
+        href="/catalogo"
+        class="inline-flex items-center justify-center"
+      >
+        Ver Catálogo
+      </Button>
+      <Button
+        variant="outline"
+        size="medium"
+        href="/contacto"
+        class="inline-flex items-center justify-center"
+      >
+        Contactar Soporte
+      </Button>
+    </div>
+  </div>
+</Layout>
