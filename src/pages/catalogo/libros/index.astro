@@ -13,7 +13,7 @@ import '../../../styles/catalog.css';
 import type { Book } from '../../../types/book';
 import { BookLevel, FormatTag } from '../../../types/book';
 import { getProductsByType } from '../../../utils/listProducts';
-import editorialsData from '../../../data/editorial.json';
+import { getCollection } from 'astro:content';
 
 // Get filter parameters from URL if any
 const { searchParams } = Astro.url;
@@ -64,13 +64,14 @@ if (format !== 'all') {
 }
 
 // Create editorial lookup map
+const editorialsData = (await getCollection('editorial')).map((entry) => entry.data);
 const editorialMap = new Map<string, string>();
 editorialsData.forEach((editorial) => {
   editorialMap.set(editorial.id, editorial.name);
 });
 
 // Get book data using the utility function
-const allBooks = getProductsByType('book');
+const allBooks = await getProductsByType('book');
 
 // Convert to Book[] type and ensure all required fields exist
 const safeBooks: Book[] = allBooks.map((book) => ({

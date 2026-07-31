@@ -15,8 +15,7 @@ import CustomerSupport from '../CustomerSupport.astro';
 import { levelConfig, formatConfig } from '../../utils/bookTags';
 import { generateRecommendations } from '../../utils/RelatedProducts';
 import '../../styles/ProductDetail.css';
-import editorialData from '../../data/editorial.json';
-import booksData from '../../data/books.json';
+import { getCollection } from 'astro:content';
 import ProductCard from '../ProductCard.astro';
 import DiscountBadge from '../DiscountBadge.astro';
 import type { Product } from '../../types/product';
@@ -84,6 +83,8 @@ const levelDisplay =
 const formatTags = pack.formatTags || [];
 
 // Find books included in this pack
+const editorialData = (await getCollection('editorial')).map((entry) => entry.data);
+const booksData = (await getCollection('books')).map((entry) => entry.data);
 const includedBooks = pack.booksIds
   ? booksData
       .filter((book) => pack.booksIds?.includes(book.id))

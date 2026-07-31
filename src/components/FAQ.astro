@@ -3,11 +3,7 @@ import SectionTitle from './SectionTitle.astro';
 import QuestionCard from './QuestionCard.astro';
 
 import '../styles/FAQ.css';
-
-// Import FAQ data directly
-import generalFaqs from '../data/general-faqs.json';
-import paymentFaqs from '../data/payment-faqs.json';
-import catalogFaqs from '../data/catalog-faqs.json';
+import { getCollection } from 'astro:content';
 
 interface FAQItem {
   question: string;
@@ -40,11 +36,11 @@ const {
 // Determine which FAQ dataset to use
 let faqItems: FAQItem[] = [];
 if (dataset === 'general') {
-  faqItems = generalFaqs;
+  faqItems = (await getCollection('generalFaqs')).map((entry) => entry.data);
 } else if (dataset === 'payment') {
-  faqItems = paymentFaqs;
+  faqItems = (await getCollection('paymentFaqs')).map((entry) => entry.data);
 } else if (dataset === 'catalog') {
-  faqItems = catalogFaqs;
+  faqItems = (await getCollection('catalogFaqs')).map((entry) => entry.data);
 } else if (dataset === 'custom' && customFAQs.length > 0) {
   faqItems = customFAQs;
 }

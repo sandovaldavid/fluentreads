@@ -1,7 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import BookDetails from '../../../components/details/BookDetails.astro';
-import booksData from '../../../data/books.json';
 import siteInfo from '../../../data/page-information.json';
 import { siteConfig } from '@config/site';
 import type { Book } from '../../../types/book';
@@ -10,9 +10,11 @@ import { levelConfig } from '../../../utils/bookTags';
 import { bookToProduct } from '../../../utils/RelatedProducts';
 
 export async function getStaticPaths() {
-  return booksData.map((book) => ({
-    params: { id: book.id },
-    props: { book },
+  const books = await getCollection('books');
+
+  return books.map((entry) => ({
+    params: { id: entry.data.id },
+    props: { book: entry.data },
   }));
 }
 
@@ -23,7 +25,8 @@ interface Props {
 const { book }: Props = Astro.props;
 
 // Get related books (same level or format)
-const relatedBooks = booksData
+const allBooks = (await getCollection('books')).map((entry) => entry.data);
+const relatedBooks = allBooks
   .filter(
     (item) =>
       item.id !== book.id &&

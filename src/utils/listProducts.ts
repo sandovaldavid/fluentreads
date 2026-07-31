@@ -1,39 +1,36 @@
+import { getCollection } from 'astro:content';
 import type { Product } from '../types/product';
 
-import booksData from '../data/books.json';
-import packsData from '../data/packs.json';
-import examsData from '../data/exams.json';
-
 /**
- * Retrieves all products from the database, converting them to the unified Product type
+ * Retrieves all products from the validated Content Collections, converting
+ * them to the unified Product type. This is the canonical source — nothing
+ * should import src/data/*.json directly for books/packs/exams. See #57.
  * @returns Array of all products (books, packs, exams)
  */
-export function getAllProducts(): Product[] {
-  // Process books and add productType property
-  const processedBooks: Product[] = booksData.map((book) => ({
-    ...book,
+export async function getAllProducts(): Promise<Product[]> {
+  const [books, packs, exams] = await Promise.all([
+    getCollection('books'),
+    getCollection('packs'),
+    getCollection('exams'),
+  ]);
+
+  const processedBooks: Product[] = books.map((entry) => ({
+    ...entry.data,
     productType: 'book' as const,
   }));
 
-  // Process packs and add productType property
-  const processedPacks: Product[] = Array.isArray(packsData)
-    ? packsData.map((pack) => ({
-        ...pack,
-        productType: 'pack' as const,
-      }))
-    : [];
-
-  // Process exams and add productType property
-  // Fix: Ensure examsData is properly processed as an array
-  const examDataArray = Array.isArray(examsData) ? examsData : [examsData];
-  const processedExams: Product[] = examDataArray.map((exam) => ({
-    ...exam,
-    productType: 'exam' as const,
-    level: exam.difficulty, // Map difficulty to level for consistent filtering
-    detailsLink: exam.detailsLink || `/catalogo/examenes-internacionales/${exam.id}`, // Ensure proper link format
+  const processedPacks: Product[] = packs.map((entry) => ({
+    ...entry.data,
+    productType: 'pack' as const,
   }));
 
-  // Return the combined array of products
+  const processedExams: Product[] = exams.map((entry) => ({
+    ...entry.data,
+    productType: 'exam' as const,
+    level: entry.data.difficulty, // Map difficulty to level for consistent filtering
+    detailsLink: entry.data.detailsLink || `/catalogo/examenes-internacionales/${entry.data.id}`,
+  }));
+
   return [...processedBooks, ...processedPacks, ...processedExams];
 }
 
@@ -43,8 +40,11 @@ export function getAllProducts(): Product[] {
  * @param count Maximum number of products to return (optional)
  * @returns Array of products of the specified type
  */
-export function getProductsByType(type: 'book' | 'pack' | 'exam', count?: number): Product[] {
-  const allProducts = getAllProducts();
+export async function getProductsByType(
+  type: 'book' | 'pack' | 'exam',
+  count?: number
+): Promise<Product[]> {
+  const allProducts = await getAllProducts();
   const filteredByType = allProducts.filter((product) => product.productType === type);
 
   if (count) {
@@ -60,8 +60,8 @@ export function getProductsByType(type: 'book' | 'pack' | 'exam', count?: number
  * @param count Maximum number of products to return
  * @returns Array of products of the specified level
  */
-export function getProductsByLevel(level: string, count?: number): Product[] {
-  const allProducts = getAllProducts();
+export async function getProductsByLevel(level: string, count?: number): Promise<Product[]> {
+  const allProducts = await getAllProducts();
   const filteredByLevel = allProducts.filter((product) => product.level === level);
 
   if (count) {

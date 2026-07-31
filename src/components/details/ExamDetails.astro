@@ -15,7 +15,7 @@ import { difficultyConfig } from '../../utils/examTags';
 import { formatConfig } from '../../utils/bookTags';
 import { generateRecommendations } from '../../utils/RelatedProducts';
 import '../../styles/ProductDetail.css';
-import editorialData from '../../data/editorial.json';
+import { getCollection } from 'astro:content';
 import ProductCard from '../ProductCard.astro';
 import DiscountBadge from '../DiscountBadge.astro';
 import type { Product } from '../../types/product';
@@ -81,6 +81,9 @@ const levelDisplay =
     ? difficultyConfig[exam.difficulty as keyof typeof difficultyConfig]
     : null;
 const formatTags = exam.formatTags || [];
+
+// Get editorial information (used for related product cards below)
+const editorialData = (await getCollection('editorial')).map((entry) => entry.data);
 
 // Get recommendations
 const finalRecommendations = generateRecommendations(exam, relatedProducts, 4);

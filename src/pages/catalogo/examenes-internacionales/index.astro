@@ -71,7 +71,7 @@ if (examType !== 'all') {
 }
 
 // Get exams data using the utility function
-const allExams = getProductsByType('exam');
+const allExams = await getProductsByType('exam');
 
 // Convert to Exam[] type and ensure all required fields exist
 const safeExams: Exam[] = allExams.map((exam) => ({
