@@ -87,6 +87,7 @@ const thumbnails = validMediaItems.map((item, index) => {
                 playlabel={`Play: ${item.title || `${title} - Video`}`}
                 style={`background-image: url('https://img.youtube.com/vi/${extractYoutubeId(item.url)}/maxresdefault.jpg');`}
                 params="autoplay=1&rel=0"
+                nocookie
               />
             </div>
           )}

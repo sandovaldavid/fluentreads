@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+/* Falls back to the browser's default sans-serif/serif stack instead of
+   importing from Google Fonts — this project self-hosts fonts via
+   @fontsource everywhere else, and this stylesheet only affects the
+   editor-only Decap CMS live-preview pane, not the public site. */
 
 body {
   font-family: 'Poppins', sans-serif;
