@@ -1,24 +1,24 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import SectionTitle from '../../../components/SectionTitle.astro';
-import Breadcrumb from '../../../components/Breadcrumb.astro';
-import CatalogExamContainer from '../../../components/catalog/CatalogExamContainer.astro';
-import PromoSection from '../../../components/catalog/PromoSection.astro';
-import FAQ from '../../../components/FAQ.astro';
-import CTABanner from '../../../components/CTA-Banner.astro';
-import CategoryCards from '../../../components/catalog/CategoryCards.astro';
-import '../../../styles/catalog.css';
+import Layout from '@layouts/Layout.astro';
+import SectionTitle from '@components/SectionTitle.astro';
+import Breadcrumb from '@components/Breadcrumb.astro';
+import CatalogExamContainer from '@components/catalog/CatalogExamContainer.astro';
+import PromoSection from '@components/catalog/PromoSection.astro';
+import FAQ from '@components/FAQ.astro';
+import CTABanner from '@components/CTA-Banner.astro';
+import CategoryCards from '@components/catalog/CategoryCards.astro';
+import '@styles/catalog.css';
 
 // Import data and proper types
-import type { Exam } from '../../../types/exam';
-import { ExamType, ExamDifficulty } from '../../../types/exam';
-import { getProductsByType } from '../../../utils/listProducts';
+import type { Exam } from '@app-types/exam';
+import { ExamType, ExamDifficulty } from '@app-types/exam';
+import { getProductsByType } from '@utils/listProducts';
+import { parseCatalogParams } from '@utils/catalogFilters';
 
-// Get filter parameters from URL if any
-const { searchParams } = Astro.url;
-const difficulty = searchParams.get('difficulty') || 'all';
-const examType = searchParams.get('examType') || 'all';
-const sort = searchParams.get('sort') || 'featured';
+// Get filter parameters from URL if any (shared contract — see catalogFilters.ts).
+// "level" carries the exam's difficulty; "examType" (IELTS/TOEFL/etc.) is an
+// extra axis specific to this page, same pattern as /catalogo's "type" toggle.
+const { level: difficulty, format, examType, sort } = parseCatalogParams(Astro.url.searchParams);
 
 // Define type-safe mapping objects
 const difficultyNames: Record<string, string> = {
@@ -54,7 +54,7 @@ if (difficulty !== 'all') {
   pageTitle = `Exámenes de Inglés - ${difficultyName}`;
   pageDescription = `Materiales de preparación para exámenes internacionales de inglés de nivel ${difficultyName}. Recursos para certificar tu nivel.`;
   canonicalUrl = new URL(
-    `/catalogo/examenes-internacionales?difficulty=${difficulty}`,
+    `/catalogo/examenes-internacionales?level=${difficulty}`,
     Astro.site
   ).toString();
 }
@@ -216,7 +216,8 @@ const structuredData = {
       <!-- Main catalog container component -->
       <CatalogExamContainer
         exams={safeExams}
-        initialDifficulty={difficulty}
+        initialLevel={difficulty}
+        initialFormat={format}
         initialExamType={examType}
         initialSort={sort}
         gridCols={4}

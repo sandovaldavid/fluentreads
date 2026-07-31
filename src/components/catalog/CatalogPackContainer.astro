@@ -1,8 +1,18 @@
 ---
-import ProductCard from '../ProductCard.astro';
-import Filter from './Filter.jsx';
-import SkeletonCatalog from '../SkeletonCatalog.astro';
-import type { Pack } from '../../types/pack';
+import ProductCard from '@components/ProductCard.astro';
+import Filter from '@components/catalog/Filter.tsx';
+import SkeletonCatalog from '@components/SkeletonCatalog.astro';
+import type { Pack } from '@app-types/pack';
+import type { Product } from '@app-types/product';
+import {
+  DEFAULT_EXAM_TYPE,
+  DEFAULT_FORMAT,
+  DEFAULT_LEVEL,
+  DEFAULT_RESOURCE_TYPE,
+  DEFAULT_SORT,
+  getGridClassFromColumns,
+  processProducts,
+} from '@utils/catalogFilters';
 
 interface Props {
   packs: Pack[];
@@ -11,90 +21,55 @@ interface Props {
   initialSort?: string;
   gridCols?: number;
   productSize?: 'small' | 'medium' | 'large';
-  showBreadcrumbs?: boolean;
   useSkeleton?: boolean;
 }
 
 const {
   packs = [],
-  initialLevel = 'all',
-  initialFormat = 'all',
-  initialSort = 'featured',
+  initialLevel = DEFAULT_LEVEL,
+  initialFormat = DEFAULT_FORMAT,
+  initialSort = DEFAULT_SORT,
   gridCols = 4,
   productSize = 'medium',
   useSkeleton = true,
 } = Astro.props;
 
-// Apply initial filters on the server
-let filteredPacks = [...packs];
+const products: Product[] = packs.map((pack) => ({
+  ...pack,
+  productType: 'pack' as const,
+  formatTags: pack.formatTags ?? [],
+}));
 
-// Filter by format if specified
-if (initialFormat !== 'all') {
-  filteredPacks = filteredPacks.filter(
-    (pack) => pack.formatTags && pack.formatTags.includes(initialFormat as any)
-  );
-}
-
-// Filter by level if specified
-if (initialLevel !== 'all') {
-  filteredPacks = filteredPacks.filter((pack) => pack.level === initialLevel);
-}
-
-// Apply initial sorting
-if (initialSort === 'price-low') {
-  filteredPacks.sort((a, b) => a.price - b.price);
-} else if (initialSort === 'price-high') {
-  filteredPacks.sort((a, b) => b.price - a.price);
-} else if (initialSort === 'newest') {
-  // If there's a timestamp field, we would sort by that here
-} else if (initialSort === 'bestseller') {
-  filteredPacks.sort((a, b) => {
-    const aIsBestseller = a.popularityTags?.includes('bestSeller');
-    const bIsBestseller = b.popularityTags?.includes('bestSeller');
-    if (aIsBestseller && !bIsBestseller) return -1;
-    if (!aIsBestseller && bIsBestseller) return 1;
-    return (b.rating?.score || 0) - (a.rating?.score || 0);
-  });
-} else {
-  // Default to featured
-  filteredPacks.sort((a, b) => (a.featured === b.featured ? 0 : a.featured ? -1 : 1));
-}
-
-// Maps a grid column count to responsive Tailwind classes
-const getGridClassFromColumns = (cols: number): string => {
-  const gridClasses = {
-    2: 'grid-cols-1 sm:grid-cols-2',
-    3: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
-    4: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4',
-    5: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5',
-    6: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6',
-  };
-
-  return (
-    gridClasses[cols as keyof typeof gridClasses] || 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4'
-  );
-};
+// Server-render with the exact same function the client re-runs on every
+// filter change (see src/utils/catalogFilters.ts).
+const filteredProducts = processProducts(
+  products,
+  {
+    resourceType: DEFAULT_RESOURCE_TYPE,
+    level: initialLevel,
+    format: initialFormat,
+    examType: DEFAULT_EXAM_TYPE,
+    search: '',
+  },
+  initialSort
+);
 
 const gridClass = getGridClassFromColumns(gridCols);
-
-// Determine if skeleton should be shown initially
-const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
+const showSkeletonOnLoad = useSkeleton && filteredProducts.length > 8;
 ---
 
 <div class="catalog-pack-container">
-  <!-- Filter UI using React component as a client-side island -->
   <Filter
     initialLevel={initialLevel}
     initialFormat={initialFormat}
     initialSort={initialSort}
-    productCount={filteredPacks.length}
+    productCount={filteredProducts.length}
     productType="pack"
     className="mb-8 shadow-lg"
     client:visible
   />
 
   <div id="packs-container" data-is-loading={showSkeletonOnLoad.toString()}>
-    <!-- Skeleton loading state -->
     <div
       id="skeleton-loader"
       class="skeleton-container"
@@ -103,272 +78,215 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
       <SkeletonCatalog count={gridCols * 2} />
     </div>
 
-    <!-- Packs Grid -->
     <div
       id="packs-grid"
       class={`grid ${gridClass} gap-4 sm:gap-6 ${showSkeletonOnLoad ? 'opacity-0' : ''}`}
     >
       {
-        filteredPacks.length > 0 ? (
-          filteredPacks.map((pack) => (
+        products.map((product) => {
+          const isInitiallyVisible = filteredProducts.some((p) => p.id === product.id);
+          return (
             <div
-              class="catalog-product-card"
-              data-level={pack.level}
-              data-formats={pack.formatTags?.join(',')}
-              data-price={pack.price}
-              data-bestseller={pack.popularityTags?.includes('bestSeller')}
-              data-bookcount={pack.booksIds?.length || 0}
-              data-rating={pack.rating?.score || '0'}
-              data-title={pack.title}
+              class={`catalog-product-card ${isInitiallyVisible ? '' : 'hidden'}`}
+              data-product-id={product.id}
             >
-              <ProductCard
-                product={{
-                  ...pack,
-                  productType: 'pack',
-                  formatTags: pack.formatTags ? [...pack.formatTags] : [],
-                }}
-                size={productSize}
-              />
+              <ProductCard product={product} size={productSize} />
             </div>
-          ))
-        ) : (
-          <div class="bg-neutral-light/50 col-span-full rounded-lg py-16 text-center">
-            <div class="mb-4 text-5xl">🔍</div>
-            <h3 class="text-primary-dark mb-2 text-xl font-semibold">No se encontraron packs</h3>
-            <p class="mb-6 text-gray-500">
-              Lo sentimos, no hay packs de materiales que coincidan con los filtros seleccionados.
-            </p>
-            <button
-              id="reset-filters"
-              class="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 font-medium text-white transition-all duration-300"
-            >
-              Reiniciar filtros
-            </button>
-          </div>
-        )
+          );
+        })
       }
     </div>
 
-    <!-- Results Summary -->
-    {
-      filteredPacks.length > 0 && (
-        <div class="mt-6 rounded-lg bg-white p-4 text-center shadow-sm">
-          <p class="text-sm text-gray-600">
-            Mostrando <span class="font-semibold">{filteredPacks.length}</span>{' '}
-            {filteredPacks.length === 1 ? 'pack' : 'packs'}
-            {initialLevel !== 'all' && ` de nivel ${initialLevel}`}
-            {initialFormat !== 'all' && ` en formato ${initialFormat}`}
-          </p>
-        </div>
-      )
-    }
+    <div
+      id="no-results"
+      class={`bg-neutral-light/50 col-span-full rounded-lg py-16 text-center ${filteredProducts.length === 0 ? '' : 'hidden'}`}
+    >
+      <div class="mb-4 text-5xl">🔍</div>
+      <h3 class="text-primary-dark mb-2 text-xl font-semibold">No se encontraron packs</h3>
+      <p class="mb-6 text-gray-500">
+        Lo sentimos, no hay packs de materiales que coincidan con los filtros seleccionados.
+      </p>
+      <button
+        id="reset-filters"
+        class="bg-primary hover:bg-primary-dark rounded-lg px-6 py-2 font-medium text-white transition-all duration-300"
+      >
+        Reiniciar filtros
+      </button>
+    </div>
+
+    <div class="results-summary mt-6 rounded-lg bg-white p-4 text-center shadow-sm">
+      <p class="text-sm text-gray-600">
+        Mostrando <span class="result-count font-semibold">{filteredProducts.length}</span>{' '}
+        {filteredProducts.length === 1 ? 'pack' : 'packs'}
+      </p>
+    </div>
   </div>
+
+  <!-- Real product data for client-side filtering — parsed once, never
+       reconstructed from data-* attributes on the cards. -->
+  <script
+    type="application/json"
+    id="catalog-products-data"
+    set:html={JSON.stringify(products)}
+    is:inline
+  />
 </div>
 
 <script>
-  // Function to apply filters client-side
-  const filterPacks = (level: string, format: string, sort: string, searchTerm = '') => {
+  import {
+    filterProducts,
+    sortProducts,
+    buildCatalogURL,
+    parseCatalogParams,
+    DEFAULT_LEVEL,
+    DEFAULT_FORMAT,
+    DEFAULT_SORT,
+    DEFAULT_SEARCH,
+  } from '@utils/catalogFilters';
+  import { applyProductOrder } from '@utils/catalogDom';
+  import type { Product } from '@app-types/product';
+  import type { CatalogFilterChangeDetail } from '@components/catalog/Filter.tsx';
+
+  const dataEl = document.getElementById('catalog-products-data');
+  const allProducts: Product[] = dataEl?.textContent ? JSON.parse(dataEl.textContent) : [];
+
+  const packsGridEl = document.getElementById('packs-grid');
+
+  // Computes the filtered/sorted result and applies it to the DOM. This is
+  // the ONLY place that touches the grid's visibility/order — both the
+  // animated "user changed a filter" path and the silent "deep link on load"
+  // path below call through it, so they can never disagree.
+  const computeAndApply = (detail: CatalogFilterChangeDetail): number => {
+    if (!packsGridEl) return 0;
+    const filtered = filterProducts(allProducts, detail);
+    const sorted = sortProducts(filtered, detail.sort);
+    const orderedIds = sorted.map((p) => p.id);
+    const items = Array.from(packsGridEl.querySelectorAll('.catalog-product-card'));
+    return applyProductOrder(packsGridEl, items, orderedIds);
+  };
+
+  const applyFilters = (detail: CatalogFilterChangeDetail): void => {
     const packsContainer = document.getElementById('packs-container');
-    const packsGrid = document.getElementById('packs-grid') as HTMLElement;
-    const skeletonLoader = document.getElementById('skeleton-loader') as HTMLElement;
-    const allPacks = document.querySelectorAll('.catalog-product-card');
+    const skeletonLoader = document.getElementById('skeleton-loader');
+    const noResults = document.getElementById('no-results');
+    const resultCountEls = document.querySelectorAll('.result-count');
 
-    // Add loading state
     document.body.classList.add('filters-loading');
+    packsContainer?.setAttribute('data-is-loading', 'true');
 
-    // Show skeleton loader during filtering
-    if (packsContainer) {
-      packsContainer.setAttribute('data-is-loading', 'true');
+    if (packsGridEl) {
+      packsGridEl.classList.add('opacity-0');
+      packsGridEl.style.position = 'absolute';
+      packsGridEl.style.visibility = 'hidden';
     }
-
-    if (packsGrid) {
-      packsGrid.classList.add('opacity-0');
-      packsGrid.style.position = 'absolute';
-      packsGrid.style.visibility = 'hidden';
-    }
-
     if (skeletonLoader) {
-      skeletonLoader.style.display = 'block';
-      skeletonLoader.style.opacity = '1';
+      (skeletonLoader as HTMLElement).style.display = 'block';
+      (skeletonLoader as HTMLElement).style.opacity = '1';
     }
-
-    // Hide all packs first
-    allPacks.forEach((pack) => {
-      pack.classList.add('hidden');
-    });
 
     // Filtering runs over an in-memory array already on the page — there's
     // no real async work here, so no artificial delay before it (see #62).
-    (() => {
-      let visibleCount = 0;
+    const visibleCount = computeAndApply(detail);
 
-      // Process the packs based on filters
-      allPacks.forEach((pack) => {
-        const packLevel = pack.getAttribute('data-level') || '';
-        const packFormats = pack.getAttribute('data-formats') || '';
-        const packTitle = pack.getAttribute('data-title') || '';
+    window.history.replaceState({}, '', buildCatalogURL(window.location.href, detail));
 
-        // Check if pack matches all filters
-        const levelMatch = level === 'all' || packLevel === level;
-        const formatMatch = format === 'all' || packFormats.includes(format);
-        const searchMatch =
-          !searchTerm || packTitle.toLowerCase().includes(searchTerm.toLowerCase());
+    resultCountEls.forEach((el) => (el.textContent = String(visibleCount)));
+    noResults?.classList.toggle('hidden', visibleCount !== 0);
 
-        if (levelMatch && formatMatch && searchMatch) {
-          pack.classList.remove('hidden');
-          visibleCount++;
+    document.body.classList.remove('filters-loading');
+    packsContainer?.setAttribute('data-is-loading', 'false');
+
+    if (skeletonLoader) {
+      (skeletonLoader as HTMLElement).style.opacity = '0';
+      // Kept: matches the skeleton's actual CSS opacity transition duration.
+      setTimeout(() => {
+        (skeletonLoader as HTMLElement).style.display = 'none';
+      }, 300);
+    }
+    if (packsGridEl) {
+      packsGridEl.classList.remove('opacity-0');
+      packsGridEl.style.position = 'static';
+      packsGridEl.style.visibility = 'visible';
+
+      const visibleCards = packsGridEl.querySelectorAll('.catalog-product-card:not(.hidden)');
+      visibleCards.forEach((card, index) => {
+        if (card instanceof HTMLElement) {
+          card.style.animationDelay = `${0.05 * index}s`;
+          card.style.animationPlayState = 'running';
         }
       });
+    }
 
-      // Sort visible packs if needed
-      if (sort !== 'featured') {
-        const sortPacks = (a: Element, b: Element) => {
-          const priceA = parseFloat(a.getAttribute('data-price') || '0');
-          const priceB = parseFloat(b.getAttribute('data-price') || '0');
-          const bookCountA = parseInt(a.getAttribute('data-bookcount') || '0');
-          const bookCountB = parseInt(b.getAttribute('data-bookcount') || '0');
-
-          if (sort === 'price-low') {
-            return priceA - priceB;
-          } else if (sort === 'price-high') {
-            return priceB - priceA;
-          } else if (sort === 'bestseller') {
-            const aIsBestseller = a.getAttribute('data-bestseller') === 'true';
-            const bIsBestseller = b.getAttribute('data-bestseller') === 'true';
-
-            if (aIsBestseller && !bIsBestseller) return -1;
-            if (!aIsBestseller && bIsBestseller) return 1;
-
-            const ratingA = parseFloat(a.getAttribute('data-rating') || '0');
-            const ratingB = parseFloat(b.getAttribute('data-rating') || '0');
-            return ratingB - ratingA;
-          } else if (sort === 'book-count') {
-            // Special sort for packs: by number of books included
-            return bookCountB - bookCountA;
-          }
-
-          return 0;
-        };
-
-        const visiblePacks = Array.from(allPacks).filter(
-          (pack) => !pack.classList.contains('hidden')
-        );
-        visiblePacks.sort(sortPacks);
-
-        if (packsGrid) {
-          visiblePacks.forEach((pack) => {
-            packsGrid.appendChild(pack);
-          });
-        }
-      }
-
-      // Update UI to reflect results
-      document.querySelectorAll('.result-count').forEach((el) => {
-        el.textContent = visibleCount.toString();
-      });
-
-      // Show empty state if needed
-      const emptyState = document.querySelector('.col-span-full');
-      if (emptyState) {
-        if (visibleCount === 0) {
-          emptyState.classList.remove('hidden');
-        } else {
-          emptyState.classList.add('hidden');
-        }
-      }
-
-      // Remove loading state and hide skeleton
-      document.body.classList.remove('filters-loading');
-
-      if (packsContainer) {
-        packsContainer.setAttribute('data-is-loading', 'false');
-      }
-
-      if (skeletonLoader) {
-        skeletonLoader.style.opacity = '0';
-        // Kept: matches the skeleton's actual CSS opacity transition
-        // duration, unlike the artificial delays removed above.
-        setTimeout(() => {
-          skeletonLoader.style.display = 'none';
-        }, 300);
-      }
-
-      if (packsGrid) {
-        packsGrid.classList.remove('opacity-0');
-        packsGrid.style.position = 'static';
-        packsGrid.style.visibility = 'visible';
-
-        // Reset animation for visible packs
-        const visiblePacks = document.querySelectorAll('.catalog-product-card:not(.hidden)');
-        visiblePacks.forEach((pack, index) => {
-          if (pack instanceof HTMLElement) {
-            pack.style.animationDelay = `${0.05 * index}s`;
-            pack.style.animationPlayState = 'running';
-          }
-        });
-      }
-    })();
+    window.dispatchEvent(new CustomEvent('updateFilterCount', { detail: { count: visibleCount } }));
   };
 
-  // Filter change event handler
-  interface FilterChangeEventDetail {
-    level: string;
-    format: string;
-    sort: string;
-    search?: string;
-  }
-
-  const handleFilterChange = (event: CustomEvent<FilterChangeEventDetail>) => {
-    // Get the filter data from the event detail
-    const { level, format, sort, search } = event.detail;
-
-    // Apply client-side filtering without page reload
-    filterPacks(level, format, sort, search);
+  const handleFilterChange = (event: Event) => {
+    applyFilters((event as CustomEvent<CatalogFilterChangeDetail>).detail);
   };
 
-  // Reset filters button
   const resetButton = document.getElementById('reset-filters');
-  if (resetButton) {
-    resetButton.addEventListener('click', () => {
-      // Create and dispatch a reset event
-      const resetEvent = new CustomEvent('resetFilters');
-      document.dispatchEvent(resetEvent);
-
-      // Apply the default filters
-      filterPacks('all', 'all', 'featured');
+  resetButton?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('resetFilters'));
+    applyFilters({
+      level: 'all',
+      format: 'all',
+      examType: 'all',
+      sort: 'featured',
+      resourceType: 'any',
+      search: '',
     });
-  }
+  });
 
-  // Listen for filter changes from the Filter component
   window.addEventListener('filterChange', handleFilterChange as EventListener);
 
-  // Animation for pack grid items
   document.addEventListener('DOMContentLoaded', () => {
     const packsContainer = document.getElementById('packs-container');
-    const skeletonLoader = document.getElementById('skeleton-loader') as HTMLElement;
-    const packsGrid = document.getElementById('packs-grid') as HTMLElement;
+    const skeletonLoader = document.getElementById('skeleton-loader');
+    const noResults = document.getElementById('no-results');
+    const resultCountEls = document.querySelectorAll('.result-count');
 
     if (packsContainer && packsContainer.getAttribute('data-is-loading') === 'true') {
       // The grid is already server-rendered — reveal it immediately
       // instead of holding the skeleton up with an artificial delay (#62).
-      if (skeletonLoader) skeletonLoader.style.opacity = '0';
-      if (packsGrid) {
-        packsGrid.classList.remove('opacity-0');
-        packsGrid.style.position = 'static';
-        packsGrid.style.visibility = 'visible';
+      if (skeletonLoader) (skeletonLoader as HTMLElement).style.opacity = '0';
+      if (packsGridEl) {
+        packsGridEl.classList.remove('opacity-0');
+        packsGridEl.style.position = 'static';
+        packsGridEl.style.visibility = 'visible';
       }
       packsContainer.setAttribute('data-is-loading', 'false');
 
       // Kept: matches the skeleton's actual CSS opacity transition duration.
       setTimeout(() => {
-        if (skeletonLoader) skeletonLoader.style.display = 'none';
+        if (skeletonLoader) (skeletonLoader as HTMLElement).style.display = 'none';
       }, 300);
+    }
+
+    // This site builds as fully static output with no SSR adapter — the
+    // markup above was rendered at BUILD time, when there is no real request
+    // and therefore no query string. A deep link like ?level=basic only
+    // reflects the right packs because this runs client-side, where
+    // location.search is the actual browser URL. Skips the loading/skeleton
+    // choreography (this is a correction on first paint, not a user action).
+    const initialParams = parseCatalogParams(new URLSearchParams(window.location.search));
+    const isNonDefault =
+      initialParams.level !== DEFAULT_LEVEL ||
+      initialParams.format !== DEFAULT_FORMAT ||
+      initialParams.sort !== DEFAULT_SORT ||
+      initialParams.search !== DEFAULT_SEARCH;
+
+    if (isNonDefault) {
+      const visibleCount = computeAndApply(initialParams);
+      resultCountEls.forEach((el) => (el.textContent = String(visibleCount)));
+      noResults?.classList.toggle('hidden', visibleCount !== 0);
+      window.dispatchEvent(
+        new CustomEvent('updateFilterCount', { detail: { count: visibleCount } })
+      );
     }
   });
 </script>
 
 <style>
-  /* Loading state animations */
   body.filters-loading .packs-grid::before {
     content: '';
     position: absolute;
@@ -396,7 +314,6 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
     }
   }
 
-  /* Pack visibility transition for smooth filtering */
   .catalog-product-card {
     transition:
       opacity 0.5s ease,
@@ -416,19 +333,16 @@ const showSkeletonOnLoad = useSkeleton && filteredPacks.length > 8;
     display: none;
   }
 
-  /* Add fade-in animation for packs after filtering */
   .catalog-product-card {
     opacity: 0;
     animation: fadeInUp 0.5s ease forwards;
     animation-play-state: paused;
   }
 
-  /* Play animation when filters are applied */
   [data-is-loading='false'] .catalog-product-card:not(.hidden) {
     animation-play-state: running;
   }
 
-  /* Animated skeleton pulse */
   .skeleton-container {
     animation: fadeIn 0.3s ease-in;
   }

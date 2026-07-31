@@ -1,9 +1,17 @@
 ---
-import Filter from './Filter.jsx';
-import SkeletonCatalog from '../SkeletonCatalog.astro';
-import ProductCard from '../ProductCard.astro';
-import type { Product } from '../../types/product';
-import { PopularityTag } from '../../types/book';
+import Filter from '@components/catalog/Filter.tsx';
+import SkeletonCatalog from '@components/SkeletonCatalog.astro';
+import ProductCard from '@components/ProductCard.astro';
+import type { Product } from '@app-types/product';
+import {
+  DEFAULT_EXAM_TYPE,
+  DEFAULT_FORMAT,
+  DEFAULT_LEVEL,
+  DEFAULT_RESOURCE_TYPE,
+  DEFAULT_SORT,
+  getGridClassFromColumns,
+  processProducts,
+} from '@utils/catalogFilters';
 
 interface Props {
   products: Product[];
@@ -20,10 +28,10 @@ interface Props {
 
 const {
   products = [],
-  initialLevel = 'all',
-  initialFormat = 'all',
-  initialSort = 'featured',
-  initialResourceType = 'any',
+  initialLevel = DEFAULT_LEVEL,
+  initialFormat = DEFAULT_FORMAT,
+  initialSort = DEFAULT_SORT,
+  initialResourceType = DEFAULT_RESOURCE_TYPE,
   editorialMap = new Map(),
   gridCols = 4,
   productSize = 'medium',
@@ -31,80 +39,25 @@ const {
   initialSearch = '',
 } = Astro.props;
 
-// Apply initial filters on the server
-let filteredProducts = [...products];
-
-if (initialSearch) {
-  const normalizedSearch = initialSearch.toLowerCase();
-  filteredProducts = filteredProducts.filter((product) =>
-    product.title.toLowerCase().includes(normalizedSearch)
-  );
-}
-
-// Filter by resource type if specified
-if (initialResourceType !== 'any') {
-  filteredProducts = filteredProducts.filter(
-    (product) => product.productType === initialResourceType
-  );
-}
-
-// Filter by format if specified
-if (initialFormat !== 'all') {
-  filteredProducts = filteredProducts.filter(
-    (product) => product.formatTags && product.formatTags.includes(initialFormat as any)
-  );
-}
-
-// Filter by level if specified
-if (initialLevel !== 'all') {
-  filteredProducts = filteredProducts.filter((product) => {
-    if (initialLevel === 'intermediate') {
-      return product.level === 'intermediate' || product.level === 'upper-intermediate';
-    }
-    if (initialLevel === 'advanced') {
-      return product.level === 'advanced' || product.level === 'proficient';
-    }
-    return product.level === initialLevel;
-  });
-}
-
-// Apply initial sorting
-if (initialSort === 'price-low') {
-  filteredProducts.sort((a, b) => a.price - b.price);
-} else if (initialSort === 'price-high') {
-  filteredProducts.sort((a, b) => b.price - a.price);
-} else if (initialSort === 'newest') {
-  // Assuming we don't have a date field, we'll leave this as is
-  // In a real app, you'd sort by date: filteredProducts.sort((a, b) => new Date(b.publishedDate) - new Date(a.publishedDate));
-} else if (initialSort === 'bestseller') {
-  filteredProducts = filteredProducts.sort((a, b) => {
-    // Fixed type error by converting boolean to number
-    const aIsBestseller = a.popularityTags?.includes(PopularityTag.BESTSELLER) ? 1 : 0;
-    const bIsBestseller = b.popularityTags?.includes(PopularityTag.BESTSELLER) ? 1 : 0;
-    return bIsBestseller - aIsBestseller;
-  });
-} else {
-  // Default 'featured' sort
-  filteredProducts = filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
-}
-
-// Maps a grid column count to responsive Tailwind classes
-const getGridClassFromColumns = (cols: number): string => {
-  const gridClasses = {
-    2: 'grid-cols-2',
-    3: 'grid-cols-2 md:grid-cols-3',
-    4: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
-    5: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
-  };
-
-  return gridClasses[cols as keyof typeof gridClasses] || 'grid-cols-2 grid-cols-3 lg:grid-cols-4';
-};
+// Server-render the initial set with the exact same function the client
+// re-runs on every filter change, so SSR output and post-filter output can
+// never disagree (see src/utils/catalogFilters.ts).
+const filteredProducts = processProducts(
+  products,
+  {
+    resourceType: initialResourceType,
+    level: initialLevel,
+    format: initialFormat,
+    examType: DEFAULT_EXAM_TYPE,
+    search: initialSearch,
+  },
+  initialSort
+);
 
 const gridClass = getGridClassFromColumns(gridCols);
 ---
 
 <div class="catalog-container flex flex-col items-center">
-  <!-- Filtro en React (Isla) con parámetros iniciales -->
   <Filter
     client:visible
     initialLevel={initialLevel}
@@ -113,29 +66,24 @@ const gridClass = getGridClassFromColumns(gridCols);
     initialResourceType={initialResourceType}
     initialSearch={initialSearch}
     enableResourceTypeFilter={enableResourceTypeFilter}
-    productType={initialResourceType !== 'any' ? initialResourceType : undefined}
+    productType={initialResourceType !== DEFAULT_RESOURCE_TYPE ? initialResourceType : undefined}
     productCount={filteredProducts.length}
   />
 
-  <!-- Contenedor del grid con posición relativa para el loading indicator -->
   <div class="relative w-full">
-    <!-- Loading indicator dentro del contenedor del grid -->
     <div
       id="loading-indicator"
       class="loading-container absolute inset-0 z-10 hidden rounded-lg bg-white/80"
     >
-      <!-- Skeleton loader que se muestra durante la carga -->
       <SkeletonCatalog count={gridCols * 2} />
     </div>
 
-    <!-- Grid de productos -->
     <div
       id="products-grid"
       class={`grid ${gridClass} mt-8 min-h-[300px] px-1 sm:px-4 md:gap-6 md:px-8`}
     >
       {
-        filteredProducts.map((product) => {
-          // Safely extract editorial information for book products
+        products.map((product) => {
           let editorialName = '';
           if (product.productType === 'book' && 'editorialId' in product) {
             const editorialId = product.editorialId;
@@ -144,20 +92,18 @@ const gridClass = getGridClassFromColumns(gridCols);
             }
           }
 
+          const isInitiallyVisible = filteredProducts.some((p) => p.id === product.id);
+
           return (
             <div
-              class="product-grid-item"
+              class={`product-grid-item ${isInitiallyVisible ? '' : 'hidden'}`}
               data-product-id={product.id}
-              data-type={product.productType}
-              data-level={product.level}
-              data-format={product.formatTags?.join(',')}
-              data-featured={product.featured}
-              data-price={product.price}
-              data-title={product.title}
-              data-bestseller={product.popularityTags?.includes(PopularityTag.BESTSELLER)}
-              data-editorial={editorialName}
             >
-              <ProductCard product={product} size={productSize} />
+              <ProductCard
+                product={product}
+                size={productSize}
+                editorial={editorialName || undefined}
+              />
             </div>
           );
         })
@@ -165,8 +111,10 @@ const gridClass = getGridClassFromColumns(gridCols);
     </div>
   </div>
 
-  <!-- Empty state message that will be shown when no products match filters -->
-  <div id="empty-state" class="hidden px-4 py-16 text-center">
+  <div
+    id="empty-state"
+    class={`px-4 py-16 text-center ${filteredProducts.length === 0 ? '' : 'hidden'}`}
+  >
     <div class="mb-4 text-6xl">📚</div>
     <h3 class="mb-2 text-2xl font-bold text-gray-700">
       No hay resultados que coincidan con tus filtros
@@ -181,300 +129,147 @@ const gridClass = getGridClassFromColumns(gridCols);
       Limpiar filtros
     </button>
   </div>
+
+  <!-- Real product data for client-side filtering — parsed once, never
+       reconstructed from data-* attributes on the cards. -->
+  <script
+    type="application/json"
+    id="catalog-products-data"
+    set:html={JSON.stringify(products)}
+    is:inline
+  />
 </div>
 
 <script>
   import { getSharedObserver } from '@utils/observer';
+  import {
+    filterProducts,
+    sortProducts,
+    buildCatalogURL,
+    parseCatalogParams,
+    DEFAULT_LEVEL,
+    DEFAULT_FORMAT,
+    DEFAULT_SORT,
+    DEFAULT_SEARCH,
+    DEFAULT_RESOURCE_TYPE,
+  } from '@utils/catalogFilters';
+  import { applyProductOrder } from '@utils/catalogDom';
+  import type { Product } from '@app-types/product';
+  import type { CatalogFilterChangeDetail } from '@components/catalog/Filter.tsx';
 
-  // Client-side filtering without page reload
   document.addEventListener('DOMContentLoaded', () => {
-    // Read products data from DOM elements (reduces HTML size and avoids duplication)
-    const productGridItems = Array.from(document.querySelectorAll('.product-grid-item'));
-    const allProducts = productGridItems.map((item) => {
-      const id = item.getAttribute('data-product-id') || '';
-      const productType = item.getAttribute('data-type') || '';
-      const level = item.getAttribute('data-level') || '';
-      const formatTags = item.getAttribute('data-format')?.split(',') || [];
-      const featured = item.getAttribute('data-featured') === 'true';
-      const price = parseFloat(item.getAttribute('data-price') || '0');
-      const title = item.getAttribute('data-title') || '';
-      const bestseller = item.getAttribute('data-bestseller') === 'true';
-      const popularityTags = bestseller ? ['bestSeller'] : [];
+    const dataEl = document.getElementById('catalog-products-data');
+    const allProducts: Product[] = dataEl?.textContent ? JSON.parse(dataEl.textContent) : [];
 
-      return {
-        id,
-        productType,
-        level,
-        formatTags,
-        featured,
-        price,
-        title,
-        popularityTags,
-      };
-    });
-
-    // Get DOM elements
     const productsGrid = document.getElementById('products-grid');
     const emptyState = document.getElementById('empty-state');
     const loadingIndicator = document.getElementById('loading-indicator');
     const resetButton = document.getElementById('reset-filters');
 
-    // Function to show/hide loading indicator
     const showLoading = (show: boolean): void => {
       if (!loadingIndicator || !productsGrid) return;
-
-      if (show) {
-        loadingIndicator.classList.remove('hidden');
-        productsGrid.classList.add('filtering');
-        productsGrid.style.opacity = '0'; // Ocultar el grid original cuando se muestra el skeleton
-      } else {
-        loadingIndicator.classList.add('hidden');
-        productsGrid.classList.remove('filtering');
-        productsGrid.style.opacity = '1'; // Mostrar el grid cuando se quita el skeleton
-      }
+      loadingIndicator.classList.toggle('hidden', !show);
+      productsGrid.classList.toggle('filtering', show);
+      productsGrid.style.opacity = show ? '0' : '1';
     };
 
-    // Function to update URL without reloading
-    const updateURL = (
-      resourceType: string,
-      level: string,
-      format: string,
-      sort: string,
-      search: string = ''
-    ): void => {
-      // Create URL object based on current URL
-      const url = new URL(window.location.href);
-
-      // Update query parameters
-      if (resourceType && resourceType !== 'any') {
-        url.searchParams.set('type', resourceType);
-      } else {
-        url.searchParams.delete('type');
-      }
-
-      if (level && level !== 'all') {
-        url.searchParams.set('level', level);
-      } else {
-        url.searchParams.delete('level');
-      }
-
-      if (format && format !== 'all') {
-        url.searchParams.set('format', format);
-      } else {
-        url.searchParams.delete('format');
-      }
-
-      if (sort && sort !== 'featured') {
-        url.searchParams.set('sort', sort);
-      } else {
-        url.searchParams.delete('sort');
-      }
-
-      if (search) {
-        url.searchParams.set('q', search);
-      } else {
-        url.searchParams.delete('q');
-      }
-
-      // Add hash to keep user at catalog section
-      url.hash = 'catalog';
-
-      // Update the URL without reloading the page
-      window.history.pushState({}, '', url.toString());
+    // Computes the filtered/sorted result and applies it to the DOM. This is
+    // the ONLY place that touches the grid's visibility/order — both the
+    // animated "user changed a filter" path and the silent "deep link on
+    // load" path below call through it, so they can never disagree.
+    const computeAndApply = (detail: CatalogFilterChangeDetail): number => {
+      const filtered = filterProducts(allProducts, detail);
+      const sorted = sortProducts(filtered, detail.sort);
+      const orderedIds = sorted.map((p) => p.id);
+      if (!productsGrid) return orderedIds.length;
+      const items = Array.from(productsGrid.querySelectorAll('.product-grid-item'));
+      return applyProductOrder(productsGrid, items, orderedIds);
     };
 
-    // Function to filter products and update the display
-    const filterProducts = (
-      resourceType: string,
-      level: string,
-      format: string,
-      sort: string,
-      search: string = ''
-    ): void => {
+    const applyFilters = (detail: CatalogFilterChangeDetail): void => {
       showLoading(true);
 
       // Filtering runs over an in-memory array already on the page — there's
       // no real async work here, so no artificial delay before it (see #62).
-      (() => {
-        // Apply filters
-        let filtered = [...allProducts];
+      const visibleCount = computeAndApply(detail);
 
-        // Filter by resource type if specified
-        if (resourceType !== 'any') {
-          filtered = filtered.filter((product) => product.productType === resourceType);
-        }
+      window.history.replaceState({}, '', buildCatalogURL(window.location.href, detail));
 
-        // Filter by level if specified (handle difficulty mapping for exams)
-        if (level && level !== 'all') {
-          filtered = filtered.filter((product) => {
-            if (level === 'intermediate') {
-              return product.level === 'intermediate' || product.level === 'upper-intermediate';
-            }
-            if (level === 'advanced') {
-              return product.level === 'advanced' || product.level === 'proficient';
-            }
-            return product.level === level;
-          });
-        }
-
-        // Filter by format if specified
-        if (format && format !== 'all') {
-          filtered = filtered.filter(
-            (product) => product.formatTags && product.formatTags.includes(format)
-          );
-        }
-
-        // Filter by search term if provided
-        if (search) {
-          const normalizedSearchTerm = search.toLowerCase();
-          filtered = filtered.filter((product) =>
-            product.title.toLowerCase().includes(normalizedSearchTerm)
-          );
-        }
-
-        // Apply sorting
-        if (sort === 'price-low') {
-          filtered.sort((a, b) => a.price - b.price);
-        } else if (sort === 'price-high') {
-          filtered.sort((a, b) => b.price - a.price);
-        } else if (sort === 'bestseller') {
-          filtered = filtered.sort((a, b) => {
-            // Use numerical values to avoid type errors
-            const aIsBestseller = a.popularityTags?.includes('bestSeller') ? 1 : 0;
-            const bIsBestseller = b.popularityTags?.includes('bestSeller') ? 1 : 0;
-            return bIsBestseller - aIsBestseller;
-          });
-        } else {
-          // Default 'featured' sort
-          filtered = filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
-        }
-
-        // Update URL to reflect filters without page reload
-        updateURL(resourceType, level, format, sort, search);
-
-        // Get all product items in the grid
-        const productItems = document.querySelectorAll('.product-grid-item');
-
-        // Create a map of product IDs for quick lookup
-        const filteredIds = new Set(filtered.map((product) => product.id));
-
-        // Show/hide products based on filter results
-        let visibleCount = 0;
-        productItems.forEach((item) => {
-          const productId = item.getAttribute('data-product-id') || '';
-          if (filteredIds.has(productId)) {
-            item.classList.remove('hidden');
-            visibleCount++;
-
-            // Determine the animation delay for staggered effect
-            const index = Array.from(productItems).indexOf(item);
-            const delayClass = `appear-${(index % 4) + 1}`;
-
-            // Reset animation classes
-            item.classList.remove('in-view', 'appear-1', 'appear-2', 'appear-3', 'appear-4');
-
-            // Force reflow to restart animation
-            // Use proper DOM property check
-            (item as HTMLElement).style.display = 'none';
-            void (item as HTMLElement).offsetWidth;
-            (item as HTMLElement).style.display = '';
-
-            // Apply animation classes
-            setTimeout(() => {
-              item.classList.add('in-view', delayClass);
-            }, 50);
-          } else {
-            item.classList.add('hidden');
-          }
+      if (productsGrid) {
+        const items = Array.from(productsGrid.querySelectorAll('.product-grid-item'));
+        items.forEach((item, index) => {
+          if (item.classList.contains('hidden')) return;
+          const delayClass = `appear-${(index % 4) + 1}`;
+          item.classList.remove('in-view', 'appear-1', 'appear-2', 'appear-3', 'appear-4');
+          (item as HTMLElement).style.display = 'none';
+          void (item as HTMLElement).offsetWidth;
+          (item as HTMLElement).style.display = '';
+          setTimeout(() => item.classList.add('in-view', delayClass), 50);
         });
+      }
 
-        // Show empty state if no products match filters
-        if (emptyState) {
-          if (visibleCount === 0) {
-            emptyState.classList.remove('hidden');
-          } else {
-            emptyState.classList.add('hidden');
-          }
-        }
+      emptyState?.classList.toggle('hidden', visibleCount !== 0);
+      showLoading(false);
 
-        showLoading(false);
-
-        // Dispatch event to inform other components about the filter results count
-        window.dispatchEvent(
-          new CustomEvent('updateFilterCount', {
-            detail: { count: visibleCount },
-          })
-        );
-      })();
+      window.dispatchEvent(
+        new CustomEvent('updateFilterCount', { detail: { count: visibleCount } })
+      );
     };
 
-    // Filter change event handler - THIS IS THE KEY PART
-    const handleFilterChange = (event: CustomEvent): void => {
-      // Get the filter data from the event detail
-      const { level, format, sort, resourceType, search } = event.detail as {
-        level: string;
-        format: string;
-        sort: string;
-        resourceType: string;
-        search: string;
-      };
-
-      // Apply client-side filtering without page reload
-      filterProducts(resourceType, level, format, sort, search);
+    const handleFilterChange = (event: Event): void => {
+      applyFilters((event as CustomEvent<CatalogFilterChangeDetail>).detail);
     };
 
-    // Reset filters button
     if (resetButton) {
       resetButton.addEventListener('click', () => {
-        // Create and dispatch a reset event
-        const resetEvent = new CustomEvent('resetFilters');
-        document.dispatchEvent(resetEvent);
-
-        // Apply the default filters
-        filterProducts('any', 'all', 'all', 'featured', '');
+        document.dispatchEvent(new CustomEvent('resetFilters'));
+        applyFilters({
+          level: 'all',
+          format: 'all',
+          examType: 'all',
+          sort: 'featured',
+          resourceType: 'any',
+          search: '',
+        });
       });
     }
 
-    // Listen for filter changes from the Filter component
     window.addEventListener('filterChange', handleFilterChange as EventListener);
 
-    // Animation for product grid items using shared observer
     const observeElements = () => {
       const observer = getSharedObserver();
-
-      // Observe all visible product grid items
       document.querySelectorAll('.product-grid-item').forEach((item) => {
-        if (!item.classList.contains('hidden')) {
-          observer.observe(item);
-        }
+        if (!item.classList.contains('hidden')) observer.observe(item);
       });
     };
 
-    // Sync to URL parameters on load
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlType = urlParams.get('type') || 'any';
-    const urlLevel = urlParams.get('level') || 'all';
-    const urlFormat = urlParams.get('format') || 'all';
-    const urlSort = urlParams.get('sort') || 'featured';
-    const urlSearch = urlParams.get('q') || urlParams.get('search') || '';
+    // This site builds as fully static output with no SSR adapter — the
+    // markup above was rendered at BUILD time, when there is no real request
+    // and therefore no query string. A deep link like ?level=basic only
+    // reflects the right products because this runs client-side, where
+    // location.search is the actual browser URL. Skips the loading/animation
+    // choreography (this is a correction on first paint, not a user action).
+    const initialParams = parseCatalogParams(new URLSearchParams(window.location.search));
+    const isNonDefault =
+      initialParams.level !== DEFAULT_LEVEL ||
+      initialParams.format !== DEFAULT_FORMAT ||
+      initialParams.sort !== DEFAULT_SORT ||
+      initialParams.search !== DEFAULT_SEARCH ||
+      initialParams.resourceType !== DEFAULT_RESOURCE_TYPE;
 
-    if (
-      urlType !== 'any' ||
-      urlLevel !== 'all' ||
-      urlFormat !== 'all' ||
-      urlSort !== 'featured' ||
-      urlSearch
-    ) {
-      filterProducts(urlType, urlLevel, urlFormat, urlSort, urlSearch);
+    if (isNonDefault) {
+      const visibleCount = computeAndApply(initialParams);
+      emptyState?.classList.toggle('hidden', visibleCount !== 0);
+      window.dispatchEvent(
+        new CustomEvent('updateFilterCount', { detail: { count: visibleCount } })
+      );
     }
 
-    // Initialize animations
     observeElements();
   });
 </script>
 
 <style>
-  /* Animation styles for product grid items */
   .product-grid-item {
     opacity: 0;
     transform: translateY(20px);

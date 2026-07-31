@@ -1,24 +1,22 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import SectionTitle from '../../../components/SectionTitle.astro';
-import Breadcrumb from '../../../components/Breadcrumb.astro';
-import CatalogPackContainer from '../../../components/catalog/CatalogPackContainer.astro';
-import PromoSection from '../../../components/catalog/PromoSection.astro';
-import FAQ from '../../../components/FAQ.astro';
-import CTABanner from '../../../components/CTA-Banner.astro';
-import CategoryCards from '../../../components/catalog/CategoryCards.astro';
-import '../../../styles/catalog.css';
+import Layout from '@layouts/Layout.astro';
+import SectionTitle from '@components/SectionTitle.astro';
+import Breadcrumb from '@components/Breadcrumb.astro';
+import CatalogPackContainer from '@components/catalog/CatalogPackContainer.astro';
+import PromoSection from '@components/catalog/PromoSection.astro';
+import FAQ from '@components/FAQ.astro';
+import CTABanner from '@components/CTA-Banner.astro';
+import CategoryCards from '@components/catalog/CategoryCards.astro';
+import '@styles/catalog.css';
 
 // Import types, utilities and data
-import type { Pack } from '../../../types/pack';
-import { BookLevel, FormatTag } from '../../../types/book';
-import { getProductsByType } from '../../../utils/listProducts';
+import type { Pack } from '@app-types/pack';
+import { BookLevel, FormatTag } from '@app-types/book';
+import { getProductsByType } from '@utils/listProducts';
+import { parseCatalogParams } from '@utils/catalogFilters';
 
-// Get filter parameters from URL if any
-const { searchParams } = Astro.url;
-const level = searchParams.get('level') || 'all';
-const format = searchParams.get('format') || 'all';
-const sort = searchParams.get('sort') || 'featured';
+// Get filter parameters from URL if any (shared contract — see catalogFilters.ts)
+const { level, format, sort } = parseCatalogParams(Astro.url.searchParams);
 
 // Define type-safe mapping objects
 const levelNames: Record<string, string> = {

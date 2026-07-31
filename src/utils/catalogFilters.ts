@@ -1,210 +1,137 @@
-import type { Product } from '../types/product';
+import type { Product } from '@app-types/product';
 
-/**
- * Filter products based on specified criteria
- * @param products Array of products to filter
- * @param resourceType Type of resource ('book', 'pack', 'exam' or 'any')
- * @param level Product level ('basic', 'intermediate', etc. or 'all')
- * @param format Product format ('pdf', 'audio', etc. or 'all')
- * @param searchTerm Optional search term to filter by title, description or editorial
- * @param editorialMap Map of editorial IDs to names for searching by editorial
- * @returns Filtered array of products
- */
-export function filterProducts(
-  products: Product[],
-  resourceType: string = 'any',
-  level: string = 'all',
-  format: string = 'all',
-  searchTerm: string = '',
-  editorialMap: Map<string, string> = new Map()
-): Product[] {
-  // Early return if no products
-  if (!products || !products.length) return [];
+// Books and exams describe "level" with two different enums (BookLevel vs
+// ExamDifficulty). This is the one place that reconciles them into a single
+// vocabulary so filtering by "Básico"/"Intermedio"/"Avanzado" also matches
+// exams whose raw difficulty is beginner/upper-intermediate/proficient.
+export type CanonicalLevel =
+  'basic' | 'intermediate' | 'advanced' | 'professional' | 'all-levels' | 'international-exam';
 
-  // Use Array.filter with combined conditions for better performance
-  const filtered = products.filter((product) => {
-    // Type filter
-    if (resourceType !== 'any' && product.productType !== resourceType) {
+export type SortOption = 'featured' | 'price-low' | 'price-high' | 'bestseller';
+
+export const DEFAULT_RESOURCE_TYPE = 'any';
+export const DEFAULT_LEVEL = 'all';
+export const DEFAULT_FORMAT = 'all';
+export const DEFAULT_EXAM_TYPE = 'all';
+export const DEFAULT_SORT: SortOption = 'featured';
+export const DEFAULT_SEARCH = '';
+
+const LEVEL_ALIASES: Record<string, CanonicalLevel> = {
+  basic: 'basic',
+  beginner: 'basic',
+  intermediate: 'intermediate',
+  'upper-intermediate': 'intermediate',
+  advanced: 'advanced',
+  proficient: 'advanced',
+  professional: 'professional',
+  'all-levels': 'all-levels',
+  'international-exam': 'international-exam',
+};
+
+export function normalizeLevel(rawLevel: string | undefined | null): CanonicalLevel | undefined {
+  if (!rawLevel) return undefined;
+  return LEVEL_ALIASES[rawLevel];
+}
+
+export interface CatalogFilterCriteria {
+  resourceType?: string;
+  level?: string;
+  format?: string;
+  examType?: string;
+  search?: string;
+}
+
+/** Fully-resolved state — every field defaulted, never undefined. What
+ *  parseCatalogParams returns and buildCatalogURL/Filter.tsx's dispatch
+ *  contract expect. */
+export interface CatalogQueryState {
+  resourceType: string;
+  level: string;
+  format: string;
+  examType: string;
+  search: string;
+  sort: string;
+}
+
+/** Single canonical predicate — used both at SSR time and re-run client-side. */
+export function filterProducts(products: Product[], criteria: CatalogFilterCriteria): Product[] {
+  const {
+    resourceType = DEFAULT_RESOURCE_TYPE,
+    level = DEFAULT_LEVEL,
+    format = DEFAULT_FORMAT,
+    examType = DEFAULT_EXAM_TYPE,
+    search = DEFAULT_SEARCH,
+  } = criteria;
+
+  const normalizedSearch = search.trim().toLowerCase();
+  const wantedLevel = level !== DEFAULT_LEVEL ? normalizeLevel(level) : undefined;
+
+  return products.filter((product) => {
+    if (resourceType !== DEFAULT_RESOURCE_TYPE && product.productType !== resourceType) {
       return false;
     }
 
-    // Level filter
-    if (level !== 'all' && product.level !== level) {
+    if (wantedLevel && normalizeLevel(product.level) !== wantedLevel) {
       return false;
     }
 
-    // Format filter
-    if (format !== 'all' && (!product.formatTags || !product.formatTags.includes(format as any))) {
+    if (format !== DEFAULT_FORMAT && !(product.formatTags ?? []).includes(format)) {
       return false;
     }
 
-    // Search term filter
-    if (searchTerm) {
-      const normalizedSearchTerm = searchTerm.toLowerCase();
-      const titleMatch = product.title.toLowerCase().includes(normalizedSearchTerm);
+    if (examType !== DEFAULT_EXAM_TYPE && product.examType !== examType) {
+      return false;
+    }
 
-      // Fixed: Properly check for description property
-      const descriptionMatch =
-        typeof product.description === 'string' &&
-        product.description.toLowerCase().includes(normalizedSearchTerm);
-
-      // Check editorial match for books - use proper type guard
-      const editorialMatch =
-        product.productType === 'book' &&
-        'editorialId' in product &&
-        product.editorialId &&
-        editorialMap.has(product.editorialId) &&
-        editorialMap.get(product.editorialId)?.toLowerCase().includes(normalizedSearchTerm);
-
-      if (!titleMatch && !descriptionMatch && !editorialMatch) {
-        return false;
-      }
+    if (normalizedSearch && !product.title.toLowerCase().includes(normalizedSearch)) {
+      return false;
     }
 
     return true;
   });
-
-  return filtered;
 }
 
-/**
- * Sort products based on the specified sort option
- * @param products Array of products to sort
- * @param sortOption Sort option ('price-low', 'price-high', 'bestseller', 'featured', etc.)
- * @returns Sorted array of products
- */
-export function sortProducts(products: Product[], sortOption: string = 'featured'): Product[] {
-  if (!products || !products.length) return [];
+/** Single canonical comparator set — same ordering rules everywhere. */
+export function sortProducts(products: Product[], sort: string = DEFAULT_SORT): Product[] {
+  const sorted = [...products];
 
-  const sortedProducts = [...products];
-
-  // Handle all sorting options in a switch case for better maintainability
-  switch (sortOption) {
+  switch (sort) {
     case 'price-low':
-      return sortedProducts.sort((a, b) => a.price - b.price);
+      return sorted.sort((a, b) => a.price - b.price);
 
     case 'price-high':
-      return sortedProducts.sort((a, b) => b.price - a.price);
+      return sorted.sort((a, b) => b.price - a.price);
 
     case 'bestseller':
-      return sortedProducts.sort((a, b) => {
-        const aIsBestseller = a.popularityTags?.includes('bestSeller') ? 1 : 0;
-        const bIsBestseller = b.popularityTags?.includes('bestSeller') ? 1 : 0;
-
-        // If bestseller status is the same, sort by rating as a tiebreaker
-        if (aIsBestseller === bIsBestseller) {
-          return (b.rating?.score || 0) - (a.rating?.score || 0);
-        }
-
-        return bIsBestseller - aIsBestseller;
+      return sorted.sort((a, b) => {
+        const aBest = a.popularityTags?.includes('bestSeller') ? 1 : 0;
+        const bBest = b.popularityTags?.includes('bestSeller') ? 1 : 0;
+        if (aBest !== bBest) return bBest - aBest;
+        return (b.rating?.score || 0) - (a.rating?.score || 0);
       });
-
-    case 'newest':
-      // If there was a date field, we would sort by that here
-      // In future, add date-based sorting
-      return sortedProducts;
-
-    case 'name-asc':
-      return sortedProducts.sort((a, b) =>
-        a.title.localeCompare(b.title, undefined, {
-          sensitivity: 'base',
-        })
-      );
-
-    case 'name-desc':
-      return sortedProducts.sort((a, b) =>
-        b.title.localeCompare(a.title, undefined, {
-          sensitivity: 'base',
-        })
-      );
 
     case 'featured':
     default:
-      // Sort by featured status, then by bestseller status as secondary criteria
-      return sortedProducts.sort((a, b) => {
-        if (a.featured !== b.featured) {
-          return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-        }
-        // If featured status is the same, check bestseller status
-        const aIsBestseller = a.popularityTags?.includes('bestSeller') ? 1 : 0;
-        const bIsBestseller = b.popularityTags?.includes('bestSeller') ? 1 : 0;
-        return bIsBestseller - aIsBestseller;
+      return sorted.sort((a, b) => {
+        const aFeatured = a.featured ? 1 : 0;
+        const bFeatured = b.featured ? 1 : 0;
+        if (aFeatured !== bFeatured) return bFeatured - aFeatured;
+        const aBest = a.popularityTags?.includes('bestSeller') ? 1 : 0;
+        const bBest = b.popularityTags?.includes('bestSeller') ? 1 : 0;
+        return bBest - aBest;
       });
   }
 }
 
-/**
- * Filter and sort products based on specified criteria
- * @param products Array of products to process
- * @param resourceType Type of resource
- * @param level Product level
- * @param format Product format
- * @param sortOption Sort option
- * @param searchTerm Search term
- * @param editorialMap Editorial ID to name map
- * @returns Filtered and sorted products
- */
 export function processProducts(
   products: Product[],
-  resourceType: string = 'any',
-  level: string = 'all',
-  format: string = 'all',
-  sortOption: string = 'featured',
-  searchTerm: string = '',
-  editorialMap: Map<string, string> = new Map()
+  criteria: CatalogFilterCriteria,
+  sort: string = DEFAULT_SORT
 ): Product[] {
-  // First filter, then sort
-  const filteredProducts = filterProducts(
-    products,
-    resourceType,
-    level,
-    format,
-    searchTerm,
-    editorialMap
-  );
-
-  return sortProducts(filteredProducts, sortOption);
+  return sortProducts(filterProducts(products, criteria), sort);
 }
 
-/**
- * Get product counts by type
- * @param products Array of products
- * @returns Object with counts for each product type
- */
-export function getProductCounts(products: Product[]) {
-  if (!products || !products.length)
-    return {
-      totalCount: 0,
-      bookCount: 0,
-      packCount: 0,
-      examCount: 0,
-    };
-
-  // Use reduce for a single-pass count of all types
-  return products.reduce(
-    (counts, product) => {
-      counts.totalCount++;
-
-      if (product.productType === 'book') counts.bookCount++;
-      else if (product.productType === 'pack') counts.packCount++;
-      else if (product.productType === 'exam') counts.examCount++;
-
-      return counts;
-    },
-    {
-      totalCount: 0,
-      bookCount: 0,
-      packCount: 0,
-      examCount: 0,
-    }
-  );
-}
-
-/**
- * Get grid class based on number of columns
- * @param cols Number of columns
- * @returns Tailwind CSS grid class
- */
+/** One grid-column → Tailwind-class mapping, used by every catalog container. */
 export function getGridClassFromColumns(cols: number): string {
   const gridClasses: Record<number, string> = {
     1: 'grid-cols-1',
@@ -215,5 +142,38 @@ export function getGridClassFromColumns(cols: number): string {
     6: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
   };
 
-  return gridClasses[cols] || 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+  return gridClasses[cols] || gridClasses[4];
+}
+
+/** Single param vocabulary shared by every catalog page: type/level/format/examType/sort/q. */
+export function parseCatalogParams(searchParams: URLSearchParams): CatalogQueryState {
+  return {
+    resourceType: searchParams.get('type') || DEFAULT_RESOURCE_TYPE,
+    level: searchParams.get('level') || DEFAULT_LEVEL,
+    format: searchParams.get('format') || DEFAULT_FORMAT,
+    examType: searchParams.get('examType') || DEFAULT_EXAM_TYPE,
+    search: searchParams.get('q') || DEFAULT_SEARCH,
+    sort: searchParams.get('sort') || DEFAULT_SORT,
+  };
+}
+
+export function buildCatalogURL(href: string, state: CatalogQueryState): string {
+  const url = new URL(href);
+
+  const setOrDelete = (key: string, value: string | undefined, defaultValue: string) => {
+    if (value && value !== defaultValue) {
+      url.searchParams.set(key, value);
+    } else {
+      url.searchParams.delete(key);
+    }
+  };
+
+  setOrDelete('type', state.resourceType, DEFAULT_RESOURCE_TYPE);
+  setOrDelete('level', state.level, DEFAULT_LEVEL);
+  setOrDelete('format', state.format, DEFAULT_FORMAT);
+  setOrDelete('examType', state.examType, DEFAULT_EXAM_TYPE);
+  setOrDelete('sort', state.sort, DEFAULT_SORT);
+  setOrDelete('q', state.search, DEFAULT_SEARCH);
+
+  return url.toString();
 }
