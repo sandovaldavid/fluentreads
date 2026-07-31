@@ -7,9 +7,10 @@ import FAQ from '../../components/FAQ.astro';
 import CTABanner from '../../components/CTA-Banner.astro';
 import siteInfo from '../../data/page-information.json';
 import { siteConfig } from '@config/site';
+import { getCollection } from 'astro:content';
 
 // Import testimonies data
-import rawTestimonies from '../../data/testimonies.json';
+const rawTestimonies = (await getCollection('testimonies')).map((entry) => entry.data);
 const testimonies = [...rawTestimonies].sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );

@@ -14,7 +14,7 @@ import CustomerSupport from '../CustomerSupport.astro';
 import { levelConfig, formatConfig } from '../../utils/bookTags';
 import { generateRecommendations } from '../../utils/RelatedProducts';
 import '../../styles/ProductDetail.css';
-import editorialData from '../../data/editorial.json';
+import { getCollection } from 'astro:content';
 import ProductCard from '../ProductCard.astro';
 import DiscountBadge from '../DiscountBadge.astro';
 import type { Product } from '../../types/product';
@@ -75,6 +75,7 @@ if (book.video) {
 }
 
 // Get editorial information for books if available
+const editorialData = (await getCollection('editorial')).map((entry) => entry.data);
 const editorialName = book.editorialId
   ? editorialData.find((e) => e.id === book.editorialId)?.name
   : undefined;

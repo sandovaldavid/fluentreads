@@ -9,7 +9,7 @@ import CTABanner from './CTA-Banner.astro';
 import '../styles/FeaturedCatalog.css';
 
 // Data and type imports
-import booksData from '../data/books.json';
+import { getCollection } from 'astro:content';
 import { BookLevel, FormatTag, PopularityTag } from '../types/book';
 import type { Book } from '../types/book';
 
@@ -19,7 +19,7 @@ interface Props {
   maxBooks?: number;
   showStatistics?: boolean;
   isLoading?: boolean;
-  filterByTag?: PopularityTag | string;
+  filterByTag?: PopularityTag;
   showOnlyFeatured?: boolean;
 }
 
@@ -34,6 +34,7 @@ const {
 } = Astro.props;
 
 // Get featured books - first filter by tag if specified, then take the max number
+const booksData = (await getCollection('books')).map((entry) => entry.data);
 let booksToShow: Book[] = [];
 try {
   // Step 1: Apply initial filters

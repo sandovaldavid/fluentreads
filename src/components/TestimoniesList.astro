@@ -2,7 +2,7 @@
 import TestimoniesCard from './TestimoniesCard.astro';
 import SectionTitle from './SectionTitle.astro';
 import Button from './Button.astro';
-import testimoniesData from '../data/testimonies.json';
+import { getCollection } from 'astro:content';
 import '../styles/TestimoniesList.css';
 
 interface Props {
@@ -22,6 +22,8 @@ const {
   ctaText = 'Ver más testimonios',
   ctaLink = '/testimonios',
 } = Astro.props;
+
+const testimoniesData = (await getCollection('testimonies')).map((entry) => entry.data);
 
 // Ensure we don't exceed the array length
 const testimoniesToShow = testimoniesData.slice(0, count);

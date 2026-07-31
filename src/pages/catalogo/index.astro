@@ -12,7 +12,7 @@ import type { Product } from '../../types/product';
 
 // Import our products utility functions
 import { getAllProducts } from '../../utils/listProducts';
-import editorialsData from '../../data/editorial.json';
+import { getCollection } from 'astro:content';
 import siteInfo from '../../data/page-information.json';
 import { siteConfig } from '@config/site';
 
@@ -78,13 +78,14 @@ if (type !== 'any') {
 }
 
 // Create editorial lookup map
+const editorialsData = (await getCollection('editorial')).map((entry) => entry.data);
 const editorialMap = new Map();
 editorialsData.forEach((editorial) => {
   editorialMap.set(editorial.id, editorial.name);
 });
 
 // Get all products with our utility function
-const allProducts: Product[] = getAllProducts();
+const allProducts: Product[] = await getAllProducts();
 
 // Build canonical URL
 const canonicalURL = new URL('/catalogo', siteConfig.url).toString();

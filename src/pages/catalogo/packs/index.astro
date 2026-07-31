@@ -63,7 +63,7 @@ if (format !== 'all') {
 }
 
 // Get packs data using the utility function
-const allPacks = getProductsByType('pack');
+const allPacks = await getProductsByType('pack');
 
 // Convert to Pack[] type and ensure all required fields exist
 const safePacks: Pack[] = allPacks.map((pack) => ({

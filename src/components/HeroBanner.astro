@@ -35,12 +35,12 @@ const {
   maxOffersToShow = 4,
 } = Astro.props;
 
-// Import references from offerHeroBanner.json
-import offerReferences from '../data/offer-hero-banner.json';
-// Import source data files
-import booksData from '../data/books.json';
-import packsData from '../data/packs.json';
-import examsData from '../data/exams.json';
+// Import references and source data from content collections
+import { getCollection } from 'astro:content';
+const offerReferences = (await getCollection('offerHeroBanner')).map((entry) => entry.data);
+const booksData = (await getCollection('books')).map((entry) => entry.data);
+const packsData = (await getCollection('packs')).map((entry) => entry.data);
+const examsData = (await getCollection('exams')).map((entry) => entry.data);
 
 // Function to get product details based on type and ID
 function getProductDetails(reference: OfferReference): Offer | null {

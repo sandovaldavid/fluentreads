@@ -1,7 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import ExamDetails from '../../../components/details/ExamDetails.astro';
-import examsData from '../../../data/exams.json';
 import siteInfo from '../../../data/page-information.json';
 import { siteConfig } from '@config/site';
 import type { Exam } from '../../../types/exam';
@@ -10,12 +10,11 @@ import { difficultyConfig } from '../../../utils/examTags';
 import { getProductsByType } from '../../../utils/listProducts';
 
 export async function getStaticPaths() {
-  // Ensure examsData is treated as an array
-  const examArray = Array.isArray(examsData) ? examsData : [examsData];
+  const exams = await getCollection('exams');
 
-  return examArray.map((exam) => ({
-    params: { id: exam.id },
-    props: { exam },
+  return exams.map((entry) => ({
+    params: { id: entry.data.id },
+    props: { exam: entry.data },
   }));
 }
 
@@ -26,7 +25,7 @@ interface Props {
 const { exam }: Props = Astro.props;
 
 // Get related exams and other products that might be related
-const productsData = getProductsByType('exam', 8);
+const productsData = await getProductsByType('exam', 8);
 const relatedProducts: Product[] = productsData
   .filter(
     (item) =>

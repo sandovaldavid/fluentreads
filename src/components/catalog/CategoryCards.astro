@@ -1,11 +1,11 @@
 ---
-import CategoriesData from '../../data/categories.json';
+import { getCollection } from 'astro:content';
 import ArrowRightIcon from '../icons/ArrowRight.astro';
 import BookIcon from '../icons/Book.astro';
 import BooksIcon from '../icons/Books.astro';
 import GraduationCapIcon from '../icons/GraduationCap.astro';
 
-const categories = CategoriesData;
+const categories = (await getCollection('categories')).map((entry) => entry.data);
 
 const iconMap: Record<string, (_props: Record<string, unknown>) => unknown> = {
   Book: BookIcon,

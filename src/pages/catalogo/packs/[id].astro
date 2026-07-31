@@ -1,7 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import PackDetails from '../../../components/details/PackDetails.astro';
-import packsData from '../../../data/packs.json';
 import siteInfo from '../../../data/page-information.json';
 import { siteConfig } from '@config/site';
 import type { Pack } from '../../../types/pack';
@@ -9,9 +9,11 @@ import type { Product } from '../../../types/product';
 import { levelConfig } from '../../../utils/bookTags';
 
 export async function getStaticPaths() {
-  return packsData.map((pack) => ({
-    params: { id: pack.id },
-    props: { pack },
+  const packs = await getCollection('packs');
+
+  return packs.map((entry) => ({
+    params: { id: entry.data.id },
+    props: { pack: entry.data },
   }));
 }
 
@@ -22,7 +24,7 @@ interface Props {
 const { pack }: Props = Astro.props;
 
 // Find related packs if any (based on formatTags or level)
-const packsArray = Array.isArray(packsData) ? packsData : [packsData];
+const packsArray = (await getCollection('packs')).map((entry) => entry.data);
 const relatedPacks = packsArray
   .filter(
     (item) =>
