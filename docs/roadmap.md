@@ -1,8 +1,11 @@
 ---
-status: done
+status: historical
 block: all
 priority: P0
 ---
+
+> [!NOTE]
+> **Documento histórico.** Este cronograma de sprints fue el plan original de estabilización. El trabajo real se ejecutó y se sigue rastreando a través de las issues [#50](https://github.com/sandovaldavid/fluentreads/issues/50)-[#65](https://github.com/sandovaldavid/fluentreads/issues/65), no en sprints quincenales. Para el estado vigente, consulta la issue de seguimiento [#65](https://github.com/sandovaldavid/fluentreads/issues/65).
 
 # Cronograma de sprints quincenales
 

@@ -19,23 +19,23 @@
 
 El sitio es **100% estático** (sin adapter SSR). Los datos de productos viven como JSON en el repo y se "freezan" en el HTML en build time. Esto da máxima velocidad de carga (no hay servidor que responda, solo CDN).
 
-**Migración planificada**: Decap CMS en `/admin` (Sprint 7) permitirá editar el JSON via UI web sin tocar código, commiteando al repo y triggereando rebuild automático de Vercel. **Gist descartado** (no actualiza el sitio sin rebuild, sin validación de schema, rate limits de la API).
+**Decap CMS** en `/admin` permite editar el JSON via UI web sin tocar código. El backend apunta a la rama `main` (ver `public/admin/config.yml`); como `main` requiere PR + status checks, los cambios desde el CMS pasan por el mismo flujo de PR que cualquier otro cambio. El merge dispara `deploy-vercel.yml` (GitHub Actions), no la integración nativa de Vercel con Git (deshabilitada a propósito para evitar despliegues duplicados). **Gist fue descartado** como alternativa (no actualiza el sitio sin rebuild, sin validación de schema, rate limits de la API).
 
 ## 2. Stack técnico
 
-| Componente      | Versión                                                                   | Notas                                                |
-| --------------- | ------------------------------------------------------------------------- | ---------------------------------------------------- |
-| Framework       | Astro 7.0.6                                                               | Sitio estático, sin adapter SSR                      |
-| UI islands      | @astrojs/react 6.0.1 + React 19                                           | Solo para componentes interactivos (filtro, carrito) |
-| CSS             | Tailwind v4 (vía @tailwindcss/vite)                                       | Config en `src/styles/global.css` con `@theme`       |
-| Package manager | bun 1.3.14                                                                | NO usar npm/yarn                                     |
-| Lenguaje        | TypeScript (strict)                                                       | `tsconfig.json` extiende `astro/tsconfigs/strict`    |
-| Formato         | Prettier + prettier-plugin-astro + prettier-plugin-tailwindcss            |                                                      |
-| Lint            | ESLint flat config + eslint-plugin-astro + eslint-plugin-react + jsx-a11y |                                                      |
-| Commits         | Conventional Commits sin emojis                                           | commitlint + husky validan                           |
-| Releases        | release-please (main=Latest, develop=Pre-release rc)                      |                                                      |
-| Deploy          | Vercel (main=prod, develop=preview)                                       | vía GitHub Actions                                   |
-| DevContainer    | ghcr.io/sandovaldavid/fluentreads-devcontainer                            | Node 22 + bun + Astro CLI                            |
+| Componente      | Versión                                                                    | Notas                                                |
+| --------------- | -------------------------------------------------------------------------- | ---------------------------------------------------- |
+| Framework       | Astro 7.0.6                                                                | Sitio estático, sin adapter SSR                      |
+| UI islands      | @astrojs/react 6.0.1 + React 19                                            | Solo para componentes interactivos (filtro, carrito) |
+| CSS             | Tailwind v4 (vía @tailwindcss/vite)                                        | Config en `src/styles/global.css` con `@theme`       |
+| Package manager | bun 1.3.14                                                                 | NO usar npm/yarn                                     |
+| Lenguaje        | TypeScript (strict)                                                        | `tsconfig.json` extiende `astro/tsconfigs/strict`    |
+| Formato         | Prettier + prettier-plugin-astro + prettier-plugin-tailwindcss             |                                                      |
+| Lint            | ESLint flat config + eslint-plugin-astro + eslint-plugin-react + jsx-a11y  |                                                      |
+| Commits         | Conventional Commits sin emojis                                            | commitlint + husky validan                           |
+| Releases        | release-please (solo `main`: GitHub Release + tag `vX.Y.Z` + CHANGELOG.md) |                                                      |
+| Deploy          | Vercel (main=prod, develop=preview)                                        | vía GitHub Actions                                   |
+| DevContainer    | ghcr.io/sandovaldavid/fluentreads-devcontainer                             | Node 22 + bun + Astro CLI                            |
 
 ## 3. Estructura del proyecto
 
@@ -45,7 +45,7 @@ El sitio es **100% estático** (sin adapter SSR). Los datos de productos viven c
 ├── .github/workflows/      # CI + devcontainer + deploy + release-please
 ├── .husky/                 # Git hooks (pre-commit, commit-msg)
 ├── .vscode/                # Settings, tasks, keybindings, launch
-├── docs/                   # Documentación de deuda técnica (12 archivos .md)
+├── docs/                   # Auditoría técnica histórica (12 archivos .md) — ver docs/README.md, no es backlog activo
 │   ├── README.md           # Índice
 │   ├── audit-summary.md    # Resumen ejecutivo de auditoría
 │   ├── astro-best-practices.md
@@ -62,7 +62,7 @@ El sitio es **100% estático** (sin adapter SSR). Los datos de productos viven c
 ├── src/
 │   ├── assets/             # Imágenes procesadas por Vite/Astro
 │   ├── components/         # Componentes Astro + React islands
-│   ├── config/             # Configuración centralizada (site.ts) [TODO B2]
+│   ├── config/             # Configuración centralizada (site.ts)
 │   ├── content.config.ts   # Schemas Zod de las astro:content collections
 │   ├── data/                # JSON consumido via getCollection() (books, packs, exams, etc.)
 │   ├── layouts/            # Layout.astro (SEO, meta tags, JSON-LD)
@@ -126,7 +126,7 @@ feat(catalog): add feature.           # punto final
 - **Sin `any` sin justificación**: regla `@typescript-eslint/no-explicit-any: warn`.
 - **Sin `innerHTML` con datos dinámicos**: regla `no-restricted-syntax` (XSS).
 - **Sin `target="_blank"` sin `rel="noopener noreferrer"`**: regla `react/jsx-no-target-blank`.
-- **Imports via aliases**: `@components/*`, `@layouts/*`, `@styles/*`, `@utils/*`, `@types/*`, `@assets/*`, `@config/*`, `@scripts/*` (configurado en `tsconfig.json`).
+- **Imports via aliases**: `@components/*`, `@layouts/*`, `@styles/*`, `@utils/*`, `@app-types/*`, `@data/*`, `@assets/*`, `@config/*`, `@scripts/*` (configurado en `tsconfig.json`). Nota: el alias de tipos es `@app-types/*`, no `@types/*` — TypeScript trata cualquier especificador `@types/*` como un paquete de declaraciones de DefinitelyTyped y no lo resuelve como alias normal.
 - **Componentes Astro**: siempre definir `interface Props` tipada, nunca usar `Astro.props` sin tipo.
 - **React islands**: `client:visible` por defecto (no `client:load` salvo críticos above-the-fold).
 - **Estilos**: scoped en componentes (`<style>`) o archivos en `src/styles/`. Sin `:global()` innecesario.
@@ -171,6 +171,12 @@ bun run format:check     # Prettier --check .
 bun run check            # astro check (TypeScript + .astro validation)
 bun run typecheck        # alias de check
 
+# Tests
+bun run test:unit        # bun:test sobre tests/unit
+bun run test:e2e         # Playwright sobre tests/e2e (requiere navegador instalado)
+bun run test             # alias de test:unit
+bun run check:links      # valida que los enlaces internos no rompan (scripts/check-internal-links.mjs)
+
 # Build
 bun run build            # astro check && astro build (con type-check)
 bun run build:force      # astro build sin type-check (emergencias)
@@ -183,18 +189,20 @@ bun run build:force      # astro build sin type-check (emergencias)
 **Antes de terminar cualquier tarea**, verifica:
 
 ```sh
-bun run lint && bun run check && bun run build
+bun run lint && bun run check && bun run build && bun run test:unit
 ```
+
+`test:e2e` no corre en CI como check bloqueante (solo `lint`/`check`/`build` lo son — ver sección 7), pero corrélo localmente si tocaste catálogo, carrito, checkout o formularios.
 
 ## 7. Branching y releases
 
 ### Ramas
 
-| Rama                                      | Propósito          | Merge method                      | Release                                    |
-| ----------------------------------------- | ------------------ | --------------------------------- | ------------------------------------------ |
-| `main`                                    | Producción estable | merge-commit o squash (no rebase) | GitHub Release "Latest" (vX.Y.Z)           |
-| `develop`                                 | Pre-release        | squash por convención             | GitHub Release "Pre-release" (vX.Y.Z-rc.N) |
-| `feat/*`, `fix/*`, `refactor/*`, `docs/*` | Feature branches   | squash a develop/main             | -                                          |
+| Rama                                      | Propósito          | Merge method                      | Release                          |
+| ----------------------------------------- | ------------------ | --------------------------------- | -------------------------------- |
+| `main`                                    | Producción estable | merge-commit o squash (no rebase) | GitHub Release "Latest" (vX.Y.Z) |
+| `develop`                                 | Preview / staging  | squash por convención             | Ninguno — solo Vercel Preview    |
+| `feat/*`, `fix/*`, `refactor/*`, `docs/*` | Feature branches   | squash a develop/main             | -                                |
 
 ### Reglas (via GitHub Rulesets)
 
@@ -208,25 +216,32 @@ bun run lint && bun run check && bun run build
 
 ### release-please
 
-- Push a `main` → `release-please-main.yml` crea PR de release → merge → GitHub Release "Latest" + tag `vX.Y.Z` + CHANGELOG.md.
-- Push a `develop` → `release-please-develop.yml` crea PR de pre-release → merge → GitHub Release "Pre-release" + tag `vX.Y.Z-rc.N`.
-- **El histórico anterior usa gitmojis**: release-please los agrupará en el primer release `v0.1.0` como "Initial release". A partir de ahí, solo commits convencionales.
+- `release-please.yml` corre **únicamente en push a `main`** (`target-branch: main`) — no existe un workflow equivalente para `develop`. Crea un PR de release → al mergear, publica un GitHub Release "Latest" + tag `vX.Y.Z` + CHANGELOG.md.
+- `develop` no genera releases ni tags; solo dispara `deploy-vercel.yml` para el Preview.
+- **El histórico anterior usa gitmojis**: release-please los agrupó en el primer release `v0.1.0` como "Initial release". A partir de ahí, solo commits convencionales.
+
+### Deploy
+
+- `deploy-vercel.yml` corre en push a `main` y `develop`. Construye el sitio y despliega vía Vercel CLI (`vercel deploy`) usando los secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
+- La integración nativa de Vercel con Git está **deshabilitada a propósito** — si estuviera activa, cada push desplegaría dos veces (una vez por la integración nativa, otra por el workflow).
+- Sin esos tres secrets configurados en el repo, el job falla rápido (timeout de 10 min) en lugar de colgarse — ver issue [#63](https://github.com/sandovaldavid/fluentreads/issues/63) si siguen sin configurarse.
 
 ## 8. Enfoque de base de datos
 
-### Actual (post-B8)
+### Estado actual
 
-`astro:content` collections definidas en `src/content.config.ts`, con loader `file()` y schemas Zod para cada colección (books, packs, exams, testimonies, offers, editorial, categories, faqs, pageInformation, etc.). Los datos viven como JSON en `src/data/` y se consumen via `getCollection('nombre')` — **nunca** imports directos de JSON. Los schemas Zod validan en build time (enums, tipos, campos requeridos).
+`astro:content` collections definidas en `src/content.config.ts`, con loader `file()` y schemas Zod para cada colección (books, packs, exams, testimonies, offers, editorial, categories, faqs, legal, etc.). Los datos viven como JSON en `src/data/` y se consumen via `getCollection('nombre')` — **nunca** imports directos de JSON para colecciones registradas (confirmado: cero imports directos de `src/data/*.json` en `src/` para archivos que tienen un schema Zod). Los schemas Zod validan en build time (enums, tipos, campos requeridos). Excepción intencional: `page-information.json` no es una content collection (no tiene schema Zod) y se sigue importando directamente.
 
-### Edición sin código (Sprint 7)
+### Edición sin código
 
-**Decap CMS** en `/admin`:
+**Decap CMS** en `/admin` — implementado y en uso:
 
-- Panel web para editar JSON via UI.
+- Panel web para editar JSON via UI, configurado en `public/admin/config.yml` + `public/admin/index.html`.
 - Auth via GitHub OAuth.
-- Commit al repo → Vercel rebuild automático via Git integration.
+- Backend apunta a la rama `main`. Como `main` exige PR + status checks (`lint`/`check`/`build`), los commits del CMS no van directo a producción — pasan por el mismo flujo de PR y CI que cualquier otro cambio.
+- El merge a `main` dispara `deploy-vercel.yml`, no la integración nativa de Vercel con Git.
 - Mantiene content collections + validación Zod.
-- **Gist descartado**: no actualiza el sitio sin rebuild, sin validación, rate limits.
+- **Gist fue descartado**: no actualiza el sitio sin rebuild, sin validación, rate limits.
 
 ## 9. Anti-patterns (LO QUE NO DEBES HACER)
 
@@ -249,33 +264,27 @@ bun run lint && bun run check && bun run build
 
 ## 10. Antes de empezar una tarea
 
-1. **Lee `docs/roadmap.md`** para ver en qué sprint/bloque estás.
-2. **Lee el doc específico del bloque** (e.g. `docs/bugs-logic.md` para B3, `docs/astro-best-practices.md` para B0/B8).
-3. **Consulta `docs/audit-summary.md`** para contexto general de la deuda técnica.
-4. **Verifica el MCP de Astro** para APIs que vayas a usar (especialmente si tocas `astro.config.mjs`, content collections, imágenes, view transitions).
-5. **Termina con**: `bun run lint && bun run check && bun run build` pasando limpio.
+1. **Revisa la issue de seguimiento [#65](https://github.com/sandovaldavid/fluentreads/issues/65)** para ver qué queda pendiente y en qué orden — es la fuente de verdad vigente, no `docs/roadmap.md`.
+2. **Si tu tarea toca algo ya cubierto por una issue cerrada**, verifica el estado actual en el código, no en `docs/` — esos documentos son un archivo histórico de la auditoría original (ver `docs/README.md`).
+3. **Verifica el MCP de Astro** para APIs que vayas a usar (especialmente si tocas `astro.config.mjs`, content collections, imágenes, view transitions).
+4. **Termina con**: `bun run lint && bun run check && bun run build` pasando limpio.
 
-## 11. Estado actual de la deuda técnica
+## 11. Estado actual del proyecto
 
-Ver `docs/README.md` para el estado de cada bloque. Resumen:
+La fuente de verdad es GitHub, no este archivo ni `docs/`. Issue de seguimiento: [#65](https://github.com/sandovaldavid/fluentreads/issues/65) (fases 1-5 de estabilización).
 
-- **B0 (tooling)**: completado en este commit.
-- **B1 (CI/CD)**: pendiente — deploy Vercel + release-please.
-- **B2 (centralización)**: pendiente — `src/config/site.ts`.
-- **B3 (bugs lógica)**: pendiente — 30 bugs P0-P2.
-- **B4 (bugs estilos)**: pendiente — 18 bugs.
-- **B5 (accesibilidad)**: pendiente — 19 issues.
-- **B6 (performance)**: pendiente — 16 issues.
-- **B7 (seguridad)**: pendiente — 13 issues.
-- **B8 (refactor collections)**: pendiente — Sprint 5-6.
-- **B9 (features incompletas)**: pendiente — Sprint 6-7 (incluye Decap CMS).
-- **B10 (README + docs finales)**: pendiente — Sprint 8.
+Al momento de escribir esto:
+
+- **Cerradas**: #50 (quality gates), #51 (tests), #52 (Decap CMS), #54 (checkout), #55 (service worker), #56 (filtros de catálogo), #57 (content collections), #58 (SEO), #59 (rutas), #60 (seguridad), #61 (formularios), #62 (latencia artificial), #64 (esta sincronización de docs).
+- **Abiertas**: #53 (reemplazar catálogo demo por datos reales — requiere información de negocio que no está disponible, no se debe inventar), #63 (gobernanza de deploy — el workflow y el ruleset ya están correctos, pero falta que se configuren los secrets `VERCEL_TOKEN`/`VERCEL_ORG_ID`/`VERCEL_PROJECT_ID` en el repo).
+
+Antes de asumir que algo "está pendiente", confirma en `gh issue list` o en el código — `docs/` puede estar desactualizado por diseño (ver nota en `docs/README.md`).
 
 ## 12. Referencias
 
 - [Documentación de Astro](https://docs.astro.build) (via MCP astro-docs)
-- [docs/](./docs/) — auditoría técnica completa
-- [docs/roadmap.md](./docs/roadmap.md) — cronograma de sprints
+- [Issue #65](https://github.com/sandovaldavid/fluentreads/issues/65) — estado vigente de la estabilización del proyecto
+- [docs/](./docs/) — auditoría técnica histórica (pre-estabilización), no backlog activo
 - [Conventional Commits](https://www.conventionalcommits.org/) — formato de commits
-- [release-please](https://github.com/googleapis/release-please) — automatización de releases
-- [Decap CMS](https://decapcms.org/) — CMS para sitios estáticos (planificado Sprint 7)
+- [release-please](https://github.com/googleapis/release-please) — automatización de releases (solo `main`)
+- [Decap CMS](https://decapcms.org/) — CMS para sitios estáticos, ya implementado en `/admin`

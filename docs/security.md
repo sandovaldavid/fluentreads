@@ -1,8 +1,11 @@
 ---
-status: done
+status: historical
 block: B7
 priority: P0
 ---
+
+> [!NOTE]
+> **Documento histórico.** Esta es una fotografía de la auditoría técnica original (previa a la estabilización del proyecto). Los hallazgos aquí descritos ya fueron total o parcialmente resueltos a través de las issues [#50](https://github.com/sandovaldavid/fluentreads/issues/50)-[#65](https://github.com/sandovaldavid/fluentreads/issues/65). Para el estado vigente de la deuda técnica, consulta la issue de seguimiento [#65](https://github.com/sandovaldavid/fluentreads/issues/65), no este documento. No uses este archivo como backlog activo.
 
 # Issues de seguridad
 
