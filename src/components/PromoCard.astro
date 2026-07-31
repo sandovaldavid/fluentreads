@@ -24,9 +24,12 @@ interface Props {
 
 const { Offer, index, size = 'large' } = Astro.props;
 
-// Extract ID and type from the link if they aren't provided directly
+// Offers are their own catalog entity (src/data/offers.json), resolved at
+// checkout the same way books/packs/exams are — never a guess based on the
+// offer id's naming, and never a book/pack id (offers aren't 1:1 with a
+// single product).
 const offerId = Offer.id || (Offer.link ? Offer.link.replace('/checkout/', '') : '');
-const offerType = Offer.type || (offerId.startsWith('pack-') ? 'pack' : 'book');
+const offerType = 'offer';
 
 // Default details link if not provided
 const detailsLink =
@@ -218,7 +221,7 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
 </div>
 
 <script>
-  import { CartManager } from '../utils/cartManager';
+  import { CartManager, type ProductType } from '../utils/cartManager';
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.promo-add-to-cart').forEach((btn) => {
@@ -227,20 +230,12 @@ const priceSize = isSmallLayout ? 'text-sm' : isMediumLayout ? 'text-base' : 'te
         e.stopPropagation();
 
         const id = btn.getAttribute('data-id');
-        const title = btn.getAttribute('data-title');
-        const priceStr = btn.getAttribute('data-price');
-        const image = btn.getAttribute('data-image');
         const type = btn.getAttribute('data-type');
 
-        if (id && title && priceStr && image && type) {
-          CartManager.addItem({
-            id,
-            title,
-            price: parseFloat(priceStr),
-            image,
-            type: type as any,
-          });
-
+        if (id && type) {
+          // Only identity is persisted — price/title are resolved from the
+          // canonical catalog at checkout, never trusted from this button.
+          CartManager.addItem(id, type as ProductType);
           window.location.href = '/checkout';
         }
       });

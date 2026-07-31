@@ -1,14 +1,61 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import WhatsAppIcon from '../components/icons/WhatsApp.astro';
-// CartIcon removed
 import SectionTitle from '../components/SectionTitle.astro';
 
 import { siteConfig } from '@config/site';
+import { buildCanonicalCatalog, type CanonicalProduct } from '@utils/catalogPricing';
 
 // WhatsApp business number
 const whatsappNumber = siteConfig.whatsapp;
+
+// Canonical, build-time catalog — the only source checkout trusts for
+// title/image/price. Embedded below as JSON for the client script to
+// resolve the (untrusted) cart contents against. See issue #54.
+const [books, packs, exams, offers] = await Promise.all([
+  getCollection('books'),
+  getCollection('packs'),
+  getCollection('exams'),
+  getCollection('offers'),
+]);
+
+const canonicalCatalog: CanonicalProduct[] = buildCanonicalCatalog([
+  ...books.map((entry) => ({
+    id: entry.data.id,
+    type: 'book' as const,
+    title: entry.data.title,
+    image: entry.data.coverImage,
+    price: entry.data.price,
+    discount: entry.data.discount,
+  })),
+  ...packs.map((entry) => ({
+    id: entry.data.id,
+    type: 'pack' as const,
+    title: entry.data.title,
+    image: entry.data.coverImage,
+    price: entry.data.price,
+    discount: entry.data.discount,
+  })),
+  ...exams.map((entry) => ({
+    id: entry.data.id,
+    type: 'exam' as const,
+    title: entry.data.title,
+    image: entry.data.coverImage,
+    price: entry.data.price,
+    discount: entry.data.discount,
+  })),
+  ...offers.map((entry) => ({
+    id: entry.data.id,
+    type: 'offer' as const,
+    title: entry.data.title,
+    image: entry.data.image,
+    // salePrice is already the final amount to charge for an offer bundle.
+    price: entry.data.salePrice,
+    discount: 0,
+  })),
+]);
 ---
 
 <Layout
@@ -16,8 +63,22 @@ const whatsappNumber = siteConfig.whatsapp;
   description="Revisa y confirma tu pedido de libros digitales en inglés con FluentReads."
 >
   <div id="checkout-data" data-whatsapp={whatsappNumber} class="hidden"></div>
+  <script
+    is:inline
+    type="application/json"
+    id="canonical-catalog"
+    set:html={JSON.stringify(canonicalCatalog)}
+  />
   <div class="mx-auto max-w-4xl px-4 py-12">
     <SectionTitle tag="h1">Tu Carrito de Compras</SectionTitle>
+
+    <div
+      id="removed-items-notice"
+      class="mb-6 hidden border-l-4 border-amber-400 bg-amber-50 p-4 text-sm text-amber-800"
+      role="status"
+      aria-live="polite"
+    >
+    </div>
 
     <div id="empty-cart-message" class="hidden py-12 text-center">
       <div class="mb-4 text-6xl">🛒</div>
@@ -69,16 +130,25 @@ const whatsappNumber = siteConfig.whatsapp;
 </Layout>
 
 <script>
-  import { CartManager, type CartItem } from '@utils/cartManager';
-  import { buildWhatsAppMessage, buildWhatsAppUrl } from '@utils/checkoutMessage';
+  import { CartManager, type ProductType } from '@utils/cartManager';
+  import { resolveCart, type CanonicalProduct } from '@utils/catalogPricing';
+  import {
+    buildWhatsAppMessage,
+    buildWhatsAppUrl,
+    generateOrderRequestId,
+  } from '@utils/checkoutMessage';
 
   document.addEventListener('DOMContentLoaded', () => {
     const checkoutDataEl = document.getElementById('checkout-data');
     const whatsappNumber = checkoutDataEl?.getAttribute('data-whatsapp') || '';
 
+    const catalogEl = document.getElementById('canonical-catalog');
+    const catalog: CanonicalProduct[] = catalogEl ? JSON.parse(catalogEl.textContent || '[]') : [];
+
     // Get DOM elements safely
     const cartContainer = document.getElementById('cart-container')!;
     const emptyCartMessage = document.getElementById('empty-cart-message')!;
+    const removedItemsNotice = document.getElementById('removed-items-notice')!;
     const cartItemsContainer = document.getElementById('cart-items')!;
     const cartTotalElement = document.getElementById('cart-total')!;
     const whatsappCheckoutBtn = document.getElementById('whatsapp-checkout-btn')!;
@@ -87,6 +157,7 @@ const whatsappNumber = siteConfig.whatsapp;
     if (
       !cartContainer ||
       !emptyCartMessage ||
+      !removedItemsNotice ||
       !cartItemsContainer ||
       !cartTotalElement ||
       !whatsappCheckoutBtn ||
@@ -96,151 +167,155 @@ const whatsappNumber = siteConfig.whatsapp;
       return;
     }
 
-    // Function to escape HTML to prevent XSS
-    function escapeHTML(str: string): string {
-      if (!str) return '';
-      return String(str).replace(
-        /[&<>'"]/g,
-        (tag) =>
-          ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            "'": '&#39;',
-            '"': '&quot;',
-          })[tag] || tag
-      );
-    }
+    const typeLabels: Record<string, string> = {
+      book: 'Libro',
+      exam: 'Examen',
+      pack: 'Pack',
+      offer: 'Oferta',
+    };
 
-    // Load cart data
+    // Load cart data, resolved against the canonical catalog embedded above.
     function loadCart() {
-      const cart = CartManager.getCart();
+      const rawCart = CartManager.getCart();
+      const resolved = resolveCart(rawCart, catalog);
 
-      // Show/hide appropriate elements based on cart state
-      if (cart.length === 0) {
+      // Products that no longer exist in the catalog can't be trusted or
+      // priced — drop them from storage and tell the user why.
+      if (resolved.removedIds.length > 0) {
+        for (const item of rawCart) {
+          if (resolved.removedIds.includes(item.id)) {
+            CartManager.removeItem(item.id, item.type);
+          }
+        }
+        removedItemsNotice.textContent =
+          resolved.removedIds.length === 1
+            ? 'Un producto de tu carrito ya no está disponible y fue eliminado.'
+            : `${resolved.removedIds.length} productos de tu carrito ya no están disponibles y fueron eliminados.`;
+        removedItemsNotice.classList.remove('hidden');
+      } else {
+        removedItemsNotice.classList.add('hidden');
+      }
+
+      if (resolved.lines.length === 0) {
         cartContainer.classList.add('hidden');
         emptyCartMessage.classList.remove('hidden');
-      } else {
-        cartContainer.classList.remove('hidden');
-        emptyCartMessage.classList.add('hidden');
-
-        // Clear previous items safely
-        while (cartItemsContainer.firstChild) {
-          cartItemsContainer.removeChild(cartItemsContainer.firstChild);
-        }
-
-        const total = CartManager.getCartTotal();
-
-        // Render cart items using DOM APIs to prevent XSS
-        cart.forEach((item: CartItem) => {
-          // Escape inputs
-          const cleanTitle = escapeHTML(item.title);
-          const cleanImage = escapeHTML(item.image);
-          const cleanType = escapeHTML(item.type);
-
-          // Create cart item element
-          const cartItemEl = document.createElement('div');
-          cartItemEl.className =
-            'flex flex-col sm:flex-row items-center bg-white p-4 rounded-lg shadow-sm border border-gray-200';
-
-          // Image container
-          const imgContainer = document.createElement('div');
-          imgContainer.className = 'flex-shrink-0 w-20 h-20 mb-3 sm:mb-0 sm:mr-4';
-          const img = document.createElement('img');
-          img.src = cleanImage;
-          img.alt = cleanTitle;
-          img.className = 'w-full h-full object-cover rounded';
-          imgContainer.appendChild(img);
-          cartItemEl.appendChild(imgContainer);
-
-          // Content container
-          const contentDiv = document.createElement('div');
-          contentDiv.className = 'flex-grow text-center sm:text-left';
-
-          const titleHeader = document.createElement('h4');
-          titleHeader.className = 'font-bold text-gray-800';
-          titleHeader.textContent = cleanTitle;
-          contentDiv.appendChild(titleHeader);
-
-          const typeDiv = document.createElement('div');
-          typeDiv.className = 'text-sm text-gray-500 mb-1';
-          typeDiv.textContent =
-            cleanType === 'book' ? 'Libro' : cleanType === 'exam' ? 'Examen' : 'Pack';
-          contentDiv.appendChild(typeDiv);
-
-          // Controls and price container
-          const controlsPriceDiv = document.createElement('div');
-          controlsPriceDiv.className =
-            'flex flex-col sm:flex-row sm:justify-between sm:items-center mt-2';
-
-          const priceDiv = document.createElement('div');
-          priceDiv.className = 'text-primary font-bold';
-          priceDiv.textContent = `S/${item.price.toFixed(2)}`;
-          controlsPriceDiv.appendChild(priceDiv);
-
-          const controlsDiv = document.createElement('div');
-          controlsDiv.className = 'mt-2 flex items-center justify-center sm:mt-0 sm:justify-end';
-
-          // Decrease button
-          const decBtn = document.createElement('button');
-          decBtn.className =
-            'quantity-btn decrease inline-flex size-11 items-center justify-center rounded-l bg-gray-100 font-medium text-gray-700 hover:bg-gray-200';
-          decBtn.setAttribute('data-id', item.id);
-          decBtn.setAttribute('aria-label', `Disminuir cantidad de ${cleanTitle}`);
-          decBtn.textContent = '-';
-          controlsDiv.appendChild(decBtn);
-
-          // Quantity display
-          const qtySpan = document.createElement('span');
-          qtySpan.className =
-            'quantity-display inline-flex min-h-11 min-w-11 items-center justify-center bg-gray-100 px-2';
-          qtySpan.textContent = String(item.quantity);
-          controlsDiv.appendChild(qtySpan);
-
-          // Increase button
-          const incBtn = document.createElement('button');
-          incBtn.className =
-            'quantity-btn increase inline-flex size-11 items-center justify-center rounded-r bg-gray-100 font-medium text-gray-700 hover:bg-gray-200';
-          incBtn.setAttribute('data-id', item.id);
-          incBtn.setAttribute('aria-label', `Aumentar cantidad de ${cleanTitle}`);
-          incBtn.textContent = '+';
-          controlsDiv.appendChild(incBtn);
-
-          // Remove button
-          const removeBtn = document.createElement('button');
-          removeBtn.className =
-            'remove-item ml-2 inline-flex size-11 items-center justify-center rounded-full text-red-600 hover:bg-red-50 hover:text-red-800';
-          removeBtn.setAttribute('data-id', item.id);
-          removeBtn.setAttribute('aria-label', `Eliminar ${cleanTitle} del carrito`);
-
-          // SVG for remove button
-          const removeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          removeSvg.setAttribute('class', 'h-5 w-5');
-          removeSvg.setAttribute('viewBox', '0 0 20 20');
-          removeSvg.setAttribute('fill', 'currentColor');
-          removeSvg.setAttribute('aria-hidden', 'true');
-          const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          svgPath.setAttribute('fill-rule', 'evenodd');
-          svgPath.setAttribute(
-            'd',
-            'M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z'
-          );
-          svgPath.setAttribute('clip-rule', 'evenodd');
-          removeSvg.appendChild(svgPath);
-          removeBtn.appendChild(removeSvg);
-
-          controlsDiv.appendChild(removeBtn);
-          controlsPriceDiv.appendChild(controlsDiv);
-          contentDiv.appendChild(controlsPriceDiv);
-          cartItemEl.appendChild(contentDiv);
-
-          // Add cart item to container
-          cartItemsContainer.appendChild(cartItemEl);
-        });
-
-        // Update total price display
-        cartTotalElement.textContent = `S/${total.toFixed(2)}`;
+        return;
       }
+
+      cartContainer.classList.remove('hidden');
+      emptyCartMessage.classList.add('hidden');
+
+      // Clear previous items safely
+      while (cartItemsContainer.firstChild) {
+        cartItemsContainer.removeChild(cartItemsContainer.firstChild);
+      }
+
+      // Render cart items using DOM APIs to prevent XSS
+      resolved.lines.forEach((line) => {
+        // Create cart item element
+        const cartItemEl = document.createElement('div');
+        cartItemEl.className =
+          'flex flex-col sm:flex-row items-center bg-white p-4 rounded-lg shadow-sm border border-gray-200';
+
+        // Image container
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'flex-shrink-0 w-20 h-20 mb-3 sm:mb-0 sm:mr-4';
+        const img = document.createElement('img');
+        img.src = line.image;
+        img.alt = line.title;
+        img.className = 'w-full h-full object-cover rounded';
+        imgContainer.appendChild(img);
+        cartItemEl.appendChild(imgContainer);
+
+        // Content container
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'flex-grow text-center sm:text-left';
+
+        const titleHeader = document.createElement('h4');
+        titleHeader.className = 'font-bold text-gray-800';
+        titleHeader.textContent = line.title;
+        contentDiv.appendChild(titleHeader);
+
+        const typeDiv = document.createElement('div');
+        typeDiv.className = 'text-sm text-gray-500 mb-1';
+        typeDiv.textContent = typeLabels[line.type] || line.type;
+        contentDiv.appendChild(typeDiv);
+
+        // Controls and price container
+        const controlsPriceDiv = document.createElement('div');
+        controlsPriceDiv.className =
+          'flex flex-col sm:flex-row sm:justify-between sm:items-center mt-2';
+
+        const priceDiv = document.createElement('div');
+        priceDiv.className = 'text-primary font-bold';
+        priceDiv.textContent = `S/${line.lineTotal.toFixed(2)}`;
+        controlsPriceDiv.appendChild(priceDiv);
+
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'mt-2 flex items-center justify-center sm:mt-0 sm:justify-end';
+
+        // Decrease button
+        const decBtn = document.createElement('button');
+        decBtn.className =
+          'quantity-btn decrease inline-flex size-11 items-center justify-center rounded-l bg-gray-100 font-medium text-gray-700 hover:bg-gray-200';
+        decBtn.setAttribute('data-id', line.id);
+        decBtn.setAttribute('data-type', line.type);
+        decBtn.setAttribute('aria-label', `Disminuir cantidad de ${line.title}`);
+        decBtn.textContent = '-';
+        controlsDiv.appendChild(decBtn);
+
+        // Quantity display
+        const qtySpan = document.createElement('span');
+        qtySpan.className =
+          'quantity-display inline-flex min-h-11 min-w-11 items-center justify-center bg-gray-100 px-2';
+        qtySpan.textContent = String(line.quantity);
+        controlsDiv.appendChild(qtySpan);
+
+        // Increase button
+        const incBtn = document.createElement('button');
+        incBtn.className =
+          'quantity-btn increase inline-flex size-11 items-center justify-center rounded-r bg-gray-100 font-medium text-gray-700 hover:bg-gray-200';
+        incBtn.setAttribute('data-id', line.id);
+        incBtn.setAttribute('data-type', line.type);
+        incBtn.setAttribute('aria-label', `Aumentar cantidad de ${line.title}`);
+        incBtn.textContent = '+';
+        controlsDiv.appendChild(incBtn);
+
+        // Remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.className =
+          'remove-item ml-2 inline-flex size-11 items-center justify-center rounded-full text-red-600 hover:bg-red-50 hover:text-red-800';
+        removeBtn.setAttribute('data-id', line.id);
+        removeBtn.setAttribute('data-type', line.type);
+        removeBtn.setAttribute('aria-label', `Eliminar ${line.title} del carrito`);
+
+        // SVG for remove button
+        const removeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        removeSvg.setAttribute('class', 'h-5 w-5');
+        removeSvg.setAttribute('viewBox', '0 0 20 20');
+        removeSvg.setAttribute('fill', 'currentColor');
+        removeSvg.setAttribute('aria-hidden', 'true');
+        const svgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        svgPath.setAttribute('fill-rule', 'evenodd');
+        svgPath.setAttribute(
+          'd',
+          'M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z'
+        );
+        svgPath.setAttribute('clip-rule', 'evenodd');
+        removeSvg.appendChild(svgPath);
+        removeBtn.appendChild(removeSvg);
+
+        controlsDiv.appendChild(removeBtn);
+        controlsPriceDiv.appendChild(controlsDiv);
+        contentDiv.appendChild(controlsPriceDiv);
+        cartItemEl.appendChild(contentDiv);
+
+        // Add cart item to container
+        cartItemsContainer.appendChild(cartItemEl);
+      });
+
+      // Update total price display
+      cartTotalElement.textContent = `S/${resolved.total.toFixed(2)}`;
     }
 
     // Handle quantity changes and item removal
@@ -252,15 +327,20 @@ const whatsappNumber = siteConfig.whatsapp;
           ? target
           : (target.closest('.quantity-btn') as HTMLElement);
         const itemId = btn.getAttribute('data-id') || '';
-        if (!itemId) return;
+        const itemType = btn.getAttribute('data-type') as ProductType | null;
+        if (!itemId || !itemType) return;
         const isIncrease = btn.classList.contains('increase');
 
         const cart = CartManager.getCart();
-        const item = cart.find((i) => i.id === itemId);
+        const item = cart.find((i) => i.id === itemId && i.type === itemType);
 
         if (item) {
           const newQty = isIncrease ? item.quantity + 1 : item.quantity - 1;
-          CartManager.updateQuantity(itemId, newQty);
+          if (newQty < 1) {
+            CartManager.removeItem(itemId, itemType);
+          } else {
+            CartManager.updateQuantity(itemId, itemType, newQty);
+          }
         }
       }
 
@@ -269,9 +349,10 @@ const whatsappNumber = siteConfig.whatsapp;
           ? target
           : (target.closest('.remove-item') as HTMLElement);
         const itemId = btn.getAttribute('data-id') || '';
-        if (!itemId) return;
+        const itemType = btn.getAttribute('data-type') as ProductType | null;
+        if (!itemId || !itemType) return;
 
-        CartManager.removeItem(itemId);
+        CartManager.removeItem(itemId, itemType);
       }
     });
 
@@ -284,15 +365,13 @@ const whatsappNumber = siteConfig.whatsapp;
 
     // WhatsApp checkout button
     whatsappCheckoutBtn.addEventListener('click', () => {
-      const cart = CartManager.getCart();
+      const rawCart = CartManager.getCart();
+      const resolved = resolveCart(rawCart, catalog);
 
-      if (cart.length === 0) return;
+      if (resolved.lines.length === 0) return;
 
-      // Calculate total
-      const total = CartManager.getCartTotal();
-
-      // Prepare WhatsApp message
-      const message = buildWhatsAppMessage(cart, total);
+      const requestId = generateOrderRequestId();
+      const message = buildWhatsAppMessage(resolved.lines, resolved.total, requestId);
 
       // Open WhatsApp with the message
       window.open(buildWhatsAppUrl(whatsappNumber, message), '_blank');

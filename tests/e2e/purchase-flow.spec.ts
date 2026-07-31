@@ -68,4 +68,63 @@ test.describe('Catalog to WhatsApp checkout', () => {
     await expect(page.locator('#empty-cart-message')).toBeVisible();
     await expect(page.locator('#cart-container')).toBeHidden();
   });
+
+  test('tampering with the stored price/title in localStorage has no effect on checkout', async ({
+    page,
+  }) => {
+    await page.goto('/catalogo');
+    await page.locator('a.book-cover-container').first().click();
+
+    const addToCartBtn = page.locator('.add-to-cart-btn').first();
+    const realTitle = await addToCartBtn.getAttribute('data-title');
+    const realPrice = Number(await addToCartBtn.getAttribute('data-price'));
+
+    await addToCartBtn.click();
+    await page.waitForFunction(() => {
+      const raw = localStorage.getItem('shoppingCart');
+      return !!raw && raw !== '[]';
+    });
+
+    // Only id/type/quantity should ever be persisted — confirm price/title
+    // never made it into localStorage in the first place...
+    const storedCart = await page.evaluate(() => JSON.parse(localStorage.getItem('shoppingCart')!));
+    expect(storedCart[0]).not.toHaveProperty('price');
+    expect(storedCart[0]).not.toHaveProperty('title');
+
+    // ...then simulate a bug or a malicious script editing it directly anyway.
+    await page.evaluate(() => {
+      const cart = JSON.parse(localStorage.getItem('shoppingCart')!);
+      cart[0].price = 0.01;
+      cart[0].title = 'TAMPERED FREE PRODUCT';
+      localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    });
+
+    await page.goto('/checkout');
+    await page.waitForSelector('#cart-items h4');
+
+    await expect(page.locator('#cart-items')).toContainText(realTitle!);
+    await expect(page.locator('#cart-items')).not.toContainText('TAMPERED FREE PRODUCT');
+    await expect(page.locator('#cart-total')).toHaveText(`S/${realPrice.toFixed(2)}`);
+  });
+
+  test('a cart item pointing at a product that no longer exists is dropped with a visible notice', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem(
+        'shoppingCart',
+        JSON.stringify([{ id: 'this-product-does-not-exist', type: 'book', quantity: 1 }])
+      );
+    });
+
+    await page.goto('/checkout');
+
+    await expect(page.locator('#empty-cart-message')).toBeVisible();
+    await expect(page.locator('#removed-items-notice')).toBeVisible();
+    await expect(page.locator('#removed-items-notice')).toContainText('ya no está disponible');
+
+    const storedCart = await page.evaluate(() => localStorage.getItem('shoppingCart'));
+    expect(storedCart).toBe('[]');
+  });
 });
