@@ -10,7 +10,7 @@ import CategoryCards from '@components/catalog/CategoryCards.astro';
 import '@styles/catalog.css';
 
 // Import types, utilities and data
-import type { Pack } from '@app-types/pack';
+import type { Pack } from '@app-types/content';
 import { BookLevel, FormatTag } from '@app-types/book';
 import { getProductsByType } from '@utils/listProducts';
 import { parseCatalogParams } from '@utils/catalogFilters';
@@ -64,26 +64,23 @@ if (format !== 'all') {
 const allPacks = await getProductsByType('pack');
 
 // Convert to Pack[] type and ensure all required fields exist
-const safePacks: Pack[] = allPacks.map((pack) => ({
-  id: pack.id,
-  title: pack.title,
-  description: pack.description || '',
-  price: pack.price,
-  coverImage: pack.coverImage,
-  altText: pack.altText || `${pack.title} Pack cover`,
-  includedItems: 'includedItems' in pack ? (pack.includedItems as string[]) : [],
-  booksIds: 'booksIds' in pack ? (pack.booksIds as string[]) : [],
-  rating: pack.rating || { score: 0, reviewCount: 0 },
-  buyLink: 'buyLink' in pack ? (pack.buyLink as string) : `/checkout/${pack.id}`,
-  detailsLink: pack.detailsLink || `/catalogo/packs/${pack.id}`,
-  discount: pack.discount || 0,
-  level: (pack.level as BookLevel) || BookLevel.INTERMEDIATE,
-  featured: pack.featured || false,
-  formatTags: pack.formatTags || [],
-  popularityTags: pack.popularityTags || [],
-  images: 'images' in pack ? (pack.images as string[]) : [],
-  video: 'video' in pack ? (pack.video as string) : '',
-}));
+const safePacks: Pack[] = allPacks.map(
+  ({ productType: _productType, examType: _examType, ...pack }) => ({
+    ...pack,
+    description: pack.description || '',
+    discount: pack.discount ?? 0,
+    offerDays: pack.offerDays ?? 7,
+    images: pack.images ?? [],
+    includedItems: 'includedItems' in pack ? (pack.includedItems as string[]) : [],
+    booksIds: 'booksIds' in pack ? (pack.booksIds as string[]) : [],
+    rating: pack.rating || { score: 0, reviewCount: 0 },
+    featured: pack.featured ?? false,
+    buyLink: 'buyLink' in pack ? (pack.buyLink as string) : `/checkout/${pack.id}`,
+    level: (pack.level as BookLevel) || BookLevel.INTERMEDIATE,
+    formatTags: (pack.formatTags || []) as FormatTag[],
+    popularityTags: (pack.popularityTags || []) as Pack['popularityTags'],
+  })
+);
 
 // Define breadcrumb items
 const breadcrumbItems = [

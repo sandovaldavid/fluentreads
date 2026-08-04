@@ -10,7 +10,7 @@ import CategoryCards from '@components/catalog/CategoryCards.astro';
 import '@styles/catalog.css';
 
 // Import data and proper types
-import type { Exam } from '@app-types/exam';
+import type { Exam } from '@app-types/content';
 import { ExamType, ExamDifficulty } from '@app-types/exam';
 import { getProductsByType } from '@utils/listProducts';
 import { parseCatalogParams } from '@utils/catalogFilters';
@@ -74,26 +74,22 @@ if (examType !== 'all') {
 const allExams = await getProductsByType('exam');
 
 // Convert to Exam[] type and ensure all required fields exist
-const safeExams: Exam[] = allExams.map((exam) => ({
-  id: exam.id,
-  title: exam.title,
-  description: exam.description || '',
-  price: exam.price,
-  coverImage: exam.coverImage,
-  altText: exam.altText || `${exam.title} Exam cover`,
-  includedItems: (exam as any).includedItems || [],
-  rating: exam.rating || { score: 0, reviewCount: 0 },
-  buyLink: (exam as any).buyLink || `/checkout/${exam.id}`,
-  detailsLink: exam.detailsLink || `/catalogo/examenes-internacionales/${exam.id}`,
-  discount: exam.discount || 0,
-  examType: (exam as any).examType || ExamType.OTHER,
-  difficulty: (exam.level as ExamDifficulty) || ExamDifficulty.INTERMEDIATE,
-  featured: exam.featured || false,
-  formatTags: exam.formatTags || [],
-  popularityTags: exam.popularityTags || [],
-  images: (exam as any).images || [],
-  video: (exam as any).video || '',
-}));
+const safeExams: Exam[] = allExams.map(
+  ({ productType: _productType, booksIds: _booksIds, ...exam }) => ({
+    ...exam,
+    description: exam.description || '',
+    discount: exam.discount ?? 0,
+    images: exam.images ?? [],
+    includedItems: (exam as { includedItems?: string[] }).includedItems || [],
+    rating: exam.rating || { score: 0, reviewCount: 0 },
+    featured: exam.featured ?? false,
+    buyLink: (exam as { buyLink?: string }).buyLink || `/checkout/${exam.id}`,
+    difficulty: (exam.level as ExamDifficulty) || ExamDifficulty.INTERMEDIATE,
+    examType: (exam.examType as ExamType) || ExamType.OTHER,
+    formatTags: (exam.formatTags || []) as Exam['formatTags'],
+    popularityTags: (exam.popularityTags || []) as Exam['popularityTags'],
+  })
+);
 
 // Define breadcrumb items
 const breadcrumbItems = [
