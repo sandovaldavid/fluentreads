@@ -26,51 +26,6 @@ export function bookToProduct(book: Book): Product {
 }
 
 /**
- * Converts an Exam object to a standardized Product type
- */
-export function examToProduct(exam: Exam): Product {
-  return {
-    id: exam.id,
-    title: exam.title,
-    editorialId: '', // Exams might not have editorialId
-    price: exam.price,
-    discount: exam.discount,
-    level: exam.difficulty, // Map difficulty to level for Product type
-    popularityTags: exam.popularityTags || [],
-    coverImage: exam.coverImage,
-    rating: exam.rating,
-    formatTags: exam.formatTags || [],
-    featured: exam.featured,
-    detailsLink: exam.detailsLink,
-    altText: exam.altText,
-    examType: exam.examType,
-    productType: 'exam',
-  };
-}
-
-/**
- * Converts a Pack object to a standardized Product type
- */
-export function packToProduct(pack: Pack): Product {
-  return {
-    id: pack.id,
-    title: pack.title,
-    editorialId: '', // Packs might not have editorialId
-    price: pack.price,
-    discount: pack.discount,
-    level: pack.level,
-    popularityTags: pack.popularityTags || [],
-    coverImage: pack.coverImage,
-    rating: pack.rating,
-    formatTags: pack.formatTags || [],
-    featured: pack.featured,
-    detailsLink: pack.detailsLink,
-    altText: pack.altText,
-    productType: 'pack',
-  };
-}
-
-/**
  * Generate recommendations based on a product and related products
  *
  * @param product The main product (book, pack, or exam)
@@ -123,12 +78,4 @@ export function generateRecommendations(
 
   // If we have too many, trim to requested count
   return result.slice(0, count);
-}
-
-/**
- * Calculate discounted price for a product if discount is available
- */
-export function calculateDiscountedPrice(product: Product): number {
-  const hasDiscount = product.discount && product.discount > 0;
-  return hasDiscount ? product.price * (1 - (product.discount || 0) / 100) : product.price;
 }
