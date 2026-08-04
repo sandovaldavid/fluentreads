@@ -13,7 +13,6 @@ export interface SiteConfig {
     twitter: string;
     twitterHandle: string;
     telegram: string;
-    facebookAppId: string;
   };
   contact: {
     email: string;
@@ -37,7 +36,6 @@ export const siteConfig: SiteConfig = {
     twitter: 'https://twitter.com/fluentreads',
     twitterHandle: '@fluentreads',
     telegram: 'FluentReads',
-    facebookAppId: '1234567890',
   },
   contact: {
     email: 'contacto@fluentreads.com',
