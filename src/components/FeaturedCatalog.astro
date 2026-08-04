@@ -11,7 +11,7 @@ import '../styles/FeaturedCatalog.css';
 // Data and type imports
 import { getCollection } from 'astro:content';
 import { BookLevel, FormatTag, PopularityTag } from '../types/book';
-import type { Book } from '../types/book';
+import type { Book } from '../types/content';
 
 interface Props {
   title?: string;
@@ -58,25 +58,8 @@ try {
         ...filteredBooks.filter((book) => !book.featured),
       ];
 
-  // Step 3: Limit the number of books and map to safe objects
-  booksToShow = sortedBooks.slice(0, maxBooks).map((book) => ({
-    id: book.id || '',
-    title: book.title || '',
-    description: book.description || '',
-    price: book.price || 0,
-    coverImage: book.coverImage || '',
-    altText: book.altText || `${book.title} Book cover`,
-    includedItems: book.includedItems || [],
-    rating: book.rating || { score: 0, reviewCount: 0 },
-    buyLink: book.buyLink || '#',
-    detailsLink: book.detailsLink || '#',
-    discount: book.discount || 0,
-    level: book.level as BookLevel,
-    featured: book.featured || false,
-    formatTags: (book.formatTags || []) as FormatTag[],
-    popularityTags: (book.popularityTags || []) as PopularityTag[],
-    editorialId: book.editorialId || '',
-  }));
+  // Step 3: Limit the number of books
+  booksToShow = sortedBooks.slice(0, maxBooks);
 
   console.log(
     `FeaturedCatalog: Showing ${booksToShow.length} books, featured only: ${showOnlyFeatured}`

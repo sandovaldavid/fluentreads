@@ -1,6 +1,6 @@
-import type { Book } from '../types/book';
-import type { Exam } from '../types/exam';
-import type { Pack } from '../types/pack';
+import type { Book } from '../types/content';
+import type { Exam } from '../types/content';
+import type { Pack } from '../types/content';
 import type { Product } from '../types/product';
 
 /**
@@ -47,13 +47,14 @@ export function generateRecommendations(
   }
 
   // Sort related products by relevance
-  // First prioritize those that match the same level
-  const sameLevel = filteredRelated.filter((p) => p.level === product.level);
+  // First prioritize those that match the same level (exams carry difficulty)
+  const productLevel = 'level' in product ? product.level : undefined;
+  const sameLevel = filteredRelated.filter((p) => p.level === productLevel);
 
   // Then prioritize those that match any format tags
   const hasMatchingFormat = filteredRelated.filter((p) => {
     if (!product.formatTags || !p.formatTags) return false;
-    return p.formatTags.some((tag) => product.formatTags?.includes(tag));
+    return p.formatTags.some((tag) => (product.formatTags as readonly string[]).includes(tag));
   });
 
   // Combine and deduplicate

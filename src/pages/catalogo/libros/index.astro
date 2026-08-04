@@ -10,7 +10,7 @@ import CategoryCards from '@components/catalog/CategoryCards.astro';
 import '@styles/catalog.css';
 
 // Import types, utilities and data
-import type { Book } from '@app-types/book';
+import type { Book } from '@app-types/content';
 import { BookLevel, FormatTag } from '@app-types/book';
 import { getProductsByType } from '@utils/listProducts';
 import { getCollection } from 'astro:content';
@@ -72,24 +72,23 @@ editorialsData.forEach((editorial) => {
 const allBooks = await getProductsByType('book');
 
 // Convert to Book[] type and ensure all required fields exist
-const safeBooks: Book[] = allBooks.map((book) => ({
-  id: book.id,
-  title: book.title,
-  description: book.description || '',
-  price: book.price,
-  editorialId: 'editorialId' in book ? (book.editorialId as string) : '',
-  coverImage: book.coverImage,
-  altText: book.altText || `${book.title} Book cover`,
-  includedItems: 'includedItems' in book ? (book.includedItems as string[]) : [],
-  rating: book.rating || { score: 0, reviewCount: 0 },
-  buyLink: 'buyLink' in book ? (book.buyLink as string) : `/checkout/${book.id}`,
-  detailsLink: book.detailsLink || `/catalogo/libros/${book.id}`,
-  discount: book.discount || 0,
-  level: (book.level as BookLevel) || BookLevel.INTERMEDIATE,
-  featured: book.featured || false,
-  formatTags: book.formatTags || [],
-  popularityTags: book.popularityTags || [],
-}));
+const safeBooks: Book[] = allBooks.map(
+  ({ productType: _productType, examType: _examType, booksIds: _booksIds, ...book }) => ({
+    ...book,
+    description: book.description || '',
+    discount: book.discount ?? 0,
+    editorialId: 'editorialId' in book ? (book.editorialId as string) : '',
+    offerDays: book.offerDays ?? 7,
+    images: book.images ?? [],
+    includedItems: 'includedItems' in book ? (book.includedItems as string[]) : [],
+    rating: book.rating || { score: 0, reviewCount: 0 },
+    featured: book.featured ?? false,
+    buyLink: 'buyLink' in book ? (book.buyLink as string) : `/checkout/${book.id}`,
+    level: (book.level as BookLevel) || BookLevel.INTERMEDIATE,
+    formatTags: (book.formatTags || []) as FormatTag[],
+    popularityTags: (book.popularityTags || []) as Book['popularityTags'],
+  })
+);
 
 // Define breadcrumb items
 const breadcrumbItems = [
