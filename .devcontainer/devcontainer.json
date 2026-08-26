@@ -1,10 +1,12 @@
 {
   "name": "FluentReads DevContainer",
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "Dockerfile",
+    "cacheFrom": [
+      "ghcr.io/sandovaldavid/fluentreads-devcontainer:pre-release",
+      "ghcr.io/sandovaldavid/fluentreads-devcontainer:stable"
+    ]
   },
-  "image": "ghcr.io/sandovaldavid/fluentreads-devcontainer:latest",
-  "cacheFrom": ["ghcr.io/sandovaldavid/fluentreads-devcontainer:cache"],
   "forwardPorts": [4321],
   "portsAttributes": {
     "4321": {
@@ -13,6 +15,7 @@
     }
   },
   "postCreateCommand": "bash .devcontainer/postCreate.sh",
+  "postStartCommand": "bash .devcontainer/scripts/post-start.sh",
   "remoteUser": "vscode",
   "customizations": {
     "vscode": {

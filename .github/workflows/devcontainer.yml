@@ -90,16 +90,22 @@ jobs:
 
       - name: Summary
         run: |
-          echo "### DevContainer image published" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Branch: \`${{ needs.detect-ref.outputs.ref }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Tags:" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Pull with:" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`sh" >> $GITHUB_STEP_SUMMARY
-          echo "docker pull ghcr.io/sandovaldavid/fluentreads-devcontainer:latest" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.detect-ref.outputs.ref }}" = "main" ]; then
+            image_tag="stable"
+          else
+            image_tag="pre-release"
+          fi
+
+          echo "### DevContainer image published" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Branch: \`${{ needs.detect-ref.outputs.ref }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Tags:" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ steps.meta.outputs.tags }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Pull with:" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`\`\`sh" >> "$GITHUB_STEP_SUMMARY"
+          echo "docker pull ghcr.io/sandovaldavid/fluentreads-devcontainer:${image_tag}" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
