@@ -13,6 +13,7 @@
     }
   },
   "postCreateCommand": "bash .devcontainer/postCreate.sh",
+  "postStartCommand": "bash .devcontainer/scripts/post-start.sh",
   "remoteUser": "vscode",
   "customizations": {
     "vscode": {
