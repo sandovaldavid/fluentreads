@@ -13,7 +13,7 @@ echo "  Astro: $(astro --version)"
 echo ""
 
 echo "[2/3] Installing project dependencies..."
-bun install
+bun install --frozen-lockfile
 
 echo ""
 echo "[3/3] Setup complete!"
